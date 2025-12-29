@@ -1,0 +1,1 @@
+sudo containerlab inspect --wide
