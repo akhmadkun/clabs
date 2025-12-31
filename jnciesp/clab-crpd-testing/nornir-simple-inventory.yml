@@ -1,0 +1,11 @@
+---
+crpd1:
+    username: root
+    password: clab123
+    platform: juniper_crpd
+    hostname: 172.20.20.2
+crpd2:
+    username: root
+    password: clab123
+    platform: juniper_crpd
+    hostname: 172.20.20.3

@@ -1,0 +1,13 @@
+name: crpd-testing
+prefix: ""
+topology:
+  nodes:
+    crpd1:
+      kind: juniper_crpd
+      image: crpd:23.4R2-S5.6
+    crpd2:
+      kind: juniper_crpd
+      image: crpd:23.4R2-S5.6
+
+  links:
+    - endpoints: ["crpd1:eth1", "crpd2:eth1"]
