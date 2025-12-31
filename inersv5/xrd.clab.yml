@@ -1,0 +1,27 @@
+name: inersv5-xrd
+prefix: ""
+
+topology:
+  nodes:
+    xrd1:
+      kind: cisco_xrd
+      image: ios-xr/xrd-control-plane:7.11.2
+    xrd2:
+      kind: cisco_xrd
+      image: ios-xr/xrd-control-plane:7.11.2
+    xrd3:
+      kind: cisco_xrd
+      image: ios-xr/xrd-control-plane:7.11.2
+    xrd4:
+      kind: cisco_xrd
+      image: ios-xr/xrd-control-plane:7.11.2
+    sw:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      startup-config: configs/sw/sw.cfg
+
+  links:
+    - endpoints: ["sw:eth1", "xrd1:Gi0-0-0-0"]
+    - endpoints: ["sw:eth2", "xrd2:Gi0-0-0-0"]
+    - endpoints: ["sw:eth3", "xrd3:Gi0-0-0-0"]
+    - endpoints: ["sw:eth4", "xrd4:Gi0-0-0-0"]

@@ -33,7 +33,7 @@ topology:
     sw:
       kind: arista_ceos
       image: ceos:4.35.0F
-      startup-config: sw.cfg
+      startup-config: configs/sw/sw.cfg
 
   links:
     - endpoints: ["sw:eth1", "iol1:eth1"]
