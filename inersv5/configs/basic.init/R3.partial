@@ -1,0 +1,30 @@
+lldp run
+
+!
+interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+!
+
+
+interface Ethernet0/1
+ no ip address
+
+interface Ethernet0/1.13
+ encapsulation dot1Q 13
+ ip address 155.1.13.3 255.255.255.0
+
+interface Ethernet0/1.100
+ encapsulation dot1Q 100
+ ip address 155.1.100.3 255.255.255.0
+
+interface Ethernet0/1.37
+ encapsulation dot1Q 37
+ ip address 155.1.37.3 255.255.255.0
+
+interface Ethernet0/1.23
+ encapsulation dot1Q 23 
+ ip address 155.1.23.3 255.255.255.0
+
+!
+alias exec siib show ip int brief | ex una
+!
