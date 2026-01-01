@@ -1,0 +1,20 @@
+name: cjunos
+prefix: ''
+topology:
+  nodes:
+
+    cevo1:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+      env:
+        # To start the BT flavor, change "BX" to "BT" below
+        CPTX_COSIM: "BT"
+
+    cevo2:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+      env:
+        # To start the BT flavor, change "BX" to "BT" below
+        CPTX_COSIM: "BX"
+  links:
+    - endpoints: ["cevo1:eth4", "cevo2:eth4"]
