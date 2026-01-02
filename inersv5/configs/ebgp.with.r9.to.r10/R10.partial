@@ -1,0 +1,81 @@
+interface Loopback0
+ ip address 28.119.16.1 255.255.255.0
+ ipv6 address 2001:28:119:16::1/64
+ ipv6 address 2001:150:10:10::10/128
+!
+interface Loopback1
+ ip address 28.119.17.1 255.255.255.0
+ ipv6 address 2001:28:119:17::1/64
+!
+interface Loopback10
+ ip address 30.0.0.1 255.255.0.0
+ ipv6 address 2001:30::1/64
+!
+interface Loopback11
+ ip address 30.1.0.1 255.255.0.0
+ ipv6 address 2001:30:1::1/64
+!
+interface Loopback12
+ ip address 30.2.0.1 255.255.0.0
+ ipv6 address 2001:30:2::1/64
+!
+interface Loopback13
+ ip address 30.3.0.1 255.255.0.0
+ ipv6 address 2001:30:3::1/64
+!
+interface Loopback14
+ ip address 31.0.0.1 255.255.0.0
+ ipv6 address 2001:31::1/64
+!
+interface Loopback15
+ ip address 31.1.0.1 255.255.0.0
+ ipv6 address 2001:31:1::1/64
+!
+interface Loopback16
+ ip address 31.2.0.1 255.255.0.0
+ ipv6 address 2001:31:2::1/64
+!
+interface Loopback17
+ ip address 31.3.0.1 255.255.0.0
+ ipv6 address 2001:31:3::1/64
+!
+interface Ethernet0/1
+ no ip address
+ no shutdown
+ negotiation auto
+ cdp enable
+!
+interface Ethernet0/1.10
+ encapsulation dot1Q 10
+ ip address 155.1.10.10 255.255.255.0
+ ipv6 address 2001:155:1:10::10/64
+!
+interface Ethernet0/1.108
+ encapsulation dot1Q 108
+ ip address 155.1.108.10 255.255.255.0
+ ipv6 address 2001:155:1:108::10/64
+!
+interface Ethernet0/1.109
+ encapsulation dot1Q 109
+ ip address 155.1.109.10 255.255.255.0
+ ipv6 address 2001:155:1:109::10/64
+!
+interface GigabitEthernet2
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3
+ no ip address
+ shutdown
+ negotiation auto
+!
+router bgp 54
+ bgp log-neighbor-changes
+ neighbor 155.1.108.8 remote-as 100
+ neighbor 155.1.109.9 remote-as 54
+ !
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

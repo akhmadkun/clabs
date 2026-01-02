@@ -1,0 +1,24 @@
+interface Loopback0
+ ipv6 address 2001:150:10:10::10/128
+ ip address 150.1.10.10 255.255.255.255
+!
+interface Ethernet0/1
+ cdp enable
+ no shutdown
+!
+interface Ethernet0/1.10
+ encapsulation dot1q 10
+ ip address 155.1.10.10 255.255.255.0
+ ipv6 address 2001:155:1:10::10/64
+!
+interface Ethernet0/1.108
+ encapsulation dot1q 108
+ ip address 155.1.108.10 255.255.255.0
+ ipv6 address 2001:155:1:108::10/64
+!
+router eigrp SECURITY
+ !
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

@@ -1,0 +1,52 @@
+interface Loopback0
+ ip address 150.1.6.6 255.255.255.255
+ ipv6 address 2001:150:6:6::6/128
+!
+interface Ethernet0/1
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface Ethernet0/1.67
+ encapsulation dot1Q 67
+ ip vrf forwarding VPN_A
+ ip address 155.1.67.6 255.255.255.0
+ ipv6 address 2001:155:1:67::6/64
+!
+interface Ethernet0/1.76
+ encapsulation dot1Q 76
+ ip vrf forwarding VPN_B
+ ip address 155.1.76.6 255.255.255.0
+!
+interface Ethernet0/1.146
+ encapsulation dot1Q 146
+ ip address 155.1.146.6 255.255.255.0
+ ipv6 address 2001:155:1:146::6/64
+ mpls ip
+ mpls ldp discovery transport-address interface
+!
+interface GigabitEthernet2
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3
+ no ip address
+ shutdown
+ negotiation auto
+!
+router ospf 1
+ router-id 150.1.6.6
+ network 150.1.0.0 0.0.255.255 area 0
+ network 155.1.0.0 0.0.255.255 area 0
+!
+router bgp 100
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 150.1.4.4 remote-as 100
+ neighbor 150.1.4.4 update-source Loopback0
+ !
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

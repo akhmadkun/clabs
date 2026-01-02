@@ -1,0 +1,27 @@
+interface Loopback0
+ ipv6 address 2001:150:1:1::1/128
+ ip address 150.1.1.1 255.255.255.255
+!
+interface Ethernet0/1
+ cdp enable
+ no shutdown
+!
+interface Ethernet0/1.13
+ encapsulation dot1q 13
+ ip address 155.1.13.1 255.255.255.0
+ ipv6 address 2001:155:1:13::1/64
+!
+interface Ethernet0/1.100
+ encapsulation dot1q 100
+ ip address 169.254.100.1 255.255.255.0
+ ipv6 address 2001:169:254:100::1/64
+!
+interface Ethernet0/1.146
+ encapsulation dot1q 146
+ ip address 155.1.146.1 255.255.255.0
+ ipv6 address 2001:155:1:146::1/64
+!
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

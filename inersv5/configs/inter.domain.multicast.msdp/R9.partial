@@ -1,0 +1,35 @@
+interface Loopback0
+ ip address 150.1.9.9 255.255.255.255
+ ipv6 address 2001:150:9:9::9/128
+ ip pim sparse-mode
+!
+interface Ethernet0/1
+ no ip address
+ negotiation auto
+ cdp enable
+ no shut
+!
+interface Ethernet0/1.9
+ encapsulation dot1Q 9
+ ip address 155.1.9.9 255.255.255.0
+ ipv6 address 2001:155:1:9::9/64
+ ip pim sparse-mode
+!
+interface Ethernet0/1.79
+ encapsulation dot1Q 79
+ ip address 155.1.79.9 255.255.255.0
+ ipv6 address 2001:155:1:79::9/64
+ ip pim sparse-mode
+!
+router ospf 1
+ network 150.1.0.0 0.0.255.255 area 0
+ network 155.1.0.0 0.0.255.255 area 0
+!
+router bgp 100
+ neighbor 150.1.7.7 remote-as 100
+ neighbor 150.1.7.7 update-source Loopback0
+!
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

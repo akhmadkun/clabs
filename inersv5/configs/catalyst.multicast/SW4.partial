@@ -1,0 +1,16 @@
+interface range FastEthernet0/19 - 24
+ no shut
+!
+interface FastEthernet0/19
+ shutdown
+!
+interface FastEthernet0/21
+ shutdown
+!
+interface FastEthernet0/23
+ shutdown
+!
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

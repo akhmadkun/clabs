@@ -1,0 +1,8 @@
+interface range FastEthernet0/19 - 24
+ switchport mode dynamic desirable
+ switchport trunk encapsulation dot1q
+!
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

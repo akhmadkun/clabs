@@ -1,0 +1,50 @@
+interface Loopback0
+ ip address 150.1.8.8 255.255.255.255
+ ipv6 address 2001:150:8:8::8/128
+!
+interface Loopback100
+ ip address 172.16.8.8 255.255.255.0
+!
+interface Ethernet0/1
+ no ip address
+ negotiation auto
+ cdp enable
+!
+interface Ethernet0/1.8
+ encapsulation dot1Q 8
+ ip address 155.1.8.8 255.255.255.0
+ ipv6 address 2001:155:1:8::8/64
+!
+interface Ethernet0/1.58
+ encapsulation dot1Q 58
+ ip address 155.1.58.8 255.255.255.0
+ ipv6 address 2001:155:1:58::8/64
+!
+interface Ethernet0/1.78
+ encapsulation dot1Q 78
+ ip address 155.1.78.8 255.255.255.0
+ ip ospf cost 9999
+ delay 10000
+!
+interface Ethernet0/1.108
+ encapsulation dot1Q 108
+ ip address 155.1.108.8 255.255.255.0
+ ipv6 address 2001:155:1:108::8/64
+!
+interface GigabitEthernet2
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3
+ no ip address
+ shutdown
+ negotiation auto
+!
+router eigrp 100
+ network 0.0.0.0
+!
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

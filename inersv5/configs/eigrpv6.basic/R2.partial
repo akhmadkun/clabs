@@ -1,0 +1,4 @@
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address

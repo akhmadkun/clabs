@@ -1,0 +1,50 @@
+interface Loopback0
+ ipv6 address 2001:150:7:7::7/128
+ ip address 150.1.7.7 255.255.255.255
+!
+interface Ethernet0/1
+ cdp enable
+ no shutdown
+!
+interface Ethernet0/1.7
+ encapsulation dot1q 7
+ ip address 155.1.7.7 255.255.255.0
+ ipv6 address 2001:155:1:7::7/64
+!
+interface Ethernet0/1.37
+ encapsulation dot1q 37
+ ip address 155.1.37.7 255.255.255.0
+ ipv6 address 2001:155:1:37::7/64
+!
+interface Ethernet0/1.67
+ encapsulation dot1q 67
+ ip address 155.1.67.7 255.255.255.0
+ ipv6 address 2001:155:1:67::7/64
+!
+interface Ethernet0/1.79
+ encapsulation dot1q 79
+ ip address 155.1.79.7 255.255.255.0
+ ipv6 address 2001:155:1:79::7/64
+!
+interface Ethernet0/1.67
+ encapsulation dot1q 67
+ ip vrf forwarding VPN_A
+ ip address 155.1.67.7 255.255.255.0
+!
+interface Ethernet0/1.76
+ encapsulation dot1q 76
+ ip vrf forwarding VPN_B
+ ip address 155.1.76.7 255.255.255.0
+!
+interface Loopback 101
+ ip vrf forwarding VPN_A
+ ip address 172.16.7.7 255.255.255.0
+!
+interface Loopback 102
+ ip vrf forwarding VPN_B
+ ip address 192.168.7.7 255.255.255.0
+!
+alias exec siib show ip int brief | ex una
+interface Ethernet0/1
+no shutdown
+no ip address
