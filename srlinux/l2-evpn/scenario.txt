@@ -1,0 +1,9 @@
+- configure ipv4 addressing as per topology
+- assign all p2p links to "default" network-instance
+- Configure eBGP as underlay with following
+    + spine1, BGP AS 201, router id 12.12.12.12
+    + leaf1, BGP AS 101, router id 1.1.1.1
+    + leaf2, BGP AS 102, router id 2.2.2.2
+    + allow all routes to be advertised and received
+    + use peer-group ebgp-underlay for each adjacency
+

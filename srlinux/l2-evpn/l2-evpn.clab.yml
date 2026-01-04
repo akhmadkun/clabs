@@ -1,12 +1,13 @@
-name: evpn01
+name: l2evpn01
+prefix: ""
 
 topology:
   kinds:
     nokia_srlinux:
       image: ghcr.io/nokia/srlinux:25.10
     linux:
-      #image: ghcr.io/srl-labs/network-multitool:latest
-      image: wbitt/network-multitool:latest
+      image: ghcr.io/srl-labs/network-multitool:latest
+      #image: wbitt/network-multitool:latest
 
   nodes:
     leaf1:
