@@ -1,0 +1,29 @@
+# topology documentation: http://containerlab.dev/lab-examples/srl-crpd/
+name: arista-mlag
+prefix: ""
+mgmt:
+  network: custom_mgmt
+  ipv4-subnet: 172.50.50.0/24
+  ipv6-subnet: 3fff:172:50:50::/80
+
+topology:
+  nodes:
+    ar1:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.50.50.10
+    ar2:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.50.50.20
+    ar3:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      startup-config: ar3.conf
+
+  links:
+    - endpoints: ["ar1:eth1", "ar2:eth1"]
+    - endpoints: ["ar1:eth2", "ar2:eth2"]
+
+    - endpoints: ["ar1:eth3", "ar3:eth1"]
+    - endpoints: ["ar2:eth3", "ar3:eth2"]
