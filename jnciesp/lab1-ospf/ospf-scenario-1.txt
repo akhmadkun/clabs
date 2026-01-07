@@ -1,0 +1,55 @@
+        192.168.10.0/24
+    +--------------------+
+                |
+          +-----+-----------+
+          |   srv1          |
+          | eth1            |
+          | 192.168.10.99/24|
+          +-----+--------+--+
+                | eth1
+                |
+                | eth2
+        +-------+--------+       192.168.12.0/30       +-------+--------+
+        |      jr1       |-----------------------------|      jr2       |
+        |                |  eth1        eth1           |                |
+        | eth2  eth1     | 192.168.12.1 192.168.12.2   | eth1   eth2    |
+        |192.168.10.1/24 |                             |192.168.20.1/24 |
+        +----------------+                             +-------+--------+
+                                                                  |
+                                                                  | eth2
+                                                                  |
+                                                          +-------+--------+
+                                                          |     srv2       |
+                                                          | eth1           |
+                                                          |192.168.20.99/24|
+                                                          +----------------+
+
+                                                            192.168.20.0/24
+
+
+- configure jr1 interfaces:
+    + lo0.0 1.1.1.1/32
+    + eth1 192.168.12.1/30
+    + eth2 192.168.10.1/24
+
+- configure jr2 interfaces:
+    + lo0.0 2.2.2.2/32
+    + eth1 192.168.12.2/30
+    + eth2 192.168.20.1/24
+
+- configure ospf
+    + set eth1 interfaces to use p2p network type area 0
+    + set eth1 interfaces metric to 100 area 0
+    + set jr1 eth2 interface area 1
+    + set jr2 eth2 interface area 2
+    + use loopback address as router-id
+
+
+- add the following address to jr1 lo0 interface
+    + 172.16.1.1/32
+    + 172.16.2.1/32
+    + 172.16.3.1/32
+
+- Make sure jr1 only advertise 1.1.1.1/32 and 172.16.1.1/32 from it's lo0 interface
+
+
