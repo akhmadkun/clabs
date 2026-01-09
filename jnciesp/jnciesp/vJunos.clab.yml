@@ -1,32 +1,32 @@
-name: crpd-testing
+name: vjunos-router
 prefix: ""
 topology:
   kinds:
-    juniper_crpd:
-      image: xzjt/crpd:25.2R1-S1.4
+    juniper_vjunosrouter:
+      image: arthurk99/juniper-vjunos-router:23.4
     arista_ceos:
       image: ceos:4.35.0F
   nodes:
     jr1:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr2:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr3:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr4:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr5:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr6:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr7:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
     jr8:
-      kind: juniper_crpd
+      kind: juniper_vjunosrouter
 
     ceos:
       kind: arista_ceos
-      startup-config: startup-config/ceos.cfg
+      startup-config: ceos.cfg
 
   links:
     # jr1 <---> jr2

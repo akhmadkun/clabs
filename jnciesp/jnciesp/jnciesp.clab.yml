@@ -26,7 +26,7 @@ topology:
 
     ceos:
       kind: arista_ceos
-      startup-config: startup-config/ceos.cfg
+      startup-config: ceos.cfg
 
   links:
     # jr1 <---> jr2

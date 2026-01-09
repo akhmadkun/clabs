@@ -4,6 +4,7 @@ topology:
   kinds:
     juniper_crpd:
       image: xzjt/crpd:25.2R1-S1.4
+      #image: arthurk99/juniper-cjunos-evolved:25.2
     linux:
       image: ghcr.io/srl-labs/network-multitool:latest
   nodes:
