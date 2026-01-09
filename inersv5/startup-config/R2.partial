@@ -32,10 +32,6 @@ interface Tunnel0
  tunnel protection ipsec profile DMVPN_PROFILE
  no shutdown
 !
-router eigrp 100
- no auto-summary
- network 155.1.0.0 0.0.255.255
-!
 alias exec siib show ip int brief | ex una
 interface Ethernet0/1
 no shutdown

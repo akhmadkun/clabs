@@ -1,0 +1,25 @@
+name: palos-lan
+prefix: ""
+
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+      #image: wbitt/network-multitool:latest
+
+  nodes:
+    virbr2:
+      kind: bridge
+    virbr3:
+      kind: bridge
+
+    srv1:
+      kind: linux
+    srv2:
+      kind: linux
+
+  links:
+    # server links
+    - endpoints: ["srv1:eth1", "virbr2:eth1"]
+    - endpoints: ["srv2:eth1", "virbr3:eth2"]

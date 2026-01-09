@@ -21,11 +21,6 @@ interface Ethernet0/1.108
  ip address 155.1.108.8 255.255.255.0
  ipv6 address 2001:155:1:108::8/64
 !
-router eigrp 100
- no auto-summary
- network 155.1.8.8 0.0.0.0
- network 155.1.58.8 0.0.0.0
-!
 alias exec siib show ip int brief | ex una
 interface Ethernet0/1
 no shutdown

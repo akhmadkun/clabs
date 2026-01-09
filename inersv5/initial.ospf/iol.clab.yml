@@ -1,0 +1,54 @@
+name: inersv5-iol
+prefix: ""
+
+topology:
+  kinds:
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
+  nodes:
+    R1:
+      kind: cisco_iol
+      startup-config: R1.partial
+    R2:
+      kind: cisco_iol
+      startup-config: R2.partial
+    R3:
+      kind: cisco_iol
+      startup-config: R3.partial
+    R4:
+      kind: cisco_iol
+      startup-config: R4.partial
+    R5:
+      kind: cisco_iol
+      startup-config: R5.partial
+    R6:
+      kind: cisco_iol
+      startup-config: R6.partial
+    R7:
+      kind: cisco_iol
+      startup-config: R7.partial
+    R8:
+      kind: cisco_iol
+      startup-config: R8.partial
+    R9:
+      kind: cisco_iol
+      startup-config: R9.partial
+    R10:
+      kind: cisco_iol
+      startup-config: R10.partial
+    sw:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      startup-config: ceos.cfg
+
+  links:
+    - endpoints: ["sw:eth1", "R1:eth1"]
+    - endpoints: ["sw:eth2", "R2:eth1"]
+    - endpoints: ["sw:eth3", "R3:eth1"]
+    - endpoints: ["sw:eth4", "R4:eth1"]
+    - endpoints: ["sw:eth5", "R5:eth1"]
+    - endpoints: ["sw:eth6", "R6:eth1"]
+    - endpoints: ["sw:eth7", "R7:eth1"]
+    - endpoints: ["sw:eth8", "R8:eth1"]
+    - endpoints: ["sw:eth9", "R9:eth1"]
+    - endpoints: ["sw:eth10", "R10:eth1"]
