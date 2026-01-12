@@ -13,15 +13,15 @@ topology:
     leaf1:
       kind: nokia_srlinux
       type: ixr-d2
-      #startup-config: config/leaf1.cli
+      startup-config: config/leaf1.cli
     leaf2:
       kind: nokia_srlinux
       type: ixr-d2
-      #startup-config: config/leaf2.cli
+      startup-config: config/leaf2.cli
     spine1:
       kind: nokia_srlinux
       type: ixr-d3
-      #startup-config: config/spine1.cli
+      startup-config: config/spine1.cli
     srv1:
       kind: linux
       exec:

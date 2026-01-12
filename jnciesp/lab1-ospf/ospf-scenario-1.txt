@@ -38,11 +38,18 @@
     + eth2 192.168.20.1/24
 
 - configure ospf
-    + set eth1 interfaces to use p2p network type area 0
-    + set eth1 interfaces metric to 100 area 0
-    + set jr1 eth2 interface area 1
-    + set jr2 eth2 interface area 2
+    + eth1 interfaces should use p2p network type area 0
+    + eth1 interfaces metric to 100 area 0
+    + jr1 eth2 interface area 1
+    + jr2 eth2 interface area 2
+    + loopback0 interface area 0
     + use loopback address as router-id
+
+    + Verification :
+        - display neighbor adj
+        - ospf routing tables
+        - ospf information
+        - display inet.0 for ospf
 
 
 - add the following address to jr1 lo0 interface

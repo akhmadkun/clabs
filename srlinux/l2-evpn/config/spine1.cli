@@ -2,6 +2,9 @@ set / routing-policy policy all default-action policy-result accept
 set / interface ethernet-1/1 admin-state enable
 set / interface ethernet-1/1 subinterface 0 ipv4 admin-state enable
 set / interface ethernet-1/1 subinterface 0 ipv4 address 192.168.11.0/31
+set / interface ethernet-1/2 admin-state enable
+set / interface ethernet-1/2 subinterface 0 ipv4 admin-state enable
+set / interface ethernet-1/2 subinterface 0 ipv4 address 192.168.12.0/31
 
 set / network-instance default interface ethernet-1/1.0
 set / network-instance default interface ethernet-1/2.0
