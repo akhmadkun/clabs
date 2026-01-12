@@ -7,7 +7,13 @@
     + leaf1, BGP AS 100, router id 1.1.1.1
     + leaf2, BGP AS 200, router id 2.2.2.2
     + allow all routes to be advertised and received
-    + use peer-group ebgp-underlay for each adjacency
+    + use peer-group for each adjacency
+
+    + Verify bgp status
+    + Verify bgp neighbor status
+    + Verify received/advertised routes from/to bgp neighbor
+    + Verify the content of the routing table
+    + ping loopback to loopback between leafs
 
 # Overlay
 
@@ -17,6 +23,7 @@
     + use as number 1000
     + allow all routes to be advertised and received
     + allow all routes to be advertised and received
+
     + Verify ibgp has been formed
 
 # access  interface on leaf1 and leaf2
@@ -32,12 +39,25 @@
     + create new mac-vrf network-instance named SRV
     + associate access interface and vxlan interface with SRV network-instance
     + send ping packet from each server and
-    + verify that each mac address has been learned by SRV network-instance
+    + Verify that srv mac has been learned by SRV network-instance at corresponding leafs.
 
 # EVPN in MAC-VRF
     + Configure EVPN to advertise locally learned MACs to remote leafs
     + Use EVPN Virtual Identifier : 111
-    + Use 100:111 as RT import and export
+    + Use 1000:111 as RT import and export
+
     + Verify the RT/RD values
-    + Verify that ibgp neighbors has exchanged EVPN routes
+    + Verify that ibgp neighbors has exchanged EVPN routes (IMET / type3, RT3)
+        /show network-instance default protocols bgp neighbor 10.0.0.2
+        /show network-instance default protocols bgp routes evpn route-type 3 summary
+        /show network-instance default protocols bgp routes evpn route-type 3 detail
+        /show tunnel-interface vxlan1 vxlan-interface 1 bridge-table multicast-destinations destination *
+    + Verify VXLAN tunnels created towards remote VTEP
+        /show tunnel vxlan-tunnel all
+        /show network-instance default tunnel-table all
     + Verify that network-instance SRV has learned remote srv mac address
+        / show network-instance SRV bridge-table mac-table all
+    + Verify EVPN MAC/IP routes (type2, RT2)
+        / show network-instance default protocols bgp routes evpn route-type 2 summary
+    + Verify the creation of unicast tunnel destinations
+        / show tunnel-interface vxlan1 vxlan-interface 1 bridge-table unicast-destinations destination *

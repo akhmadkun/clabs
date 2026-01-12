@@ -1,7 +1,9 @@
+set / routing-policy policy all default-action policy-result accept
 set / interface ethernet-1/49 admin-state enable
 set / interface ethernet-1/49 subinterface 0 ipv4 admin-state enable
 set / interface ethernet-1/49 subinterface 0 ipv4 address 192.168.11.1/31
-set / routing-policy policy all default-action policy-result accept
+set / interface system0 subinterface 0 ipv4 admin-state enable
+set / interface system0 subinterface 0 ipv4 address 1.1.1.1/32
 set / network-instance default interface ethernet-1/49.0
 set / network-instance default interface system0.0
 set / network-instance default protocols bgp autonomous-system 100

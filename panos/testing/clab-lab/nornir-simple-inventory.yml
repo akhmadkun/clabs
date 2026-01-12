@@ -1,6 +1,0 @@
----
-panos:
-    username: admin
-    password: Admin@123
-    platform: paloalto_panos
-    hostname: 172.20.20.2

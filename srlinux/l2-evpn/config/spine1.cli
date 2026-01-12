@@ -2,13 +2,11 @@ set / routing-policy policy all default-action policy-result accept
 set / interface ethernet-1/1 admin-state enable
 set / interface ethernet-1/1 subinterface 0 ipv4 admin-state enable
 set / interface ethernet-1/1 subinterface 0 ipv4 address 192.168.11.0/31
-set / interface ethernet-1/2 admin-state enable
-set / interface ethernet-1/2 subinterface 0 ipv4 admin-state enable
-set / interface ethernet-1/2 subinterface 0 ipv4 address 192.168.12.0/31
+
 set / network-instance default interface ethernet-1/1.0
 set / network-instance default interface ethernet-1/2.0
 set / network-instance default protocols bgp autonomous-system 300
-set / network-instance default protocols bgp router-id 11.11.11.11
+set / network-instance default protocols bgp router-id 12.12.12.12
 set / network-instance default protocols bgp afi-safi ipv4-unicast admin-state enable
 set / network-instance default protocols bgp group leafs export-policy [ all ]
 set / network-instance default protocols bgp group leafs import-policy [ all ]
