@@ -1,0 +1,54 @@
+name: inital.ospf.junos
+prefix: ""
+
+topology:
+  kinds:
+    juniper_crpd:
+        image: xzjt/crpd:25.2R1-S1.4
+  nodes:
+    R1:
+      kind: juniper_crpd
+      startup-config: R1.conf
+    R2:
+      kind: juniper_crpd
+      startup-config: R2.conf
+    R3:
+      kind: juniper_crpd
+      startup-config: R3.conf
+    R4:
+      kind: juniper_crpd
+      startup-config: R4.conf
+    R5:
+      kind: juniper_crpd
+      startup-config: R5.conf
+    R6:
+      kind: juniper_crpd
+      startup-config: R6.conf
+    R7:
+      kind: juniper_crpd
+      startup-config: R7.conf
+    R8:
+      kind: juniper_crpd
+      startup-config: R8.conf
+    R9:
+      kind: juniper_crpd
+      startup-config: R9.conf
+    R10:
+      kind: juniper_crpd
+      startup-config: R10.conf
+    sw:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      startup-config: ceos.cfg
+
+  links:
+    - endpoints: ["sw:eth1", "R1:eth1"]
+    - endpoints: ["sw:eth2", "R2:eth1"]
+    - endpoints: ["sw:eth3", "R3:eth1"]
+    - endpoints: ["sw:eth4", "R4:eth1"]
+    - endpoints: ["sw:eth5", "R5:eth1"]
+    - endpoints: ["sw:eth6", "R6:eth1"]
+    - endpoints: ["sw:eth7", "R7:eth1"]
+    - endpoints: ["sw:eth8", "R8:eth1"]
+    - endpoints: ["sw:eth9", "R9:eth1"]
+    - endpoints: ["sw:eth10", "R10:eth1"]
