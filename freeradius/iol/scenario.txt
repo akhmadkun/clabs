@@ -1,0 +1,7 @@
++ Configure R1 to use Radius server as authentication server for remote login
++ fallback to local if radius server down
++ Radius Server :
+    - IP : 172.20.20.100
+    - secret: testing123
+
++ make sure logged in user got privileged level 15

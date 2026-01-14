@@ -1,0 +1,16 @@
+name: inersv5-iol
+prefix: ""
+mgmt:
+  ipv4-subnet: 172.20.20.0/24
+topology:
+  kinds:
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
+  nodes:
+    R1:
+      kind: cisco_iol
+      #startup-config: R1.partial
+    radius:
+      kind: linux
+      image: akhmadkun/myradius:latest
+      mgmt-ipv4: 172.20.20.100

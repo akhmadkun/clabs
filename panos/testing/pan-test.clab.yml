@@ -4,4 +4,4 @@ topology:
   nodes:
     panos:
       kind: paloalto_panos
-      image: arthurk99/paloalto-pa-vm:10.1.0
+      image: akhmadkun/palo-pa-vm:10.1.0
