@@ -1,0 +1,34 @@
+name: simple-palo
+prefix: ""
+mgmt:
+  network: fixedpalo
+  ipv4-subnet: 172.21.21.0/24
+topology:
+  kinds:
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+    paloalto_panos:
+      image: arthurk99/paloalto-pa-vm:10.1.0
+  nodes:
+    ngfw:
+      kind: paloalto_panos
+      mgmt-ipv4: 172.21.21.11
+    client1:
+      kind: linux
+      network-mode: none
+      exec:
+        - ip link set address 00:c1:ab:00:00:01 dev eth1
+        - ip addr add 192.168.1.99/24 dev eth1
+        - ip route add default via 192.168.1.1 dev eth1
+    client2:
+      kind: linux
+      network-mode: none
+      exec:
+        - ip link set address 00:c1:ab:00:00:02 dev eth1
+        - ip addr add 192.168.2.99/24 dev eth1
+        - ip route add default via 192.168.2.1 dev eth1
+
+  links:
+    - endpoints: ["ngfw:Ethernet1/1", "client1:eth1"]
+    - endpoints: ["ngfw:Ethernet1/2", "client2:eth1"]
+
