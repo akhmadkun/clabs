@@ -3,5 +3,6 @@
 + Radius Server :
     - IP : 172.20.20.100
     - secret: testing123
+    - creds => radius:radius
 
 + make sure logged in user got privileged level 15

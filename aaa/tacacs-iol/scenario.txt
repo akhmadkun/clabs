@@ -1,0 +1,9 @@
++ Configure R1 to use tacacs as authentication server for remote login
++ fallback to local if tacacs server down
++ Tacacs Server :
+    - IP : 172.20.20.100
+    - secret: tac_plus_key
+    - creds => tacacs:tacacs
+
++ make sure logged in user got privileged level 15
+    - do not user configuration under line vty to accomplish this
