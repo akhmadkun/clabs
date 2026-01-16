@@ -14,3 +14,39 @@
 |            |             | Ethernet2     | -              | Access Port (VLAN 10) |
 
 
+# Underlay
+
++ configure ip address as per topology
++ Configure ospf area 0 for all devices
++ all nodes should use lo0 as router-id
++ make sure leafs have loopback reachability between them
+
+# Overlay
+
++ Configure BGP EVPN using AS 65001
++ Spine should act as Route Reflector for leafs
++ do not enable ipv4-unicast peering
++ Use peer group EVPN-CLIENTS on spine
++ all nodes should use loopback0 as bgp source
+
+# Access Interfaces and VxLAN
+
++ Configure interface to end-points as access vlan 10
++ Configure vxlan interface using loopback0 as source
++ Map vlan 10 to vni 10010
+
+# EVPN
+
++ Configure EVPN to advertise locally learned MACs to remote leafs
++ Use <loopback0>:10010 as identifier
++ Use 65001:10010 as route target
+
+# Verify
+
++ Test leaf's loopback reachability
++ run show bgp summary
++ run show route table bgp.evpn.0
++ run show interfaces vtep
++ run show ethernet-switching table
++ run show evpn database
++ Test Host to Host reachability
