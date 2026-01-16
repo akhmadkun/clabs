@@ -1,0 +1,35 @@
+name: arista-evpn
+prefix: ""
+
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.35.0F
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+      network-mode: none
+
+  nodes:
+    spine1:
+      kind: ceos
+    leaf1:
+      kind: ceos
+    leaf2:
+      kind: ceos
+    host1:
+      kind: linux
+      exec:
+        - ip addr add 192.168.10.11/24 dev eth1
+    host2:
+      kind: linux
+      exec:
+        - ip addr add 192.168.10.12/24 dev eth1
+
+  links:
+    # Underlay Links (Leaf ke Spine)
+    - endpoints: ["leaf1:eth1", "spine1:eth1"]
+    - endpoints: ["leaf2:eth1", "spine1:eth2"]
+    
+    # Host Links
+    - endpoints: ["leaf1:eth2", "host1:eth1"]
+    - endpoints: ["leaf2:eth2", "host2:eth1"]
