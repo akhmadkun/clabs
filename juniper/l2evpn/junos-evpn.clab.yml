@@ -1,0 +1,29 @@
+name: junos-evpn
+prefix: ""
+topology:
+  kinds:
+    juniper_vjunosswitch:
+      image: arthurk99/juniper-vjunos-switch:23.4
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+      network-mode: none
+
+  nodes:
+    spine1: { kind: juniper_vjunosswitch }
+    leaf1:  { kind: juniper_vjunosswitch }
+    leaf2:  { kind: juniper_vjunosswitch }
+    host1:
+      kind: linux
+      exec:
+        - ip addr add 192.168.10.11/24 dev eth1
+    host2:
+      kind: linux
+      exec:
+        - ip addr add 192.168.10.12/24 dev eth1
+
+  links:
+    # Interface mapping: eth1 -> xe-0/0/0, eth2 -> xe-0/0/1
+    - endpoints: ["leaf1:eth1", "spine1:eth1"]
+    - endpoints: ["leaf2:eth1", "spine1:eth2"]
+    - endpoints: ["leaf1:eth2", "host1:eth1"]
+    - endpoints: ["leaf2:eth2", "host2:eth1"]
