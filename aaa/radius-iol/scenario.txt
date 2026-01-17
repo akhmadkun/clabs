@@ -1,8 +1,30 @@
+  172.20.20.0/24
+   ──────────────────────────────
+
+        ┌─────────────────────┐
+        │       RADIUS        │     secret : testing123
+        │       Server        │     user :
+        │                     │         - adminradius:admin (privilege 15)
+        │  eth0               │         - radius:radius (unprivileged)
+        │  172.20.20.100      │
+        └──────────┬──────────┘
+                   │
+                   │
+                   │  eth0/0
+        ┌──────────┴───────────┐
+        │         R1           │
+        │                      │
+        │  eth0/0              │
+        │  VRF: clab-mgmt      │
+        │                      │
+        └──────────────────────┘
+
 + Configure R1 to use Radius server as authentication server for remote login
 + fallback to local if radius server down
-+ Radius Server :
-    - IP : 172.20.20.100
-    - secret: testing123
-    - creds => radius:radius
 
-+ make sure logged in user got privileged level 15
++ make sure logged in user got privileged as configured from radius server
++ now, make sure all logged in user (remotely) got privilege 15
+
++ Notes :
+  - on radius server : use  radtest radius1 radius1  127.0.0.1 0 testing123 on radius server for testing
+

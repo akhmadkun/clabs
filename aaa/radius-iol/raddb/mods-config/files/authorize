@@ -1,0 +1,4 @@
+adminradius Cleartext-Password := "admin"
+  Cisco-AVPair = "shell:priv-lvl=15"
+radius Cleartext-Password := "radius"
+radius1 Cleartext-Password := "radius1"
