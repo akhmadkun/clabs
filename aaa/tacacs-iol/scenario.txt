@@ -1,9 +1,29 @@
+            172.20.20.0/24
+   ──────────────────────────────
+
+        ┌─────────────────────┐
+        │       TACACS+       │     secret : tacacs123
+        │       Server        │     user :
+        │                     │         - admintacacs:admin (privilege 15)
+        │  eth0               │         - tacacs:tacacs(unprivileged)
+        │  172.20.20.100      │
+        └──────────┬──────────┘
+                   │
+                   │
+                   │  eth0/0
+        ┌──────────┴───────────┐
+        │         R1           │
+        │                      │
+        │  eth0/0              │
+        │  VRF: clab-mgmt      │
+        │                      │
+        └──────────────────────┘
+
+
+
 + Configure R1 to use tacacs as authentication server for remote login
 + fallback to local if tacacs server down
-+ Tacacs Server :
-    - IP : 172.20.20.100
-    - secret: tac_plus_key
-    - creds => tacacs:tacacs
 
-+ make sure logged in user got privileged level 15
-    - do not user configuration under line vty to accomplish this
++ make sure logged in user got privileged as configured from radius server
++ now, make sure all logged in user (remotely) got privilege 15
+

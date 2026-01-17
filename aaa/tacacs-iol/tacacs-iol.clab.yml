@@ -10,7 +10,9 @@ topology:
     R1:
       kind: cisco_iol
       #startup-config: R1.partial
-    radius:
+    tacacs:
       kind: linux
       image: akhmadkun/mytacacs:latest
       mgmt-ipv4: 172.20.20.100
+      binds:
+        - ./tac_plus.cfg:/etc/tac_plus/tac_plus.cfg
