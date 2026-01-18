@@ -1,0 +1,11 @@
+name: cjunos
+prefix: ''
+topology:
+  nodes:
+    cevo1:
+      #kind: vr-ftosv
+      kind: fortinet_fortigate
+      image: vrnetlab/vr-fortios:7.0.1
+
+  links:
+    #- endpoints: ["cevo1:eth4", "cevo2:eth4"]

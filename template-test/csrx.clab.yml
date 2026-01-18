@@ -1,0 +1,10 @@
+name: cjunos
+prefix: ''
+topology:
+  nodes:
+    cevo1:
+      kind: linux
+      image: mturton/csrx:22.4R2.8
+
+  links:
+    #- endpoints: ["cevo1:eth4", "cevo2:eth4"]
