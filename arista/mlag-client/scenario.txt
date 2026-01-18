@@ -1,9 +1,5 @@
-                    Management Network
-                   172.20.20.0/24
-   ───────────────────────────────────────────────
         ┌──────────────────┐        ┌──────────────────┐
         │      leaf1       │        │      leaf2       │
-        │     (cEOS)       │        │     (cEOS)       │
         │                  │        │                  │
         │ mgmt: .11        │        │ mgmt: .12        │
         │                  │        │                  │
@@ -11,9 +7,11 @@
         │ eth2 ────────────┼────────┼────────── eth2   │
         │   PEER-LINK      │        │   PEER-LINK      │
         │   (Po1)          │        │   (Po1)          │
+        │                 10.1.1.0/30                  │
         │                  │        │                  │
         │ eth3 ────────────┼────────┼────────── eth3   │
         │   KEEPALIVE      │        │   KEEPALIVE      │
+        │                 10.2.2.0/30                  │
         │                  │        │                  │
         │ eth4             │        │ eth4             │
         └─────┬────────────┘        └────────────┬─────┘
@@ -31,3 +29,29 @@
         │ GW : 192.168.10.1                         │
         └───────────────────────────────────────────┘
 
+# VLAN
+  + client should be on the vlan 10 (CLIENT_10)
+  + use vlan 4094 for mlag peering
+
+# Peer Link
+  + configure Po1 bundle for peer-link
+  + configure svi for peering using 10.1.1.0/30 subnet
+  + ensure leafs have reachability on this subnet
+
+# Peer KEEPALIVE
+  + use 10.2.2.0/30 subnet
+
+# MLAG configuration
+  + Use domain MLAG_DOMAIN
+  + Use peerlink and keepalive as show on topology
+  + Use eth3 to detect split-brain scenario
+
+# MLAG Interface
+  + Configure eth4 as MLAG interface
+  + Use vlan 10 and bundle id 10
+
+# Configure GW for vlan 10
+  + use 192.168.10.1 as virtual-router
+  + make sure the client can ping the virtual router address
+
+# Make sure failover happened within less than 3 seconds

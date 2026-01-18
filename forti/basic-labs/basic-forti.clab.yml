@@ -1,0 +1,24 @@
+name: fgt-basic-lab
+prefix: ""
+
+topology:
+  nodes:
+    # 1. FortiGate (Router/Firewall Utama)
+    fgt01:
+      kind: fortinet_fortigate
+      image: vrnetlab/vr-fortios:7.0.1
+      mgmt-ipv4: 172.20.20.10
+      
+    # 2. LAN Client (PC Linux Ringan)
+    client01:
+      kind: linux
+      image: ghcr.io/hellt/network-multitool 
+      network-mode: none
+      exec:
+        # Setting IP Statis dan Gateway ke arah FortiGate
+        - ip addr add 10.10.10.2/24 dev eth1
+        - ip route add 0.0.0.0/0 via 10.10.10.1
+
+  links:
+    # Link Port2 (LAN) -> Terhubung ke Client
+    - endpoints: ["fgt01:eth1", "client01:eth1"]
