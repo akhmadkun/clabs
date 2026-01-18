@@ -12,7 +12,7 @@ topology:
       #startup-config: R1.partial
     radius:
       kind: linux
-      image: akhmadkun/myradius:latest
+      image: freeradius/freeradius-server:latest
       mgmt-ipv4: 172.20.20.100
       binds:
         - ./raddb/clients.conf:/etc/raddb/clients.conf

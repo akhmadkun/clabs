@@ -1,0 +1,55 @@
+name: arista-mlag-poc
+prefix: ""
+
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.35.0F
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    leaf1:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.11
+
+    leaf2:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.12
+
+    client:
+      kind: linux
+      mgmt-ipv4: 172.20.20.13
+      # LACP setup for Linux saat boot
+      exec:
+        # 1. Matikan dulu interface fisik sebelum bonding
+        - ip link set eth1 down
+        - ip link set eth2 down
+
+        # 2. Buat interface bond
+        - ip link add bond0 type bond mode 802.3ad
+
+        # 3. Masukkan slave ke master (sekarang aman karena slave 'down')
+        - ip link set eth1 master bond0
+        - ip link set eth2 master bond0
+
+        # 4. Nyalakan interface bond dan fisiknya
+        - ip link set bond0 up
+        - ip link set eth1 up
+        - ip link set eth2 up
+
+        # 5. Pasang IP Address
+        - ip addr add 192.168.10.100/24 dev bond0
+        #- ip route add default via 192.168.10.1
+
+  links:
+    # PEER LINK (Port-Channel 1)
+    - endpoints: ["leaf1:eth1", "leaf2:eth1"]
+    - endpoints: ["leaf1:eth2", "leaf2:eth2"]
+
+    # KEEPALIVE LINK
+    - endpoints: ["leaf1:eth3", "leaf2:eth3"]
+
+    # MEMBER LINKS (Host connection)
+    - endpoints: ["leaf1:eth4", "client:eth1"]
+    - endpoints: ["leaf2:eth4", "client:eth2"]

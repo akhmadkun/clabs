@@ -12,7 +12,7 @@ topology:
       #startup-config: R1.partial
     tacacs:
       kind: linux
-      image: akhmadkun/mytacacs:latest
+      image: lfkeitel/tacacs_plus:ubuntu
       mgmt-ipv4: 172.20.20.100
       binds:
         - ./tac_plus.cfg:/etc/tac_plus/tac_plus.cfg
