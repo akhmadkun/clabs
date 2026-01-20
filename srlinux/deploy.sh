@@ -1,1 +1,0 @@
-sudo containerlab deploy

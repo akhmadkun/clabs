@@ -1,4 +1,4 @@
-name: l2evpn01
+name: bgp-basic
 prefix: ""
 
 topology:

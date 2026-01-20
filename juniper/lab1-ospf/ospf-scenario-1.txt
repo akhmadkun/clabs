@@ -42,7 +42,7 @@
     + eth1 interfaces metric to 100 area 0
     + jr1 eth2 interface area 1
     + jr2 eth2 interface area 2
-    + loopback0 interface area 0
+    + loopback0 interface area 0 and should be in passive state
     + use loopback address as router-id
 
     + Verification :

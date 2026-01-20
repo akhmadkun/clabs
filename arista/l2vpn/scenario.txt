@@ -21,7 +21,7 @@
 + all nodes should use lo0 as router-id
 + make sure leafs have loopback reachability between them
 
-# Overlay
+# Overlay BGP-EVPN
 
 + Configure BGP EVPN using AS 65001
 + Spine should act as Route Reflector for leafs
