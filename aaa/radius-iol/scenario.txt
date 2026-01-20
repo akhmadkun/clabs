@@ -26,5 +26,6 @@
 + now, make sure all logged in user (remotely) got privilege 15
 
 + Notes :
-  - on radius server : use  radtest radius1 radius1  127.0.0.1 0 testing123 on radius server for testing
+  - to test radius on the server :
+    > radtest radius1 radius1  127.0.0.1 0 testing123
 
