@@ -1,0 +1,28 @@
+
+┌─────────────┐ .1 eBGP       .2┌─────────────┐.2  eBGP       .3┌─────────────┐
+│     R1      │─────────────────│     R2      │─────────────────│     R3      │
+│             │   10.0.0.0/24   │             │ 10.1.0.0/24     │             │
+│  AS 64512   │eth1         eth1│  AS 64511   │eth2         eth1│   AS 64512  │
+│             │                 │             │                 │             │
+└─────────────┘                 └─────────────┘                 └─────────────┘
+lo0:1.1.1.1/32                  lo0:2.2.2.2/32                  lo0:3.3.3.3/32
+
+
+# BGP Peering
+    + Configure BGP peering between the nodes
+    + Configure AS number as the following:
+        - R1 : 64512
+        - R2 : 64511
+        - R3 : 64512
+    + Advertise each lo0 into bgp neighbors
+    + Verify the received routes on each nodes
+
+# BGP loop prevention
+    + On R2, Check what bgp routes is advertised to R1 and R3
+    + Configure R2 so it send received BGP routes to R1 and R3
+    + Verify what R2 send to neighbors
+
+    + Configure R1 and R3, so it didn't drop BGP routes even when
+      its own AS is in the BGP path
+
+    + Test ping loopback reachability between R1 and R3

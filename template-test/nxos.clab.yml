@@ -1,0 +1,30 @@
+name: vpc-basic
+prefix: ""
+
+topology:
+  nodes:
+    nxos1:
+      kind: cisco_n9kv
+      image: arthurk99/cisco-nxos9000v:10.3.5
+      mgmt-ipv4: 172.20.20.11
+    
+    nxos2:
+      kind: cisco_n9kv
+      image: arthurk99/cisco-nxos9000v:10.3.5
+      mgmt-ipv4: 172.20.20.12
+
+    server1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      cmd: sleep infinity
+
+  links:
+    # Peer Keepalive (L3 Link)
+    - endpoints: ["nxos1:eth1", "nxos2:eth1"]
+    
+    # Peer Link (vPC Trunk)
+    - endpoints: ["nxos1:eth2", "nxos2:eth2"]
+    
+    # Member Ports (Downstream to Server)
+    - endpoints: ["nxos1:eth3", "server1:eth1"]
+    - endpoints: ["nxos2:eth3", "server1:eth2"]

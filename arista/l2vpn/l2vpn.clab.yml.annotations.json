@@ -1,0 +1,46 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "spine1",
+      "position": {
+        "x": 357,
+        "y": 161
+      }
+    },
+    {
+      "id": "leaf2",
+      "position": {
+        "x": 455,
+        "y": 259
+      }
+    },
+    {
+      "id": "leaf1",
+      "position": {
+        "x": 259,
+        "y": 245
+      }
+    },
+    {
+      "id": "host2",
+      "position": {
+        "x": 469,
+        "y": 357
+      }
+    },
+    {
+      "id": "host1",
+      "position": {
+        "x": 259,
+        "y": 357
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}

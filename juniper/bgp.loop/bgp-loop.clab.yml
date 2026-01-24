@@ -1,0 +1,20 @@
+name: bgp-loop
+prefix: ""
+topology:
+  nodes:
+    r1:
+      kind: crpd
+      startup-config: r1.conf
+      image: xzjt/crpd:25.2R1-S1.4
+    r2:
+      kind: crpd
+      startup-config: r2.conf
+      image: xzjt/crpd:25.2R1-S1.4
+    r3:
+      kind: crpd
+      startup-config: r3.conf
+      image: xzjt/crpd:25.2R1-S1.4
+
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]
+    - endpoints: ["r2:eth2", "r3:eth1"]

@@ -1,0 +1,16 @@
+---
+client1:
+    username: 
+    password: 
+    platform: linux
+    hostname: 
+client2:
+    username: 
+    password: 
+    platform: linux
+    hostname: 
+ngfw:
+    username: admin
+    password: Admin@123
+    platform: paloalto_panos
+    hostname: 172.21.21.11
