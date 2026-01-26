@@ -28,6 +28,7 @@
 + do not enable ipv4-unicast peering
 + Use peer group EVPN-CLIENTS on spine
 + all nodes should use loopback0 as bgp source
++ activate evpn peering
 
 # Access Interfaces and VxLAN
 

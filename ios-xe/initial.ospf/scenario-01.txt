@@ -24,32 +24,3 @@ A) Configure OSPF process id 1 on R6, R7, and R9
     7) Ensure R7 has connectivity with R6 and R9’s Loopback0.
     8) Why R6 and R9 doesn’t receive any OSPF routes ?
     9) Configure R7 so R6 and R9 receive inter area OSPF routes
-
-___________________________________________________________________________________________
-
-
-OSPF BACKBONE (AREA 0) - Broadcast Segment
-      [=========================================================]
-                 | Subnet: eth0/1.100 (VLAN 100) |
-      [=========================================================]
-          |            |             |             |            |
-          |            |             |             |            |
-     eth0/1.100   eth0/1.100    eth0/1.100    eth0/1.100   eth0/1.100
-    +----------+ +----------+  +----------+  +----------+ +----------+
-    |    R1    | |    R2    |  |    R3    |  |    R4    | |    R5    |
-    |          | |          |  |   (ABR)  |  |   (ABR)  | |          |
-    |   Lo0    | |   Lo0    |  |   Lo0    |  |   Lo0    | |   Lo0    |
-    | (Area 0) | | (Area 0) |  | (Area 3) |  | (Area 4) | | (Area 0) |
-    +----------+ +----------+  +----------+  +----------+ +----------+
-
-
-
-B) Configure OSPF process id 1 area 0 on R1, R2, R3, R4, and R5
-    1) advertise lo0 prefixes of R1 – R2 into area 0
-    2) advertise lo0 prefixes of R3 – R4 into area Y, Y is the router number
-    3) Use single network command on R5.
-    4) Use only interface-level on DMVPN spokes.
-    5) Change default OSPF network type to non-broadcast
-    6) Ensure IP connectivity between loopback0 prefixes of the routers
-
-

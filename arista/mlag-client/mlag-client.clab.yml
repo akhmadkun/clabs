@@ -27,7 +27,7 @@ topology:
         - ip link set eth2 down
 
         # 2. Buat interface bond
-        - ip link add bond0 type bond mode 802.3ad
+        - ip link add bond0 type bond mode 802.3ad miimon 100 lacp_rate fast
 
         # 3. Masukkan slave ke master (sekarang aman karena slave 'down')
         - ip link set eth1 master bond0
@@ -40,7 +40,6 @@ topology:
 
         # 5. Pasang IP Address
         - ip addr add 192.168.10.100/24 dev bond0
-        #- ip route add default via 192.168.10.1
 
   links:
     # PEER LINK (Port-Channel 1)
