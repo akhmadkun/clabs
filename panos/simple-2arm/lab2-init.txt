@@ -1,0 +1,7 @@
++ Connect to the firewall web interface
++ Load a starting lab configuration
++ Set DNS servers for the firewall
++ Set NTP servers for the firewall
++ Configure a login banner for the firewall
++ Set Latitude and Longitude for the firewall
++ Configure permitted IP addresses for firewall management

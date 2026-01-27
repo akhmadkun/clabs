@@ -15,12 +15,13 @@ OSPF AREA 67                       OSPF AREA 79
 
 
 A) Configure OSPF process id 1 on R6, R7, and R9
-    1) R6 & R7 : do not use any interface-level commands.
-    2) R6 : enable OSPF only for interfaces with exact IP of Lo0 and eth0/1.67.
-    3) R7 : enable OSPF on all interface with the subnets of Eth0/1.67 and Eth0/1.79.
-    4) R9 : Use only interface-level commands
-    5) Area 67 between R6 and R7, and Loopback0 of R6 and R7.
-    6) Area 79 between R7 and R9, and Loopback0 of R9.
-    7) Ensure R7 has connectivity with R6 and R9’s Loopback0.
-    8) Why R6 and R9 doesn’t receive any OSPF routes ?
-    9) Configure R7 so R6 and R9 receive inter area OSPF routes
+    + R6 : do not use any interface-level commands.
+    + R7 & R9 : Use only interface-level commands
+    + Use ospf network type of point-to-point between R7 and R9
+    + R6 : enable OSPF only for interfaces with exact IP of Lo0 and eth0/1.67.
+    + R7 : enable OSPF on all interface with the subnets of Eth0/1.67 and Eth0/1.79.
+    + Area 67 between R6 and R7, and Loopback0 of R6 and R7.
+    + Area 79 between R7 and R9, and Loopback0 of R9.
+    + Ensure R7 has connectivity with R6 and R9’s Loopback0.
+    + Why R6 and R9 doesn’t receive any OSPF routes ?
+    + Configure R7 so R6 and R9 receive inter area OSPF routes

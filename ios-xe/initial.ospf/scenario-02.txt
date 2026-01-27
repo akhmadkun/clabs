@@ -14,10 +14,29 @@
 
 
 
-B) Configure OSPF process id 1 area 0 on R1, R2, R3, R4, and R5
+A) Configure OSPF process id 1 area 0 on R1, R2, R3, R4, and R5
     1) advertise lo0 prefixes of R1 – R2 into area 0
     2) advertise lo0 prefixes of R3 – R4 into area Y, Y is the router number
     3) Use single network command on R5.
     4) Use only interface-level on DMVPN spokes.
     5) Change default OSPF network type to non-broadcast
     6) Ensure IP connectivity between loopback0 prefixes of the routers
+
+
+[ L2 Switch / Cloud ]
+               |
+      _________|_________
+     |         |         |
+   [.1]       [.4]      [.6]
+ +------+   +------+   +------+
+ |  R1  |   |  R4  |   |  R6  |
+ +------+   +------+   +------+
+     \         |         /
+      \____ AREA 0 _____/
+
+B) Configure OSPF
+    + All should be on area 0
+    + advertise loopback0 on area 0
+    + R6 is preferred to become the DR
+    + if R6 goes down, R1 should take over DR role
+    + R4 shouldn't participate in DR election
