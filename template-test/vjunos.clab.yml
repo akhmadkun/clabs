@@ -1,0 +1,28 @@
+name: vpc-basic
+prefix: ""
+
+topology:
+  nodes:
+    vjunos1:
+      kind: juniper_vjunosrouter
+      image: arthurk99/juniper-vjunos-router:23.4
+    
+    vjunos2:
+      kind: juniper_vjunosrouter
+      image: arthurk99/juniper-vjunos-router:23.4
+
+    server1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      cmd: sleep infinity
+
+  links:
+    # Peer Keepalive (L3 Link)
+    - endpoints: ["vjunos1:eth1", "vjunos2:eth1"]
+    
+    # Peer Link (vPC Trunk)
+    - endpoints: ["vjunos1:eth2", "vjunos2:eth2"]
+    
+    # Member Ports (Downstream to Server)
+    - endpoints: ["vjunos1:eth3", "server1:eth1"]
+    - endpoints: ["vjunos2:eth3", "server1:eth2"]

@@ -1,0 +1,56 @@
+name: vpc-basic
+prefix: ""
+
+topology:
+  nodes:
+    r1:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+      startup-config: r1.cfg
+    
+    cjunos2:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+
+    cjunos3:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+    
+    cjunos4:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+
+    cjunos5:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+    
+    cjunos6:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+
+    cjunos7:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+    
+    cjunos8:
+      kind: juniper_cjunosevolved
+      image: arthurk99/juniper-cjunos-evolved:25.2
+
+    server1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      cmd: sleep infinity
+
+  links:
+    # Peer Keepalive (L3 Link)
+    - endpoints: ["r1:eth4", "cjunos2:eth4"]
+    
+    # Peer Link (vPC Trunk)
+    - endpoints: ["r1:eth5", "cjunos2:eth5"]
+    
+    - endpoints: ["r1:eth6", "cjunos2:eth6"]
+    - endpoints: ["r1:eth7", "cjunos2:eth7"]
+
+    # Member Ports (Downstream to Server)
+    - endpoints: ["r1:eth8", "server1:eth1"]
+    - endpoints: ["cjunos2:eth8", "server1:eth2"]
