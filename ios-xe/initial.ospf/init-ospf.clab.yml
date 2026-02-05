@@ -36,19 +36,17 @@ topology:
     R10:
       kind: cisco_iol
       startup-config: config/R10.partial
-    sw:
-      kind: arista_ceos
-      image: ceos:4.35.0F
-      startup-config: config/ceos.cfg
+    virbr3:
+      kind: bridge
 
   links:
-    - endpoints: ["sw:eth1", "R1:eth1"]
-    - endpoints: ["sw:eth2", "R2:eth1"]
-    - endpoints: ["sw:eth3", "R3:eth1"]
-    - endpoints: ["sw:eth4", "R4:eth1"]
-    - endpoints: ["sw:eth5", "R5:eth1"]
-    - endpoints: ["sw:eth6", "R6:eth1"]
-    - endpoints: ["sw:eth7", "R7:eth1"]
-    - endpoints: ["sw:eth8", "R8:eth1"]
-    - endpoints: ["sw:eth9", "R9:eth1"]
-    - endpoints: ["sw:eth10", "R10:eth1"]
+    - endpoints: ["virbr3:eth1", "R1:eth1"]
+    - endpoints: ["virbr3:eth2", "R2:eth1"]
+    - endpoints: ["virbr3:eth3", "R3:eth1"]
+    - endpoints: ["virbr3:eth4", "R4:eth1"]
+    - endpoints: ["virbr3:eth5", "R5:eth1"]
+    - endpoints: ["virbr3:eth6", "R6:eth1"]
+    - endpoints: ["virbr3:eth7", "R7:eth1"]
+    - endpoints: ["virbr3:eth8", "R8:eth1"]
+    - endpoints: ["virbr3:eth9", "R9:eth1"]
+    - endpoints: ["virbr3:eth10", "R10:eth1"]

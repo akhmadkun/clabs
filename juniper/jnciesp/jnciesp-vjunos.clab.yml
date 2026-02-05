@@ -1,0 +1,55 @@
+name: jncie-sp-vjunos
+prefix: ""
+
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: arthurk99/juniper-vjunos-router:23.4
+      cpu: 1.5
+  
+  nodes:
+    # --- Router Definitions ---
+    r1:
+      kind: juniper_vjunosrouter
+    r2:
+      kind: juniper_vjunosrouter
+    r3:
+      kind: juniper_vjunosrouter
+    r4:
+      kind: juniper_vjunosrouter
+    r5:
+      kind: juniper_vjunosrouter
+    r6:
+      kind: juniper_vjunosrouter
+    r7:
+      kind: juniper_vjunosrouter
+    r8:
+      kind: juniper_vjunosrouter
+
+    # --- Switch untuk interkoneksi ge-0/0/4 ---
+    virbr3:
+      kind: bridge
+
+  links:
+    # --- Point-to-Point Links (LAG) R1 <-> R2 ---
+    # eth2 = ge-0/0/1
+    - endpoints: ["r1:eth2", "r2:eth2"]
+    # eth3 = ge-0/0/2
+    - endpoints: ["r1:eth3", "r2:eth3"]
+
+    # --- Point-to-Point Links (LAG) R5 <-> R6 ---
+    # eth2 = ge-0/0/1
+    - endpoints: ["r5:eth2", "r6:eth2"]
+    # eth3 = ge-0/0/2
+    - endpoints: ["r5:eth3", "r6:eth3"]
+
+    # --- Mesh Connections (Semua connect ke Switch s1) ---
+    # Menggunakan eth5 yang mapping ke ge-0/0/4
+    - endpoints: ["r1:eth5", "virbr3:r1_ge4"]
+    - endpoints: ["r2:eth5", "virbr3:r2_ge4"]
+    - endpoints: ["r3:eth5", "virbr3:r3_ge4"]
+    - endpoints: ["r4:eth5", "virbr3:r4_ge4"]
+    - endpoints: ["r5:eth5", "virbr3:r5_ge4"]
+    - endpoints: ["r6:eth5", "virbr3:r6_ge4"]
+    - endpoints: ["r7:eth5", "virbr3:r7_ge4"]
+    - endpoints: ["r8:eth5", "virbr3:r8_ge4"]

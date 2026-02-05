@@ -24,6 +24,6 @@
 + Configure R1 to use tacacs as authentication server for remote login
 + fallback to local if tacacs server down
 
-+ make sure logged in user got privileged as configured from radius server
++ make sure logged in user got privileged as configured from tacacs server
 + now, make sure all logged in user (remotely) got privilege 15
 

@@ -6,7 +6,6 @@ topology:
     r1:
       kind: juniper_cjunosevolved
       image: arthurk99/juniper-cjunos-evolved:25.2
-      startup-config: r1.cfg
     
     cjunos2:
       kind: juniper_cjunosevolved

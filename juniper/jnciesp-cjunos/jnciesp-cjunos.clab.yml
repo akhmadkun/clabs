@@ -5,6 +5,7 @@ topology:
   kinds:
     juniper_cjunosevolved:
       image: arthurk99/juniper-cjunos-evolved:25.2
+      cpu: 1.0
 
   nodes:
     # --- Router Definitions (R1 - R8) ---
