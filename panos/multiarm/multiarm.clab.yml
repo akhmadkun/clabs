@@ -1,0 +1,32 @@
+name: multiarm-ceos
+prefix: ""
+mgmt:
+  network: fixedpalo
+  ipv4-subnet: 172.21.21.0/24
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.35.0F
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+    paloalto_panos:
+      image: arthurk99/paloalto-pa-vm:10.1.0
+  nodes:
+    ngfw:
+      kind: paloalto_panos
+      mgmt-ipv4: 172.21.21.11
+    ceos:
+      kind: ceos
+
+  links:
+    - endpoints: ["ngfw:Ethernet1/1", "ceos:eth1"]
+    - endpoints: ["ngfw:Ethernet1/2", "ceos:eth2"]
+    - endpoints: ["ngfw:Ethernet1/3", "ceos:eth3"]
+    - endpoints: ["ngfw:Ethernet1/4", "ceos:eth4"]
+    - endpoints: ["ngfw:Ethernet1/5", "ceos:eth5"]
+    - endpoints: ["ngfw:Ethernet1/6", "ceos:eth6"]
+    - endpoints: ["ngfw:Ethernet1/7", "ceos:eth7"]
+    - endpoints: ["ngfw:Ethernet1/8", "ceos:eth8"]
+    - endpoints: ["ngfw:Ethernet1/9", "ceos:eth9"]
+    - endpoints: ["ngfw:Ethernet1/10", "ceos:eth10"]
+

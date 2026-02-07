@@ -1,0 +1,28 @@
+# IP Address Scheme and Topology
+
+                 ┌──────────────────────────┐
+                 │        Palo Alto NGFW    │
+                 │                          │
+                 │ zone: LAN1    zone: LAN2 │
+                 │ 192.168.1.1   192.168.2.1│
+                 │                          │
+                 │ eth1/1        eth1/2     │
+                 └───────┬──────────┬───────┘
+                         │          │
+          192.168.1.0/24 │          │ 192.168.2.0/24
+                         │          │
+              ┌──────────┘          └────────────┐
+              │                                  │
+      ┌───────────────┐                ┌───────────────┐
+      │    Client1    │                │    Client2    │
+      │               │                │               │
+      │  eth0         │                │  eth0         │
+      │  192.168.1.99 │                │  192.168.2.99 │
+      │  GW: .1       │                │  GW: .1       │
+      └───────────────┘                └───────────────┘
+
+
++ Make sure clients can ping their gateway
++ Make sure client1 can ping client2
++ Make sure client2 can ping client1
++ You are only allowed to create 1 security policy
