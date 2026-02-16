@@ -1,0 +1,23 @@
+name: qinq-lab
+prefix: ""
+topology:
+  nodes:
+    ce1:
+      kind: vr-vmx
+      image: vrnetlab/juniper_vmx:18.2R1.9
+    pe1:
+      kind: vr-vmx
+      image: vrnetlab/juniper_vmx:18.2R1.9
+    pe2:
+      kind: vr-vmx
+      image: vrnetlab/juniper_vmx:18.2R1.9
+    ce2:
+      kind: vr-vmx
+      image: vrnetlab/juniper_vmx:18.2R1.9
+  links:
+    # Link between CE1 and PE1
+    - endpoints: ["ce1:ge-0/0/0", "pe1:ge-0/0/0"]
+    # Link between PE1 and PE2 (Provider Core)
+    - endpoints: ["pe1:ge-0/0/1", "pe2:ge-0/0/1"]
+    # Link between PE2 and CE2
+    - endpoints: ["pe2:ge-0/0/0", "ce2:ge-0/0/0"]

@@ -1,0 +1,35 @@
+name: iosxr-ansible-test
+prefix: ""
+
+mgmt:
+  network: clab-mgmt-static   # Nama network docker bridge
+  ipv4-subnet: 192.168.100.0/24 # Subnet wajib didefinisikan untuk static IP
+
+topology:
+  kinds:
+    cisco_xrd:
+      image: tiebevn/cisco-xrd:latest
+      # Username/Password default biasanya tergantung image build
+      # Umumnya: cisco/cisco, admin/admin, atau root/root
+  
+  nodes:
+    PSCF-COCR3:
+      kind: cisco_xrd
+      mgmt-ipv4: 192.168.100.11
+      
+    PSCF-COCR4:
+      kind: cisco_xrd
+      mgmt-ipv4: 192.168.100.12
+      
+    BSCF-COCR3:
+      kind: cisco_xrd
+      mgmt-ipv4: 192.168.100.13
+      
+    BSCF-COCR4:
+      kind: cisco_xrd
+      mgmt-ipv4: 192.168.100.14
+
+  # Bagian links dikosongkan karena Anda hanya meminta setup mgmt IP.
+  # Anda bisa menambahkan koneksi antar router di bawah sini jika perlu.
+  links:
+    # - endpoints: ["PSCF-COCR3:Gi0-0-0-0", "PSCF-COCR4:Gi0-0-0-0"]
