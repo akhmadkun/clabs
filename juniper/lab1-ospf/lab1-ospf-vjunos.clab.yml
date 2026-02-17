@@ -1,0 +1,37 @@
+name: lab1-ospf
+prefix: ""
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: arthurk99/juniper-vjunos-router:23.4
+    juniper_crpd:
+      image: xzjt/crpd:25.2R1-S1.4
+      #image: arthurk99/juniper-cjunos-evolved:25.2
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+  nodes:
+    jr1:
+      kind: juniper_vjunosrouter
+    jr2:
+      kind: juniper_vjunosrouter
+    srv1:
+      kind: linux
+      network-mode: none
+      exec:
+        - ip link set address 00:c1:ab:00:00:01 dev eth1
+        - ip addr add 192.168.10.99/24 dev eth1
+        - route add default gw 192.168.10.1
+    srv2:
+      kind: linux
+      network-mode: none
+      exec:
+        - ip link set address 00:c1:ab:00:00:02 dev eth1
+        - ip addr add 192.168.20.99/24 dev eth1
+        - route add default gw 192.168.20.1
+
+  links:
+    - endpoints: ["jr1:eth1", "jr2:eth1"]
+
+    # endpoints connection
+    - endpoints: ["jr1:eth2", "srv1:eth1"]
+    - endpoints: ["jr2:eth2", "srv2:eth1"]

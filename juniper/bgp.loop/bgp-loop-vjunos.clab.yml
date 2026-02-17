@@ -1,0 +1,21 @@
+name: bgp-loop
+prefix: ""
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: arthurk99/juniper-vjunos-router:23.4
+  nodes:
+    r1:
+      kind: juniper_vjunosrouter
+      startup-config: r1.cfg
+    r2:
+      kind: juniper_vjunosrouter
+      startup-config: r2.cfg
+    r3:
+      kind: juniper_vjunosrouter
+      startup-config: r3.cfg
+      
+
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]
+    - endpoints: ["r2:eth2", "r3:eth2"]

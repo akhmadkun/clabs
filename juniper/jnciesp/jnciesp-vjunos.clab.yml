@@ -5,7 +5,7 @@ topology:
   kinds:
     juniper_vjunosrouter:
       image: arthurk99/juniper-vjunos-router:23.4
-      cpu: 1.5
+      #cpu: 1.5
   
   nodes:
     # --- Router Definitions ---
