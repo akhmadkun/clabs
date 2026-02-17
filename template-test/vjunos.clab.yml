@@ -5,11 +5,11 @@ topology:
   nodes:
     vjunos1:
       kind: juniper_vjunosrouter
-      image: arthurk99/juniper-vjunos-router:23.4
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
     
     vjunos2:
       kind: juniper_vjunosrouter
-      image: arthurk99/juniper-vjunos-router:23.4
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
 
     server1:
       kind: linux

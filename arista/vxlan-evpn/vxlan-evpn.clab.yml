@@ -1,4 +1,4 @@
-name: arista-evpn
+name: vxlan-evpn
 prefix: ""
 
 topology:

@@ -17,6 +17,10 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.20.20.12
 
+    host1:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.13
+
     client:
       kind: linux
       mgmt-ipv4: 172.20.20.13
@@ -50,5 +54,5 @@ topology:
     - endpoints: ["leaf1:eth3", "leaf2:eth3"]
 
     # MEMBER LINKS (Host connection)
-    - endpoints: ["leaf1:eth4", "client:eth1"]
-    - endpoints: ["leaf2:eth4", "client:eth2"]
+    - endpoints: ["leaf1:eth4", "host1:eth1"]
+    - endpoints: ["leaf2:eth4", "host1:eth2"]
