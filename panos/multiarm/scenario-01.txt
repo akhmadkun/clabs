@@ -26,3 +26,34 @@
 + Make sure client1 can ping client2
 + Make sure client2 can ping client1
 + You are only allowed to create 1 security policy
+
+
+
+# IP Address Scheme and Topology (Same Zone, Same VLAN)
+
+                 ┌──────────────────────────┐
+                 │        Palo Alto NGFW    │
+                 │                          │
+                 │ zone: LAN34              │
+                 │ 192.168.34.1             │
+                 │                          │
+                 │ vlan34        vlan34     │
+                 │ eth1/3        eth1/4     │
+                 └───────┬──────────┬───────┘
+                         │          │
+                         │          │
+                         │          │
+              ┌──────────┘          └────────────┐
+              │                                  │
+      ┌───────────────┐                ┌───────────────┐
+      │    Client3    │                │    Client4    │
+      │               │                │               │
+      │  eth0         │                │  eth0         │
+      │  192.168.34.3 │                │  192.168.34.4 │
+      │  GW: .1       │                │  GW: .1       │
+      └───────────────┘                └───────────────┘
+
++ Make sure client3 can ping client4
++ Create svi gateway for this vlan (192.168.34.1)
++ Make sure this clients can reach their gateway
++ Make sure this clients can reach Client1 and Client2
