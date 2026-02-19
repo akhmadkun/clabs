@@ -1,0 +1,43 @@
+name: vxlan-evpn-lab
+prefix: ""
+
+topology:
+  nodes:
+    # --- Leaf Switches (vJunos-Switch) ---
+    leaf1:
+      kind: juniper_vjunosswitch
+      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+      exec:
+        # Optimasi buffer interface agar OSPF/BGP tidak flapping
+        - ip link set dev eth1 txqueuelen 10000
+        - ip link set dev eth2 txqueuelen 10000
+
+    leaf2:
+      kind: juniper_vjunosswitch
+      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+      exec:
+        - ip link set dev eth1 txqueuelen 10000
+        - ip link set dev eth2 txqueuelen 10000
+
+    # --- Clients (Linux) ---
+    client1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        # Assign IP ke Client 1 (VLAN 10)
+        - ip addr add 192.168.10.1/24 dev eth1
+
+    client2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        # Assign IP ke Client 2 (VLAN 10)
+        - ip addr add 192.168.10.2/24 dev eth1
+
+  links:
+    # Underlay Link antar Leaf (ge-0/0/0)
+    - endpoints: ["leaf1:eth1", "leaf2:eth1"]
+    
+    # Client Links (ge-0/0/1)
+    - endpoints: ["leaf1:eth2", "client1:eth1"]
+    - endpoints: ["leaf2:eth2", "client2:eth1"]

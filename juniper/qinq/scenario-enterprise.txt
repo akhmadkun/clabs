@@ -1,0 +1,49 @@
+        Customer Site A                                            Customer Site B
+    +---------------------+                                    +---------------------+
+    |                     |                                    |                     |
+    |         CE1         |                                    |         CE2         |
+    |  (192.168.101.1)    |                                    |  (192.168.101.2)    |
+    |                     |                                    |                     |
+    +----------+----------+                                    +----------+----------+
+               | ge-0/0/0                                                 | ge-0/0/0
+               |                                                          |
+               |                                                          |
+               | Link: Access / Trunk                                     | Link: Access / Trunk
+               | Tags: C-VLAN 101                                         | Tags: C-VLAN 101
+               |                                                          |
+               |                                                          |
+               | ge-0/0/0                                                 | ge-0/0/0
+    +----------+----------+                                    +----------+----------+
+    |                     |                                    |                     |
+    |         PE1         |                                    |         PE2         |
+    |    (QinQ Pusher)    |                                    |    (QinQ Popper)    |
+    |                     |                                    |                     |
+    +----------+----------+                                    +----------+----------+
+               | ge-0/0/1                                                 | ge-0/0/1
+               |                                                          |
+               |                                                          |
+               +----------------------------------------------------------+
+                                  Service Provider Link
+                               (The "QinQ Tunnel" Link)
+
+                         Outer Tag (S-VLAN): 200
+                         Inner Tag (C-VLAN): 101
+
+
+
+# CE1 and CE2
+    + configure both of CE1 and CE2 interface to use vlan-id 101
+    + CE1 : 192.168.101.1/24
+    + CE2 : 192.168.101.2/24
+
+# PE1 & PE2
+    + Customer-facing port
+        - configure as standard trunk
+        - allow vlan list : VLAN 101-120
+
+    + Provider-facing port should handle untagged, single tagged, and dual-tagged vlan
+        - Outer VLAN : 200 (S-VLAN)
+        - inner VLAN : 101-120 (C-VLAN)
+
+    + Create bridge domain that handle vlan range 101 to 120
+

@@ -1,4 +1,4 @@
-name: junos-evpn
+name: vxlan-evpn
 prefix: ""
 topology:
   kinds:
@@ -26,5 +26,6 @@ topology:
     # Interface mapping: eth1 -> xe-0/0/0, eth2 -> xe-0/0/1
     - endpoints: ["leaf1:eth1", "spine1:eth1"]
     - endpoints: ["leaf2:eth1", "spine1:eth2"]
+
     - endpoints: ["leaf1:eth2", "host1:eth1"]
     - endpoints: ["leaf2:eth2", "host2:eth1"]

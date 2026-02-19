@@ -1,6 +1,5 @@
 # IP Address scheme
 
-
 |   Node     |   Role      |   Interface   |   IP Address   |   Description         |
 | ---------- | ----------- | ------------- | -------------- | --------------------- |
 |   Spine1   | Underlay/RR | Loopback0     | 3.3.3.3/32     | Router ID & BGP ID    |
