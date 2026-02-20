@@ -1,0 +1,28 @@
+name: xrv9k
+prefix: ""
+
+topology:
+  nodes:
+    xrv1:
+      kind: cisco_xrv9k
+      image: arthurk99/cisco-xrv9k:7.11.1
+    
+    xrv2:
+      kind: cisco_xrv9k
+      image: arthurk99/cisco-xrv9k:7.11.1
+
+    server1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  links:
+    # eth1 -> Gi2
+    - endpoints: ["xrv1:eth1", "xrv2:eth1"]
+    
+    # eth2 -> Gi3
+    # Peer Link (vPC Trunk)
+    - endpoints: ["xrv1:eth2", "xrv2:eth2"]
+    
+    # Member Ports (Downstream to Server)
+    - endpoints: ["xrv1:eth3", "server1:eth1"]
+    - endpoints: ["xrv2:eth3", "server1:eth2"]

@@ -1,0 +1,28 @@
+name: mclag-poc
+prefix: ""
+
+topology:
+  nodes:
+    leaf1:
+      kind: juniper_vjunosswitch
+      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+    leaf2:
+      kind: juniper_vjunosswitch
+      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+    client1:
+      kind: ceos
+      image: ceos:4.35.0F
+
+  links:
+    # ICL (Data Plane) - xe-0/0/0 & xe-0/0/1
+    - endpoints: ["leaf1:eth1", "leaf2:eth1"]
+    - endpoints: ["leaf1:eth2", "leaf2:eth2"]
+    
+    # ICCP (Control Plane) - xe-0/0/2
+    - endpoints: ["leaf1:eth3", "leaf2:eth3"]
+    
+    # MC-LAG Member Links to Client - xe-0/0/3
+    - endpoints: ["leaf1:eth4", "client1:eth1"]
+    - endpoints: ["leaf2:eth4", "client1:eth2"]

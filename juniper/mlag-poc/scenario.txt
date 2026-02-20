@@ -1,0 +1,66 @@
+                    Control Plane (ICCP)
+                 10.1.1.1/30 <--> 10.1.1.2/30
+               [eth3]                   [eth3]
+          +------+-------------------------+------+
+          |                                       |
+  +-------+-------+                       +-------+-------+
+  |               |    Data Plane (ICL)   |               |
+  |     LEAF 1    | [eth1]         [eth1] |     LEAF 2    |
+  | (vJunos-switch)-----------------------+(vJunos-switch)|
+  |               | [eth2]   (ae0) [eth2] |               |
+  |               -------------------------               |
+  |   Chassis: 0  |                       |   Chassis: 1  |
+  +-------+-------+                       +-------+-------+
+          | [eth4]                                | [eth4]
+          |                                       |
+          |               (ae1)                   |
+          |            MC-LAG Bundle              |
+          |       LACP System-ID: 00:...:01       |
+          |                                       |
+          | [eth1]                                | [eth2]
+  +-------+---------------------------------------+-------+
+  |                                                       |
+  |                   CLIENT 1 (cEOS)                     |
+  |                   (Port-Channel 1)                    |
+  |                                                       |
+  +-------------------------------------------------------+
+
+# 1. Aktifkan fitur Aggregated Devices
+
+# 2. Konfigurasi ICL (Inter-Chassis Link) di ae0
+
+set interfaces xe-0/0/0 gigether-options 802.3ad ae0
+set interfaces xe-0/0/1 gigether-options 802.3ad ae0
+set interfaces ae0 description "ICL-TO-LEAF2"
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members all
+
+# 3. Konfigurasi Link ICCP (Control Plane L3)
+set interfaces xe-0/0/2 description "ICCP-LINK"
+set interfaces xe-0/0/2 unit 0 family inet address 10.1.1.1/30
+
+# 4. Konfigurasi Protokol ICCP
+set protocols iccp local-ip-addr 10.1.1.1
+set protocols iccp peer 10.1.1.2 session-establishment-hold-time 50
+set protocols iccp peer 10.1.1.2 redundancy-group-id-list 1
+set protocols iccp peer 10.1.1.2 liveness-detection minimum-receive-interval 1000
+set protocols iccp peer 10.1.1.2 liveness-detection transmit-interval-minimum 1000
+
+# 5. Konfigurasi Member Link MC-LAG (Kearah Client) di ae1
+set interfaces xe-0/0/3 gigether-options 802.3ad ae1
+set interfaces ae1 description "MC-LAG-TO-CLIENT1"
+set interfaces ae1 aggregated-ether-options lacp active
+set interfaces ae1 aggregated-ether-options lacp system-id 00:00:00:00:00:01
+set interfaces ae1 aggregated-ether-options lacp admin-key 1
+set interfaces ae1 aggregated-ether-options mc-ae mc-ae-id 1
+set interfaces ae1 aggregated-ether-options mc-ae redundancy-group 1
+set interfaces ae1 aggregated-ether-options mc-ae chassis-id 0
+set interfaces ae1 aggregated-ether-options mc-ae mode active-active
+set interfaces ae1 aggregated-ether-options mc-ae status-control active
+set interfaces ae1 unit 0 family ethernet-switching interface-mode access
+set interfaces ae1 unit 0 family ethernet-switching vlan members VLAN10
+
+# 6. VLAN dan Switch-Options (Wajib untuk QFX/vJunos-switch)
+set vlans VLAN10 vlan-id 10
+set switch-options service-id 1
