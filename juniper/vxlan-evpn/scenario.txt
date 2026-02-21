@@ -2,9 +2,6 @@
 
 |   Node     |   Role      |   Interface   |   IP Address   |   Description         |
 | ---------- | ----------- | ------------- | -------------- | --------------------- |
-|   Spine1   | Underlay/RR | Loopback0     | 3.3.3.3/32     | Router ID & BGP ID    |
-|            |             | Ethernet1     | 10.1.1.0/31    | Link to Leaf1         |
-|            |             | Ethernet2     | 10.2.2.0/31    | Link to Leaf2         |
 |   Leaf1    | VTEP        | Loopback0     |   1.1.1.1/32   | VTEP Source IP        |
 |            |             | Ethernet1     | 10.1.1.1/31    | Link to Spine1        |
 |            |             | Ethernet2     | -              | Access Port (VLAN 10) |
@@ -23,7 +20,6 @@
 # Overlay
 
 + Configure BGP EVPN using AS 65001
-+ Spine should act as Route Reflector for leafs
 + do not enable ipv4-unicast peering
 + Use peer group EVPN-CLIENTS on spine
 + all nodes should use loopback0 as bgp source

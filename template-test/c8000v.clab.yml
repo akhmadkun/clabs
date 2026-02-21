@@ -1,0 +1,29 @@
+name: vpc-basic
+prefix: ""
+
+topology:
+  nodes:
+    csr1:
+      kind: cisco_c8000v
+      image: arthurk99/cisco-c8000v:17.11.01a
+    
+    csr2:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+
+    server1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      cmd: sleep infinity
+
+  links:
+    # eth1 -> Gi2
+    - endpoints: ["csr1:eth1", "csr2:eth1"]
+    
+    # eth2 -> Gi3
+    # Peer Link (vPC Trunk)
+    - endpoints: ["csr1:eth2", "csr2:eth2"]
+    
+    # Member Ports (Downstream to Server)
+    - endpoints: ["csr1:eth3", "server1:eth1"]
+    - endpoints: ["csr2:eth3", "server1:eth2"]

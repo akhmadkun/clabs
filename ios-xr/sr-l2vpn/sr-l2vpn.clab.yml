@@ -1,0 +1,28 @@
+name: lab-evpn-sr
+prefix: ""
+topology:
+  nodes:
+    pe1:
+      kind: cisco_xrv9k
+      image: arthurk99/cisco-xrv9k:7.11.1
+    p1:
+      kind: cisco_xrv9k
+      image: arthurk99/cisco-xrv9k:7.11.1
+    pe2:
+      kind: cisco_xrv9k
+      image: arthurk99/cisco-xrv9k:7.11.1
+    ce1:
+      kind: linux
+      image: alpine:latest
+    ce2:
+      kind: linux
+      image: alpine:latest
+
+  links:
+    # Core Links (Segment Routing)
+    - endpoints: ["pe1:eth1", "p1:eth1"] # Gi0/0/0/0 to Gi0/0/0/0
+    - endpoints: ["p1:eth2", "pe2:eth1"] # Gi0/0/0/1 to Gi0/0/0/0
+    
+    # Access Links (Customer L2VPN)
+    - endpoints: ["ce1:eth1", "pe1:eth2"] # Ke Gi0/0/0/1 di PE1
+    - endpoints: ["ce2:eth1", "pe2:eth2"] # Ke Gi0/0/0/1 di PE2

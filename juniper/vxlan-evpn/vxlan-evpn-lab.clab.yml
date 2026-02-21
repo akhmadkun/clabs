@@ -21,18 +21,12 @@ topology:
 
     # --- Clients (Linux) ---
     client1:
-      kind: linux
-      image: ghcr.io/srl-labs/network-multitool:latest
-      exec:
-        # Assign IP ke Client 1 (VLAN 10)
-        - ip addr add 192.168.10.1/24 dev eth1
+      kind: arista_ceos
+      image: ceos:4.35.0F
 
     client2:
-      kind: linux
-      image: ghcr.io/srl-labs/network-multitool:latest
-      exec:
-        # Assign IP ke Client 2 (VLAN 10)
-        - ip addr add 192.168.10.2/24 dev eth1
+      kind: arista_ceos
+      image: ceos:4.35.0F
 
   links:
     # Underlay Link antar Leaf (ge-0/0/0)

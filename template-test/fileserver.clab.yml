@@ -1,0 +1,34 @@
+name: ccie-sp-lab
+prefix: ""
+mgmt:
+  ipv4-subnet: 10.200.200.0/24
+topology:
+  nodes:
+    # --- Ini node XR kamu yang sudah ada ---
+    XRv1:
+      kind: cisco_xrv
+      image: vrnetlab/cisco_xrv:6.3.1
+      startup-config: ine-spv4/lab_configs/xrv_startup_config.cfg
+
+    XRv2:
+      kind: cisco_xrv
+      image: vrnetlab/cisco_xrv:6.3.1
+      startup-config: ine-spv4/lab_configs/xrv_startup_config.cfg
+
+    R1:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+
+    # --- Tambahkan block ini untuk File Server ---
+    fileserver:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      # Tetapkan IP statis agar mudah diingat saat ditarik dari router
+      mgmt-ipv4: 10.200.200.99
+      # Mount folder lokal dari Arch Linux kamu (sesuaikan path-nya)
+      binds:
+        - ./ine-spv4/lab_configs:/usr/share/nginx/html:ro
+
+  links:
+    - endpoints: ["XRv1:eth1","XRv2:eth1"]
+    - endpoints: ["XRv1:eth2","XRv2:eth2"]
