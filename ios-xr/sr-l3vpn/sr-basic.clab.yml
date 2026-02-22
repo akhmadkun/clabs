@@ -1,11 +1,11 @@
-name: lab-sr-basic
+name: sr-l3vpn
 prefix: ""
 topology:
   nodes:
     pe1:
       kind: cisco_xrd
       image: ios-xr/xrd-control-plane:7.11.2
-    p1:
+    p3:
       kind: cisco_xrd
       image: ios-xr/xrd-control-plane:7.11.2
     pe2:
@@ -13,5 +13,5 @@ topology:
       image: ios-xr/xrd-control-plane:7.11.2
   links:
     # Menggunakan penamaan interface natif IOS-XR (Gi0-0-0-X)
-    - endpoints: ["pe1:Gi0-0-0-0", "p1:Gi0-0-0-0"] # Link PE1 ke P1
-    - endpoints: ["p1:Gi0-0-0-1", "pe2:Gi0-0-0-0"] # Link P1 ke PE2
+    - endpoints: ["pe1:Gi0-0-0-0", "p3:Gi0-0-0-0"] # Link PE1 ke P1
+    - endpoints: ["p3:Gi0-0-0-1", "pe2:Gi0-0-0-0"] # Link P1 ke PE2

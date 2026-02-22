@@ -1,0 +1,32 @@
+name: lab-l3vpn
+prefix: ""
+topology:
+  nodes:
+    # --- PE & P Routers ---
+    pe1: { kind: cisco_csr1000v, image: arthurk99/cisco-csr1000v:17.03.08 }
+    p2:  { kind: cisco_csr1000v, image: arthurk99/cisco-csr1000v:17.03.08 }
+    p3:  { kind: cisco_xrd, image: ios-xr/xrd-control-plane:7.11.2 }
+    pe4: { kind: cisco_xrd, image: ios-xr/xrd-control-plane:7.11.2 }
+    
+    # --- Customer Edges ---
+    ce1: { kind: ceos, image: ceos:4.35.0F }
+    ce4: { kind: ceos, image: ceos:4.35.0F }
+
+  links:
+    # Core Links (MTU 1550 wajib untuk MPLS)
+
+    # Gi2 to Gi2 (10.10.12.0/24)
+    - endpoints: ["pe1:eth1", "p2:eth1"]
+
+    # Gi3 to Gi0/0/0/1 (10.10.23.0/24)
+    - endpoints: ["p2:eth2", "p3:Gi0-0-0-1"]
+
+    # Gi0/0/0/0 to Gi0/0/0/0 (10.10.34.0/24)
+    - endpoints: ["p3:Gi0-0-0-0", "pe4:Gi0-0-0-0"]
+    
+    # Access Links
+    # Eth1 to Gi3 (10.10.11.0/24)
+    - endpoints: ["ce1:eth1", "pe1:eth2"]
+
+    # Eth1 to Gi0/0/0/1 (10.10.44.0/24)
+    - endpoints: ["ce4:eth1", "pe4:Gi0-0-0-1"]

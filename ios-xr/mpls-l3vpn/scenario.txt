@@ -1,0 +1,34 @@
+     [CE1]                                                                      [CE4]
+      cEOS                                                                        cEOS
+        | eth1                                                                     | eth1
+        |                                                                          |
+        | 10.10.11.0/24                                              10.10.44.0/24 |
+        | VRF CUST_A                                                    VRF CUST_A |
+        |                                                                          |
+        | eth2 (Gi3)                                                     Gi0-0-0-1 |
+ +------+-------+            +------------+            +------------+            +-------+------+
+ |     PE1      | eth1  eth1 |     P2     | eth2       |     P3     | Gi0-0-0-0  |     PE4      |
+ |   (IOS-XE)   +------------+  (IOS-XE)  +------------+    (XRd)   +------------+    (XRd)     |
+ |   CSR1000v   | Gi2    Gi2 |  CSR1000v  | Gi3        |            | Gi0-0-0-0  |              |
+ +--------------+            +------------+  Gi0-0-0-1 +------------+            +--------------+
+  Lo0: 1.1.1.1                Lo0: 2.2.2.2              Lo0: 3.3.3.3              Lo0: 4.4.4.4
+
+        |                          |                          |                          |
+        +------ 10.10.12.0/24 -----+------ 10.10.23.0/24 -----+------ 10.10.34.0/24 -----+
+        |                                                                                |
+        |<<<<<<<<<<<<<<<<<<<<<< MPLS CORE (OSPF + LDP) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>|
+        |                                                                                |
+        |<<<<<<<<<<<<<<<<<<<<<< MP-BGP (VPNv4 Peering) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>|
+
+
+# Underlay
+    - OSPF & LDP PE1-P2-P3-PE4
+    - Use loopback as ospf and ldp router-id
+    -
+# MP-BGP
+    - PE1 and PE4 should exchange vpnv4 routes for CUST_A
+    - Use their loopback to establish bgp adj
+
+# Verification
+    - show mpls forwarding-table
+    - show cef vrf CUST_A
