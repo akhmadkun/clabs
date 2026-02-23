@@ -18,3 +18,35 @@
           |<<<<<<<<<<<<<<<<< MPLS LDP / OSPF CORE >>>>>>>>>>>>>>>>>>>>|
           |                                                           |
           |<<<<<<<<<<<<<<<< BGP EVPN L2VPN OVERLAY >>>>>>>>>>>>>>>>>>>|
+
+# Objective: Bangun konektivitas Layer 2 end-to-end (E-LAN) antara CE1 dan CE2 melewati backbone Segment Routing MPLS.
+
+# Task 1 (Underlay & Transport): * Konfigurasikan OSPF Area 0 di PE1, P3, dan PE2.
+
+    + Aktifkan Segment Routing di atas OSPF tersebut.
+    + Alokasikan Prefix-SID (Index) secara manual: PE1 (Index 1), PE2 (Index 2), dan P3 (Index 3).
+
+
+# Task 2 (Overlay Control Plane):
+
+    + Bangun sesi iBGP (ASN 65000) antara PE1 (1.1.1.1) dan PE2 (2.2.2.2) menggunakan antarmuka Loopback.
+    + Aktifkan Address Family L2VPN EVPN dan pastikan community dikirim.
+
+# Task 3 (L2VPN Service - EVPN):
+
+    + Buat EVPN Instance (EVI) nomor 100 dengan tipe vlan-based di PE1 dan PE2.
+    + Gunakan Route Target (RT) 65000:100 untuk import dan export.
+    + Ikat EVPN Instance tersebut ke bridge-domain 100.
+
+# Task 4 (Customer Attachment):
+
+    + Arahkan interface yang menuju CE (Gi3) ke dalam Service Instance 100.
+    + Karena CE mengirim paket murni tanpa VLAN (untagged), konfigurasikan enkapsulasi yang sesuai di Service Instance tersebut dan masukkan ke bridge-domain.
+
+$ Task 5 (Verification):
+
+    Lakukan ping dari CE1 ke CE2. Pastikan tabel MAC Address di PE1 dan PE2 mendeteksi MAC CE lawan via pseudoport (BGP).
+    + show bgp l2vpn evpn summary
+    + show mpls forwarding-table
+    + show bridge-domain 100
+    + show l2vpn evpn evi 100 detail

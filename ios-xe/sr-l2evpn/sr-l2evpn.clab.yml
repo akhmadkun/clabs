@@ -2,13 +2,13 @@ name: segmentrouting-l2vpn
 prefix: ""
 topology:
   nodes:
-    PE1:
+    PE1: # lo0 : 1.1.1.1
       kind: cisco_csr1000v
       image: arthurk99/cisco-csr1000v:17.03.08
-    P:
+    P3: # lo0 : 3.3.3.3
       kind: cisco_csr1000v
       image: arthurk99/cisco-csr1000v:17.03.08
-    PE2:
+    PE2: # lo0 : 2.2.2.2
       kind: cisco_csr1000v
       image: arthurk99/cisco-csr1000v:17.03.08
     ce1:
@@ -22,10 +22,13 @@ topology:
       image: ghcr.io/srl-labs/network-multitool:latest
       exec:
         - ip link set address 00:c1:ab:00:22:22 dev eth1
-        - ip addr add 192.168.100.1/24 dev eth1
+        - ip addr add 192.168.100.2/24 dev eth1
 
   links:
-    - endpoints: ["PE1:eth1", "P:eth1"] # Gi2 to Gi2 : 10.10.13.0/24
-    - endpoints: ["P:eth2", "PE2:eth1"] # Gi3 to Gi2 : 10.10.23.0/24
+    # Underlay OSPF Area 0 | Overlay BGP EVPN
+    - endpoints: ["PE1:eth1", "P3:eth1"] # Gi2 to Gi2 : 10.10.13.0/24
+    - endpoints: ["P3:eth2", "PE2:eth1"] # Gi3 to Gi2 : 10.10.23.0/24
+
+    # L2 Bridge / Access
     - endpoints: ["ce1:eth1", "PE1:eth2"] # Gi3
     - endpoints: ["ce2:eth1", "PE2:eth2"] # Gi3
