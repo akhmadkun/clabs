@@ -1,0 +1,31 @@
+name: lab-isis
+prefix: ""
+
+topology:
+  nodes:
+    r1: # lo0 : 1.1.1.1/32
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    r2: # lo0 : 2.2.2.2/32
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    r5: # lo0 : 5.5.5.5/32
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    r4: # lo0 : 4.4.4.4/32
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    r3: # lo0 : 3.3.3.3/32
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+
+  links:
+    # Area 49.0001 (L1)
+    - endpoints: ["r1:eth1", "r2:eth1"] # 10.10.12.0/24
+    
+    # Area 49.0000 (L2 Backbone)
+    - endpoints: ["r2:eth2", "r5:eth1"] # 10.10.25.0/24
+    - endpoints: ["r5:eth2", "r4:eth2"] # 10.10.54.0/24
+    
+    # Area 49.0002 (L1)
+    - endpoints: ["r4:eth1", "r3:eth1"] # 10.10.34.0/24

@@ -1,13 +1,20 @@
 # IP Address scheme
 
-|   Node     |   Role      |   Interface   |   IP Address   |   Description         |
-| ---------- | ----------- | ------------- | -------------- | --------------------- |
-|   Leaf1    | VTEP        | Loopback0     |   1.1.1.1/32   | VTEP Source IP        |
-|            |             | Ethernet1     | 10.1.1.1/31    | Link to Spine1        |
-|            |             | Ethernet2     | -              | Access Port (VLAN 10) |
-|   Leaf2    | VTEP        | Loopback0     |   2.2.2.2/32   | VTEP Source IP        |
-|            |             | Ethernet1     | 10.2.2.1/31    | Link to Spine1        |
-|            |             | Ethernet2     | -              | Access Port (VLAN 10) |
+     [client1]                                                [client2]
+        cEOS                                                     cEOS
+          | eth1                                                   | eth1
+          |                                                        |
+          | VLAN/Subnet Pelanggan (Contoh: 192.168.100.0/24)       |
+          |                                                        |
+          | eth2 (ge-0/0/1)                                        | eth2 (ge-0/0/1)
+   +------+-------+                                         +------+-------+
+   |    leaf1     | eth1                               eth1 |    leaf2     |
+   | (vJunos-SW)  +-----------------------------------------+ (vJunos-SW)  |
+   +--------------+               10.10.12.0/24             +--------------+
+    Lo0: 1.1.1.1                 Core / Underlay             Lo0: 2.2.2.2
+                                   (ge-0/0/0)
+
+   <<<<<<<<<<<<<<<<<<<<<< EVPN/VXLAN Tunnel (Overlay) >>>>>>>>>>>>>>>>>>>>>>
 
 
 # Underlay
@@ -21,7 +28,7 @@
 
 + Configure BGP EVPN using AS 65001
 + do not enable ipv4-unicast peering
-+ Use peer group EVPN-CLIENTS on spine
++ Use peer group EVPN
 + all nodes should use loopback0 as bgp source
 
 # Access Interfaces and VxLAN

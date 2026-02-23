@@ -1,0 +1,31 @@
+name: segmentrouting-l2vpn
+prefix: ""
+topology:
+  nodes:
+    PE1:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+    P:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+    PE2:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+    ce1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip link set address 00:c1:ab:00:11:11 dev eth1
+        - ip addr add 192.168.100.1/24 dev eth1
+    ce2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip link set address 00:c1:ab:00:22:22 dev eth1
+        - ip addr add 192.168.100.1/24 dev eth1
+
+  links:
+    - endpoints: ["PE1:eth1", "P:eth1"] # Gi2 to Gi2 : 10.10.13.0/24
+    - endpoints: ["P:eth2", "PE2:eth1"] # Gi3 to Gi2 : 10.10.23.0/24
+    - endpoints: ["ce1:eth1", "PE1:eth2"] # Gi3
+    - endpoints: ["ce2:eth1", "PE2:eth2"] # Gi3
