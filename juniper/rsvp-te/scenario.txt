@@ -1,0 +1,26 @@
+Task 1: IP Addressing & Data Plane MPLS
+
+    + Konfigurasikan IP address pada semua link point-to-point (ge-0/0/0 dan ge-0/0/1) serta lo0.0 di keempat router.
+    + Aktifkan pemrosesan label di Data Plane untuk semua antarmuka fisik transit. (Hint: family...)
+
+Task 2: IGP & Traffic Engineering (TED)
+
+    + Aktifkan OSPF Area 0 di semua link fisik dan loopback.
+    + Karena kita akan menggunakan CSPF, pastikan router bisa mendistribusikan informasi bandwidth/metrik tambahan. Aktifkan Traffic Engineering extensions di dalam OSPF.
+
+Task 3: Control Plane MPLS & RSVP
+
+    + Aktifkan protokol MPLS dan RSVP pada seluruh antarmuka fisik dan loopback di keempat router agar mereka bisa saling bertukar pesan persinyalan jalur.
+
+Task 4: Tunnel Provisioning
+
+    + Di R1, buat satu buah RSVP Label-Switched Path (LSP) menuju IP Loopback R4. Beri nama LSP-R1-to-R4.
+    + Di R4, buat LSP balasan menuju IP Loopback R1. Beri nama LSP-R4-to-R1.
+
+
+Verify :
+    + show mpls lsp ingress detail
+    + show route table inet.3
+    + show route forwarding-table family mpls
+
+

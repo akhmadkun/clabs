@@ -1,11 +1,45 @@
-     +--------------+                               +--------------+                               +--------------+
-     |     PE1      |                               |      P3      |                               |     PE2      |
-     |    (XRd)     |                               |    (XRd)     |                               |    (XRd)     |
-     | Lo0: 1.1.1.1 |                               | Lo0: 3.3.3.3 |                               | Lo0: 2.2.2.2 |
-     +--------------+                               +--------------+                               +--------------+
-            |                                        |           |                                      |
-  Gi0-0-0-0 | .1                        Gi0-0-0-0 .3 |           | .3 Gi0-0-0-1                      .2 | Gi0-0-0-0
-            |                                        |           |                                      |
-            +--------------- 10.10.12.0/24 ----------+           +--------------- 10.10.23.0/24 --------+
+          [ CE1 ]                                             [ CE2 ]
+   (Linux Multitool)                                   (Linux Multitool)
+    192.168.10.2/24                                     192.168.20.2/24
+           | eth1                                              | eth1
+           |                                                   |
+           | Gi0-0-0-1 (VRF CUST_A)                            | Gi0-0-0-1 (VRF CUST_A)
+           | 192.168.10.1/24                                   | 192.168.20.1/24
+   +---------------+               +---------------+               +---------------+
+   |      PE1      | Gi0-0-0-0     |       P3      |     Gi0-0-0-0 |      PE2      |
+   |     (XRd)     +---------------+     (XRd)     +---------------+     (XRd)     |
+   |  Lo0: 1.1.1.1 | .1         .3 |  Lo0: 3.3.3.3 | .3         .2 |  Lo0: 2.2.2.2 |
+   +---------------+ 10.10.13.0/24 +---------------+ 10.10.23.0/24 +---------------+
 
-            <<<<<<<<<<<<<<<<<<<<<<<<<< Segment Routing (OSPF Area 0) >>>>>>>>>>>>>>>>>>>>>>>>>>
+           <<<<<<<<<<<<<<<<<< OSPF + SEGMENT ROUTING >>>>>>>>>>>>>>>>>>
+           <<<<<<<<<<<<<<<<<<< MP-BGP VPNv4 PEERING >>>>>>>>>>>>>>>>>>>
+Objective: End-to-End L3VPN Reachability via Segment Routing Backbone
+
+# Task 1 (IP Addressing & VRF):
+
+     + Konfigurasikan semua alamat IP pada antarmuka core dan Loopback.
+     + Buat VRF bernama CUST_A di PE1 dan PE2. Terapkan VRF tersebut pada antarmuka yang mengarah ke pelanggan (CE).
+     + Set IP gateway untuk pelanggan di antarmuka VRF tersebut (PE1: 192.168.10.1/24, PE2: 192.168.20.1/24).
+
+# Task 2 (Underlay & Segment Routing):
+
+     + Konfigurasikan OSPF Area 0 di PE1, P3, dan PE2.
+     + Aktifkan fitur Segment Routing MPLS di dalam proses OSPF.
+     + Alokasikan Prefix-SID secara spesifik pada antarmuka Loopback0: PE1 (Index 1), PE2 (Index 2), dan P3 (Index 3).
+     + Pastikan tabel show mpls forwarding sudah terisi dengan label SR (blok 16000+).
+
+# Task 3 (BGP VPNv4 Overlay):
+
+     + Bangun sesi iBGP (ASN 65000) antara PE1 dan PE2 menggunakan IP Loopback.
+     + Aktifkan Address Family vpnv4 unicast.
+     + Di dalam VRF CUST_A, konfigurasikan Route Distinguisher (RD) 65000:1 dan Route Target (RT) 65000:1 untuk import maupun export.
+     + Redistribute rute Connected (subnet CE) ke dalam BGP VRF agar masing-masing PE saling bertukar rute pelanggan.
+
+# Task 4 (Verification):
+
+     + Lakukan ping dari CE1 ke 192.168.20.2 (CE2).
+     + Jelaskan bagaimana proses resolusi Double Label (VPN Label di bawah, SR Transport Label di atas) terjadi di PE1 saat mengirim paket ke PE2.
+     + PE1
+          + show bgp vpnv4 unicast all 192.168.20.0/24 (cek received label)
+          + show cef vrf CUST_A 192.168.20.0/24 detail (cek labels imposed)
+          + show mpls forwarding

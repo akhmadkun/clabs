@@ -1,0 +1,14 @@
+Scenario:
+Kita akan membangun Arista Layer 2 Leaf-Spine Fabric.
+Anda diberikan 2 Spine, 2 Leaf, dan 2 Host.
+Host1 berada di VLAN 100, Host2 berada di VLAN 200.
+Keduanya dual-homed ke Leaf1 dan Leaf2 menggunakan LACP.
+
+Task Requirements:
+
+    + Core MLAG (Spine): Konfigurasikan Spine1 dan Spine2 sebagai satu domain MLAG.
+    + Edge MLAG (Leaf): Konfigurasikan Leaf1 dan Leaf2 sebagai satu domain MLAG.
+    + L2 Bow-Tie Fabric: Hubungkan Leaf ke Spine menggunakan Port-Channel L2 Trunk (allow VLAN 100 & 200).
+    + Active/Active Gateway: Implementasikan Arista VARP di Leaf1 dan Leaf2 sebagai Anycast Gateway untuk VLAN 100 (172.20.0.1) dan VLAN 200 (172.30.0.1).
+    + Host Connectivity: Pastikan Port-Channel ke arah host menggunakan LACP Fallback Static dan LACP rate fast.
+    + Validation: Buktikan bahwa Host1 dapat melakukan PING ke Host2. Jika satu kabel dari Host1 dicabut, tidak boleh ada RTO (sub-second failover).

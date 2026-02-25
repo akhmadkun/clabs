@@ -1,0 +1,24 @@
+Objective: Secure, Optimized, and Leaked IS-IS Routing
+
+# Task 1 (Wide Metrics & IPv6 Baseline):
+
+    + Konfigurasikan IS-IS untuk IPv4 dan IPv6 (aktifkan family inet6 dan iso).
+
+    + Ubah standar metrik IS-IS di semua router menjadi Wide Metrics (ini wajib untuk Traffic Engineering dan IPv6).
+    Metrik sempit/lama (Narrow) tidak boleh digunakan.
+
+# Task 2 (Multi-Topology IPv6):
+
+    + Secara default, IS-IS membagikan topologi IPv4 dan IPv6 di pohon yang sama (Single Topology). Pisahkan perhitungannya menggunakan fitur IPv6 Unicast Topology agar jika link IPv4 mati, trafik IPv6 tetap bisa jalan lewat jalur lain.
+
+# Task 3 (Security - LSP Authentication):
+
+    + Lakukan pengamanan pada control plane. Aktifkan HMAC-MD5 Authentication dengan password KunciRahasia untuk pertukaran Link State PDU (LSP) di area Level 2 saja (antara R2 dan R3).
+
+# Task 4 (The Boss Level: Route Leaking):
+
+    + Secara default, R1 (L1) hanya memiliki default route (ATT-bit) menuju R2 untuk mencapai R4.
+
+    + Tugas: Di R2, bocorkan (leak) rute spesifik Loopback R4 (4.4.4.4/32 dan 2001:db8::4/128) dari database Level 2 ke database Level 1.
+
+    + Goal: R1 harus memiliki rute spesifik ke Loopback R4 di dalam tabel inet.0-nya dengan tanda rute IS-IS L1 (bukan default route).
