@@ -1,0 +1,14 @@
+Task 1: Underlay (IGP & MPLS)
+    Konfigurasi IP Address di semua interface fisik dan Loopback0 (R1=1.1.1.1, R2=2.2.2.2, dst).
+    Aktifkan OSPF Area 0, MPLS, dan RSVP di semua interface transit. Jangan lupa nyalakan Traffic Engineering extensions di OSPF.
+Task 2: RSVP-TE dengan Secondary Path
+    Di R1 dan R4, buat RSVP LSP yang saling terhubung.
+    Gunakan fitur path untuk mendefinisikan strict hop. Jalur via R2 sebagai Primary, dan jalur via R3 sebagai Secondary (dengan mode standby).
+Task 3: MP-BGP (Control Plane L3VPN)
+    Bangun sesi iBGP antara Loopback R1 dan R4. Aktifkan address family khusus untuk mendistribusikan rute VPN (inet-vpn unicast).
+Task 4: L3VPN / VRF (Data Plane)
+    Di R1 dan R4, buat routing-instance bertipe VRF dengan nama VPN-A.
+    Gunakan Route Distinguisher dan VRF Target bebas (misal: 65000:100).
+    Buat interface lo0.100 dan masukkan ke dalam VRF sebagai simulasi network pelanggan (R1 = 192.168.1.1/24, R4 = 192.168.4.1/24).
+
+Task 5: Carrier-Grade Fast Reroute (FRR)

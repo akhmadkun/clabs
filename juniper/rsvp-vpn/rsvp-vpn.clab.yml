@@ -1,0 +1,31 @@
+name: rsvp-vpn-lab
+prefix: ""
+topology:
+  nodes:
+    # loopback0 : 1.1.1.1/32 | OSPF Area 0
+    # MP-BGP L3VPN to R4
+    r1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    # loopback0 : 2.2.2.2/32 | OSPF Area 0
+    r2:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    # loopback0 : 3.3.3.3/32 | OSPF Area 0
+    r3:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+    # loopback0 : 4.4.4.4/32 | OSPF Area 0
+    # MP-BGP L3VPN to R4
+    r4:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+
+  links:
+    # RSVP Primary Path
+    - endpoints: ["r1:eth1", "r2:eth1"] # 10.10.12.0/24
+    - endpoints: ["r2:eth2", "r4:eth2"] # 10.10.24.0/24
+    
+    # RSVP Secondary Path
+    - endpoints: ["r1:eth2", "r3:eth2"] # 10.10.13.0/24
+    - endpoints: ["r3:eth1", "r4:eth1"] # 10.10.34.0/24
