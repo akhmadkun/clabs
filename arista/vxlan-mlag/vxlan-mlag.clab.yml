@@ -1,0 +1,43 @@
+name: vxlan-mlag
+prefix: ""
+
+mgmt:
+  network: custom_mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.35.0F
+  nodes:
+    spine1: { kind: ceos }
+    spine2: { kind: ceos }
+    leaf11: { kind: ceos }
+    leaf12: { kind: ceos }
+    leaf21: { kind: ceos }
+    leaf22: { kind: ceos }
+    host1: { kind: ceos }
+    host2: { kind: ceos }
+    
+  links:
+    # MLAG Peer Links
+    - endpoints: ["leaf11:eth3", "leaf12:eth3"]
+    - endpoints: ["leaf11:eth4", "leaf12:eth4"]
+    - endpoints: ["leaf21:eth3", "leaf22:eth3"]
+    - endpoints: ["leaf21:eth4", "leaf22:eth4"]
+    
+    # Underlay Spine-Leaf
+    - endpoints: ["leaf11:eth1", "spine1:eth1"]
+    - endpoints: ["leaf11:eth2", "spine2:eth1"]
+    - endpoints: ["leaf12:eth1", "spine1:eth2"]
+    - endpoints: ["leaf12:eth2", "spine2:eth2"]
+    - endpoints: ["leaf21:eth1", "spine1:eth3"]
+    - endpoints: ["leaf21:eth2", "spine2:eth3"]
+    - endpoints: ["leaf22:eth1", "spine1:eth4"]
+    - endpoints: ["leaf22:eth2", "spine2:eth4"]
+    
+    # Hosts (Dual-Homed ke MLAG)
+    - endpoints: ["host1:eth1", "leaf11:eth5"]
+    - endpoints: ["host1:eth2", "leaf12:eth5"]
+    - endpoints: ["host2:eth1", "leaf21:eth5"]
+    - endpoints: ["host2:eth2", "leaf22:eth5"]

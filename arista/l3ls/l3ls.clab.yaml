@@ -1,0 +1,52 @@
+name: l3-leaf-spine
+prefix: ""
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.35.0F
+      network-mode: none
+  nodes:
+    # Spine Layer BGP ASN : 65010
+    spine1: { kind: ceos } # R-ID : 192.168.0.1
+    spine2: { kind: ceos } # R-ID : 192.168.0.2
+
+    # Leaf Layer BGP ASN : 65020
+    leaf1: { kind: ceos } # R-ID : 192.168.0.11
+    leaf2: { kind: ceos } # R-ID : 192.168.0.12
+    leaf3: { kind: ceos } # R-ID : 192.168.0.13
+    leaf4: { kind: ceos } # R-ID : 192.168.0.14
+
+    # Host Rak 1 : 172.16.100.10
+    host1: { kind: ceos }
+
+    # Host Rak 1 : 172.16.200.10
+    host2: { kind: ceos }
+
+  links:
+    # --- Uplinks Rak 1 (Leaf 1 & 2) To Spines ---
+    - endpoints: ["leaf1:eth1", "spine1:eth1"] # 10.10.1.0/31
+    - endpoints: ["leaf1:eth2", "spine2:eth1"] # 10.10.2.0/31
+    - endpoints: ["leaf2:eth1", "spine1:eth2"] # 10.10.1.2/31
+    - endpoints: ["leaf2:eth2", "spine2:eth2"] # 10.10.2.2/31
+    
+    # --- Uplinks Rak 2 (Leaf 3 & 4) To Spines ---
+    - endpoints: ["leaf3:eth1", "spine1:eth3"] # 10.10.1.4/31
+    - endpoints: ["leaf3:eth2", "spine2:eth3"] # 10.10.2.4/31
+    - endpoints: ["leaf4:eth1", "spine1:eth4"] # 10.10.1.6/31
+    - endpoints: ["leaf4:eth2", "spine2:eth4"] # 10.10.2.6/31
+
+    # --- MLAG Peer-Links | VLAN 4094 | LACP Po10 | iBGP---
+    - endpoints: ["leaf1:eth3", "leaf2:eth3"]
+    - endpoints: ["leaf1:eth4", "leaf2:eth4"]
+
+    # --- MLAG Peer-Links | VLAN 4094 | LACP Po10 | iBGP---
+    - endpoints: ["leaf3:eth3", "leaf4:eth3"]
+    - endpoints: ["leaf3:eth4", "leaf4:eth4"]
+
+    # --- Dual-Homed Hosts LACP Po50  ---
+    - endpoints: ["host1:eth1", "leaf1:eth5"]
+    - endpoints: ["host1:eth2", "leaf2:eth5"]
+
+    # --- Dual-Homed Hosts LACP Po50  ---
+    - endpoints: ["host2:eth1", "leaf3:eth5"]
+    - endpoints: ["host2:eth2", "leaf4:eth5"]
