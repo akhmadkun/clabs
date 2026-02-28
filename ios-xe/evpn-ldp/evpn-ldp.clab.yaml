@@ -1,0 +1,25 @@
+name: evpn-ldp-lab
+prefix: ""
+topology:
+  nodes:
+    pe1:
+      kind: cisco_c8000v
+      image: arthurk99/cisco-c8000v:17.11.01a
+    p1:
+      kind: cisco_c8000v
+      image: arthurk99/cisco-c8000v:17.11.01a
+    pe2:
+      kind: cisco_c8000v
+      image: arthurk99/cisco-c8000v:17.11.01a
+    host1:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+    host2:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+
+  links:
+    - endpoints: ["pe1:eth2", "p1:eth2"]
+    - endpoints: ["pe2:eth2", "p1:eth3"]
+    - endpoints: ["pe1:eth3", "host1:eth1"]
+    - endpoints: ["pe2:eth3", "host2:eth1"]

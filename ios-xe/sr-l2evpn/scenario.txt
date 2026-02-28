@@ -10,7 +10,7 @@
    +-------------+               +-------------+               +-------------+
    |     PE1     | eth1     eth1 |     P3      | eth2     eth1 |     PE2     |
    | (CSR1000v)  +---------------+ (CSR1000v)  +---------------+ (CSR1000v)  |
-   | Lo0:1.1.1.1 | Gi2       Gi2 | Lo0:3.3.3.3 | Gi3       Gi2 | Lo0:2.2.2.2 |
+   | Lo0:1.1.1.1 | Gi2       Gi2 | Lo0:3.3.3.3 | Gi3       Gi3 | Lo0:2.2.2.2 |
    +-------------+               +-------------+               +-------------+
           |                             |                             |
           |        10.10.13.0/24        |        10.10.32.0/24        |
@@ -40,7 +40,7 @@
 
 # Task 4 (Customer Attachment):
 
-    + Arahkan interface yang menuju CE (Gi3) ke dalam Service Instance 100.
+    + Arahkan interface yang menuju CE (Gi4) ke dalam Service Instance 100.
     + Karena CE mengirim paket murni tanpa VLAN (untagged), konfigurasikan enkapsulasi yang sesuai di Service Instance tersebut dan masukkan ke bridge-domain.
 
 $ Task 5 (Verification):
