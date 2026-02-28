@@ -4,8 +4,7 @@ Objective: Secure, Optimized, and Leaked IS-IS Routing
 
     + Konfigurasikan IS-IS untuk IPv4 dan IPv6 (aktifkan family inet6 dan iso).
 
-    + Ubah standar metrik IS-IS di semua router menjadi Wide Metrics (ini wajib untuk Traffic Engineering dan IPv6).
-    Metrik sempit/lama (Narrow) tidak boleh digunakan.
+    + Ubah standar metrik IS-IS di semua router menjadi Wide Metrics (ini wajib untuk Traffic Engineering dan IPv6). Metrik sempit/lama (Narrow) tidak boleh digunakan.
 
 # Task 2 (Multi-Topology IPv6):
 

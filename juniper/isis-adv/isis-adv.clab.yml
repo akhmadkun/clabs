@@ -4,16 +4,28 @@ prefix: ""
 topology:
   nodes:
     # lo0 : 1.1.1.1/32 | 2001:db8::1
-    r1: { kind: juniper_vjunosrouter, image: vrnetlab/juniper_vjunos-router:25.4R1.12 }
+    r1:
+        kind: juniper_vjunosrouter
+        image: vrnetlab/juniper_vjunos-router:25.4R1.12
+        startup-config: r1.cfg
 
     # lo0 : 2.2.2.2/32 | 2001:db8::2
-    r2: { kind: juniper_vjunosrouter, image: vrnetlab/juniper_vjunos-router:25.4R1.12 }
+    r2:
+        kind: juniper_vjunosrouter
+        image: vrnetlab/juniper_vjunos-router:25.4R1.12
+        startup-config: r2.cfg
 
     # lo0 : 3.3.3.3/32 | 2001:db8::3
-    r3: { kind: juniper_vjunosrouter, image: vrnetlab/juniper_vjunos-router:25.4R1.12 }
+    r3:
+        kind: juniper_vjunosrouter
+        image: vrnetlab/juniper_vjunos-router:25.4R1.12
+        startup-config: r3.cfg
 
     # lo0 : 4.4.4.4/32 | 2001:db8::4
-    r4: { kind: juniper_vjunosrouter, image: vrnetlab/juniper_vjunos-router:25.4R1.12 }
+    r4:
+        kind: juniper_vjunosrouter
+        image: vrnetlab/juniper_vjunos-router:25.4R1.12
+        startup-config: r4.cfg
 
   links:
     # ge-0/0/0 to ge-0/0/0 (Area 49.0001)
