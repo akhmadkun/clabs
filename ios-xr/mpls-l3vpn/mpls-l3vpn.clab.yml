@@ -3,17 +3,25 @@ prefix: ""
 topology:
   nodes:
     # --- PE & P Routers ---
-    pe1: { kind: cisco_csr1000v, image: arthurk99/cisco-csr1000v:17.03.08 }
+
+    # loopback0 : 1.1.1.1/32
+    pe1:
+        kind: cisco_csr1000v
+        image: arthurk99/cisco-csr1000v:17.03.08
+
     p2:  { kind: cisco_csr1000v, image: arthurk99/cisco-csr1000v:17.03.08 }
     p3:  { kind: cisco_xrd, image: ios-xr/xrd-control-plane:7.11.2 }
-    pe4: { kind: cisco_xrd, image: ios-xr/xrd-control-plane:7.11.2 }
+
+    # loopback0 : 4.4.4.4/32
+    pe4:
+        kind: cisco_xrd
+        image: ios-xr/xrd-control-plane:7.11.2
     
     # --- Customer Edges ---
     ce1: { kind: ceos, image: ceos:4.35.0F }
     ce4: { kind: ceos, image: ceos:4.35.0F }
 
   links:
-    # Core Links (MTU 1550 wajib untuk MPLS)
 
     # Gi2 to Gi2 (10.10.12.0/24)
     - endpoints: ["pe1:eth1", "p2:eth1"]

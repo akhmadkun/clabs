@@ -7,26 +7,54 @@ topology:
   kinds:
     ceos:
       image: ceos:4.35.0F
-    linux:
-      image: ghcr.io/srl-labs/network-multitool:latest
     paloalto_panos:
       image: arthurk99/paloalto-pa-vm:10.1.0
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+      network-mode: none
   nodes:
     ngfw:
       kind: paloalto_panos
       mgmt-ipv4: 172.21.21.11
-    ceos:
-      kind: ceos
+    client1:
+      kind: linux
+      exec:
+        - ip addr add 192.168.1.11/24 dev eth0
+        - ip route add default via 192.168.1.1
+    client2:
+      kind: linux
+      exec:
+        - ip addr add 192.168.2.12/24 dev eth0
+        - ip route add default via 192.168.2.1
+    client3:
+      kind: linux
+      exec:
+        - ip addr add 192.168.34.3/24 dev eth0
+        - ip route add default via 192.168.34.1
+    client4:
+      kind: linux
+      exec:
+        - ip addr add 192.168.34.4/24 dev eth0
+        - ip route add default via 192.168.34.1
+    ISP:
+      kind: linux
+      exec:
+        - ip addr add 8.8.8.8/32 dev lo
+        - ip addr add 8.8.4.4/32 dev lo
+        - ip addr add 4.4.4.4/32 dev lo
+        - ip addr add 203.0.113.2/30 dev eth0
+        - ip route add default via 203.0.113.1
+    web:
+      kind: linux
+      exec:
+        - ip addr add 10.0.0.100/24 dev eth0
+        - ip route add default via 10.0.0.1
 
   links:
-    - endpoints: ["ngfw:Ethernet1/1", "ceos:eth1"]
-    - endpoints: ["ngfw:Ethernet1/2", "ceos:eth2"]
-    - endpoints: ["ngfw:Ethernet1/3", "ceos:eth3"]
-    - endpoints: ["ngfw:Ethernet1/4", "ceos:eth4"]
-    - endpoints: ["ngfw:Ethernet1/5", "ceos:eth5"]
-    - endpoints: ["ngfw:Ethernet1/6", "ceos:eth6"]
-    - endpoints: ["ngfw:Ethernet1/7", "ceos:eth7"]
-    - endpoints: ["ngfw:Ethernet1/8", "ceos:eth8"]
-    - endpoints: ["ngfw:Ethernet1/9", "ceos:eth9"]
-    - endpoints: ["ngfw:Ethernet1/10", "ceos:eth10"]
+    - endpoints: ["ngfw:Ethernet1/1", "client1:eth0"]
+    - endpoints: ["ngfw:Ethernet1/2", "client2:eth0"]
+    - endpoints: ["ngfw:Ethernet1/3", "client3:eth0"]
+    - endpoints: ["ngfw:Ethernet1/4", "client4:eth0"]
+    - endpoints: ["ngfw:Ethernet1/5", "ISP:eth0"]
+    - endpoints: ["ngfw:Ethernet1/6", "web:eth0"]
 

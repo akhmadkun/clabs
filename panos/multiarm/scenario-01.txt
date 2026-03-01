@@ -1,59 +1,82 @@
 # IP Address Scheme and Topology
 
-                 ┌──────────────────────────┐
-                 │        Palo Alto NGFW    │
-                 │                          │
-                 │ zone: LAN1    zone: LAN2 │
-                 │ 192.168.1.1   192.168.2.1│
-                 │                          │
-                 │ eth1/1        eth1/2     │
-                 └───────┬──────────┬───────┘
-                         │          │
-          192.168.1.0/24 │          │ 192.168.2.0/24
-                         │          │
-              ┌──────────┘          └────────────┐
-              │                                  │
-      ┌───────────────┐                ┌───────────────┐
-      │    Client1    │                │    Client2    │
-      │               │                │               │
-      │  eth0         │                │  eth0         │
-      │  192.168.1.99 │                │  192.168.2.99 │
-      │  GW: .1       │                │  GW: .1       │
-      └───────────────┘                └───────────────┘
+                              [ Zone: Untrust ]
+                              ISP Node (Linux)
+                            lo: 8.8.8.8, 8.8.4.4, 4.4.4.4
+                              eth0: 203.0.113.2
+                                      │
+                                      │ 203.0.113.0/30
+                                      │
+                                eth1/5 (203.0.113.1)
+[ Zone: DMZ ]               ┌─────────┴─────────┐               [ Zone: LAN1 ]
+web (Linux)                 │                   │ eth1/1
+eth0: 10.0.0.100 ───────────┤ eth1/6     (192.168.1.1) ├─────── client1 (Linux)
+GW: 10.0.0.1    10.0.0.0/24 │ (10.0.0.1)        │                 eth0: 192.168.1.11
+                            │   Palo Alto NGFW  │                 GW: 192.168.1.1
+                            │                   │
+                            │                   │ eth1/2        [ Zone: LAN2 ]
+                            │            (192.168.2.1) ├─────── client2 (Linux)
+                            │                   │                 eth0: 192.168.2.12
+                            │ eth1/3     eth1/4 │                 GW: 192.168.2.1
+                            └────┬──────────┬───┘
+                                 │          │
+                          192.168.34.0/24 (L2 VLAN 34)
+                          SVI/Gateway: 192.168.34.1
+                                 │          │
+                              client3    client4
+                              (Linux)    (Linux)
+                eth0: 192.168.34.3       eth0: 192.168.34.4
+                GW: 192.168.34.1         GW: 192.168.34.1
+                           [ Zone: LAN34 (layer2) ]
+                           [ Zone: LAN34-L3 (layer3) ]
+
+# Layer 3 + Inter LAN Connections
+   + Make sure clients can ping their gateway
+   + Make sure client1 can ping client2
+   + Make sure client2 can ping client1
+   + You are only allowed to create 1 security policy
 
 
-+ Make sure clients can ping their gateway
-+ Make sure client1 can ping client2
-+ Make sure client2 can ping client1
-+ You are only allowed to create 1 security policy
+
+# Layer 2 + SVI
+
+
+   + Make sure client3 can ping client4
+   + Create svi gateway for this vlan (192.168.34.1)
+   + Make sure this clients can reach their gateway
+   + Make sure this clients can reach Client1 and Client2
 
 
 
-# IP Address Scheme and Topology (Same Zone, Same VLAN)
+# Source NAT
 
-                 ┌──────────────────────────┐
-                 │        Palo Alto NGFW    │
-                 │                          │
-                 │ zone: LAN34              │
-                 │ 192.168.34.1             │
-                 │                          │
-                 │ vlan34        vlan34     │
-                 │ eth1/3        eth1/4     │
-                 └───────┬──────────┬───────┘
-                         │          │
-                         │          │
-                         │          │
-              ┌──────────┘          └────────────┐
-              │                                  │
-      ┌───────────────┐                ┌───────────────┐
-      │    Client3    │                │    Client4    │
-      │               │                │               │
-      │  eth0         │                │  eth0         │
-      │  192.168.34.3 │                │  192.168.34.4 │
-      │  GW: .1       │                │  GW: .1       │
-      └───────────────┘                └───────────────┘
 
-+ Make sure client3 can ping client4
-+ Create svi gateway for this vlan (192.168.34.1)
-+ Make sure this clients can reach their gateway
-+ Make sure this clients can reach Client1 and Client2
++ 1. Configure ethernet1/5 with IP 203.0.113.1/30 and assign it to a new zone named Untrust
++ 2. Configure a Default Route (0.0.0.0/0) in the Virtual Router pointing to next-hop 203.0.113.2
++ 3. Create a Source NAT Policy (Dynamic IP and Port / DIPP)
+     Translate all traffic from LAN1, LAN2, and LAN34 going to Untrust using the IP of ethernet1/5
+
++ 4. Create a Security Policy to Allow Traffic from Internal Zones to Untrust
++ 5. Verify that Client1 can ping 8.8.8.8
+
+# Destination NAT (DMZ & Port Forwarding)
+
+
+    1. Configure ethernet1/6 with IP 10.0.0.1/24 and assign it to a new zone named DMZ
+
+
+    2. Create a Destination NAT Policy
+       If traffic from Untrust is destined to 203.0.113.1 (public IP on ethernet1/5),
+       translate the destination to the internal Web Server IP 10.0.0.100
+
+
+    3. Create a Security Policy to Allow Inbound Traffic
+       IMPORTANT:
+       - Source Zone  = Pre-NAT Zone (Untrust)
+       - Destination Zone = DMZ (zone after routing decision)
+       - Destination IP   = Post-NAT IP (10.0.0.100)
+
+    4. (Advanced Simulation)
+       Run a mini Python web server on the cEOS Web_Server node,
+       then test access from ISP_Router using:
+       curl 203.0.113.1
