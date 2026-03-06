@@ -6,18 +6,23 @@ topology:
     r1: # lo0 : 1.1.1.1/32
       kind: juniper_vjunosrouter
       image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: r1.cfg
     r2: # lo0 : 2.2.2.2/32
       kind: juniper_vjunosrouter
       image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: r2.cfg
     r5: # lo0 : 5.5.5.5/32
       kind: juniper_vjunosrouter
       image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: r5.cfg
     r4: # lo0 : 4.4.4.4/32
       kind: juniper_vjunosrouter
       image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: r4.cfg
     r3: # lo0 : 3.3.3.3/32
       kind: juniper_vjunosrouter
       image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: r3.cfg
 
   links:
     # Area 49.0001 (L1)

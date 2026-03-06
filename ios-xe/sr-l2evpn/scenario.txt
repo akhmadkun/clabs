@@ -19,34 +19,36 @@
           |                                                           |
           |<<<<<<<<<<<<<<<< BGP EVPN L2VPN OVERLAY >>>>>>>>>>>>>>>>>>>|
 
-# Objective: Bangun konektivitas Layer 2 end-to-end (E-LAN) antara CE1 dan CE2 melewati backbone Segment Routing MPLS.
 
-# Task 1 (Underlay & Transport): * Konfigurasikan OSPF Area 0 di PE1, P3, dan PE2.
+Objective: Build end-to-end Layer 2 connectivity (E-LAN) between CE1 and CE2 across a Segment Routing MPLS backbone.
 
-    + Aktifkan Segment Routing di atas OSPF tersebut.
-    + Alokasikan Prefix-SID (Index) secara manual: PE1 (Index 1), PE2 (Index 2), dan P3 (Index 3).
+Task 1 (Underlay & Transport):
+    Configure OSPF Area 0 on PE1, P3, and PE2.
+    Enable Segment Routing on top of OSPF.
+    Manually allocate Prefix-SID (Index) as follows:
+        PE1 → Index 1
+        PE2 → Index 2
+        P3 → Index 3
 
+Task 2 (Overlay Control Plane):
+    Establish an iBGP session (ASN 65000) between PE1 (1.1.1.1) and PE2 (2.2.2.2) using their Loopback interfaces.
+    Enable the L2VPN EVPN address family and ensure BGP communities are sent.
 
-# Task 2 (Overlay Control Plane):
+Task 3 (L2VPN Service – EVPN):
+    Create an EVPN Instance (EVI) 100 with type vlan-based on both PE1 and PE2.
+    Use Route Target (RT) 65000:100 for both import and export.
+    Bind the EVPN instance to bridge-domain 100.
 
-    + Bangun sesi iBGP (ASN 65000) antara PE1 (1.1.1.1) dan PE2 (2.2.2.2) menggunakan antarmuka Loopback.
-    + Aktifkan Address Family L2VPN EVPN dan pastikan community dikirim.
+Task 4 (Customer Attachment):
+    Map the interface facing the CE (Gi3) into Service Instance 100.
+    Since the CE sends untagged Ethernet frames, configure the appropriate encapsulation on the service instance and associate it with the bridge-domain.
 
-# Task 3 (L2VPN Service - EVPN):
+Task 5 (Verification):
+    Perform a ping from CE1 to CE2. Verify that the MAC address table on PE1 and PE2 learns the remote CE MAC via the pseudoport (BGP EVPN).
 
-    + Buat EVPN Instance (EVI) nomor 100 dengan tipe vlan-based di PE1 dan PE2.
-    + Gunakan Route Target (RT) 65000:100 untuk import dan export.
-    + Ikat EVPN Instance tersebut ke bridge-domain 100.
+Commands to verify:
 
-# Task 4 (Customer Attachment):
-
-    + Arahkan interface yang menuju CE (Gi4) ke dalam Service Instance 100.
-    + Karena CE mengirim paket murni tanpa VLAN (untagged), konfigurasikan enkapsulasi yang sesuai di Service Instance tersebut dan masukkan ke bridge-domain.
-
-$ Task 5 (Verification):
-
-    Lakukan ping dari CE1 ke CE2. Pastikan tabel MAC Address di PE1 dan PE2 mendeteksi MAC CE lawan via pseudoport (BGP).
-    + show bgp l2vpn evpn summary
-    + show mpls forwarding-table
-    + show bridge-domain 100
-    + show l2vpn evpn evi 100 detail
+    show bgp l2vpn evpn summary
+    show mpls forwarding-table
+    show bridge-domain 100
+    show l2vpn evpn evi 100 detail

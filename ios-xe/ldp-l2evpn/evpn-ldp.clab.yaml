@@ -1,0 +1,30 @@
+name: evpn-ldp-lab
+prefix: ""
+topology:
+  kinds:
+    cisco_iol:
+       image: arthurk99/cisco-iol:17.15.01
+    cisco_c8000v:
+        image: arthurk99/cisco-c8000v:17.11.01a
+  nodes:
+    PE1:
+      kind: cisco_c8000v
+      startup-config: PE1.cfg
+    P3:
+      kind: cisco_c8000v
+      startup-config: P3.cfg
+    PE2:
+      kind: cisco_c8000v
+      startup-config: PE2.cfg
+    host1:
+      kind: cisco_iol
+      startup-config: host1.partial
+    host2:
+      kind: cisco_iol
+      startup-config: host2.partial
+
+  links:
+    - endpoints: ["PE1:eth1", "P3:eth1"]
+    - endpoints: ["PE2:eth1", "P3:eth2"]
+    - endpoints: ["PE1:eth2", "host1:eth1"]
+    - endpoints: ["PE2:eth2", "host2:eth1"]

@@ -1,14 +1,43 @@
 Task 1: Underlay (IGP & MPLS)
-    Konfigurasi IP Address di semua interface fisik dan Loopback0 (R1=1.1.1.1, R2=2.2.2.2, dst).
-    Aktifkan OSPF Area 0, MPLS, dan RSVP di semua interface transit. Jangan lupa nyalakan Traffic Engineering extensions di OSPF.
-Task 2: RSVP-TE dengan Secondary Path
-    Di R1 dan R4, buat RSVP LSP yang saling terhubung.
-    Gunakan fitur path untuk mendefinisikan strict hop. Jalur via R2 sebagai Primary, dan jalur via R3 sebagai Secondary (dengan mode standby).
-Task 3: MP-BGP (Control Plane L3VPN)
-    Bangun sesi iBGP antara Loopback R1 dan R4. Aktifkan address family khusus untuk mendistribusikan rute VPN (inet-vpn unicast).
-Task 4: L3VPN / VRF (Data Plane)
-    Di R1 dan R4, buat routing-instance bertipe VRF dengan nama VPN-A.
-    Gunakan Route Distinguisher dan VRF Target bebas (misal: 65000:100).
-    Buat interface lo0.100 dan masukkan ke dalam VRF sebagai simulasi network pelanggan (R1 = 192.168.1.1/24, R4 = 192.168.4.1/24).
+    Configure IP addresses on all physical interfaces and Loopback0 (R1 = 1.1.1.1, R2 = 2.2.2.2, etc.).
+    Enable OSPF Area 0, MPLS, and RSVP on all transit interfaces.
+    Don’t forget to enable Traffic Engineering (TE) extensions in OSPF.
 
-Task 5: Carrier-Grade Fast Reroute (FRR)
+Task 2: RSVP-TE with Secondary Path
+    On R1 and R4, create RSVP LSPs toward each other.
+    Use the path feature to define strict hops.
+    Use the path via R2 as the Primary path.
+    Use the path via R3 as the Secondary path (configured in standby mode).
+
+Task 3: MP-BGP (L3VPN Control Plane)
+    Establish an iBGP (AS 65001) session between the Loopback interfaces of R1 and R4.
+    Enable the appropriate address family to distribute VPN routes (inet-vpn unicast).
+
+Task 4: L3VPN / VRF (Data Plane)
+    On R1 and R4, create a routing-instance of type VRF named VPN-A.
+    Use any Route Distinguisher and VRF Target (for example: 65000:100).
+    Create interface lo0.100 and assign it to the VRF as a simulated customer network:
+    R1 = 192.168.1.1/24
+    R4 = 192.168.4.1/24
+
+Task 5:
+    Activate icmp tunneling
+
+Verify :
+
+show ospf neighbor
+show ted database
+
+show rsvp neighbor
+show mpls interface
+
+show mpls lsp ingress detail
+show route table inet.3
+
+show bgp summary
+show route table VRF-TEST.inet.0
+
+ping 192.168.4.4 routing-instance VRF-TEST source 192.168.1.1 count 5
+traceroute 192.168.4.4 routing-instance VRF-TEST source 192.168.1.1
+
+

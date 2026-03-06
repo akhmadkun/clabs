@@ -1,0 +1,24 @@
+Phase 1: The Underlay (OSPF & LDP)
+Goal: Make sure all routers can reach each other's Loopback IPs and can exchange MPLS labels.
+
++ OSPF provides the basic routing map (IP reachability).
++ LDP assigns labels for normal unicast traffic (like replies to pings).
++ mLDP builds a "tree" for multicast traffic (like broadcast ARP requests).
+
+Phase 2: The Control Plane (BGP EVPN)
+Goal: Use BGP AS 65000 to share MAC addresses between PE routers so they know where the hosts live.
+
++ P3 will act as a Route Reflector. This means PE1 and PE2 only need to peer with P3, instead of peering with everyone in the network.
++ We use the l2vpn evpn address family because standard BGP only shares IP addresses, but we need to share MAC addresses.
+
+
+Phase 3: The EVPN Overlay & Attachment Circuit
+Goal: Create the virtual switch (MAC-VRF) and connect our physical host port to it.
+
++ core-tree mldp-p2mp: This is the magic command. It tells the router, "When you get a broadcast packet (like an ARP), do not make copies yourself. Send it into the mLDP multicast tree in the core network."
+
+Phase 4: Arista cEOS Hosts
+Goal: Configure simple IP addresses on the hosts to generate traffic.
+
++ Host 1 : 192.168.10.1/24
++ Host 2 : 192.168.10.2/24

@@ -19,6 +19,7 @@ Objective: End-to-End L3VPN Reachability via Segment Routing Backbone
 
      + Konfigurasikan semua alamat IP pada antarmuka core dan Loopback.
      + Buat VRF bernama CUST_A di PE1 dan PE2. Terapkan VRF tersebut pada antarmuka yang mengarah ke pelanggan (CE).
+     + Di dalam VRF CUST_A, konfigurasikan Route Distinguisher (RD) 65000:1 dan Route Target (RT) 65000:1 untuk import maupun export.
      + Set IP gateway untuk pelanggan di antarmuka VRF tersebut (PE1: 192.168.10.1/24, PE2: 192.168.20.1/24).
 
 # Task 2 (Underlay & Segment Routing):
@@ -32,7 +33,7 @@ Objective: End-to-End L3VPN Reachability via Segment Routing Backbone
 
      + Bangun sesi iBGP (ASN 65000) antara PE1 dan PE2 menggunakan IP Loopback.
      + Aktifkan Address Family vpnv4 unicast.
-     + Di dalam VRF CUST_A, konfigurasikan Route Distinguisher (RD) 65000:1 dan Route Target (RT) 65000:1 untuk import maupun export.
+
      + Redistribute rute Connected (subnet CE) ke dalam BGP VRF agar masing-masing PE saling bertukar rute pelanggan.
 
 # Task 4 (Verification):

@@ -11,21 +11,17 @@ Lo0: 1.1.1.1           Lo0: 2.2.2.2            Lo0: 5.5.5.5            Lo0: 4.4.
 
 Objective: End-to-End Reachability via IS-IS Multi-Area
 
-# Task 1 (Addressing): Konfigurasikan IP Address IPv4 pada semua interface ge (sesuai topologi) dan interface lo0.0 (Loopback). Pastikan semua interkoneksi bisa di-ping secara point-to-point.
+# Task 1
+    Configure IPv4 addresses on all ge interfaces (according to the topology) and on the lo0.0 (Loopback) interface. Make sure all point-to-point interconnections can successfully ping each other.
 
-# Task 2 (IS-IS Enablement): Aktifkan protokol IS-IS pada semua router. Ingat bahwa di Junos, kamu harus mengaktifkan family iso di physical interface dan loopback.
+# Task 2
+    Enable the IS-IS protocol on all routers. Remember that in Juniper Networks Junos, you must enable family iso under both the physical interfaces and the loopback interface in order for IS-IS to operate properly.
 
-# Task 3 (NET Configuration): Konfigurasikan Network Entity Title (NET) di interface lo0.0 dengan format:
+# Task 3
+    Configure the Network Entity Title (NET) under interface lo0.0 using the following format: R1 & R2 are in Area 49.0001, R3 & R4 are in Area 49.0002, and R5 is in Backbone Area 49.0000. Use the standard System ID format (for example, R1: 0000.0000.0001).
 
-    + R1 & R2 berada di Area 49.0001
-    + R3 & R4 berada di Area 49.0002
-    + R5 berada di Area Backbone 49.0000
-    + (Gunakan format System ID standar, contoh R1: 0000.0000.0001)
+# Task 4
+    Optimize IS-IS levels to make the database more efficient: R1 & R3 must run Level 1 only, R5 must run Level 2 only, and R2 & R4 (ABRs) must configure interfaces toward the Access side as Level 1 only and interfaces toward the Backbone as Level 2 only.
 
-# Task 4 (Level Optimization): Lakukan optimasi Level agar database lebih efisien:
-
-    + R1 & R3: Hanya jalankan IS-IS Level 1.
-    + R5: Hanya jalankan IS-IS Level 2.
-    + R2 & R4 (ABR): Interface ke arah Access jadikan L1-only, interface ke arah Backbone jadikan L2-only.
-
-# Task 5 (Verification): Buktikan bahwa R1 dapat melakukan ping ke Loopback R3 (3.3.3.3) menggunakan source Loopback R1 (1.1.1.1). Jelaskan bagaimana R1 (yang L1-only) bisa tahu jalan menuju Area lain!
+# Task 5
+    Finally, verify that R1 can ping the Loopback of R3 (3.3.3.3) using source Loopback R1 (1.1.1.1), and explain how R1 (which is Level 1-only) is able to learn the route toward another area.
