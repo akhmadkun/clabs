@@ -1,32 +1,81 @@
 # Phase 1: Building the "Highway" (Underlay IP & BGP)
 Goal: Ensure all Leaf switches can communicate with each other through the Spine switches.
+    + Spines & Leafs: Enable ip routing.
+    + Spines & Leafs: Configure standard eBGP (router bgp <ASN>).
+        - Spines use ASN 65000,
+        - Rack 1 uses 65001
+        - Rack 2 uses 65002.
+    + Spines & Leafs:
+        - Peer them together
+        - advertise Loopback0 into BGP using the network command.
+    + Verification:
+        - Go to Leaf11 and type show ip route.
+        - You MUST see the Loopback0 IPs of the Spines and the REMOTE Leafs
+        - You will NOT see your twin Leaf's Loopback0 (same BGP AS Number).
 
-+ On all Spines and Leafs: Configure IP addresses on the physical interfaces connecting them (the uplinks and downlinks).
-+ On all Spines and Leafs: Create a Loopback0 interface. Think of this as the main ID card for each switch.
-+ On all Spines and Leafs: Enable BGP routing. Advertise your connected networks so the Spines and Leafs know how to reach each other.
-+ How to verify: From Leaf11, try to ping Leaf21's Loopback0 IP. If it replies, your highway is ready!
 
 # Phase 2: Creating the "Twin Doors" (MLAG)
 Goal: Combine 2 physical Leaf switches in the same rack so they appear as 1 logical switch to the servers below them. This provides redundancy.
 
-+ On Leaf11 & Leaf12 (Rack 1): Create VLAN 4094 and assign an IP address. This is the dedicated "heartbeat" link so the switches know their partner is alive.
-+ On Leaf11 & Leaf12: Enable mlag configuration and point it to the partner's heartbeat IP.
-+ How to verify: Type show mlag. Make sure the status shows Active/Active and the peer link is Up.
-+ Repeat these exact steps for Leaf21 & Leaf22 in Rack 2.
+
+    + Create vlan 4094 for the MLAG heartbeat.
+    + Bundle the direct cables between the twin Leafs into a Port-Channel
+    + set it as a trunk, and assign IP addresses to interface vlan 4094.
+    + Configure the mlag configuration block.
+        - Set the domain-id, the local interface, and the peer's heartbeat IP.
+    + Verification: Type show mlag. The status must be Active/Active.
 
 Phase 3: Tunnels & The Anycast Gateway (VXLAN)
 Goal: Wrap L2 packets inside L3 packets (VXLAN encapsulation) and create the exact same IP Gateway on all Leaf switches so the hosts always have a local exit point.
 
-On all Leafs: Create VLAN 10 and VLAN 20.
-On all Leafs: Configure the VLAN 10 & 20 interfaces using the ip address virtual command. Set them to 10.10.10.254 and 10.10.20.254.
-On all Leafs: Set the virtual-router mac-address to 00:aa:aa:aa:aa:aa (This MUST be identical across all leaf switches!).
-On all Leafs: Create Loopback1. Add the Primary IP (for the data tunnel) and the Secondary IP (to handle ARP broadcasts). Important: Leafs in the same rack (e.g., Leaf11 & Leaf12) must use the EXACT same IP addresses for Loopback1.
-On all Leafs: Enter interface Vxlan1, set the source to Loopback1, then map VLAN 10 to VNI 1010, and VLAN 20 to VNI 1020.
-Don't forget to configure the flood vtep pointing to the remote rack's Loopback1 IP.
-Phase 5: Connecting the Hosts & Final Verification
-Goal: Connect the servers to the switches and test the end-to-end connection.
+    + Create a VRF using vrf instance TENANT-A. Enable routing for it.
+    + Set the universal Anycast MAC address globally to 00:aa:aa:aa:aa:aa.
+    + Create VLAN 10 and VLAN 20.
+    + Create interface Vlan10 and interface Vlan20.
+        - Put them inside the VRF (vrf TENANT-A).
+        - Assign the exact same Anycast IPs (10.10.10.254/24 and 10.10.20.254/24).
+    + Create VLAN 1000.
+        - This will be our "Transit VLAN" for the VRF.
+        - Create interface Vlan1000 and put it inside vrf TENANT-A.
+            - No IP address is needed here.
 
-On Leaf11 & Leaf12: Configure the ports facing Host 1 as a Port-Channel (using LACP) and assign them to VLAN 10.
-On Host 1: Bundle its ports into a Port-Channel, assign the IP 10.10.10.1/24, and set its default route/gateway to 10.10.10.254.
-Repeat these steps for Host 2 in Rack 2 (use VLAN 20, IP 10.10.20.1/24, Gateway 10.10.20.254).
-The Final Exam: Go to Host 1 and type ping 10.10.20.1. If you get a reply, congratulations! You have successfully built a VXLAN routed network!
+
+Phase 4: The Tunnels (VXLAN Interface)
+Goal: Configure the hardware tunnel endpoints (VTEP) and map the VLANs to VXLAN Network Identifiers (VNIs).
+
+    + Create interface Loopback1.
+        - Assign Primary IP (data) and Secondary IP (Virtual VTEP for ARP).
+        - Remember: Twin leafs in the same rack share the EXACT same Loopback1 IPs!
+
+    + Loopback1 IPs into BGP IPv4 Underlay network.
+    + Create interface Vxlan1.
+        - Set the source-interface to Loopback1 and UDP port to 4789.
+        - map VLAN 10 to VNI 1010, and VLAN 20 to VNI 1020 (L2VNIs).
+        - map VRF to a unique routing VNI: vxlan vrf TENANT-A vni 10000 (L3VNI).
+
+
+Phase 5: The Smart Brain (BGP EVPN)
+Goal: Turn on EVPN so the switches can share MAC and IP addresses dynamically without static flooding.
+
+    + Inside BGP, activate the EVPN family for all neighbors
+    + Spines and Leafs should pass EVPN Route Targets
+    + Leafs: configure the Layer 2 EVPN.
+        - Create a block for vlan 10 and vlan 20.
+        - Set rd auto, route-target both auto, and redistribute learned.
+    + Leafs: configure the Layer 3 EVPN.
+        - Create a block for vrf TENANT-A.
+        - Manually set the RD using your Loopback0 IP and L3VNI.
+        - Set the Route-Targets to match the VNI universally.
+        - Don't forget redistribute connected!.
+
+Phase 6: Server Connection & The Ultimate Test
+Goal: Plug in the servers and prove the network works.
+
+    + Leafs: Configure the server-facing ports as LACP Port-Channels
+        - Assign them to the correct VLANs (VLAN 10 Host 1, VLAN 20 for Host 2).
+        - Add the mlag command to the Port-Channel.
+    + Hosts: Configure the Port-Channel
+        - assign the host IP, and set the default route to the Anycast Gateway
+    + Verification 1: From Leaf11, type show bgp evpn summary.
+    + Verification 2: From Leaf11, type show bgp evpn route-type mac-ip.
+    + Verification 3: From Host 1, ping 10.10.20.1 (Host 2).

@@ -7,7 +7,7 @@ topology:
         image: ceos:4.35.0F
         network-mode: none
     cisco_iol:
-        image: arthurk99/cisco-iol:17.15.01
+        image: arthurk99/cisco-iol-l2:17.15.01
 
   nodes:
     # Spine Layer BGP ASN : 65010
@@ -41,10 +41,12 @@ topology:
     # Host Rak 1 : 172.16.100.10
     host1:
         kind: cisco_iol
+        type: L2
 
     # Host Rak 1 : 172.16.200.10
     host2:
         kind: cisco_iol
+        type: L2
 
   links:
     # --- Uplinks Rak 1 (Leaf 1 & 2) To Spines ---

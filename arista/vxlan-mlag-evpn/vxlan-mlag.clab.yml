@@ -9,6 +9,7 @@ topology:
   kinds:
     ceos:
       image: ceos:4.35.0F
+      network-mode: none
     cisco_iol:
        image: arthurk99/cisco-iol-l2:17.15.01
        type: L2
@@ -32,11 +33,9 @@ topology:
         kind: ceos
         startup-config: leaf22.cfg
     host1:
-        kind: ceos
-        network-mode: none
+        kind: cisco_iol
     host2:
-        kind: ceos
-        network-mode: none
+        kind: cisco_iol
     
   links:
     # MLAG Peer Links

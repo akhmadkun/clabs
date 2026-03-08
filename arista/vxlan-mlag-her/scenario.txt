@@ -1,32 +1,57 @@
 # Phase 1: Building the "Highway" (Underlay IP & BGP)
 Goal: Ensure all Leaf switches can communicate with each other through the Spine switches.
 
-+ On all Spines and Leafs: Configure IP addresses on the physical interfaces connecting them (the uplinks and downlinks).
-+ On all Spines and Leafs: Create a Loopback0 interface. Think of this as the main ID card for each switch.
-+ On all Spines and Leafs: Enable BGP routing. Advertise your connected networks so the Spines and Leafs know how to reach each other.
-+ How to verify: From Leaf11, try to ping Leaf21's Loopback0 IP. If it replies, your highway is ready!
+    + On all Spines and Leafs: Configure IP addresses on the physical interfaces connecting them.
+    + On all Spines and Leafs: Create a Loopback0 interface. Think of this as the main ID card for each switch.
+    + On all Spines and Leafs: Enable BGP routing.
+        - Advertise your connected networks so the Spines and Leafs know how to reach each other.
+    + How to verify: From Leaf11, try to ping Leaf21's Loopback0 IP. If it replies, your highway is ready!
 
 # Phase 2: Creating the "Twin Doors" (MLAG)
 Goal: Combine 2 physical Leaf switches in the same rack so they appear as 1 logical switch to the servers below them. This provides redundancy.
 
-+ On Leaf11 & Leaf12 (Rack 1): Create VLAN 4094 and assign an IP address. This is the dedicated "heartbeat" link so the switches know their partner is alive.
-+ On Leaf11 & Leaf12: Enable mlag configuration and point it to the partner's heartbeat IP.
-+ How to verify: Type show mlag. Make sure the status shows Active/Active and the peer link is Up.
-+ Repeat these exact steps for Leaf21 & Leaf22 in Rack 2.
+    + On Leaf11 & Leaf12 (Rack 1): Create VLAN 4094 and assign an IP address.
+        - This is the dedicated "heartbeat" link so the switches know their partner is alive.
+    + On Leaf11 & Leaf12: Enable mlag configuration and point it to the partner's heartbeat IP.
+    + How to verify: Type show mlag. Make sure the status shows Active/Active and the peer link is Up.
+    + Repeat these exact steps for Leaf21 & Leaf22 in Rack 2.
 
-Phase 3: Tunnels & The Anycast Gateway (VXLAN)
+# Phase 3: Tunnels & The Anycast Gateway (VXLAN)
 Goal: Wrap L2 packets inside L3 packets (VXLAN encapsulation) and create the exact same IP Gateway on all Leaf switches so the hosts always have a local exit point.
 
-On all Leafs: Create VLAN 10 and VLAN 20.
-On all Leafs: Configure the VLAN 10 & 20 interfaces using the ip address virtual command. Set them to 10.10.10.254 and 10.10.20.254.
-On all Leafs: Set the virtual-router mac-address to 00:aa:aa:aa:aa:aa (This MUST be identical across all leaf switches!).
-On all Leafs: Create Loopback1. Add the Primary IP (for the data tunnel) and the Secondary IP (to handle ARP broadcasts). Important: Leafs in the same rack (e.g., Leaf11 & Leaf12) must use the EXACT same IP addresses for Loopback1.
-On all Leafs: Enter interface Vxlan1, set the source to Loopback1, then map VLAN 10 to VNI 1010, and VLAN 20 to VNI 1020.
-Don't forget to configure the flood vtep pointing to the remote rack's Loopback1 IP.
-Phase 5: Connecting the Hosts & Final Verification
+    + On all Leafs: Create VLAN 10 and VLAN 20.
+    + On all Leafs: Configure the anycast gateway on VLAN 10 & 20 interfaces.
+        vl10: 10.10.10.254
+        vl20: 10.10.20.254.
+    + On all Leafs: Set the virtual-router mac-address to 00:aa:aa:aa:aa:aa
+        (This MUST be identical across all leaf switches!).
+
+    + On all Leafs: Create Loopback1.
+        - Primary IP (for the data tunnel) and Secondary IP (to handle ARP broadcasts).
+        - Leafs in the same rack (e.g., Leaf11 & Leaf12) must use the EXACT same IP addresses.
+            > RACK1 : 192.168.1.1/32, 192.168.1.2/32 (secondary)
+            > RACK2 : 192.168.1.3/32, 192.168.1.4/32 (secondary)
+    + On all Leafs: Advertise the Loopback1 IPs.
+
+    + On all Leafs: Create interface Vxlan1,
+        - set the source to Loopback1
+        - map VLAN 10 to VNI 1010, and VLAN 20 to VNI 1020.
+        - Configure the flood vtep pointing to the remote rack's Loopback1 Primary IP.
+
+
+Phase 3.5 :
+    + Set ARP timeout faster than MAC aging-time to force refresh
+
+
+Phase 4: Connecting the Hosts & Final Verification
 Goal: Connect the servers to the switches and test the end-to-end connection.
 
-On Leaf11 & Leaf12: Configure the ports facing Host 1 as a Port-Channel (using LACP) and assign them to VLAN 10.
-On Host 1: Bundle its ports into a Port-Channel, assign the IP 10.10.10.1/24, and set its default route/gateway to 10.10.10.254.
-Repeat these steps for Host 2 in Rack 2 (use VLAN 20, IP 10.10.20.1/24, Gateway 10.10.20.254).
-The Final Exam: Go to Host 1 and type ping 10.10.20.1. If you get a reply, congratulations! You have successfully built a VXLAN routed network!
+    + On Leaf11 & Leaf12:
+        - Configure the ports facing Host 1 as a Port-Channel (using LACP) and assign them to VLAN 10.
+    + On Host 1:
+        - Bundle its ports into a Port-Channel
+        - assign the IP 10.10.10.1/24, and set its default route/gateway to 10.10.10.254.
+
+    + Repeat these steps for Host 2 in Rack 2 (use VLAN 20, IP 10.10.20.1/24, Gateway 10.10.20.254).
+
+    + Test reachability between Host1 and Host2
