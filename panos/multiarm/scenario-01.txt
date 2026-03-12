@@ -51,13 +51,19 @@ GW: 10.0.0.1    10.0.0.0/24 │ (10.0.0.1)        │                 eth0: 192.
 # Source NAT
 
 
-+ 1. Configure ethernet1/5 with IP 203.0.113.1/30 and assign it to a new zone named Untrust
-+ 2. Configure a Default Route (0.0.0.0/0) in the Virtual Router pointing to next-hop 203.0.113.2
-+ 3. Create a Source NAT Policy (Dynamic IP and Port / DIPP)
-     Translate all traffic from LAN1, LAN2, and LAN34 going to Untrust using the IP of ethernet1/5
+   + Configure ethernet1/5 with IP 203.0.113.1/30
+    - Assign it to a new zone named Untrust
 
-+ 4. Create a Security Policy to Allow Traffic from Internal Zones to Untrust
-+ 5. Verify that Client1 can ping 8.8.8.8
+   + Configure a Default Route (0.0.0.0/0) in the Virtual Router
+    - Set next-hop to 203.0.113.2
+
+   + Create a Source NAT Policy named Internet-Access
+    - Translate traffic from LAN1, LAN2, and LAN34 to Untrust using the IP of eth1/5
+
+   + Create a Security Policy to Allow Traffic from Internal Zones to Untrust
+   + Verify that Client1 can ping 8.8.8.8, 8.8.4.4
+
+
 
 # Destination NAT (DMZ & Port Forwarding)
 
@@ -65,13 +71,14 @@ GW: 10.0.0.1    10.0.0.0/24 │ (10.0.0.1)        │                 eth0: 192.
     1. Configure ethernet1/6 with IP 10.0.0.1/24 and assign it to a new zone named DMZ
 
 
-    2. Create a Destination NAT Policy
+    2. Create a Destination NAT Policy named Inbound-Web
        If traffic from Untrust is destined to 203.0.113.1 (public IP on ethernet1/5),
        translate the destination to the internal Web Server IP 10.0.0.100
 
 
     3. Create a Security Policy to Allow Inbound Traffic
        IMPORTANT:
+       - name : Allow-Inbound-Web
        - Source Zone  = Pre-NAT Zone (Untrust)
        - Destination Zone = DMZ (zone after routing decision)
        - Destination IP   = Post-NAT IP (10.0.0.100)
