@@ -1,23 +1,23 @@
 Objective: Secure, Optimized, and Leaked IS-IS Routing
+Task 1 (Wide Metrics & IPv6 Baseline):
 
-# Task 1 (Wide Metrics & IPv6 Baseline):
+    + Configure IS-IS for both IPv4 and IPv6
+    + Change the standard IS-IS metric style on all routers to Wide Metrics
 
-    + Konfigurasikan IS-IS untuk IPv4 dan IPv6 (aktifkan family inet6 dan iso).
+Task 2 (Multi-Topology IPv6):
 
-    + Ubah standar metrik IS-IS di semua router menjadi Wide Metrics (ini wajib untuk Traffic Engineering dan IPv6). Metrik sempit/lama (Narrow) tidak boleh digunakan.
+    + By default, IS-IS shares the same topology tree for IPv4 and IPv6.
+    + Separate the SPF calculations by enabling the IPv6 Unicast Topology
 
-# Task 2 (Multi-Topology IPv6):
+Task 3 (Security - LSP Authentication):
 
-    + Secara default, IS-IS membagikan topologi IPv4 dan IPv6 di pohon yang sama (Single Topology). Pisahkan perhitungannya menggunakan fitur IPv6 Unicast Topology agar jika link IPv4 mati, trafik IPv6 tetap bisa jalan lewat jalur lain.
+    + Secure the control plane.
+    + Enable HMAC-MD5 authentication for LSP exchanges between R2 and R3.
+    + Use password KunciRahasia.
 
-# Task 3 (Security - LSP Authentication):
+Task 4 (The Boss Level: Route Leaking):
 
-    + Lakukan pengamanan pada control plane. Aktifkan HMAC-MD5 Authentication dengan password KunciRahasia untuk pertukaran Link State PDU (LSP) di area Level 2 saja (antara R2 dan R3).
-
-# Task 4 (The Boss Level: Route Leaking):
-
-    + Secara default, R1 (L1) hanya memiliki default route (ATT-bit) menuju R2 untuk mencapai R4.
-
-    + Tugas: Di R2, bocorkan (leak) rute spesifik Loopback R4 (4.4.4.4/32 dan 2001:db8::4/128) dari database Level 2 ke database Level 1.
-
-    + Goal: R1 harus memiliki rute spesifik ke Loopback R4 di dalam tabel inet.0-nya dengan tanda rute IS-IS L1 (bukan default route).
+    + By default, R1 (Level 1) only has a default route to reach R4.
+    + On R2, leak the specific Loopback routes of R4 to Level 1 database.
+    + Leak Both of it's IPv4 and IPv6 address.
+    + R1 must have specific routes to R4's Loopback (IPv4 and IPv6)

@@ -1,0 +1,37 @@
+all:
+  vars:
+    # The generated inventory is assumed to be used from the clab host.
+    # Hence no http proxy should be used. Therefore we make sure the http
+    # module does not attempt using any global http proxy.
+    ansible_httpapi_use_proxy: false
+  children:
+    bridge:
+      hosts:
+        virbr3:
+          ansible_host: 
+    cisco_iol:
+      vars:
+        # ansible_connection: set ansible_connection variable if required
+        ansible_user: admin
+        ansible_password: admin
+      hosts:
+        R1:
+          ansible_host: 172.20.20.11
+        R10:
+          ansible_host: 172.20.20.3
+        R2:
+          ansible_host: 172.20.20.8
+        R3:
+          ansible_host: 172.20.20.5
+        R4:
+          ansible_host: 172.20.20.2
+        R5:
+          ansible_host: 172.20.20.10
+        R6:
+          ansible_host: 172.20.20.6
+        R7:
+          ansible_host: 172.20.20.7
+        R8:
+          ansible_host: 172.20.20.9
+        R9:
+          ansible_host: 172.20.20.4

@@ -1,0 +1,56 @@
+---
+virbr3:
+    username: 
+    password: 
+    platform: bridge
+    hostname: 
+R1:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.11
+R10:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.3
+R2:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.8
+R3:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.5
+R4:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.2
+R5:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.10
+R6:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.6
+R7:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.7
+R8:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.9
+R9:
+    username: admin
+    password: admin
+    platform: cisco_iol
+    hostname: 172.20.20.4

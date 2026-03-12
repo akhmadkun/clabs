@@ -17,30 +17,41 @@ Objective: End-to-End L3VPN Reachability via Segment Routing Backbone
 
 # Task 1 (IP Addressing & VRF):
 
-     + Konfigurasikan semua alamat IP pada antarmuka core dan Loopback.
-     + Buat VRF bernama CUST_A di PE1 dan PE2. Terapkan VRF tersebut pada antarmuka yang mengarah ke pelanggan (CE).
-     + Di dalam VRF CUST_A, konfigurasikan Route Distinguisher (RD) 65000:1 dan Route Target (RT) 65000:1 untuk import maupun export.
-     + Set IP gateway untuk pelanggan di antarmuka VRF tersebut (PE1: 192.168.10.1/24, PE2: 192.168.20.1/24).
+     + Configure all IP addresses on the core interfaces and Loopback interfaces.
+     + Create a VRF named CUST_A on PE1 and PE2.
+        - Apply this VRF to the interfaces facing the customer (CE).
+     + VRF CUST_A,
+        - Route Distinguisher (RD) 65000:1
+        - Route Target (RT) 65000:1 for both import and export.
+     + Configure the customer gateway IP on the VRF interfaces
+        - PE1: 192.168.10.1/24
+        - PE2: 192.168.20.1/24
 
 # Task 2 (Underlay & Segment Routing):
 
-     + Konfigurasikan OSPF Area 0 di PE1, P3, dan PE2.
-     + Aktifkan fitur Segment Routing MPLS di dalam proses OSPF.
-     + Alokasikan Prefix-SID secara spesifik pada antarmuka Loopback0: PE1 (Index 1), PE2 (Index 2), dan P3 (Index 3).
-     + Pastikan tabel show mpls forwarding sudah terisi dengan label SR (blok 16000+).
+     + Configure OSPF Area 0 on PE1, P3, and PE2.
+     + Enable the Segment Routing MPLS feature within the OSPF process.
+     + Allocate Prefix-SIDs specifically on the Loopback0 interfaces.
+        - PE1 (Index 1)
+        - PE2 (Index 2)
+        - P3 (Index 3)
+     + Ensure the `show mpls forwarding` table is populated with SR labels.
 
 # Task 3 (BGP VPNv4 Overlay):
 
-     + Bangun sesi iBGP (ASN 65000) antara PE1 dan PE2 menggunakan IP Loopback.
-     + Aktifkan Address Family vpnv4 unicast.
-
-     + Redistribute rute Connected (subnet CE) ke dalam BGP VRF agar masing-masing PE saling bertukar rute pelanggan.
+     + Establish an iBGP session between PE1 and PE2
+        - Use ASN 65000 and Loopback IP addresses.
+     + Enable the Address Family vpnv4 unicast.
+     + Redistribute Connected routes (CE subnets) into BGP VRF
+        - Ensure both PEs can exchange customer routes.
 
 # Task 4 (Verification):
 
-     + Lakukan ping dari CE1 ke 192.168.20.2 (CE2).
-     + Jelaskan bagaimana proses resolusi Double Label (VPN Label di bawah, SR Transport Label di atas) terjadi di PE1 saat mengirim paket ke PE2.
+     + Perform a ping from CE1 to 192.168.20.2 (CE2).
+     + Explain how the Double Label resolution process
+        - VPN Label at the bottom,
+        - SR Transport Label on top
      + PE1
-          + show bgp vpnv4 unicast all 192.168.20.0/24 (cek received label)
-          + show cef vrf CUST_A 192.168.20.0/24 detail (cek labels imposed)
+          + show bgp vpnv4 unicast all 192.168.20.0/24 (check received label)
+          + show cef vrf CUST_A 192.168.20.0/24 detail (check labels imposed)
           + show mpls forwarding
