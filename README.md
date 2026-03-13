@@ -61,4 +61,16 @@ This repo covers **multi-vendor environments** (Cisco, Juniper, Arista, Fortinet
 2. Clone the repo:
    ```bash
    git clone https://github.com/akhmadkun/clabs.git
-   cd clabs
+   cd clabs```
+
+3. Deploy an example lab (e.g., Cisco IOS-XE OSPF):
+  ```cd ios-xe/ospf-lab  # adjust to actual path
+  sudo containerlab deploy -t topology.clab.yml```
+
+> Note: Pull vendor images first (e.g., via containerlab graph). Check each vendor folder's README or topology for credentials & specifics.
+
+## Portfolio Value
+
+- Demonstrates broad vendor knowledge + deep automation skills.
+- Reproducible labs → Ideal for interview demos or team sharing.
+- Aligned with modern network practices: IaC mindset, containerized testing.
