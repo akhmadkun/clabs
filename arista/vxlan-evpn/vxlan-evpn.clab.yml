@@ -5,6 +5,8 @@ topology:
   kinds:
     ceos:
       image: ceos:4.35.0F
+      env:
+        CLAB_MGMT_VRF: MGMT
     linux:
       image: ghcr.io/srl-labs/network-multitool:latest
       network-mode: none
@@ -12,10 +14,13 @@ topology:
   nodes:
     spine1:
       kind: ceos
-    leaf1:
+      startup-config: spine1.cfg
+    leaf11:
       kind: ceos
-    leaf2:
+      startup-config: leaf11.cfg
+    leaf12:
       kind: ceos
+      startup-config: leaf12.cfg
     host1:
       kind: linux
       exec:
@@ -27,9 +32,9 @@ topology:
 
   links:
     # Underlay Links (Leaf ke Spine)
-    - endpoints: ["leaf1:eth1", "spine1:eth1"]
-    - endpoints: ["leaf2:eth1", "spine1:eth2"]
+    - endpoints: ["leaf11:eth1", "spine1:eth1"] # 10.11.1.0/24
+    - endpoints: ["leaf12:eth1", "spine1:eth2"] # 10.12.1.0/24
     
     # Host Links
-    - endpoints: ["leaf1:eth2", "host1:eth1"]
-    - endpoints: ["leaf2:eth2", "host2:eth1"]
+    - endpoints: ["leaf11:eth2", "host1:eth1"]
+    - endpoints: ["leaf12:eth2", "host2:eth1"]
