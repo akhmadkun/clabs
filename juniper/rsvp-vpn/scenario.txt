@@ -1,24 +1,26 @@
 Task 1: Underlay (IGP & MPLS)
-    Configure IP addresses on all physical interfaces and Loopback0 (R1 = 1.1.1.1, R2 = 2.2.2.2, etc.).
-    Enable OSPF Area 0, MPLS, and RSVP on all transit interfaces.
-    Don’t forget to enable Traffic Engineering (TE) extensions in OSPF.
+    + Configure IP addresses on all physical interfaces and Loopback0
+        - R1 = 1.1.1.1, R2 = 2.2.2.2
+    + Enable OSPF Area 0, MPLS, and RSVP on all transit interfaces.
+    + Don’t forget to enable Traffic Engineering (TE) extensions in OSPF.
 
 Task 2: RSVP-TE with Secondary Path
-    On R1 and R4, create RSVP LSPs toward each other.
-    Use the path feature to define strict hops.
-    Use the path via R2 as the Primary path.
-    Use the path via R3 as the Secondary path (configured in standby mode).
+    + On R1 and R4, create RSVP LSPs toward each other.
+    + Use the path feature to define strict hops.
+    + Use the path via R2 as the Primary path.
+    + Use the path via R3 as the Secondary path (configured in standby mode).
 
 Task 3: MP-BGP (L3VPN Control Plane)
-    Establish an iBGP (AS 65001) session between the Loopback interfaces of R1 and R4.
-    Enable the appropriate address family to distribute VPN routes (inet-vpn unicast).
+    + Establish an iBGP (AS 65001) session R1 and R4.
+        - Use loopback0 ip address
+    + Enable the appropriate address family to distribute VPN routes..
 
 Task 4: L3VPN / VRF (Data Plane)
-    On R1 and R4, create a routing-instance of type VRF named VPN-A.
-    Use any Route Distinguisher and VRF Target (for example: 65000:100).
-    Create interface lo0.100 and assign it to the VRF as a simulated customer network:
-    R1 = 192.168.1.1/24
-    R4 = 192.168.4.1/24
+    + On R1 and R4, create a routing-instance of type VRF named VPN-A.
+    + Use any Route Distinguisher and VRF Target (for example: 65000:100).
+    + Create interface lo0.100 and assign it to the VRF as a customer network:
+        - R1 = 192.168.1.1/24
+        - R4 = 192.168.4.1/24
 
 Task 5:
     Activate icmp tunneling
@@ -31,6 +33,7 @@ show ted database
 show rsvp neighbor
 show mpls interface
 
+show mpls lsp
 show mpls lsp ingress detail
 show route table inet.3
 
