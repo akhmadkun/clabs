@@ -1,16 +1,21 @@
 "We will build 2 Data Center racks using the Arista UCN design. Spine (ASN 65010) and ALL Leaf switches (ASN 65020). Host-1 is in VLAN 100, and Host-2 is in VLAN 200."
 
 Underlay P2P & Loopback:
-    Create /31 point-to-point IP addressing between all Leaf and Spine devices. Configure Loopback0 on each device to be used as the BGP Router-ID.
+    + Create /31 point-to-point IP addressing between all Leaf and Spine devices.
+    + Configure Loopback0 on each device to be used as the BGP Router-ID.
 
 MLAG & VARP (Anycast Gateway):
-    Build an MLAG domain in Rack 1 (Leaf 1 & Leaf 2) and in Rack 2 (Leaf 3 & Leaf 4).
-    Enable VARP (Virtual ARP) on interface VLAN100 (Rack 1) and VLAN200 (Rack 2) to function as an active/active default gateway.
+    + Build an MLAG domain in Rack 1 (Leaf 1 & 2) and in Rack 2 (Leaf 3 & 4).
+    + Enable VARP (Virtual ARP) to function as an active/active default gateway.
+        - VLAN100 (Rack 1)
+        - VLAN200 (Rack 2)
 
 BGP Routing (The Trap):
-    Establish eBGP sessions from Leaf to Spine and configure maximum-paths 4 for ECMP.
-    Add an iBGP session between MLAG peers in each rack for failover purposes.
-    Make sure to advertise the VLAN networks into BGP.
+    + Establish eBGP sessions from Leaf to Spine
+        - Configure maximum-paths 4 for ECMP.
+    + Add an iBGP session between MLAG peers in each rack for failover purposes.
+    + Make sure to advertise the VLAN networks into BGP.
 
 Host Connectivity:
-    Configure cEOS Host-1 and Host-2 to run LACP Port-Channel toward the Leaf switches, assign IP addresses, and point their default route to the VARP IP address.
+    + Configure Host-1 and Host-2 to run LACP toward the Leaf switches,
+    + Assign IP addresses, and point their default route to the VARP IP address.

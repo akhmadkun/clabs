@@ -2,10 +2,11 @@
 Goal: Ensure all Leaf switches can communicate with each other through the Spine switches.
 
     + On all Spines and Leafs: Configure IP addresses on the physical interfaces connecting them.
-    + On all Spines and Leafs: Create a Loopback0 interface. Think of this as the main ID card for each switch.
+    + On all Spines and Leafs: Create a Loopback0 interface.
+        - Think of this as the main ID card for each switch.
     + On all Spines and Leafs: Enable BGP routing.
         - Advertise your connected networks so the Spines and Leafs know how to reach each other.
-    + How to verify: From Leaf11, try to ping Leaf21's Loopback0 IP. If it replies, your highway is ready!
+    + How to verify: From Leaf11, try to ping Leaf21's Loopback0 IP.
 
 # Phase 2: Creating the "Twin Doors" (MLAG)
 Goal: Combine 2 physical Leaf switches in the same rack so they appear as 1 logical switch to the servers below them. This provides redundancy.
@@ -29,8 +30,9 @@ Goal: Wrap L2 packets inside L3 packets (VXLAN encapsulation) and create the exa
     + On all Leafs: Create Loopback1.
         - Primary IP (for the data tunnel) and Secondary IP (to handle ARP broadcasts).
         - Leafs in the same rack (e.g., Leaf11 & Leaf12) must use the EXACT same IP addresses.
-            > RACK1 : 192.168.1.1/32, 192.168.1.2/32 (secondary)
-            > RACK2 : 192.168.1.3/32, 192.168.1.4/32 (secondary)
+            > RACK1 : 2.2.2.1/32, 2.2.2.4/32 (secondary)
+            > RACK2 : 2.2.2.2/32, 2.2.2.5/32 (secondary)
+
     + On all Leafs: Advertise the Loopback1 IPs.
 
     + On all Leafs: Create interface Vxlan1,

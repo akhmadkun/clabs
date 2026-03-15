@@ -30,9 +30,11 @@ topology:
         startup-config: leaf22.cfg
     host1:
         kind: ceos
+        startup-config: host1.cfg
         network-mode: none
     host2:
         kind: ceos
+        startup-config: host2.cfg
         network-mode: none
     
   links:
