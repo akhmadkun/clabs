@@ -6,12 +6,12 @@ topology:
     # loopback0 : 1.1.1.1/32 Overlay EVPN Peering to Leaf2
     leaf1:
       kind: juniper_vjunosswitch
-      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+      image: arthurk99/juniper-vjunos-switch:23.4
 
     # Overlay : 2.2.2.2/32 Overlay BGP EVPN Peering to Leaf1
     leaf2:
       kind: juniper_vjunosswitch
-      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+      image: arthurk99/juniper-vjunos-switch:23.4
 
 
     # IP : 192.168.100.1
