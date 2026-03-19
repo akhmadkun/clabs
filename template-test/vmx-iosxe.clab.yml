@@ -1,0 +1,15 @@
+name: vpc-basic
+prefix: ""
+
+topology:
+  nodes:
+    r1:
+      kind: juniper_vmx
+      image: vrnetlab/juniper_vmx:18.2R1.9
+    
+    r2:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]

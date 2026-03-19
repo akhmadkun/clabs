@@ -35,7 +35,7 @@ Objective: End-to-End L3VPN Reachability via Segment Routing Backbone
         - PE1 (Index 1)
         - PE2 (Index 2)
         - P3 (Index 3)
-     + Ensure the `show mpls forwarding` table is populated with SR labels.
+     + Ensure the 'show mpls forwarding' table is populated with SR labels.
 
 # Task 3 (BGP VPNv4 Overlay):
 

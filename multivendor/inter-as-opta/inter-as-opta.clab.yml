@@ -1,0 +1,49 @@
+name: inter-as-option-a
+prefix: ""
+topology:
+  kinds:
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+      network-mode: none
+    ceos:
+      image: ceos:4.35.0F
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+  nodes:
+    # --- AS 65001 (Arista cEOS) ---
+    pe1:
+      kind: ceos
+    asbr1:
+      kind: ceos
+    
+    # --- AS 65002 (Juniper vJunos-router) ---
+    asbr2:
+      kind: juniper_vjunosrouter
+    pe2:
+      kind: juniper_vjunosrouter
+
+    # --- Customer Edges (Linux) ---
+    ce1:
+      kind: linux
+      exec:
+        - ip addr add 172.16.1.10/24 dev eth1
+        - ip route add default via 172.16.1.1
+    ce2:
+      kind: linux
+      exec:
+        - ip addr add 172.16.2.10/24 dev eth1
+        - ip route add default via 172.16.2.1
+
+  links:
+    # Inter-AS Link (Option A - Back-to-Back VRF via VLAN 10)
+    - endpoints: ["asbr1:eth2", "asbr2:eth2"] # 192.168.12.0/30 (VRF-A)
+
+    # Intra-AS 1 (Underlay OSPF + LDP + iBGP VPNv4)
+    - endpoints: ["pe1:eth1", "asbr1:eth1"]   # 10.1.1.0/24
+    
+    # Intra-AS 2 (Underlay OSPF + LDP + iBGP VPNv4)
+    - endpoints: ["asbr2:eth1", "pe2:eth1"]   # 10.2.2.0/24
+    
+    # Customer Attachments
+    - endpoints: ["ce1:eth1", "pe1:eth2"]     # 172.16.1.0/24
+    - endpoints: ["ce2:eth1", "pe2:eth2"]     # 172.16.2.0/24
