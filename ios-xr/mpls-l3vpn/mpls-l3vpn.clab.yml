@@ -8,18 +8,20 @@ topology:
     pe1:
         kind: cisco_csr1000v
         image: arthurk99/cisco-csr1000v:17.03.08
+        startup-config: pe1.cfg
 
-    p2:  { kind: cisco_csr1000v, image: arthurk99/cisco-csr1000v:17.03.08 }
-    p3:  { kind: cisco_xrd, image: ios-xr/xrd-control-plane:7.11.2 }
+    p2:  { kind: cisco_csr1000v, image: arthurk99/cisco-csr1000v:17.03.08, startup-config: p2.cfg }
+    p3:  { kind: cisco_xrd, image: ios-xr/xrd-control-plane:7.11.2, startup-config: p3.cfg}
 
     # loopback0 : 4.4.4.4/32
     pe4:
         kind: cisco_xrd
         image: ios-xr/xrd-control-plane:7.11.2
+        startup-config: pe4.cfg
     
     # --- Customer Edges ---
-    ce1: { kind: ceos, image: ceos:4.35.0F }
-    ce4: { kind: ceos, image: ceos:4.35.0F }
+    ce1: { kind: ceos, image: ceos:4.35.0F, startup-config: ce1.cfg }
+    ce4: { kind: ceos, image: ceos:4.35.0F, startup-config: ce4.cfg }
 
   links:
 
