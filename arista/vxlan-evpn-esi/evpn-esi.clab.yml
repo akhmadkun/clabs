@@ -1,0 +1,34 @@
+name: evpn-esi-bundle
+prefix: ""
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.35.0F
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+      network-mode: none
+  nodes:
+    spine1: { kind: ceos }
+    spine2: { kind: ceos }
+    leaf11: { kind: ceos }
+    leaf12: { kind: ceos }
+    leaf21: { kind: ceos }
+    
+    host1: { kind: ceos, network-mode: none }
+    host2: { kind: ceos, network-mode: none }
+
+  links:
+    # Underlay Spine-Leaf
+    - endpoints: ["spine1:eth1", "leaf11:eth1"]
+    - endpoints: ["spine1:eth2", "leaf12:eth1"]
+    - endpoints: ["spine1:eth3", "leaf21:eth1"]
+    - endpoints: ["spine2:eth1", "leaf11:eth2"]
+    - endpoints: ["spine2:eth2", "leaf12:eth2"]
+    - endpoints: ["spine2:eth3", "leaf21:eth2"]
+    
+    # ESI Multi-Homing 
+    - endpoints: ["leaf11:eth3", "host1:eth1"]
+    - endpoints: ["leaf12:eth3", "host1:eth2"]
+    
+    # Single-Homed Host
+    - endpoints: ["leaf21:eth3", "host2:eth1"]

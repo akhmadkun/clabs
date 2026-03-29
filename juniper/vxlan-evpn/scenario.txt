@@ -19,29 +19,29 @@
 
 # Underlay
 
-+ configure ip address as per topology
-+ Configure ospf area 0 for all devices
-+ all nodes should use lo0 as router-id
-+ make sure leafs have loopback reachability between them
+  + configure ip address as per topology
+  + Configure ospf area 0 for all devices
+  + all nodes should use lo0 as router-id
+  + make sure leafs have loopback reachability between them
 
 # Overlay
 
-+ Configure BGP EVPN using AS 65001
-+ do not enable ipv4-unicast peering
-+ Use peer group EVPN
-+ all nodes should use loopback0 as bgp source
+  + Configure BGP EVPN using AS 65001
+  + do not enable ipv4-unicast peering
+  + Use peer group EVPN
+  + all nodes should use loopback0 as bgp source
 
 # Access Interfaces and VxLAN
 
-+ Configure interface to end-points as access vlan 10
-+ Configure vxlan interface using loopback0 as source
-+ Map vlan 10 to vni 10010
+  + Configure interface to end-points as access vlan 10
+  + Configure vxlan interface using loopback0 as source
+  + Map vlan 10 to vni 10010
 
 # EVPN
 
-+ Configure EVPN to advertise locally learned MACs to remote leafs
-+ Use <loopback0>:10010 as identifier
-+ Use 65001:10010 as route target
+  + Configure EVPN to advertise locally learned MACs to remote leafs
+  + Use <loopback0>:10010 as identifier
+  + Use 65001:10010 as route target
 
 # Verify
 
