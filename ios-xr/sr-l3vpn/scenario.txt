@@ -23,7 +23,7 @@ Objective: End-to-End L3VPN Reachability via Segment Routing Backbone
      + VRF CUST_A,
         - Route Distinguisher (RD) 65000:1
         - Route Target (RT) 65000:1 for both import and export.
-     + Configure the customer gateway IP on the VRF interfaces
+     + Configure the customer gateway IP on the VRF interfaces (Gi 0/0/0/1)
         - PE1: 192.168.10.1/24
         - PE2: 192.168.20.1/24
 
