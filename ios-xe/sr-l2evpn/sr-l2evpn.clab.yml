@@ -18,10 +18,10 @@ topology:
       startup-config: PE2.cfg
     ce1: # 192.168.100.1/24
       kind: cisco_iol
-      startup-config: ce1.partial
+      startup-config: ce1.cfg.partial
     ce2: # 192.168.100.2/24
       kind: cisco_iol
-      startup-config: ce2.partial
+      startup-config: ce2.cfg.partial
 
   links:
     # Underlay OSPF Area 0 | Overlay BGP EVPN

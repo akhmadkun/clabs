@@ -48,6 +48,7 @@ Goal: Configure the hardware tunnel endpoints (VTEP) and map the VLANs to VXLAN 
         - Remember: Twin leafs in the same rack share the EXACT same Loopback1 IPs!
 
     + Advertise Loopback1 IPs into BGP IPv4 Underlay network.
+
     + Create interface Vxlan1.
         - Set the source-interface to Loopback1 and UDP port to 4789.
         - map VLAN 10 to VNI 1010, and VLAN 20 to VNI 1020 (L2VNIs).
