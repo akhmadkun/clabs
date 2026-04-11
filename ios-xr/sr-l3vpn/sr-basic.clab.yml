@@ -1,6 +1,9 @@
 name: sr-l3vpn
 prefix: ""
 topology:
+  kinds:
+    cisco_xrd:
+      image: sbezverk/xrd-control-plane:25.2.1
   nodes:
     # lo0 : 1.1.1.1/32 vpnv4 peering to pe2
     pe1:
