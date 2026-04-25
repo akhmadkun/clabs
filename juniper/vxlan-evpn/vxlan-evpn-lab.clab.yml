@@ -7,11 +7,13 @@ topology:
     leaf1:
       kind: juniper_vjunosswitch
       image: arthurk99/juniper-vjunos-switch:23.4
+      startup-config: leaf1.cfg
 
     # Overlay : 2.2.2.2/32 Overlay BGP EVPN Peering to Leaf1
     leaf2:
       kind: juniper_vjunosswitch
       image: arthurk99/juniper-vjunos-switch:23.4
+      startup-config: leaf2.cfg
 
 
     # IP : 192.168.100.1
