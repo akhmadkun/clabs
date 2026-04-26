@@ -83,7 +83,7 @@ GW: 10.0.0.1    10.0.0.0/24 │ (10.0.0.1)        │                 eth0: 192.
        - name : Allow-Inbound-Web
        - Source Zone  = Pre-NAT Zone (Untrust)
        - Destination Zone = DMZ (zone after routing decision)
-       - Destination IP   = Post-NAT IP (10.0.0.100)
+       - Destination IP   = Post-NAT IP (10.0.0.100) or Pre-NAT IP (203.0.113.1) ???
 
     4. (Advanced Simulation)
        Run a mini Python web server on the cEOS Web_Server node,
