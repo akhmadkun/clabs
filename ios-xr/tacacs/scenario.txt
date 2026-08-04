@@ -1,0 +1,55 @@
+            172.20.20.0/24
+   ──────────────────────────────
+
+        ┌─────────────────────┐
+        │       TACACS+       │     secret : tacacs123
+        │       Server        │     user :
+        │                     │         - admintacacs:admin (privilege 15)
+        │  eth0               │         - tacacs:tacacs(unprivileged)
+        │  172.20.20.100      │
+        └──────────┬──────────┘
+                   │
+                   │
+                   │  Mgmt0
+        ┌──────────┴───────────┐
+        │         R1           │
+        │                      │
+        │  Mgmt0               │
+        │                      │
+        │                      │
+        └──────────────────────┘
+
+
+* Configure R1 to use TACACS+ as the authentication server for remote login.
+* Configure fallback to local authentication if the TACACS+ server is unreachable.
+* Ensure remotely logged-in users receive the privilege level assigned by the TACACS+ server.
+* Then configure all remotely logged-in users to always receive privilege level 15.
+
+Create IOS-XR user access configuration with the following requirements:
+1. Read-Only Level (R/O)
+   * Username: scout
+
+2. Read/Write Level (R/W)
+   * Username: warden
+
+3. Super-User Level
+   * Username: lord
+
+Description:
+
+* Read-Only Level (R/O):
+  Users can execute all show commands, including "show running-config",
+  but cannot enter configuration mode ("conf t").
+
+* Read/Write Level (R/W):
+  Users can execute all show commands and perform configuration changes,
+  but cannot reload the device, erase configuration, start shell access,
+  or execute any destructive/reload-related commands.
+
+* Super-User Level:
+  Users have full unrestricted access to all commands and features.
+
+Access Control Requirement:
+
+* Remote access is allowed only from the following subnet:
+  * 172.20.20.0/25 (client1 and client2)

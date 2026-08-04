@@ -1,0 +1,29 @@
+name: inersv5-iol
+prefix: ""
+mgmt:
+  ipv4-subnet: 172.20.20.0/24
+topology:
+  kinds:
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+    cisco_xrd:
+      image: sbezverk/xrd-control-plane:25.2.1
+  nodes:
+    R1:
+      kind: cisco_xrd
+      #startup-config: R1.partial
+    client1:
+      kind: linux
+      mgmt-ipv4: 172.20.20.10
+    client2:
+      kind: linux
+      mgmt-ipv4: 172.20.20.70
+    client3:
+      kind: linux
+      mgmt-ipv4: 172.20.20.130
+    tacacs:
+      kind: linux
+      image: lfkeitel/tacacs_plus:ubuntu
+      mgmt-ipv4: 172.20.20.100
+      binds:
+        - ./tac_plus.cfg:/etc/tac_plus/tac_plus.cfg
