@@ -1,0 +1,37 @@
+name: lab001
+prefix: ""
+
+mgmt:
+  network: lab001-mgmt
+  ipv4-subnet: 172.31.1.0/24
+
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      enforce-startup-config: true
+
+  nodes:
+    r1:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r1.conf
+      mgmt-ipv4: 172.31.1.11
+
+    r2:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r2.conf
+      mgmt-ipv4: 172.31.1.12
+
+    client1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      mgmt-ipv4: 172.31.1.21
+      exec:
+        - ip address add 192.168.10.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route add 10.255.0.0/24 via 192.168.10.1
+        - ip route add 10.0.12.0/30 via 192.168.10.1
+
+  links:
+    - endpoints: ["client1:eth1", "r1:ge-0/0/0"]
+    - endpoints: ["r1:ge-0/0/1", "r2:ge-0/0/0"]
