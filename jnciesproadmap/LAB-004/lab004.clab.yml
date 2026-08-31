@@ -1,0 +1,56 @@
+name: lab004
+prefix: ""
+
+mgmt:
+  network: lab004-mgmt
+  ipv4-subnet: 172.31.4.0/24
+
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      enforce-startup-config: true
+
+  nodes:
+    r1:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r1.conf
+      mgmt-ipv4: 172.31.4.11
+    r2:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r2.conf
+      mgmt-ipv4: 172.31.4.12
+    r3:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r3.conf
+      mgmt-ipv4: 172.31.4.13
+    r4:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r4.conf
+      mgmt-ipv4: 172.31.4.14
+    client1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      mgmt-ipv4: 172.31.4.21
+      exec:
+        - ip address add 192.168.40.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route add 10.0.0.0/8 via 192.168.40.1
+        - ip route add 198.51.100.0/24 via 192.168.40.1
+    server1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      mgmt-ipv4: 172.31.4.22
+      exec:
+        - ip address add 198.51.100.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route add 10.0.0.0/8 via 198.51.100.1
+        - ip route add 192.168.40.0/24 via 198.51.100.1
+
+  links:
+    - endpoints: ["client1:eth1", "r1:ge-0/0/0"] # 192.168.40.0/24
+    - endpoints: ["r1:ge-0/0/1", "r2:ge-0/0/0"] # 10.0.12.0/30
+    - endpoints: ["r2:ge-0/0/1", "r4:ge-0/0/0"] # 10.0.24.0/30
+    - endpoints: ["r1:ge-0/0/2", "r3:ge-0/0/0"] # 10.0.13.0/30
+    - endpoints: ["r3:ge-0/0/1", "r4:ge-0/0/1"] # 10.0.34.0/30
+    - endpoints: ["r4:ge-0/0/2", "server1:eth1"] # 198.51.100.0/24
