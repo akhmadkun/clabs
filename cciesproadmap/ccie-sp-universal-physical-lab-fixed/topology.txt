@@ -1,0 +1,13 @@
+                         ARISTA EOS SW1
+                    UNIVERSAL L2 BACKPLANE
+                     VLAN 101 - 599 trunks
+        ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
+        │    │    │    │    │    │    │    │    │    │    │
+       XR1  XR2  XR3  XR4  XR5  XR6  XR7  XR8  XR9  XR10
+        │    │    │    │    │    │    │    │    │    │
+        └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
+                               │
+                        HOST1 / HOST2
+
+Physical topology is fixed.
+Logical topology is created with 802.1Q VLANs on Junos/XR.

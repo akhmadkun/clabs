@@ -1,0 +1,25 @@
+name: ccie-sp-lab001
+prefix: ""
+
+mgmt:
+  network: ccie-sp-lab001-mgmt
+  ipv4-subnet: 172.31.101.0/24
+
+topology:
+  kinds:
+    cisco_xrd:
+      image: sbezverk/xrd-control-plane:25.2.1
+      enforce-startup-config: true
+
+  nodes:
+    r1:
+      kind: cisco_xrd
+      startup-config: configs/r1.cfg
+      mgmt-ipv4: 172.31.101.11
+    r2:
+      kind: cisco_xrd
+      startup-config: configs/r2.cfg
+      mgmt-ipv4: 172.31.101.12
+
+  links:
+    - endpoints: ["r1:Gi0-0-0-0", "r2:Gi0-0-0-0"]

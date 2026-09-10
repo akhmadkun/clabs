@@ -1,0 +1,14 @@
+name: vjunos_bind_poc
+prefix: ""
+
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      binds:
+        - ./configs:/config/labconfigs:ro
+
+  nodes:
+    r1:
+      kind: juniper_vjunosrouter
+      startup-config: configs/bootstrap.conf

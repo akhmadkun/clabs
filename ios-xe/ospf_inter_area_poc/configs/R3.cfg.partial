@@ -1,0 +1,33 @@
+hostname R3
+!
+interface Ethernet0/1
+ ip ospf cost 5
+ ip ospf 1 area 0
+ no shutdown
+!
+interface Ethernet0/2
+ ip ospf cost 3
+ ip ospf 1 area 0
+ no shutdown
+!
+interface Ethernet0/3
+ ip ospf cost 3
+ ip ospf 1 area 0
+ no shutdown
+!
+interface Ethernet1/0
+ ip ospf cost 20
+ ip ospf 1 area 1
+ no shutdown
+!
+interface Ethernet1/1
+ ip ospf cost 30
+ ip ospf 1 area 1
+ no shutdown
+!
+interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+ ip ospf 1 area 0
+!
+router ospf 1
+ router-id 3.3.3.3

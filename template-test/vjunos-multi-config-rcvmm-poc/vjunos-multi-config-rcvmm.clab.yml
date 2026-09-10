@@ -1,0 +1,11 @@
+name: vjunos_multi_config_rcvmm
+prefix: ""
+
+topology:
+  nodes:
+    r1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12-rcvmm
+      startup-config: startup.conf
+      binds:
+        - ./configs:/labconfigs:ro

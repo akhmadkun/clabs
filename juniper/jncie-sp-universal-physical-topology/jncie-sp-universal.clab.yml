@@ -1,0 +1,70 @@
+name: jncie_sp_universal
+prefix: ""
+
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12-rcvmm
+      binds:
+        - ./configs:/labconfigs:ro
+
+    ceos:
+      image: ceos:4.35.0F
+
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    sw1:
+      kind: ceos
+      startup-config: configs/arista/sw1.cfg
+
+    r1:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r1-base.conf
+    r2:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r2-base.conf
+    r3:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r3-base.conf
+    r4:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r4-base.conf
+    r5:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r5-base.conf
+    r6:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r6-base.conf
+    r7:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r7-base.conf
+    r8:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r8-base.conf
+    r9:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r9-base.conf
+    r10:
+      kind: juniper_vjunosrouter
+      startup-config: configs/r10-base.conf
+
+    host1:
+      kind: linux
+    host2:
+      kind: linux
+
+  links:
+    - endpoints: ["sw1:eth1", "r1:ge-0/0/0"]
+    - endpoints: ["sw1:eth2", "r2:ge-0/0/0"]
+    - endpoints: ["sw1:eth3", "r3:ge-0/0/0"]
+    - endpoints: ["sw1:eth4", "r4:ge-0/0/0"]
+    - endpoints: ["sw1:eth5", "r5:ge-0/0/0"]
+    - endpoints: ["sw1:eth6", "r6:ge-0/0/0"]
+    - endpoints: ["sw1:eth7", "r7:ge-0/0/0"]
+    - endpoints: ["sw1:eth8", "r8:ge-0/0/0"]
+    - endpoints: ["sw1:eth9", "r9:ge-0/0/0"]
+    - endpoints: ["sw1:eth10", "r10:ge-0/0/0"]
+    - endpoints: ["sw1:eth11", "host1:eth1"]
+    - endpoints: ["sw1:eth12", "host2:eth1"]

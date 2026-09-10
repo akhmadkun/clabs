@@ -1,0 +1,88 @@
+name: ccie_sp_universal
+
+prefix: ""
+
+mgmt:
+  network: ccie-sp-mgmt
+
+topology:
+  nodes:
+    sw1:
+      kind: ceos
+      startup-config: configs/arista/sw1.cfg
+    r1:
+      kind: cisco_xrd
+      startup-config: configs/r1/startup.cfg
+      binds:
+        - ./configs/r1:/misc/config/labconfigs:ro
+    r2:
+      kind: cisco_xrd
+      startup-config: configs/r2/startup.cfg
+      binds:
+        - ./configs/r2:/misc/config/labconfigs:ro
+    r3:
+      kind: cisco_xrd
+      startup-config: configs/r3/startup.cfg
+      binds:
+        - ./configs/r3:/misc/config/labconfigs:ro
+    r4:
+      kind: cisco_xrd
+      startup-config: configs/r4/startup.cfg
+      binds:
+        - ./configs/r4:/misc/config/labconfigs:ro
+    r5:
+      kind: cisco_xrd
+      startup-config: configs/r5/startup.cfg
+      binds:
+        - ./configs/r5:/misc/config/labconfigs:ro
+    r6:
+      kind: cisco_xrd
+      startup-config: configs/r6/startup.cfg
+      binds:
+        - ./configs/r6:/misc/config/labconfigs:ro
+    r7:
+      kind: cisco_xrd
+      startup-config: configs/r7/startup.cfg
+      binds:
+        - ./configs/r7:/misc/config/labconfigs:ro
+    r8:
+      kind: cisco_xrd
+      startup-config: configs/r8/startup.cfg
+      binds:
+        - ./configs/r8:/misc/config/labconfigs:ro
+    r9:
+      kind: cisco_xrd
+      startup-config: configs/r9/startup.cfg
+      binds:
+        - ./configs/r9:/misc/config/labconfigs:ro
+    r10:
+      kind: cisco_xrd
+      startup-config: configs/r10/startup.cfg
+      binds:
+        - ./configs/r10:/misc/config/labconfigs:ro
+    host1:
+      kind: linux
+    host2:
+      kind: linux
+
+  kinds:
+    cisco_xrd:
+      image: sbezverk/xrd-control-plane:25.2.1
+    ceos:
+      image: ceos:4.35.0F
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  links:
+    - endpoints: ["sw1:eth1", "r1:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth2", "r2:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth3", "r3:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth4", "r4:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth5", "r5:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth6", "r6:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth7", "r7:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth8", "r8:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth9", "r9:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth10", "r10:Gi0-0-0-0"]
+    - endpoints: ["sw1:eth11", "host1:eth1"]
+    - endpoints: ["sw1:eth12", "host2:eth1"]

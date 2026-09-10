@@ -1,0 +1,23 @@
+name: isis-metric-300-poc
+mgmt:
+  network: clab
+  ipv4-subnet: 172.20.20.0/24
+
+topology:
+  nodes:
+    R1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: configs/R1.conf
+    R2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: configs/R2.conf
+    R3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: configs/R3.conf
+
+  links:
+    - endpoints: [R1:eth1, R2:eth1]
+    - endpoints: [R2:eth2, R3:eth1]

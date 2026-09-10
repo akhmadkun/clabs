@@ -1,0 +1,11 @@
+name: xrd_multiconfig_bind_v2
+prefix: ""
+
+topology:
+  nodes:
+    xr1:
+      kind: cisco_xrd
+      image: sbezverk/xrd-control-plane:25.2.1
+      startup-config: xrd.cfg
+      binds:
+        - ./configs:/misc/config/labconfigs:ro

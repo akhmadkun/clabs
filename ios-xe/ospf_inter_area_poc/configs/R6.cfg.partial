@@ -1,0 +1,23 @@
+hostname R6
+!
+interface Ethernet0/1
+ ip ospf cost 30
+ ip ospf 1 area 1
+ no shutdown
+!
+interface Ethernet0/2
+ ip ospf cost 5
+ ip ospf 1 area 1
+ no shutdown
+!
+interface Ethernet0/3
+ ip ospf cost 5
+ ip ospf 1 area 1
+ no shutdown
+!
+interface Loopback0
+ ip address 6.6.6.6 255.255.255.255
+ ip ospf 1 area 1
+!
+router ospf 1
+ router-id 6.6.6.6

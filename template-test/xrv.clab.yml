@@ -5,11 +5,11 @@ topology:
   nodes:
     xrv1:
       kind: cisco_xrv
-      image: vrnetlab/cisco_xrv:6.6.3
+      image: vrnetlab/cisco_xrv:6.3.1
     
     xrv2:
       kind: cisco_xrv
-      image: vrnetlab/cisco_xrv:6.6.3
+      image: vrnetlab/cisco_xrv:6.3.1
 
     server1:
       kind: linux

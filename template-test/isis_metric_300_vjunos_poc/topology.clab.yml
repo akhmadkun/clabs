@@ -1,0 +1,24 @@
+name: isis-metric-300-vjunos
+prefix: ""
+
+mgmt:
+  network: clab
+
+topology:
+  nodes:
+    R1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: configs/R1.conf
+    R2:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: configs/R2.conf
+    R3:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      startup-config: configs/R3.conf
+
+  links:
+    - endpoints: ["R1:ge-0/0/0", "R2:ge-0/0/0"]
+    - endpoints: ["R2:ge-0/0/1", "R3:ge-0/0/0"]
