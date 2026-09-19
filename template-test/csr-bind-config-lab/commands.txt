@@ -1,0 +1,17 @@
+# Deploy once
+sudo containerlab deploy -t csr-bind.clab.yml
+
+# Verify bind
+./scripts/verify-bind.sh
+
+# CSR1 -> LAB-001
+configure replace tftp://10.0.0.2/configs/LAB-001/csr1.cfg force
+
+# CSR2 -> LAB-001
+configure replace tftp://10.0.0.2/configs/LAB-001/csr2.cfg force
+
+# CSR1 -> LAB-002
+configure replace tftp://10.0.0.2/configs/LAB-002/csr1.cfg force
+
+# CSR2 -> LAB-002
+configure replace tftp://10.0.0.2/configs/LAB-002/csr2.cfg force

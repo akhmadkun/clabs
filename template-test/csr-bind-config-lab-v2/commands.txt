@@ -1,0 +1,35 @@
+# Deploy ONCE
+sudo containerlab deploy -t csr-bind.clab.yml
+
+# Verify host directory is visible through the CSR container's TFTP root
+./scripts/verify-bind.sh
+
+# Check scenario file structure before loading
+./scripts/check-config-format.sh
+
+# On CSR1 / CSR2, keep this management-plane TFTP source setting.
+# This is required for the management interface in VRF clab-mgmt.
+conf t
+ ip tftp source-interface GigabitEthernet1
+end
+
+# Load LAB-001
+configure replace tftp://10.0.0.2/configs/LAB-001/csr1.cfg force
+configure replace tftp://10.0.0.2/configs/LAB-001/csr2.cfg force
+
+# Verify LAB-001
+show run | include ^hostname
+show ip interface brief
+show ip interface brief | include Loopback100|GigabitEthernet2
+
+# Load LAB-002 WITHOUT redeploying
+configure replace tftp://10.0.0.2/configs/LAB-002/csr1.cfg force
+configure replace tftp://10.0.0.2/configs/LAB-002/csr2.cfg force
+
+# Verify LAB-002
+show run | include ^hostname
+show ip interface brief
+show run interface Loopback100
+
+# Optional: save current scenario across a reboot
+copy running-config startup-config

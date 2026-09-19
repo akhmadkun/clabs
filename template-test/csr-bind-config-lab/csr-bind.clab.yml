@@ -1,0 +1,19 @@
+name: csr-bind-config-lab
+prefix: ""
+
+topology:
+  nodes:
+    csr1:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+      binds:
+        - ./configs:/tftpboot/configs:ro
+
+    csr2:
+      kind: cisco_csr1000v
+      image: arthurk99/cisco-csr1000v:17.03.08
+      binds:
+        - ./configs:/tftpboot/configs:ro
+
+  links:
+    - endpoints: ["csr1:Gi2", "csr2:Gi2"]

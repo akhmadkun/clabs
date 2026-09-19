@@ -1,0 +1,300 @@
+JNCIE-SP ROADMAP v1
+LAB-005 — POLICY LANGUAGE FUNDAMENTALS
+SOLUTION GUIDE
+
+NOTE
+This guide assumes the universal JNCIE-SP topology and an existing working baseline.
+Adjust interface addresses, prefix values, neighbor addresses, and router names to match the baseline actually deployed in the lab.
+The examples below use generic documentation prefixes and illustrative policy names.
+
+============================================================
+1. PREFIX-LIST BASICS
+============================================================
+
+Example:
+
+set policy-options prefix-list PL-CUSTOMER 192.0.2.0/24
+set policy-options prefix-list PL-CUSTOMER 198.51.100.0/24
+set policy-options prefix-list PL-INFRA 10.0.0.0/8
+set policy-options prefix-list PL-INFRA 172.16.0.0/12
+
+Verify:
+
+show configuration policy-options prefix-list
+
+Key point:
+A prefix-list is a reusable set of exact prefixes. It does not itself accept or reject a route; a policy term uses it as a match condition.
+
+============================================================
+2. POLICY TERM EVALUATION
+============================================================
+
+Example:
+
+set policy-options policy-statement POL-CLASSIFY term CUSTOMER from prefix-list PL-CUSTOMER
+set policy-options policy-statement POL-CLASSIFY term CUSTOMER then accept
+
+set policy-options policy-statement POL-CLASSIFY term INFRA from prefix-list PL-INFRA
+set policy-options policy-statement POL-CLASSIFY term INFRA then reject
+
+set policy-options policy-statement POL-CLASSIFY term DEFAULT then accept
+
+Verify:
+
+show configuration policy-options policy-statement POL-CLASSIFY
+
+Reasoning:
+Junos evaluates policy terms in sequence. The first matching term determines the action unless the term uses a flow-control action such as next policy/next term behavior.
+
+Correct order:
+CUSTOMER -> INFRA -> DEFAULT
+
+If DEFAULT is placed first with "then accept", later terms become unreachable for routes that match DEFAULT.
+
+Useful inspection:
+
+show policy POL-CLASSIFY
+
+Depending on Junos release and policy context, use the appropriate policy evaluation/trace command for detailed term matching.
+
+============================================================
+3. PROTOCOL MATCHING
+============================================================
+
+Example:
+
+set policy-options policy-statement POL-PROTOCOL term BGP-CUSTOMER from protocol bgp
+set policy-options policy-statement POL-PROTOCOL term BGP-CUSTOMER from prefix-list PL-CUSTOMER
+set policy-options policy-statement POL-PROTOCOL term BGP-CUSTOMER then accept
+
+set policy-options policy-statement POL-PROTOCOL term BGP-INFRA from protocol bgp
+set policy-options policy-statement POL-PROTOCOL term BGP-INFRA from prefix-list PL-INFRA
+set policy-options policy-statement POL-PROTOCOL term BGP-INFRA then reject
+
+set policy-options policy-statement POL-PROTOCOL term OTHER then accept
+
+Important:
+Multiple "from" conditions within one term are logically ANDed. The route must satisfy both protocol and prefix conditions before the term matches.
+
+============================================================
+4. COMMUNITY MATCHING
+============================================================
+
+Define communities:
+
+set policy-options community CUSTOMER-A members 65000:100
+set policy-options community CUSTOMER-B members 65000:200
+
+Create the policy:
+
+set policy-options policy-statement POL-COMMUNITY term CUSTOMER-A from community CUSTOMER-A
+set policy-options policy-statement POL-COMMUNITY term CUSTOMER-A then local-preference 200
+set policy-options policy-statement POL-COMMUNITY term CUSTOMER-A then accept
+
+set policy-options policy-statement POL-COMMUNITY term CUSTOMER-B from community CUSTOMER-B
+set policy-options policy-statement POL-COMMUNITY term CUSTOMER-B then local-preference 100
+set policy-options policy-statement POL-COMMUNITY term CUSTOMER-B then accept
+
+set policy-options policy-statement POL-COMMUNITY term OTHER then accept
+
+Verify:
+
+show configuration policy-options community
+show configuration policy-options policy-statement POL-COMMUNITY
+
+Key point:
+A community is a route attribute used as a policy classification/tag. It is not the same type of match as a destination prefix.
+
+============================================================
+5. MED MANIPULATION
+============================================================
+
+Example:
+
+set policy-options policy-statement POL-MED term SELECTED from prefix-list PL-CUSTOMER
+set policy-options policy-statement POL-MED term SELECTED then metric 50
+set policy-options policy-statement POL-MED term SELECTED then accept
+set policy-options policy-statement POL-MED term OTHER then accept
+
+In Junos BGP policy, "metric" is commonly used to manipulate the MED attribute.
+
+Verification examples:
+
+show route <prefix> detail
+show route receive-protocol bgp <neighbor> <prefix> detail
+show route advertising-protocol bgp <neighbor> <prefix> detail
+
+Exact operational command syntax can vary by Junos release and context.
+
+============================================================
+6. IMPORT POLICY
+============================================================
+
+Example policy:
+
+set policy-options policy-statement POL-BGP-IN term CUSTOMER from protocol bgp
+set policy-options policy-statement POL-BGP-IN term CUSTOMER from prefix-list PL-CUSTOMER
+set policy-options policy-statement POL-BGP-IN term CUSTOMER then accept
+
+set policy-options policy-statement POL-BGP-IN term INFRA from protocol bgp
+set policy-options policy-statement POL-BGP-IN term INFRA from prefix-list PL-INFRA
+set policy-options policy-statement POL-BGP-IN term INFRA then reject
+
+set policy-options policy-statement POL-BGP-IN term OTHER then accept
+
+Attach it to the BGP group or neighbor according to the lab baseline:
+
+set protocols bgp group <GROUP> import POL-BGP-IN
+
+Verify:
+
+show configuration protocols bgp
+show route receive-protocol bgp <neighbor>
+show route <prefix>
+
+Important distinction:
+An import policy controls which routes received from the protocol/session are accepted and/or modified before they are installed/used locally.
+
+============================================================
+7. EXPORT POLICY
+============================================================
+
+Example:
+
+set policy-options policy-statement POL-BGP-OUT term CUSTOMER from prefix-list PL-CUSTOMER
+set policy-options policy-statement POL-BGP-OUT term CUSTOMER then accept
+
+set policy-options policy-statement POL-BGP-OUT term INFRA from prefix-list PL-INFRA
+set policy-options policy-statement POL-BGP-OUT term INFRA then reject
+
+set policy-options policy-statement POL-BGP-OUT term OTHER then reject
+
+Attach to the appropriate BGP group/neighbor:
+
+set protocols bgp group <GROUP> export POL-BGP-OUT
+
+Verify advertised routes:
+
+show route advertising-protocol bgp <neighbor>
+show route advertising-protocol bgp <neighbor> <prefix> detail
+
+Key point:
+The routing table may contain more routes than the set advertised to a BGP neighbor. Export policy determines the advertised set.
+
+============================================================
+8. POLICY CHAINING
+============================================================
+
+A common pattern is to use one policy to modify/classify routes and another to make the final decision.
+
+Example first policy:
+
+set policy-options policy-statement POL-MARK term CUSTOMER-A from prefix-list PL-CUSTOMER
+set policy-options policy-statement POL-MARK term CUSTOMER-A then community add CUSTOMER-A
+set policy-options policy-statement POL-MARK term CUSTOMER-A then next policy
+
+Example second policy:
+
+set policy-options policy-statement POL-FILTER term INFRA from prefix-list PL-INFRA
+set policy-options policy-statement POL-FILTER term INFRA then reject
+set policy-options policy-statement POL-FILTER term OTHER then accept
+
+The exact policy-chain mechanism should follow the attachment context and Junos version. Where supported, "next policy" transfers evaluation to the next policy in the chain.
+
+The important exam concept is to distinguish:
+- matching;
+- modifying attributes;
+- final acceptance/rejection;
+- continuation to another policy.
+
+============================================================
+9. POLICY DELETE / RECOVERY
+============================================================
+
+Delete only one term:
+
+delete policy-options policy-statement POL-BGP-OUT term INFRA
+
+Check the candidate configuration:
+
+show | compare
+
+Restore the term:
+
+set policy-options policy-statement POL-BGP-OUT term INFRA from prefix-list PL-INFRA
+set policy-options policy-statement POL-BGP-OUT term INFRA then reject
+
+Commit:
+
+commit confirmed 5
+commit
+
+Using commit confirmed is useful while experimenting with live routing policy.
+
+============================================================
+10. VERIFICATION CHECKLIST
+============================================================
+
+Prefix-list:
+show configuration policy-options prefix-list
+
+Community:
+show configuration policy-options community
+
+Policy hierarchy:
+show configuration policy-options policy-statement
+
+Protocol configuration:
+show configuration protocols bgp
+
+Routing table:
+show route
+show route <prefix> detail
+
+Received BGP routes:
+show route receive-protocol bgp <neighbor>
+
+Advertised BGP routes:
+show route advertising-protocol bgp <neighbor>
+
+Policy counters / evaluation:
+Use Junos policy tracing or the policy statistics/evaluation command available on the installed release.
+
+============================================================
+11. EXPECTED CONCEPTUAL RESULTS
+============================================================
+
+CUSTOMER-A:
+- matches the CUSTOMER-A policy term;
+- receives the intended local-preference or other attribute change;
+- is accepted when the policy is designed to accept it;
+- is advertised only when the export policy permits it.
+
+CUSTOMER-B:
+- matches its community term;
+- receives the configured lower local-preference;
+- follows the explicit acceptance term.
+
+INFRA:
+- matches the INFRA term;
+- is rejected where required;
+- does not appear in the corresponding accepted/advertised route set.
+
+Unmatched routes:
+- follow the explicit final term;
+- do not depend on an accidental implicit outcome.
+
+============================================================
+12. JNCIE-SP TAKEAWAYS
+============================================================
+
+1. Policy terms are processed in sequence.
+2. Multiple "from" clauses in a term narrow the match because they are combined as conditions.
+3. The policy action can accept, reject, modify attributes, or control continuation.
+4. Prefix-list is a reusable match object; it is not a policy decision by itself.
+5. Community is a policy classification mechanism carried as a route attribute.
+6. Import affects received routing information; export affects what is advertised outward.
+7. A route can exist locally while being suppressed from advertisement by export policy.
+8. Always verify both configuration state and operational route state.
+9. Explicit final terms make policy behavior predictable and easier to troubleshoot.
+10. For certification-level work, be precise about the attachment point and the direction of policy evaluation.

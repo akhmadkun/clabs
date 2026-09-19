@@ -1,0 +1,126 @@
+JNCIE-SP ROADMAP v1
+LAB-005 — POLICY LANGUAGE FUNDAMENTALS
+
+OBJECTIVE
+Master the Junos policy-statement language used for route filtering and attribute manipulation.
+The physical topology is unchanged from the universal JNCIE-SP topology.
+
+LAB SCOPE
+- prefix-list
+- policy-statement
+- term evaluation and term order
+- route filtering
+- protocol matching
+- route attributes
+- community matching and setting
+- local-preference
+- MED
+- accept/reject actions
+- import versus export policy behavior
+
+PRE-LAB ASSUMPTIONS
+1. The universal 10-router vJunos physical topology is already deployed.
+2. The base IGP/BGP lab is operational.
+3. R1–R4 are used for this exercise.
+4. Do not change the physical topology.
+5. Use the existing loopback/interface addressing from your current baseline.
+
+TASK 1 — PREFIX-LIST BASICS
+1. Create a prefix-list named PL-CUSTOMER containing two customer prefixes.
+2. Create a second prefix-list named PL-INFRA containing infrastructure prefixes.
+3. Verify both prefix-lists in the candidate configuration.
+4. Confirm that a policy term can reference each prefix-list.
+
+TASK 2 — POLICY TERM EVALUATION
+1. On R1, create a policy-statement named POL-CLASSIFY.
+2. Create three ordered terms:
+   - CUSTOMER: match PL-CUSTOMER and accept.
+   - INFRA: match PL-INFRA and reject.
+   - DEFAULT: accept everything else.
+3. Verify the policy hierarchy.
+4. Demonstrate that term order affects the final result.
+5. Temporarily move the DEFAULT term above the other terms and observe the policy behavior.
+6. Restore the correct order.
+
+TASK 3 — PROTOCOL MATCHING
+1. Create a policy-statement named POL-PROTOCOL.
+2. Match routes learned from BGP.
+3. Accept BGP routes that belong to PL-CUSTOMER.
+4. Reject BGP routes that belong to PL-INFRA.
+5. Permit other protocols without unintentionally changing their behavior.
+6. Verify the policy using policy evaluation commands.
+
+TASK 4 — COMMUNITY MATCHING
+1. Define two communities:
+   - a community representing CUSTOMER-A
+   - a community representing CUSTOMER-B
+2. Create a policy named POL-COMMUNITY.
+3. Match CUSTOMER-A and set a higher local-preference.
+4. Match CUSTOMER-B and set a lower local-preference.
+5. Ensure both terms explicitly accept their matched routes.
+6. Ensure unmatched routes follow an explicit final term.
+
+TASK 5 — MED MANIPULATION
+1. Create a policy named POL-MED.
+2. Match one selected prefix using a prefix-list.
+3. Set a distinct MED value for that route.
+4. Leave all other matching behavior unchanged.
+5. Verify the resulting route attributes on the receiving router.
+
+TASK 6 — IMPORT POLICY
+1. Apply an import policy to the BGP session where the lab baseline permits policy application.
+2. Permit CUSTOMER-A routes.
+3. Reject INFRA routes.
+4. Leave other routes according to an explicit final term.
+5. Verify that rejected routes are not installed from the BGP neighbor.
+6. Use operational commands to prove the policy is affecting the received route set.
+
+TASK 7 — EXPORT POLICY
+1. Create an export policy that advertises only CUSTOMER-A routes to the selected BGP neighbor.
+2. Ensure INFRA routes are not exported.
+3. Verify the Adj-RIB-Out/advertised route view from the appropriate Junos operational command.
+4. Compare the local routing table with the advertised route set.
+
+TASK 8 — POLICY CHAINING
+1. Build a two-policy chain where the first policy classifies or modifies routes and the second policy performs final acceptance/rejection.
+2. Apply the chain in a controlled direction (import or export).
+3. Verify the order of evaluation.
+4. Confirm the final outcome for:
+   - CUSTOMER-A
+   - CUSTOMER-B
+   - INFRA
+   - unmatched routes
+
+TASK 9 — POLICY DELETE/RECOVERY
+1. Remove only the policy term responsible for blocking INFRA routes.
+2. Verify the resulting route behavior.
+3. Restore the term without rebuilding the entire policy-statement.
+4. Confirm that the intended routing behavior is restored.
+
+TASK 10 — VERIFICATION
+For every policy created in this lab, provide evidence for:
+1. Prefix-list contents.
+2. Policy-statement hierarchy and term order.
+3. Match conditions.
+4. Actions taken on matching routes.
+5. Import/export attachment point.
+6. Actual route-table result.
+7. Actual received/advertised route result.
+8. Attribute changes for at least one affected route.
+
+JNCIE-SP CHECKPOINT
+You should be able to explain, from memory:
+- how Junos evaluates policy terms;
+- how a route moves through terms;
+- what happens when no term matches;
+- the difference between import and export policy;
+- how prefix-list and prefix-list-filter differ conceptually;
+- how community matching differs from prefix matching;
+- where route attributes are modified;
+- how policy chaining changes the final result.
+
+CONSTRAINTS
+- Task-only document: do not place solution commands or expected configuration here.
+- Preserve the existing physical topology.
+- Avoid broad configuration changes outside the policy objects required by this lab.
+- Use operational verification commands rather than relying only on configuration output.
