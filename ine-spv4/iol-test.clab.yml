@@ -1,0 +1,14 @@
+name: iol-test
+prefix: ""
+topology:
+  nodes:
+    R1:
+      kind: cisco_iol
+      image: arthurk99/cisco-iol:17.15.01
+      binds:
+        - ./lab_configs/R1:/iol/labconfigs:ro
+    R2:
+      kind: cisco_iol
+      image: arthurk99/cisco-iol:17.15.01
+      binds:
+        - ./lab_configs/R1:/iol/labconfigs:ro

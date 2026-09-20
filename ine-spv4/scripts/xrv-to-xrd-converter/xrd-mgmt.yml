@@ -1,0 +1,14 @@
+topology:
+  nodes:
+    XR1:
+      kind: cisco_xrd
+      mgmt-ipv4: 10.200.255.12
+    XR2:
+      kind: cisco_xrd
+      mgmt-ipv4: 10.200.255.13
+    XR3:
+      kind: cisco_xrd
+      mgmt-ipv4: 10.200.255.14
+    XR4:
+      kind: cisco_xrd
+      mgmt-ipv4: 10.200.255.15
