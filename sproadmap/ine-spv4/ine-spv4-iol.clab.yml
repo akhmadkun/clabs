@@ -1,0 +1,94 @@
+name: ine-spv4
+prefix: ""
+mgmt:
+  network: fixedips
+  ipv4-subnet: 10.200.255.0/24
+
+topology:
+  kinds:
+    cisco_csr1000v:
+      image: arthurk99/cisco-csr1000v:17.03.08
+      startup-delay: 300
+    ceos:
+      image: ceos:4.35.0F
+    cisco_xrd:
+      image: sbezverk/xrd-control-plane:25.2.1
+      #startup-delay: 300
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
+  nodes:
+    R1:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.2
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R1:/iol/labconfigs:ro
+
+    R2:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.3
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R2:/iol/labconfigs:ro
+
+    R3:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.4
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R3:/iol/labconfigs:ro
+
+    R4:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.5
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R4:/iol/labconfigs:ro
+
+    R5:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.6
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R5:/iol/labconfigs:ro
+
+      #startup-delay: 300
+    R6:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.7
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R6:/iol/labconfigs:ro
+      #startup-delay: 300
+
+    XR1:
+      kind: cisco_xrd
+      mgmt-ipv4: 10.200.255.12
+      #startup-delay: 500
+      #startup-config: lab_configs/xrv_startup_config.cfg
+      binds:
+        - ./lab_configs/XR1:/misc/config/labconfigs:ro
+    XR2:
+      kind: cisco_xrd
+      mgmt-ipv4: 10.200.255.13
+      #startup-delay: 500
+      #startup-config: lab_configs/xrv_startup_config.cfg
+      binds:
+        - ./lab_configs/XR2:/misc/config/labconfigs:ro
+
+
+    SW:
+      kind: ceos
+      mgmt-ipv4: 10.200.255.18
+      startup-config: lab_configs/SW.cfg
+
+
+  links:
+    - endpoints: ["R1:eth1","SW:eth1"]
+    - endpoints: ["R2:eth1","SW:eth2"]
+    - endpoints: ["R3:eth1","SW:eth3"]
+    - endpoints: ["R4:eth1","SW:eth4"]
+    - endpoints: ["R5:eth1","SW:eth5"]
+    - endpoints: ["R6:eth1","SW:eth6"]
+    - endpoints: ["XR1:Gi0-0-0-0","SW:eth11"]
+    - endpoints: ["XR2:Gi0-0-0-0","SW:eth12"]

@@ -50,7 +50,7 @@ topology:
 
   links:
     - endpoints: ["R1:eth1","SW:eth1"]
-    - endpoints: ["R1:eth2","SW:eth1"]
+    - endpoints: ["R2:eth2","SW:eth2"]
     - endpoints: ["XR1:Gi0-0-0-0","SW:eth11"]
     - endpoints: ["XR2:Gi0-0-0-0","SW:eth12"]
 

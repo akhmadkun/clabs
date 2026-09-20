@@ -8,10 +8,12 @@ topology:
   kinds:
     cisco_csr1000v:
       image: arthurk99/cisco-csr1000v:17.03.08
+      startup-delay: 300
     ceos:
       image: ceos:4.35.0F
     cisco_xrd:
       image: sbezverk/xrd-control-plane:25.2.1
+      startup-delay: 300
   nodes:
     R1:
       kind: cisco_csr1000v
@@ -86,5 +88,5 @@ topology:
     - endpoints: ["R4:eth1","SW:eth4"]
     - endpoints: ["R5:eth1","SW:eth5"]
     - endpoints: ["R6:eth1","SW:eth6"]
-    - endpoints: ["XR1:eth1","SW:eth11"]
-    - endpoints: ["XR2:eth1","SW:eth12"]
+    - endpoints: ["XR1:Gi0-0-0-0","SW:eth11"]
+    - endpoints: ["XR2:Gi0-0-0-0","SW:eth12"]
