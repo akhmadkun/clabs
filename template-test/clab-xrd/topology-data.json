@@ -1,0 +1,101 @@
+{
+  "name": "xrd",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "",
+      "mgmt": {
+        "network": "clab",
+        "bridge": "br-54728e5bb44f",
+        "ipv4-subnet": "172.20.20.0/24",
+        "ipv4-gw": "172.20.20.1",
+        "ipv6-subnet": "3fff:172:20:20::/64",
+        "ipv6-gw": "3fff:172:20:20::1",
+        "external-access": true
+      }
+    }
+  },
+  "ssh-pub-keys": ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIIoerYyONtmKXUZzfM/CymExdpSnbW5aZBFri2Mcx3K","ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC4YGzvGV33uy5UP7E0KKkOa78a4DDevQLl64FB4D/JfVqRHDUZ52sjCPDPfKg0SvicKOD8o/2lDndGvf/x9ZZXyCO2/uhG6wTHPlEZQaKR+bKlp3XGGl1vHjBofHSYp8hS/kwj3LCPtdTpLOGTZicTYn9807wzu5t6yb2dGDWgHMy5Ya9RwNeUeE/mES08bq+NH/yX8E9CBRWrTK1C6G/98lAdHOF9rfFEhu5YUQ6pno5mdf4Q6HCl/HFaQkOh+eVj+VnQl9iE4LhTEpooRg1aRvlI16db5bimAsgYb5emL36kK5GRUtCrNf6RiN7hlt+erBTPTokslOoPFFVnWyL+1Smk+AJHQCbtPA3ZuDabpl0ZBLNYZrUZYZeqlKg0JMcUTvE9xwXj/tb9K1odYUwthPubtYGvRRdCtJR0H2ai057CoJmCQZK5OJnNVzWvzsaHDaTIciPJBe3gQ5B2328CPd671Blf8YjZ38/AUSSmRdg9y7tb+oT5U0TlNBWeaDc="],
+  "nodes": {
+    "r1": {
+      "index": "0",
+      "shortname": "r1",
+      "longname": "r1",
+      "fqdn": "r1.xrd.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/template-test/clab-xrd/r1",
+      "kind": "cisco_xrd_vrouter",
+      "image": "idopal/xrd-vrouter:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.3",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-54728e5bb44f",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_xrd_vrouter",
+        "clab-node-lab-dir": "/home/akhmad/clabs/template-test/clab-xrd/r1",
+        "clab-node-longname": "r1",
+        "clab-node-name": "r1",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/template-test/xrd-vrouter.clab.yml",
+        "containerlab": "xrd"
+      },
+      "port-bindings": [
+      ]
+    },
+    "r2": {
+      "index": "1",
+      "shortname": "r2",
+      "longname": "r2",
+      "fqdn": "r2.xrd.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/template-test/clab-xrd/r2",
+      "kind": "cisco_xrd_vrouter",
+      "image": "idopal/xrd-vrouter:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-54728e5bb44f",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_xrd_vrouter",
+        "clab-node-lab-dir": "/home/akhmad/clabs/template-test/clab-xrd/r2",
+        "clab-node-longname": "r2",
+        "clab-node-name": "r2",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/template-test/xrd-vrouter.clab.yml",
+        "containerlab": "xrd"
+      },
+      "port-bindings": [
+      ]
+    }
+  },
+  "links": [
+    {
+      "endpoints": {
+        "a": {
+          "node": "r1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:23:97:ec",
+          "peer": "z"
+        },
+        "z": {
+          "node": "r2",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:41:16:57",
+          "peer": "a"
+        }
+      }
+    }
+  ]
+}

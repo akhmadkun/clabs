@@ -1,0 +1,14 @@
+name: xrd
+prefix: ""
+topology:
+  nodes:
+    r1:
+      kind: cisco_xrd_vrouter
+      image: idopal/xrd-vrouter:latest
+      #startup-config: r1.cfg
+    r2:
+      kind: cisco_xrd_vrouter
+      image: idopal/xrd-vrouter:latest
+      #startup-config: r2.cfg
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]
