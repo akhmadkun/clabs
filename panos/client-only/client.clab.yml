@@ -13,13 +13,35 @@ topology:
       kind: bridge
     virbr3:
       kind: bridge
+    virbr4:
+      kind: bridge
+    virbr5:
+      kind: bridge
 
     srv1:
       kind: linux
+      exec:
+        - ip addr add 192.168.131.11/24 dev eth0
+        - ip route add default via 192.168.131.254
     srv2:
       kind: linux
+      exec:
+        - ip addr add 192.168.132.11/24 dev eth0
+        - ip route add default via 192.168.132.254
+    srv3:
+      kind: linux
+      exec:
+        - ip addr add 192.168.133.11/24 dev eth0
+        - ip route add default via 192.168.133.254
+    srv4:
+      kind: linux
+      exec:
+        - ip addr add 192.168.134.11/24 dev eth0
+        - ip route add default via 192.168.134.254
 
   links:
     # server links
-    - endpoints: ["srv1:eth1", "virbr2:eth1"]
-    - endpoints: ["srv2:eth1", "virbr3:eth2"]
+    - endpoints: ["srv1:eth0", "virbr2:srv1"]
+    - endpoints: ["srv2:eth0", "virbr3:srv2"]
+    - endpoints: ["srv3:eth0", "virbr4:srv3"]
+    - endpoints: ["srv4:eth0", "virbr5:srv4"]
