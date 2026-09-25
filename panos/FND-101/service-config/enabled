@@ -1,0 +1,3 @@
+# LAB-001 uses only management-plane support services.
+dns
+ntp

@@ -9,6 +9,8 @@ topology:
       #image: wbitt/network-multitool:latest
 
   nodes:
+    virbr1:
+      kind: bridge
     virbr2:
       kind: bridge
     virbr3:

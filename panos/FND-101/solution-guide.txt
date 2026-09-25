@@ -1,0 +1,289 @@
+LAB-001 — FND-101 Management Plane Baseline
+Solution Guide
+
+1. Lab Topology
+---------------
+Existing libvirt network:
+
+    virbr1
+    192.168.121.0/24
+       |
+       +---- PA-VM MGT
+       |     192.168.121.10
+       |
+       +---- server
+             192.168.121.20
+
+The PA-VM is external to containerlab in this lab. containerlab manages only
+the Universal Services node and the existing bridge reference.
+
+Deploy:
+    containerlab deploy -t LAB-001_FND-101.clab.yml
+
+Verify service node:
+    ./verify.sh
+
+2. PA-VM Management IP
+----------------------
+Keep console access available before changing the Management IP.
+
+GUI:
+    Device > Setup > Interfaces > Management
+
+Configure:
+    Type/IP Assignment: Static
+    IP Address:         192.168.121.10
+    Netmask:            255.255.255.0
+    Default Gateway:    192.168.121.1
+    Speed: auto-negotiate
+    MTU: 1500
+
+Administrative Management Services:
+    - HTTPS: enabled
+    - SSH: enabled
+    - HTTP: disabled
+    - Telnet: disabled
+
+Permitted IP Addresses:
+    - Add the verified administrator source IP.
+    - For the default host-side lab path, this will normally be 192.168.121.1.
+
+Commit the change.
+
+Operational verification:
+    show system info
+    show interface management
+
+Expected:
+    IP address:        192.168.121.10
+    Netmask:           255.255.255.0
+    Default gateway:  192.168.121.1
+    IP assignment:     static
+
+3. Hostname and Timezone
+------------------------
+GUI:
+    Device > Setup > Management
+
+Set:
+    Hostname: pa1
+
+Set the timezone to the intended local lab timezone.
+
+Commit.
+
+CLI verification:
+    show system info
+
+Verify the hostname and timezone fields in the returned output.
+
+4. DNS
+------
+GUI:
+    Device > Setup > Services
+
+Set:
+    Primary DNS Server: 192.168.121.20
+
+Do not depend on Internet DNS for this isolated lab.
+
+Commit.
+
+From the service node:
+    dig +short @192.168.121.20 pa1.fndlab A
+    dig +short @192.168.121.20 services.fndlab A
+
+Expected:
+    pa1.fndlab       -> 192.168.121.10
+    services.fndlab  -> 192.168.121.20
+
+On PA, verify the configured DNS settings:
+    show deviceconfig system dns-setting
+
+5. NTP
+------
+GUI:
+    Device > Setup > Services
+    NTP Servers
+
+Add:
+    192.168.121.20
+
+Commit.
+
+The service node provides an isolated local NTP source at Stratum 10.
+
+On the service node:
+    chronyc tracking
+    ss -H -lun 'sport = :123'
+
+On PA, verify the configured NTP settings:
+    show deviceconfig system ntp-servers
+
+6. Management Services
+----------------------
+GUI:
+    Device > Setup > Management > Management Interface Settings
+    or the Management Services section exposed by the PAN-OS version in use.
+
+Enable:
+    HTTPS
+    SSH
+
+Disable:
+    HTTP
+    Telnet
+
+Keep console access available while testing.
+
+From server:
+    nc -vz 192.168.121.10 443
+    nc -vz 192.168.121.10 22
+
+Do not use TCP/80 as the PA web-management test.
+
+7. Permitted IP
+---------------
+Configure permitted Management IP addresses so that the intended management
+source is allowed.
+
+For this lab, allow:
+    192.168.121.0/24
+
+Keep console access until the restriction is verified.
+
+Verify:
+    show deviceconfig system permitted-ip
+
+8. Commit Verification
+----------------------
+Commit:
+    commit
+
+Check:
+    show jobs all
+
+Then verify the active Management state:
+    show system info
+    show interface management
+
+9. End-to-End Verification
+--------------------------
+From server:
+    ping -c 3 192.168.121.10
+    nc -vz 192.168.121.10 443
+    nc -vz 192.168.121.10 22
+
+DNS:
+    dig +short @192.168.121.20 pa1.fndlab A
+    dig +short @192.168.121.20 services.fndlab A
+
+HTTPS:
+    curl -kI https://192.168.121.10
+
+Expected:
+    Management IP reachable
+    TCP/443 open
+    TCP/22 open
+    HTTP/80 unavailable for management
+    Telnet/23 unavailable
+    pa1.fndlab resolves to 192.168.121.10
+
+10. Fault Injection / Diagnosis
+
+A. Broken DNS
+-------------
+Break:
+    Configure an invalid PA DNS server.
+
+Symptoms:
+    Updates/name lookups that require DNS fail.
+    Operational behavior differs from a connectivity failure.
+
+Diagnose:
+    show system info
+    show deviceconfig system dns-setting
+
+Restore:
+    Set primary DNS to 192.168.121.20.
+    Commit.
+    Re-test DNS-dependent functions.
+
+B. Broken NTP
+-------------
+Break:
+    Configure an invalid or unreachable NTP server.
+
+Diagnose:
+    show deviceconfig system ntp-servers
+    show system info
+
+Restore:
+    Set NTP server to 192.168.121.20.
+    Commit.
+    Re-check time synchronization/status.
+
+C. HTTPS Disabled
+-----------------
+Break:
+    Disable HTTPS Management Service.
+
+Symptom from server:
+    nc -vz 192.168.121.10 443 fails.
+    curl -kI https://192.168.121.10 fails.
+
+Diagnose:
+    show deviceconfig system service
+
+Restore:
+    Re-enable HTTPS.
+    Commit.
+    Re-test TCP/443.
+
+D. Permitted-IP Restriction
+---------------------------
+Break:
+    Change permitted-IP configuration so 192.168.121.20 is not allowed.
+
+Symptom:
+    Basic IP reachability can remain available while management access fails.
+
+Diagnose:
+    show deviceconfig system permitted-ip
+
+Restore:
+    Permit 192.168.121.0/24.
+    Commit.
+    Re-test SSH/HTTPS.
+
+Important Distinction
+---------------------
+Ping success does not prove that HTTPS/SSH management access is permitted.
+
+The relevant layers are:
+    L3 reachability
+    Management service listener
+    Management source restriction
+    Authentication
+
+Use each layer's evidence instead of assuming one successful test proves all
+four.
+
+11. Expected Final State
+------------------------
+PA-VM:
+    MGT IP       192.168.121.10/24
+    Gateway      192.168.121.1
+    Hostname     pa1
+    DNS          192.168.121.20
+    NTP          192.168.121.20
+    HTTPS        enabled
+    SSH          enabled
+    HTTP         disabled
+    Telnet       disabled
+    Permitted    192.168.121.0/24
+
+Universal Services:
+    192.168.121.20/24
+    DNS          UDP/TCP 53
+    NTP          UDP 123

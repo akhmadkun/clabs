@@ -1,0 +1,107 @@
+LAB-001 — FND-101 Management Plane Baseline
+Task-Only
+
+Environment
+-----------
+The PA-VM is a standalone KVM guest connected to the existing libvirt bridge:
+
+    virbr1 / 192.168.121.0/24
+
+The Universal Services node is provided by containerlab:
+
+    server / 192.168.121.20
+
+The target PA-VM Management address for this lab is:
+
+    192.168.121.10/24
+    Default gateway: 192.168.121.1
+
+Do not replace, recreate, or modify the existing virbr1 bridge.
+
+
+
+Objective
+---------
+Build and verify a deterministic Palo Alto management-plane baseline.
+
+Requirements
+------------
+1. Configure the MGT interface with:
+   - IPv4 static: 192.168.121.10/24
+   - Default gateway: 192.168.121.1
+   - Speed/duplex: auto-negotiate
+   - MTU: 1500
+
+   Allow only the management services required for this lab:
+   - HTTPS
+   - SSH
+   - Ping (for diagnostics)
+
+   Do not allow plaintext HTTP or Telnet.
+
+   Restrict administrator access with Permitted IP Addresses.
+   Use the verified administrator source IP, not the whole subnet unless you can justify it.
+
+2. Configure the PA-VM hostname:
+      pa1
+
+3. Configure the PA-VM timezone appropriately for the lab.
+
+4. Configure the PA-VM primary DNS server:
+      192.168.121.20
+
+5. Configure the PA-VM NTP server:
+      192.168.121.20
+
+6. Configure Management Services:
+      HTTPS   enabled
+      SSH     enabled
+      HTTP    disabled
+      Telnet  disabled
+
+7. Configure Management permitted IPs so that the intended management source
+   network is explicitly controlled. Keep console access available while
+   testing the change.
+
+8. Commit the configuration.
+
+9. Verify from the Universal Services node:
+      - PA Management IP is reachable
+      - HTTPS/443 is reachable
+      - SSH/22 is reachable
+      - pa1.fndlab resolves to 192.168.121.10
+      - services.fndlab resolves to 192.168.121.20
+
+10. Verify NTP/DNS configuration on the PA-VM using operational/configuration
+    commands.
+
+Evidence
+--------
+Capture enough CLI/GUI evidence to prove:
+- static Management addressing
+- hostname
+- DNS
+- NTP
+- management services
+- permitted IP
+- commit completed
+- reachability from the service node
+
+Fault Injection
+---------------
+After the baseline passes, introduce the following one at a time:
+
+A. Change the PA DNS server to an invalid address.
+B. Change the PA NTP server to an invalid/unreachable address.
+C. Disable HTTPS management service.
+D. Change the permitted-IP configuration so the service node can no longer
+   access management services.
+
+For each fault:
+- identify the symptom
+- identify the relevant operational command
+- restore the intended baseline
+- re-verify
+
+Do not use the service node as a source of truth for PA configuration.
+Use PA operational/configuration commands for PA state.
