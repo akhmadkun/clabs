@@ -1,0 +1,24 @@
+name: palo-fnd101
+prefix: ""
+
+topology:
+  nodes:
+    virbr1:
+      kind: bridge
+
+    server:
+      kind: linux
+      network-mode: none
+      image: palo-lab-services:1.4
+
+      binds:
+        - ./service-config:/etc/fnd-services:ro
+        - ./service-data/www:/var/www/html:ro
+        - ./service-data/tftp:/srv/tftp
+
+      exec:
+        - ip link set eth0 up
+        - ip addr add 192.168.121.20/24 dev eth0
+
+  links:
+    - endpoints: ["server:eth0", "virbr1:server"]

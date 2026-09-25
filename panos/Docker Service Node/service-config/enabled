@@ -1,0 +1,10 @@
+# Default universal service set.
+# DHCP is intentionally excluded from the default runtime on shared libvirt bridges.
+dns
+ntp
+ssh
+syslog
+http
+snmp
+radius
+tftp

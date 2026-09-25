@@ -1,0 +1,2 @@
+labuser    Cleartext-Password := "labpass"
+           Service-Type = Login-User

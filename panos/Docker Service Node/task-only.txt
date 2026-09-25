@@ -1,0 +1,168 @@
+LAB-001 — FND-101 Management Plane Baseline
+Palo Alto Expert Mastery Roadmap — Phase 0
+
+MODE
+Hands-on configuration + verification + unknown-fault troubleshooting.
+Do the first pass without opening the solution guide.
+
+OBJECTIVE
+Build a secure, repeatable PAN-OS management-plane baseline from a clean PA-VM state.
+You must configure and prove:
+- Management interface
+- Hostname / domain / timezone
+- DNS
+- NTP
+- Administrative management services
+- Permitted management source IPs
+- Service-route behavior
+- Login banner
+- Commit and post-commit verification
+
+LAB TOPOLOGY
+Existing libvirt bridge: virbr1
+Management subnet: 192.168.121.0/24
+Host/libvirt side: 192.168.121.1/24
+PA-VM MGT: 192.168.121.10/24
+Service node: 192.168.121.20/24
+
+Service node provides:
+- DNS: UDP/TCP 53
+- NTP: UDP 123
+- pa1.fnd101.lab -> 192.168.121.10
+- services.fnd101.lab -> 192.168.121.20
+
+PREREQUISITES
+1. PA-VM is reachable from the console.
+2. The service container is already attached to virbr1 and has 192.168.121.20/24.
+3. DNS/NTP processes are running on the service container.
+4. Service configuration is exposed from the host under service-config/. You may inspect or modify those files when the task explicitly calls for service-side troubleshooting.
+5. Identify the real administrator source IP on the management network before restricting permitted IPs. In the default lab host-only design this is normally 192.168.121.1, but verify it on the host.
+
+TASK 1 — PREDICTION FIRST
+Before changing anything, write down the expected state for:
+- MGT IP, netmask, gateway
+- hostname and timezone
+- DNS server and expected FQDN resolution
+- NTP server and expected synchronization state
+- allowed management protocols
+- permitted source IP(s)
+- service-route source interface
+- commit state
+
+TASK 2 — MANAGEMENT INTERFACE
+Configure the MGT interface with:
+- IPv4 static: 192.168.121.10/24
+- Default gateway: 192.168.121.1
+- Speed/duplex: auto-negotiate
+- MTU: 1500
+
+Allow only the management services required for this lab:
+- HTTPS
+- SSH
+- Ping (for diagnostics)
+
+Do not allow plaintext HTTP or Telnet.
+
+Restrict administrator access with Permitted IP Addresses. Use the verified administrator source IP, not the whole subnet unless you can justify it.
+
+TASK 3 — SYSTEM IDENTITY
+Configure:
+- Hostname: PA-FND101
+- Domain: fnd101.lab
+- Timezone: Asia/Jakarta
+- Login banner stating that this is the FND-101 training firewall and administrative access is restricted to authorized users.
+
+TASK 4 — DNS
+Configure the firewall to use:
+- Primary DNS: 192.168.121.20
+
+Prove that the firewall can resolve:
+- pa1.fnd101.lab
+- services.fnd101.lab
+
+TASK 5 — NTP
+Configure:
+- Primary NTP: 192.168.121.20
+
+Prove synchronization using PAN-OS operational commands and by correlating the service node time source.
+
+TASK 6 — SERVICE ROUTES
+Review Service Route Configuration.
+For this standalone management-plane lab, make the service communication for DNS and NTP use the MGT interface / management path.
+Do not create dataplane interfaces just to satisfy this task.
+
+TASK 7 — COMMIT + EVIDENCE
+Commit the candidate configuration.
+Record evidence for:
+- MGT configuration
+- management services
+- permitted IPs
+- hostname/domain/timezone
+- DNS
+- NTP
+- service-route configuration
+- successful commit
+- successful DNS resolution
+- successful NTP synchronization
+
+TASK 8 — BREAK / DIAGNOSE / RESTORE
+Return to a known-good baseline before each fault.
+For every fault:
+1. Record the symptom before touching the configuration.
+2. Rank 3–5 hypotheses.
+3. Gather the minimum evidence needed to eliminate hypotheses.
+4. Make the smallest corrective change.
+5. Commit only when appropriate.
+6. Prove the original acceptance criteria still pass.
+
+FAULT A — DNS BLACKHOLE
+Replace the primary DNS server with an unreachable address.
+Expected symptom: hostname resolution fails while MGT connectivity to the firewall itself remains available.
+Diagnose from the firewall and from the service node.
+
+FAULT B — NTP SOURCE FAILURE
+Stop the chrony service on the service node.
+Expected symptom: the firewall remains manageable, but NTP synchronization becomes stale/unsynchronized.
+Restore chrony and prove synchronization returns.
+
+FAULT C — MANAGEMENT ACCESS LOCKOUT
+Temporarily replace the permitted administrator source IP with a wrong address.
+Expected symptom: the firewall stops accepting management access from the administrator source while the MGT interface remains configured.
+Use console access to recover the permitted source.
+
+FAULT D — SSH SERVICE DISABLED
+Disable SSH on the MGT interface while leaving HTTPS enabled.
+Expected symptom: HTTPS still works, SSH fails.
+Use the evidence to distinguish an SSH service-state problem from a network reachability problem, then restore SSH.
+
+FINAL ACCEPTANCE
+The lab is complete only when all of the following are true:
+- MGT is 192.168.121.10/24 with the intended gateway.
+- HTTPS and SSH are available; HTTP and Telnet are not permitted.
+- Permitted IPs contain only the intended administrator source(s).
+- Hostname/domain/timezone are correct.
+- DNS resolves both lab FQDNs through 192.168.121.20.
+- NTP is synchronized to 192.168.121.20.
+- Service-route intent is documented and matches the lab design.
+- Login banner is configured.
+- Candidate changes are committed.
+- Each injected fault was diagnosed from evidence rather than trial-and-error.
+- No unintended configuration remains after restoration.
+
+MASTERY GATE
+Do not mark the lab mastered merely because the baseline works.
+A mastery attempt requires solving an unseen management-plane fault using symptom → hypotheses → evidence → root cause → minimal fix → regression proof.
+
+TIMEBOX
+Suggested first attempt: 90 minutes.
+Unknown-fault section: 30 minutes without assistance.
+
+OFFICIAL REFERENCE
+Palo Alto Networks — Device > Setup > Interfaces (PAN-OS 10.1):
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-setup-interfaces
+Palo Alto Networks — Perform the Initial Setup and Configuration for NGFWs:
+https://docs.paloaltonetworks.com/ngfw/getting-started/initial-setup-configuration-ngfws
+Palo Alto Networks — Configure Service Routes:
+https://docs.paloaltonetworks.com/ngfw/networking/configure-service-routes
+Palo Alto Networks — CLI Jump Start:
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/use-the-cli/cli-jump-start

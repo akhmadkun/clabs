@@ -1,0 +1,437 @@
+LAB-001 — FND-101 Management Plane Baseline
+SOLUTION GUIDE
+
+============================================================
+[OBJECTIVE]
+============================================================
+Build a hardened, repeatable PAN-OS 10.1 management baseline and then prove that common management-plane failures can be isolated without confusing management reachability, service state, DNS, NTP, and permitted-source controls.
+
+PAN-OS exposes MGT configuration under Device > Setup > Interfaces. Palo Alto documents static IPv4 address/netmask/default gateway, permitted IP addresses, and management services such as HTTPS/SSH there. HTTP and Telnet are plaintext management protocols and should not be enabled for this lab. See the official PAN-OS 10.1 interface documentation.
+
+============================================================
+[IMPORTANT]
+============================================================
+1. Perform configuration from the console until MGT is reachable.
+2. Verify the administrator source IP before changing Permitted IPs. A wrong value can intentionally lock you out.
+3. Do not use the full management subnet as a shortcut unless you can defend that design choice.
+4. The service node is a helper only. The firewall's management plane remains separate from dataplane security policy.
+5. Capture evidence before fixing an injected fault.
+
+============================================================
+[LAB STATE]
+============================================================
+virbr1              192.168.121.0/24
+Host/libvirt side    192.168.121.1/24
+PA-VM MGT            192.168.121.10/24
+Service node         192.168.121.20/24
+Domain               fnd101.lab
+FQDN                 pa1.fnd101.lab
+Timezone             Asia/Jakarta
+
+============================================================
+[SECTION 1 — SERVICE NODE CHECK]
+============================================================
+On the service container:
+
+  ip addr show eth0
+  ss -lunpt
+  ps -ef | grep -E 'dnsmasq|chronyd' | grep -v grep
+
+Expected:
+- eth0 has 192.168.121.20/24.
+- DNS listens on port 53 TCP/UDP.
+- chronyd is running and listening on UDP/123. The UDP/323 command socket is not used in this lab because cmdport 0 is set.
+
+The service-node configuration is host-bound, so edit these files without rebuilding the image:
+
+  service-config/dnsmasq.conf
+  service-config/chrony.conf
+
+Then redeploy/restart the service node as needed for process startup.
+
+Test DNS locally:
+
+  getent hosts pa1.fnd101.lab
+  getent hosts services.fnd101.lab
+
+Expected:
+192.168.121.10 pa1.fnd101.lab
+192.168.121.20 services.fnd101.lab
+
+============================================================
+[SECTION 2 — INITIAL PAN-OS OBSERVATION]
+============================================================
+From operational mode:
+
+  show system info
+  show clock
+  show admins
+  show interface management
+
+Then enter configuration mode and inspect the current device configuration:
+
+  configure
+  show deviceconfig system
+
+Also inspect the current management service/permitted-IP state using the CLI hierarchy available in your image. PAN-OS CLI supports command completion and '?' help, so use:
+
+  set deviceconfig system ?
+  set deviceconfig system service ?
+  set deviceconfig system permitted-ip ?
+
+The exact hierarchy is version dependent; use PAN-OS CLI help if your 10.1 image presents a slightly different leaf name.
+
+============================================================
+[SECTION 3 — MANAGEMENT INTERFACE BASELINE]
+============================================================
+Configure the MGT interface through:
+
+  Device > Setup > Interfaces > Management
+
+Set:
+- Type: Static
+- IP Address: 192.168.121.10
+- Netmask: 255.255.255.0
+- Default Gateway: 192.168.121.1
+- Speed: auto-negotiate
+- MTU: 1500
+
+Administrative Management Services:
+- HTTPS: enabled
+- SSH: enabled
+- HTTP: disabled
+- Telnet: disabled
+
+Network Services:
+- Ping: enabled for this training lab
+- Leave other services disabled unless a later lab explicitly needs them.
+
+Permitted IP Addresses:
+- Add the verified administrator source IP.
+- For the default host-side lab path, this will normally be 192.168.121.1.
+
+Do not remove console access while testing this setting.
+
+CLI verification after configuration:
+
+  run show system info
+
+============================================================
+[SECTION 4 — SYSTEM IDENTITY]
+============================================================
+From configuration mode:
+
+  set deviceconfig system hostname PA-FND101
+  set deviceconfig system domain fnd101.lab
+  set deviceconfig system timezone Asia/Jakarta
+  set deviceconfig system login-banner "AUTHORIZED ACCESS ONLY - FND-101 LAB FIREWALL"
+
+Commit after completing the baseline rather than committing every single leaf unless you are deliberately testing candidate/running behavior.
+
+Verification:
+
+  show deviceconfig system hostname
+  show deviceconfig system domain
+  show deviceconfig system timezone
+
+Operational:
+
+  show system info
+  show clock
+
+Expected:
+- Hostname is PA-FND101.
+- Domain is fnd101.lab.
+- Timezone is Asia/Jakarta.
+- System clock displays the intended local timezone.
+
+============================================================
+[SECTION 5 — DNS]
+============================================================
+PAN-OS supports DNS configuration under:
+
+  set deviceconfig system dns-setting servers
+
+Configure:
+
+  set deviceconfig system dns-setting servers primary 192.168.121.20
+
+Verify candidate configuration:
+
+  show deviceconfig system dns-setting servers
+
+Commit, then test name resolution from operational mode using the DNS test facilities available in your PAN-OS 10.1 image. At minimum, verify the configured DNS server is reachable and prove resolution of:
+
+  pa1.fnd101.lab
+  services.fnd101.lab
+
+Use built-in CLI help when needed:
+
+  ?
+  find command keyword dns
+
+The official CLI guide confirms DNS lives under `set deviceconfig system dns-setting servers`, and PAN-OS CLI help can be used to resolve exact syntax.
+
+============================================================
+[SECTION 6 — NTP]
+============================================================
+Configure the primary NTP server:
+
+  set deviceconfig system ntp-servers primary-ntp-server ntp-server-address 192.168.121.20
+
+Verify candidate configuration:
+
+  show deviceconfig system ntp-servers
+
+Commit.
+
+Use the operational NTP/time commands exposed by the 10.1 image to verify synchronization. Useful starting points are:
+
+  show clock
+  show system info
+  find command keyword ntp
+
+Then correlate with the service node:
+
+  chronyc tracking
+  chronyc sources -v
+
+Expected service-node evidence:
+- chronyd is running.
+- UDP/123 is active.
+- local lab source is serving time.
+
+Because this lab intentionally uses a local isolated NTP source, chrony is configured as a lab authority rather than as a source of Internet time.
+
+============================================================
+[SECTION 7 — SERVICE ROUTES]
+============================================================
+PAN-OS provides Service Route Configuration under:
+
+  Device > Setup > Services > Service Route Configuration
+
+For this standalone lab, configure the DNS/NTP service communication to use the management interface. The simplest design is the global option:
+
+  Use Management Interface for all
+
+If you choose per-service routing instead, configure the DNS and NTP services so their source interface is MGT and document the decision.
+
+Why:
+The objective is to make the management-plane path explicit and predictable. Palo Alto documents that service routes determine the source interface used to reach external services, and that using MGT for service communication is a supported configuration.
+
+Verification:
+- Screenshot or record the Service Route Configuration page.
+- Record which services are using MGT.
+- Prove DNS and NTP reach the 192.168.121.20 service node.
+
+============================================================
+[SECTION 8 — COMMIT + EVIDENCE]
+============================================================
+Commit:
+
+  commit
+
+Then verify the completed baseline again:
+
+  show system info
+  show clock
+  show admins
+  show interface management
+  show deviceconfig system service
+  show deviceconfig system permitted-ip
+  show deviceconfig system dns-setting servers
+  show deviceconfig system ntp-servers
+
+For configuration visibility, you may switch output to set format:
+
+  set cli config-output-format set
+
+Then inspect the relevant trees with `show ...` commands.
+
+Record:
+- commit success
+- MGT state
+- allowed services
+- permitted source
+- hostname/domain/timezone
+- DNS server
+- NTP server
+- service-route intent
+
+============================================================
+[SECTION 9 — FAULT A: DNS BLACKHOLE]
+============================================================
+Break:
+Change the primary DNS server from 192.168.121.20 to an unused address, for example 192.168.121.250.
+Commit the fault.
+
+Expected symptom:
+- HTTPS/SSH to 192.168.121.10 still works from an allowed source.
+- FQDN resolution fails.
+- This demonstrates that management reachability and the DNS service path are separate fault domains.
+
+Diagnose:
+1. Check the configured DNS server.
+2. Test reachability from the firewall.
+3. Check service-route intent.
+4. Check the service node for received DNS traffic/listener state.
+
+Do not immediately replace the IP. Prove the configured destination and the actual packet path first.
+
+Restore:
+Set DNS back to 192.168.121.20 and commit.
+Re-test both lab FQDNs.
+
+============================================================
+[SECTION 10 — FAULT B: NTP SOURCE FAILURE]
+============================================================
+Break on service node:
+
+  pkill chronyd
+
+Expected symptom:
+- PA remains manageable.
+- NTP state stops being healthy/stale.
+- `chronyc` on the service node no longer shows an active daemon.
+
+Diagnose:
+- Check firewall NTP configuration.
+- Check the service node process and UDP/123 state.
+- Compare firewall clock state before and after the outage.
+
+Restore service node according to the image startup method used by the lab, for example by re-running the startup command or restarting the service process.
+
+Then prove NTP health returns.
+
+============================================================
+[SECTION 11 — FAULT C: PERMITTED-IP LOCKOUT]
+============================================================
+From console, replace the correct administrator source with a wrong address, e.g. 192.168.121.250/32.
+Commit.
+
+Expected symptom:
+- MGT IP and routing remain configured.
+- HTTPS/SSH fail from the real administrator source.
+
+Diagnostic reasoning:
+If ping to MGT still works but TCP management connections are rejected/blocked from the administrator source, a permitted-IP/service restriction is a stronger hypothesis than a missing route.
+
+Restore:
+- Return the verified administrator source IP.
+- Commit from console.
+- Re-test HTTPS and SSH.
+
+IMPORTANT:
+Do this only when console access is definitely available.
+
+============================================================
+[SECTION 12 — FAULT D: SSH SERVICE DISABLED]
+============================================================
+Disable SSH on the MGT interface while leaving HTTPS enabled.
+For example, use the configuration hierarchy exposed by your 10.1 image:
+
+  set deviceconfig system service disable-ssh yes
+
+Commit.
+
+Expected symptom:
+- HTTPS remains available.
+- SSH connection fails.
+
+This is intentionally a misleading symptom because an engineer may initially suspect routing, permitted IPs, or a TCP/22 ACL.
+
+Diagnose:
+- Verify MGT reachability.
+- Verify HTTPS reachability.
+- Inspect management service state.
+- Confirm SSH is disabled.
+
+Restore:
+
+  set deviceconfig system service disable-ssh no
+
+Commit and prove SSH works again.
+
+============================================================
+[SECTION 13 — FINAL REGRESSION]
+============================================================
+Final expected state:
+
+MGT
+192.168.121.10/24
+Gateway 192.168.121.1
+
+Services
+HTTPS = enabled
+SSH   = enabled
+HTTP  = disabled
+Telnet = disabled
+Ping  = enabled for lab diagnostics
+
+Identity
+Hostname = PA-FND101
+Domain   = fnd101.lab
+Timezone = Asia/Jakarta
+
+DNS
+Primary = 192.168.121.20
+pa1.fnd101.lab      -> 192.168.121.10
+services.fnd101.lab -> 192.168.121.20
+
+NTP
+Primary = 192.168.121.20
+State   = synchronized/healthy
+
+Access control
+Permitted IPs = verified administrator source(s) only
+
+Service routes
+DNS/NTP use the intended MGT path.
+
+============================================================
+[EXPECTED RESULT]
+============================================================
+A correct solution is not merely "everything is green".
+You should be able to explain:
+
+1. Why a working HTTPS session does not prove DNS or NTP is working.
+2. Why permitted-IP restrictions can create a management-only failure while the MGT interface remains correctly addressed.
+3. Why disabling SSH is distinguishable from a routing problem when HTTPS still works.
+4. Why service routes matter even when the firewall has a dedicated MGT interface.
+5. Why the service node belongs on the isolated management bridge rather than inside the firewall dataplane.
+
+============================================================
+[MASTERY / SELF-SCORE]
+============================================================
+Use the roadmap scale:
+
+1  Recognize
+2  Explain
+3  Implement
+4  Verify
+5  Break
+6  Diagnose known fault patterns
+7  Diagnose an unseen fault with evidence
+8  Design + automate safely
+9  RCA / teach
+10 Operational intuition
+
+Do not mark FND-101 mastered unless the unseen-fault attempt reaches at least 7 and the root cause is proven with evidence.
+
+============================================================
+[OFFICIAL REFERENCES]
+============================================================
+PAN-OS 10.1 — Device > Setup > Interfaces:
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-setup-interfaces
+
+Perform the Initial Setup and Configuration for NGFWs:
+https://docs.paloaltonetworks.com/ngfw/getting-started/initial-setup-configuration-ngfws
+
+Configure Service Routes:
+https://docs.paloaltonetworks.com/ngfw/networking/configure-service-routes
+
+PAN-OS CLI Jump Start:
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/use-the-cli/cli-jump-start
+
+PAN-OS CLI — Modify the Configuration:
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/use-the-cli/modify-the-configuration

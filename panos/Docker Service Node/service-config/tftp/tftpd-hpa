@@ -1,0 +1,4 @@
+# Reference config for tftpd-hpa. The universal startup script invokes in.tftpd directly.
+TFTP_DIRECTORY="/srv/tftp"
+TFTP_ADDRESS="192.168.121.20:69"
+TFTP_OPTIONS="--secure --create"
