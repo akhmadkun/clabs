@@ -1,0 +1,72 @@
+STEP 1 — Enable feature
+
+    configure terminal
+    feature lacp
+    feature vpc
+    end
+
+STEP 2 — Peer-keepalive
+
+    configure terminal
+
+    interface Ethernet1/4
+    no switchport
+    ip address 192.168.100.2/30
+    no shutdown
+
+    vpc domain 10
+    role priority 200
+    peer-keepalive destination 192.168.100.1 source 192.168.100.2 vrf default
+
+    end
+
+STEP 3 — Test peer-keepalive
+
+    ping 192.168.100.2 vrf default
+
+    show vpc peer-keepalive
+
+    show vpc
+
+STEP 4 — Buat peer-link
+
+    configure terminal
+
+    interface Ethernet1/2-3
+        description VPC-PEERLINK-MEMBER1
+        switchport
+        switchport mode trunk
+        channel-group 20 mode active
+        no shutdown
+
+    interface port-channel20
+        description VPC-PEER-LINK
+        switchport
+        switchport mode trunk
+        vpc peer-link
+
+    end
+
+STEP 5 — Check peer-link
+
+    show port-channel summary
+    show vpc brief
+
+STEP 6 — Buat downstream vPC
+
+    interface Ethernet1/1
+        description Downstream vPC
+        switchport
+        switchport mode trunk
+        channel-group 10 mode active
+        no shutdown
+
+    interface port-channel10
+        description VPC10
+        switchport
+        switchport mode trunk
+        vpc 10
+
+STEP 7 — Konfigurasi Peer Device
+
+STEP 8 — Verify LACP

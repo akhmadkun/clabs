@@ -1,0 +1,40 @@
+name: panos-nxos-vpc
+prefix: ""
+
+topology:
+  nodes:
+
+    virbr2:
+      kind: bridge
+    virbr3:
+      kind: bridge
+
+    nx1:
+      kind: cisco_n9kv
+      image: arthurk99/cisco-nxos9000v:10.3.5
+      startup-config: configs/NX1.cfg
+
+
+    nx2:
+      kind: cisco_n9kv
+      image: arthurk99/cisco-nxos9000v:10.3.5
+      startup-config: configs/NX2.cfg
+
+    switch:
+      kind: ceos
+      image: ceos:4.35.0F
+
+  links:
+    # vPC member 1
+    - endpoints: ["nx1:Ethernet1/1", "virbr2:eth1"]
+
+    # vPC member 2
+    - endpoints: ["nx2:Ethernet1/1", "virbr3:eth2"]
+
+    # Peer Link
+    - endpoints: ["nx1:Ethernet1/2", "nx2:Ethernet1/2"]
+    - endpoints: ["nx1:Ethernet1/3", "nx2:Ethernet1/3"]
+
+    # Keep Alive
+    - endpoints: ["nx1:Ethernet1/4", "nx2:Ethernet1/4"]
+

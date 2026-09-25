@@ -1,0 +1,11 @@
+name: nxos-lite
+prefix: ""
+
+
+topology:
+  nodes:
+    node:
+      kind: cisco_n9kv
+      env:
+        QEMU_MEMORY: 6144 # N9kv-lite requires minimum 6GB memory
+        QEMU_SMP: 2 # N9kv-lite requires minimum 2 CPUs

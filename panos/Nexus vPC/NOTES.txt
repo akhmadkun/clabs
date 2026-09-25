@@ -1,0 +1,15 @@
+LAB-001 NOTES
+
+Images
+- NX-OS Titanium: vrnetlab/cisco_nxostitanium:7.3.0.D1.1
+- IOL: arthurk99/cisco-iol:17.15.01
+
+Design choice
+- Two physical links are used so LACP can be tested.
+- The Port-Channel is Layer 3 to keep the lab independent of L2 switching behavior on regular IOL.
+- IOL CEF is explicitly enabled for predictable routed forwarding in the lab.
+
+Important
+The current official containerlab documentation lists Cisco Nexus 9000v as a supported modern VM kind, while legacy Titanium/NX-OS is not prominently listed in the current kind catalog. This package intentionally uses the legacy vr-nxos kind because the supplied image is an older Titanium vrnetlab image.
+
+If your installed containerlab rejects vr-nxos as an unknown kind, this is an integration/version mismatch, not a configuration error in the LACP lab.

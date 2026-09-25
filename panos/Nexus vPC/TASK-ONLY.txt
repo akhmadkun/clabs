@@ -1,0 +1,58 @@
+LAB-001 — NX-OS Titanium ↔ IOL LACP / EtherChannel
+
+Objective
+Build a two-link LACP Port-Channel between Cisco NX-OS Titanium 7.3.0.D1.1 and Cisco IOL 17.15.01, then verify forwarding and member-link failure behavior.
+
+Topology
+
+             LACP Po10
+        ====================
+        NX1                IOL1
+    Eth2/1 ------------- Eth0/1
+    Eth2/2 ------------- Eth0/2
+
+Port-Channel addressing
+NX1   Po10: 10.10.10.1/30
+IOL1  Po10: 10.10.10.2/30
+
+Loopbacks
+NX1   Lo0: 10.255.0.1/32
+IOL1  Lo0: 10.255.0.2/32
+
+Tasks
+
+1. Deploy the lab.
+
+2. On NX1, verify:
+   - both physical interfaces are up
+   - Po10 is up
+   - both members are bundled
+   - LACP neighbor is IOL1
+
+3. On IOL1, verify:
+   - Port-channel10 is up
+   - both members are bundled
+   - LACP neighbor is NX1
+
+4. Test traffic:
+   - ping 10.10.10.2 from NX1
+   - ping 10.10.10.1 from IOL1
+   - ping 10.255.0.2 source loopback0 from NX1
+   - ping 10.255.0.1 source loopback0 from IOL1
+
+5. Failure test:
+   - keep continuous ping running across Po10
+   - shut down NX1 Ethernet2/1
+   - verify Po10 stays up with one member
+   - verify traffic continues
+   - restore Ethernet2/1
+   - shut down NX1 Ethernet2/2
+   - verify Po10 stays up with the remaining member
+   - restore Ethernet2/2
+
+6. Final verification:
+   - confirm both members return to bundled/up state
+   - confirm loopback-to-loopback traffic works again
+
+Expected outcome
+Po10 remains operational when either single LACP member is lost. Traffic should continue over the remaining member.
