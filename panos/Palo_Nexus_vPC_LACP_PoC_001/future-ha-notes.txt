@@ -1,0 +1,26 @@
+NEXT PHASE — PA ACTIVE/PASSIVE HA
+==================================
+
+After POC-001 is stable, extend the same Nexus vPC/LACP design to two PA-VMs.
+
+Target concept:
+
+                     vPC DOMAIN 10
+              N9K-01 ============== N9K-02
+                |  \                /  |
+                |   \              /   |
+                |    +============+    |
+                |       PA HA pair      |
+                |     PA-01 / PA-02     |
+                |                       |
+
+On PAN-OS 11.2, AE/LACP has HA-specific options including:
+- Enable in HA Passive State
+- Same System MAC Address for Active-Passive HA
+
+These are intentionally NOT configured in POC-001.
+They should be tested as a separate HA PoC after the standalone AE/LACP
+baseline is working.
+
+Official reference:
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface-group

@@ -1,0 +1,19 @@
+OFFICIAL DOCUMENTATION REFERENCES
+
+Arista EOS 4.35.0F — Traffic Management / PBR
+https://www.arista.com/en/um-eos/eos-traffic-management
+
+Arista MLAG
+https://www.arista.com/en/um-eos/eos-multi-chassis-link-aggregation
+
+Arista VARP
+https://www.arista.com/en/um-eos/eos-vrrp-and-varp
+
+Palo Alto PAN-OS 11.2 — Aggregate Ethernet
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface
+
+Palo Alto PAN-OS 11.2 — Common Building Blocks for Firewall Interfaces
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/common-building-blocks-for-firewall-interfaces
+
+Palo Alto — Set Up a Basic Security Policy
+https://docs.paloaltonetworks.com/ngfw/getting-started/initial-setup-configuration-ngfws/set-up-a-basic-security-policy

@@ -1,0 +1,836 @@
+POC-002 — SOLUTION GUIDE
+Palo Alto + Nexus vPC + Selective PBR
+=====================================
+
+AUDIENCE
+--------
+Junior engineer.
+
+CONCEPT
+-------
+This lab has TWO operating modes.
+
+MODE A — NORMAL
+  Client -> Nexus SVI -> normal routing -> destination
+
+MODE B — PBR
+  Selected Client -> Nexus SVI -> PBR -> Palo Alto -> destination
+
+The Palo Alto is physically connected in both modes. It is simply not the
+forwarding path until PBR is applied.
+
+================================================================
+1. DEPLOY
+================================================================
+
+From the lab directory:
+
+  ./preflight.sh
+
+Then:
+
+  containerlab deploy -t Palo_Nexus_vPC_PBR_PoC_002.clab.yml
+
+Check:
+
+  containerlab inspect -t Palo_Nexus_vPC_PBR_PoC_002.clab.yml
+
+PA-VM is a VM-based vrnetlab node. Wait until PAN-OS has fully booted.
+
+================================================================
+2. VERIFY N9K-01 / N9K-02
+================================================================
+
+On N9K-01:
+
+  show version
+  show feature | include vpc|lacp|hsrp
+
+On N9K-02:
+
+  show version
+  show feature | include vpc|lacp|hsrp
+
+Expected:
+NX-OS 10.3(5)
+vPC, LACP and HSRP enabled.
+
+================================================================
+3. VERIFY PEER-KEEPALIVE
+================================================================
+
+N9K-01:
+
+  show vpc peer-keepalive
+  ping 10.255.0.2 vrf VPC-KA
+
+N9K-02:
+
+  show vpc peer-keepalive
+  ping 10.255.0.1 vrf VPC-KA
+
+Expected:
+Peer is alive.
+
+If this fails, stop here and fix the keepalive path.
+
+================================================================
+4. VERIFY PEER-LINK
+================================================================
+
+On both:
+
+  show port-channel summary
+  show vpc brief
+  show vpc consistency-parameters global
+
+Expected:
+  Po100 up
+  peer adjacency formed
+  peer-link up
+  consistency success / no blocking Type-1 mismatch
+
+================================================================
+5. VERIFY PA DOWNSTREAM VPC
+================================================================
+
+On both:
+
+  show port-channel summary
+  show vpc brief
+  show lacp neighbor
+
+Expected:
+  Po20 is configured as vPC 20.
+
+At this stage it may show LACP pending until PA AE1 is configured.
+That is expected.
+
+================================================================
+6. VERIFY VLAN/SVI/HSRP
+================================================================
+
+On both:
+
+  show vlan brief
+  show ip interface brief
+  show hsrp brief
+
+Expected:
+
+VLAN100:
+  local SVI .2 or .3
+  HSRP VIP 10.100.100.1
+
+VLAN200:
+  local SVI .2 or .3
+  HSRP VIP 10.200.200.1
+
+================================================================
+7. VERIFY TEST CLIENTS
+================================================================
+
+Run:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-pbr ip -br addr show eth1
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-normal ip -br addr show eth1
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-outside ip -br addr show eth1
+
+Expected:
+
+  MT-INSIDE-PBR    10.100.100.10/24
+  MT-INSIDE-NORMAL 10.100.100.11/24
+  MT-OUTSIDE       10.200.200.10/24
+
+================================================================
+8. PHASE 1 — TEST NORMAL ROUTING
+================================================================
+
+From selected host:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-pbr     ping -c 5 10.200.200.10
+
+Expected:
+Success.
+
+From normal host:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-normal     ping -c 5 10.200.200.10
+
+Expected:
+Success.
+
+IMPORTANT:
+PBR is NOT configured yet.
+
+================================================================
+9. PROVE THE NORMAL ROUTE
+================================================================
+
+On N9K-01:
+
+  show ip route 10.200.200.0/24
+
+On N9K-02:
+
+  show ip route 10.100.100.0/24
+
+Expected:
+Connected/Local routing through Vlan200/Vlan100.
+
+KEY IDEA:
+These routes stay installed even after PBR is added.
+
+PBR does not remove the normal route. It overrides the forwarding decision
+for packets that match the route-map.
+
+================================================================
+10. PROVE PA IS NOT USED
+================================================================
+
+At this stage, open PA:
+
+  Monitor > Traffic
+
+Generate both test flows again.
+
+Expected:
+No firewall session for those client-to-client flows.
+
+The PA is connected to the same VLANs, but the Nexus is performing the
+normal routing.
+
+================================================================
+11. CONFIGURE PA VIRTUAL ROUTER
+================================================================
+
+Open:
+
+  Network > Virtual Routers > Add
+
+Name:
+
+  VR-POC
+
+Save.
+
+================================================================
+12. CONFIGURE PA ZONES
+================================================================
+
+Go to:
+
+  Network > Zones
+
+Create:
+
+  INSIDE
+  Type = Layer3
+
+Create:
+
+  OUTSIDE
+  Type = Layer3
+
+================================================================
+13. CREATE PA AE1
+================================================================
+
+Go to:
+
+  Network > Interfaces > Ethernet
+
+Select:
+
+  Add Aggregate Group
+
+Create:
+
+  ae1
+
+Type:
+
+  Layer3
+
+Enable LACP:
+
+  LACP Mode       = Active
+  Transmission    = Fast
+  Max Interfaces  = 2
+
+Do not put the IP addresses on ae1 itself.
+
+Palo Alto documents AE as an IEEE 802.1AX aggregate interface and supports
+LACP on Layer 3 AE groups.
+
+================================================================
+14. ASSIGN AE1 MEMBERS
+================================================================
+
+Assign:
+
+  Ethernet1/1 -> ae1
+  Ethernet1/2 -> ae1
+
+Expected:
+
+  ae1
+    + ethernet1/1
+    + ethernet1/2
+
+These physical links terminate on different Nexus vPC peers.
+
+================================================================
+15. CREATE ae1.100
+================================================================
+
+Under ae1, add a Layer 3 subinterface.
+
+Use:
+
+  Interface:       ae1.100
+  VLAN Tag:        100
+  IP:               10.100.100.254/24
+  Virtual Router:   VR-POC
+  Security Zone:    INSIDE
+
+Commit later with ae1.200.
+
+================================================================
+16. CREATE ae1.200
+================================================================
+
+Add:
+
+  Interface:       ae1.200
+  VLAN Tag:        200
+  IP:               10.200.200.254/24
+  Virtual Router:   VR-POC
+  Security Zone:    OUTSIDE
+
+The PA is now a Layer 3 router for these two logical subinterfaces.
+
+================================================================
+17. COMMIT PA
+================================================================
+
+Review first:
+
+  show config diff
+
+Then:
+
+  configure
+  validate full
+
+If successful:
+
+  commit description "POC-002 PA AE subinterfaces baseline"
+  exit
+
+================================================================
+18. VERIFY PA AE/LACP
+================================================================
+
+Run:
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+Expected:
+- ae1 operational
+- ethernet1/1 present
+- ethernet1/2 present
+- LACP operational
+
+================================================================
+19. VERIFY NEXUS LACP
+================================================================
+
+On both Nexus:
+
+  show port-channel summary
+  show lacp neighbor
+  show vpc brief
+
+Expected:
+Po20 up, vPC20 up, PA is the LACP neighbor.
+
+================================================================
+20. TEST PA SUBINTERFACES
+================================================================
+
+From MT-INSIDE-PBR:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-pbr     ping -c 5 10.100.100.254
+
+From MT-OUTSIDE:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-outside     ping -c 5 10.200.200.254
+
+Expected:
+Both respond.
+
+If they do not, do not configure PBR yet.
+
+================================================================
+21. CREATE PA SECURITY POLICY
+================================================================
+
+Go to:
+
+  Policies > Security > Add
+
+Name:
+
+  ALLOW-INSIDE-OUTSIDE
+
+Source Zone:
+  INSIDE
+
+Destination Zone:
+  OUTSIDE
+
+Source:
+  any
+
+Destination:
+  any
+
+Application:
+  any
+
+Service:
+  any
+
+Action:
+  Allow
+
+Enable Log at Session End.
+
+No NAT.
+
+Commit.
+
+================================================================
+22. UNDERSTAND THE PBR DESIGN
+================================================================
+
+The selected forward flow is:
+
+  10.100.100.10
+        |
+        v
+  N9K Vlan100
+        |
+        | PBR next-hop
+        v
+  10.100.100.254
+        |
+        v
+  PA ae1.100
+        |
+      PA route/policy
+        |
+        v
+  PA ae1.200
+        |
+        v
+  10.200.200.10
+
+The return flow is deliberately PBR'd too:
+
+  10.200.200.10
+        |
+        v
+  N9K Vlan200
+        |
+        | PBR next-hop
+        v
+  10.200.200.254
+        |
+        v
+  PA ae1.200
+        |
+      PA route/state
+        |
+        v
+  PA ae1.100
+        |
+        v
+  10.100.100.10
+
+Cisco documents that PBR is configured on the interface that receives the
+packet, and that "set ip next-hop" selects the adjacent next hop. Traffic
+that does not match the route-map continues with normal destination-based
+routing.
+
+================================================================
+23. ENABLE PBR
+================================================================
+
+On BOTH Nexus switches:
+
+  configure terminal
+  feature pbr
+
+================================================================
+24. CREATE FORWARD ACL
+================================================================
+
+On BOTH Nexus:
+
+  ip access-list ACL-PBR-TO-PA-FWD
+    10 permit ip host 10.100.100.10 host 10.200.200.10
+
+Only the selected host pair matches.
+
+================================================================
+25. CREATE FORWARD ROUTE-MAP
+================================================================
+
+On BOTH Nexus:
+
+  route-map PBR-TO-PA-FWD permit 10
+    match ip address ACL-PBR-TO-PA-FWD
+    set ip next-hop 10.100.100.254
+
+Enable statistics:
+
+  route-map PBR-TO-PA-FWD pbr-statistics
+
+================================================================
+26. APPLY FORWARD PBR
+================================================================
+
+On BOTH Nexus:
+
+  interface Vlan100
+    ip policy route-map PBR-TO-PA-FWD
+
+Why Vlan100?
+Because traffic from 10.100.100.10 enters the Nexus routing process via
+Vlan100.
+
+================================================================
+27. CREATE RETURN ACL
+================================================================
+
+On BOTH Nexus:
+
+  ip access-list ACL-PBR-TO-PA-REV
+    10 permit ip host 10.200.200.10 host 10.100.100.10
+
+================================================================
+28. CREATE RETURN ROUTE-MAP
+================================================================
+
+On BOTH Nexus:
+
+  route-map PBR-TO-PA-REV permit 10
+    match ip address ACL-PBR-TO-PA-REV
+    set ip next-hop 10.200.200.254
+
+Enable statistics:
+
+  route-map PBR-TO-PA-REV pbr-statistics
+
+================================================================
+29. APPLY RETURN PBR
+================================================================
+
+On BOTH Nexus:
+
+  interface Vlan200
+    ip policy route-map PBR-TO-PA-REV
+
+================================================================
+30. VERIFY PBR CONFIGURATION
+================================================================
+
+Run on both Nexus:
+
+  show ip policy
+
+Then:
+
+  show route-map PBR-TO-PA-FWD
+  show route-map PBR-TO-PA-REV
+
+Then:
+
+  show route-map PBR-TO-PA-FWD pbr-statistics
+  show route-map PBR-TO-PA-REV pbr-statistics
+
+Initially counters should be zero or near zero.
+
+================================================================
+31. TEST SELECTED FLOW
+================================================================
+
+From MT-INSIDE-PBR:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-pbr     ping -c 10 10.200.200.10
+
+Expected:
+Success.
+
+Then on the Nexus:
+
+  show route-map PBR-TO-PA-FWD pbr-statistics
+  show route-map PBR-TO-PA-REV pbr-statistics
+
+Expected:
+Counters increase.
+
+================================================================
+32. VERIFY THE PA SESSION
+================================================================
+
+On PA:
+
+  Monitor > Traffic
+
+Filter:
+
+  (addr.src eq 10.100.100.10) and (addr.dst eq 10.200.200.10)
+
+Expected:
+Allowed session using ALLOW-INSIDE-OUTSIDE.
+
+This is the key proof that the selected packet crossed the firewall.
+
+================================================================
+33. TEST NON-SELECTED FLOW
+================================================================
+
+From MT-INSIDE-NORMAL:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-normal     ping -c 10 10.200.200.10
+
+Expected:
+Success.
+
+Check PBR statistics again.
+
+Expected:
+The route-map counter does not increase for this host's packets.
+
+Check PA Traffic:
+
+Expected:
+No corresponding firewall session for:
+  10.100.100.11 -> 10.200.200.10
+
+Therefore:
+
+  10.100.100.11
+        |
+     Nexus
+        |
+   normal route
+        |
+  10.200.200.10
+
+================================================================
+34. VERIFY NEXT-HOP REACHABILITY
+================================================================
+
+N9K-01:
+
+  show ip arp 10.100.100.254
+
+N9K-02:
+
+  show ip arp 10.200.200.254
+
+Expected:
+PA MAC address is resolved.
+
+Also:
+
+  show mac address-table vlan 100
+  show mac address-table vlan 200
+
+================================================================
+35. VERIFY NORMAL ROUTE STILL EXISTS
+================================================================
+
+On both Nexus:
+
+  show ip route 10.200.200.0/24
+  show ip route 10.100.100.0/24
+
+Expected:
+Connected routes remain installed.
+
+PBR is not a route-table replacement.
+It is a policy decision applied to matching ingress traffic.
+
+================================================================
+36. FAILURE TEST — ONE PA AE MEMBER
+================================================================
+
+Start selected traffic:
+
+  docker exec -it clab-palo-nexus-vpc-pbr-poc-mt-inside-pbr     ping 10.200.200.10
+
+On N9K-01:
+
+  configure terminal
+  interface Ethernet1/4
+    shutdown
+
+Verify:
+
+  show port-channel summary
+  show vpc brief
+  show lacp neighbor
+
+On PA:
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+Expected:
+One AE member is down, but AE1 remains operational via N9K-02.
+
+Restore:
+
+  interface Ethernet1/4
+    no shutdown
+
+================================================================
+37. FAILURE TEST — OTHER PA AE MEMBER
+================================================================
+
+On N9K-02:
+
+  interface Ethernet1/4
+    shutdown
+
+Expected:
+AE1 remains operational via N9K-01.
+
+Restore:
+
+  no shutdown
+
+================================================================
+38. OPTIONAL — RETURN TO NORMAL
+================================================================
+
+To disable PBR without deleting the route-maps:
+
+On both Nexus:
+
+  interface Vlan100
+    no ip policy route-map PBR-TO-PA-FWD
+
+  interface Vlan200
+    no ip policy route-map PBR-TO-PA-REV
+
+Then generate:
+
+  10.100.100.10 -> 10.200.200.10
+
+Expected:
+Traffic bypasses the PA again.
+
+================================================================
+39. TROUBLESHOOTING
+================================================================
+
+vPC down:
+  show vpc brief
+  show vpc peer-keepalive
+  show port-channel summary
+  show vpc consistency-parameters global
+
+Po20 down:
+  show port-channel summary
+  show lacp neighbor
+  PA: show lacp aggregate-ethernet ae1
+
+PA subinterface unreachable:
+  verify VLAN tag 100/200
+  verify ae1 members
+  verify AE1 trunk allows VLAN100/200 on Nexus
+  verify PA zones/VR-POC
+
+PBR counter increases but PA has no session:
+  show ip arp 10.100.100.254
+  show mac address-table vlan 100
+
+Return traffic fails:
+  verify the reverse PBR on Vlan200
+  verify 10.200.200.254 is reachable
+  verify the PA session is allowed
+
+Normal host unexpectedly hits PA:
+  inspect ACL-PBR-TO-PA-FWD
+  it must match only 10.100.100.10 -> 10.200.200.10
+
+================================================================
+40. FINAL ACCEPTANCE
+================================================================
+
+VPC
+[ ] Peer alive
+[ ] Peer-link up
+[ ] vPC20 up
+[ ] Consistency clean
+
+PA
+[ ] AE1 up
+[ ] LACP two members
+[ ] ae1.100 operational
+[ ] ae1.200 operational
+[ ] INSIDE/OUTSIDE zones correct
+[ ] VR-POC correct
+[ ] Security policy committed
+
+NORMAL
+[ ] selected flow works before PBR
+[ ] normal-only flow works before PBR
+[ ] PA does not see those flows before PBR
+
+PBR
+[ ] feature pbr enabled
+[ ] forward ACL correct
+[ ] forward route-map correct
+[ ] reverse ACL correct
+[ ] reverse route-map correct
+[ ] PBR applied on Vlan100/Vlan200
+[ ] selected flow creates PA session
+[ ] PBR counters increase
+[ ] non-selected flow bypasses PA
+[ ] normal route remains installed
+
+FAILURE
+[ ] N9K-01 PA member failure tested
+[ ] N9K-02 PA member failure tested
+
+================================================================
+OFFICIAL DOCUMENTATION BASIS
+================================================================
+
+Cisco:
+- Nexus 9000 NX-OS 10.3(x) Unicast Routing Configuration Guide,
+  Policy-Based Routing.
+  The guide documents:
+    feature pbr
+    match ip address
+    set ip next-hop
+    ip policy route-map
+    PBR statistics
+    PBR applied on the ingress interface.
+
+Palo Alto Networks:
+- PAN-OS 11.2 Aggregate Ethernet (AE) Interface Group
+- PAN-OS 11.2 Aggregate Ethernet (AE) Interface
+- PAN-OS 11.2 Layer 3 Subinterface
+- VM-Series Link Aggregation Control Protocol documentation
+
+The exact lab IPs, VLANs, vPC IDs, names, and route-map names are lab design
+choices, not vendor-required values.

@@ -1,0 +1,60 @@
+OFFICIAL DOCUMENTATION REFERENCES
+===================================
+
+CISCO — POLICY-BASED ROUTING
+1. Nexus 9000 Series NX-OS Unicast Routing Configuration Guide, Release
+   10.3(x) — Configuring Policy-Based Routing
+   https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/103x/unicast-routing-configuration/cisco-nexus-9000-series-nx-os-unicast-routing-configuration-guide-release-103x/m_configuring_policy-based_routing_101x.html
+
+   Used for:
+   - feature pbr
+   - match ip address
+   - set ip next-hop
+   - ip policy route-map
+   - PBR on ingress interfaces
+   - show route-map ... pbr-statistics
+
+2. Cisco Nexus 9000 Series NX-OS Command Reference, Release 10.3(x)
+   https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/103x/command-reference/config/b_n9k_config_commands_103x/m_s_cmds.html
+
+   Used for PBR command syntax.
+
+CISCO — vPC
+3. Cisco Nexus 9000 Series NX-OS Interfaces Configuration Guide
+   (vPC)
+   https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/104x/configuration/interfaces/cisco-nexus-9000-series-nx-os-interfaces-configuration-guide-release-104x/m_configuring_vpcs_9x.html
+
+PALO ALTO — AE/LACP
+4. PAN-OS 11.2 Aggregate Ethernet (AE) Interface Group
+   https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface-group
+
+5. PAN-OS 11.2 Aggregate Ethernet (AE) Interface
+   https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface
+
+6. PAN-OS 11.2 Layer 3 Subinterface
+   https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/layer-3-subinterface
+
+7. VM-Series — Configure Link Aggregation Control Protocol on KVM
+   https://docs.paloaltonetworks.com/vm-series/deployment/private-cloud/set-up-the-vm-series-firewall-on-kvm/install-the-vm-series-firewall-on-kvm/configure-link-aggregation-control-protocol-for-kvm.html
+
+CONTAINERLAB / VRNETLAB
+8. Palo Alto PA-VM kind
+   https://containerlab.dev/manual/kinds/vr-pan/
+
+9. Cisco Nexus 9000v kind
+   https://containerlab.dev/manual/kinds/vr-n9kv/
+
+10. vrnetlab / VM-based nodes
+    https://containerlab.dev/manual/vrnetlab/
+
+LAB DESIGN VALUES
+-----------------
+vPC domain 10
+Po100 peer-link
+Po20/vPC20 -> PA AE1
+VLAN 100/200
+10.100.100.0/24
+10.200.200.0/24
+172.30.30.0/24 management
+VR-POC
+PBR ACL/route-map names

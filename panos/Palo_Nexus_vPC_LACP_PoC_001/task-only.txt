@@ -1,0 +1,186 @@
+POC-001 — TASK ONLY
+True VM-Series AE/LACP + Nexus vPC
+===================================
+
+OBJECTIVE
+---------
+Prove this chain:
+
+  Nexus vPC pair
+      +
+  LACP
+      +
+  Palo Alto AE1/AE2
+      +
+  firewall routing + security policy
+      +
+  end-to-end traffic
+      +
+  link failure recovery
+
+IMAGES
+------
+N9K:
+  arthurk99/cisco-nxos9000v:10.3.5
+
+PA:
+  vrnetlab/paloalto_pa-vm:11.2.5
+
+Testing:
+  ghcr.io/srl-labs/network-multitool:latest
+
+TASK 1 — DEPLOY
+---------------
+Deploy the topology.
+
+Record:
+- Containerlab version
+- NX-OS version
+- PAN-OS version
+- management IPs
+
+TASK 2 — BUILD/VERIFY NEXUS vPC
+--------------------------------
+Verify:
+- feature vpc
+- feature lacp
+- peer-keepalive
+- peer-link Po100
+- vPC domain 10
+- peer roles
+- consistency state
+
+TASK 3 — VERIFY DOWNSTREAM VPCS
+-------------------------------
+Verify:
+  vPC 20
+  vPC 21
+  vPC 30
+  vPC 40
+
+TASK 4 — BUILD PA AE1
+---------------------
+Create:
+  AE1 = Layer3
+  members = Ethernet1/1 + Ethernet1/2
+  IP = 10.100.100.1/24
+  virtual router = VR-POC
+  zone = INSIDE
+  LACP = enabled
+  LACP mode = active
+  transmission = fast
+  max interfaces = 2
+
+TASK 5 — BUILD PA AE2
+---------------------
+Create:
+  AE2 = Layer3
+  members = Ethernet1/3 + Ethernet1/4
+  IP = 10.200.200.1/24
+  virtual router = VR-POC
+  zone = OUTSIDE
+  LACP = enabled
+  LACP mode = active
+  transmission = fast
+  max interfaces = 2
+
+TASK 6 — CREATE SECURITY POLICY
+--------------------------------
+Allow:
+  INSIDE -> OUTSIDE
+  source = any
+  destination = any
+  application = any
+  service = any
+  action = allow
+
+No NAT.
+
+TASK 7 — VERIFY LACP
+---------------------
+On both Nexus:
+  show port-channel summary
+  show lacp neighbor
+  show vpc brief
+
+On Palo:
+  show interface all
+  show interface ae1
+  show interface ae2
+  show lacp aggregate-ethernet ae1
+  show lacp aggregate-ethernet ae2
+
+Expected:
+- each AE has two members
+- both members operational
+- Nexus sees PA as LACP partner
+- vPC port-channels are up
+
+TASK 8 — END-TO-END TRAFFIC
+---------------------------
+From MT-INSIDE:
+  ping 10.100.100.1
+  ping 10.200.200.1
+  ping 10.200.200.10
+
+Verify the session on Palo Alto.
+
+TASK 9 — APPLICATION TRAFFIC
+-----------------------------
+Use nc/curl/iperf3 where available to generate TCP traffic from INSIDE to
+OUTSIDE.
+
+Capture:
+- Palo Alto Traffic Log
+- session information
+- Nexus counters
+
+TASK 10 — FAILURE TEST AE1
+--------------------------
+Run continuous ping from MT-INSIDE to MT-OUTSIDE.
+
+Shutdown the PA AE1 member connected to N9K-01:
+  N9K-01 Ethernet1/4
+
+Expected:
+- PA AE1 remains up
+- N9K-01 Po20 loses one member
+- N9K-02 Po20 remains active
+- traffic recovers through the remaining member
+
+Restore the interface.
+
+Repeat by shutting N9K-02 Ethernet1/4.
+
+TASK 11 — FAILURE TEST AE2
+---------------------------
+Repeat on:
+  N9K-01 Ethernet1/5
+  N9K-02 Ethernet1/5
+
+TASK 12 — CLIENT vPC FAILURE
+----------------------------
+Repeat from the inside client:
+  N9K-01 Ethernet1/6 shutdown
+  N9K-02 Ethernet1/6 shutdown
+
+Observe the MT-INSIDE bond0 state while traffic runs.
+
+Repeat for MT-OUTSIDE with Ethernet1/7.
+
+TASK 13 — FINAL ACCEPTANCE
+--------------------------
+[ ] vPC peer up
+[ ] peer-link up
+[ ] peer-keepalive alive
+[ ] vPC consistency clean
+[ ] PA AE1 up with 2 members
+[ ] PA AE2 up with 2 members
+[ ] LACP neighbors established
+[ ] INSIDE gateway reachable
+[ ] OUTSIDE gateway reachable
+[ ] traffic crosses PA
+[ ] security policy hit
+[ ] AE1 member failure tested
+[ ] AE2 member failure tested
+[ ] client vPC failure tested

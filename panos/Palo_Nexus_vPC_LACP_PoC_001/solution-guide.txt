@@ -1,0 +1,1046 @@
+POC-001 — SOLUTION GUIDE
+True VM-Series AE/LACP + Nexus vPC
+===================================
+
+AUDIENCE
+--------
+Junior engineer.
+
+LAB GOAL
+--------
+Build this end-to-end path:
+
+                 vPC DOMAIN 10
+        N9K-01 ================= N9K-02
+          ||         Po100         ||
+          ||                      ||
+       Po20/vPC20              Po20/vPC20
+          ||                      ||
+        PA e1/1                PA e1/2
+             \                  /
+              \      AE1       /
+               +--------------+
+                 INSIDE L3
+
+        Po21/vPC21              Po21/vPC21
+          ||                      ||
+        PA e1/3                PA e1/4
+             \                  /
+              \      AE2       /
+               +--------------+
+                 OUTSIDE L3
+
+Traffic:
+  MT-INSIDE -> AE1 -> PA routing/security policy -> AE2 -> MT-OUTSIDE
+
+This is a standalone PA PoC. No Palo Alto HA is included yet.
+
+================================================================
+0. IMPORTANT: WHAT IS OFFICIAL AND WHAT IS LAB DESIGN
+================================================================
+
+Official Palo Alto behavior used in this lab:
+- VM-Series link aggregation was introduced in PAN-OS 11.1.0.
+- PAN-OS 11.2 supports Aggregate Ethernet groups and LACP.
+- An AE group can contain multiple Ethernet members.
+- LACP can be Active or Passive.
+- Both LACP peers must not be Passive.
+- LACP Fast sends queries every second.
+- Fast Failover can reduce failover detection to within one second.
+- AE interfaces can be Layer 3.
+
+Official Cisco behavior used in this lab:
+- vPC lets one downstream device connect to both Nexus peers as one logical
+  port-channel.
+- The downstream port-channel gets the same vPC number on both peers.
+- vPC requires the vPC feature, peer-link, and peer-keepalive.
+- LACP can be used on vPC port-channels.
+
+Lab-specific choices:
+- vPC domain = 10
+- peer-link = Po100
+- VLAN 100 = INSIDE
+- VLAN 200 = OUTSIDE
+- vPC 20 = PA AE1
+- vPC 21 = PA AE2
+- vPC 30 = MT-INSIDE
+- vPC 40 = MT-OUTSIDE
+- management subnet = 172.30.30.0/24
+- data subnets = 10.100.100.0/24 and 10.200.200.0/24
+
+================================================================
+1. PRE-FLIGHT
+================================================================
+
+On the Containerlab host:
+
+  docker image inspect arthurk99/cisco-nxos9000v:10.3.5
+  docker image inspect vrnetlab/paloalto_pa-vm:11.2.5
+  docker image inspect ghcr.io/srl-labs/network-multitool:latest
+
+Check Containerlab:
+
+  containerlab version
+
+Check KVM:
+
+  ls -l /dev/kvm
+
+The PA-VM and Nexus nodes are VM-based Containerlab nodes. Containerlab
+runs these VM workloads through the vrnetlab/VM launcher mechanism.
+
+================================================================
+2. DEPLOY
+================================================================
+
+From the lab directory:
+
+  containerlab deploy -t Palo_Nexus_vPC_LACP_PoC_001.clab.yml
+
+Check:
+
+  containerlab inspect -t Palo_Nexus_vPC_LACP_PoC_001.clab.yml
+
+Expected nodes:
+  n9k-01
+  n9k-02
+  pa-01
+  mt-inside
+  mt-outside
+
+IMPORTANT:
+The Containerlab PA-VM documentation says the PA-VM can take about 8 minutes
+to fully boot.
+
+Monitor the PA:
+
+  docker logs -f clab-palo-nexus-vpc-lacp-poc-pa-01
+
+Wait until PAN-OS is ready before configuring the data plane.
+
+================================================================
+3. VERIFY NEXUS-01 VERSION
+================================================================
+
+Connect to N9K-01:
+
+  ssh admin@172.30.30.11
+
+Run:
+
+  show version
+
+Expected:
+  NX-OS 10.3(5)
+
+================================================================
+4. VERIFY NEXUS-02 VERSION
+================================================================
+
+Connect to N9K-02:
+
+  ssh admin@172.30.30.12
+
+Run:
+
+  show version
+
+Expected:
+  NX-OS 10.3(5)
+
+================================================================
+5. VERIFY vPC/LACP FEATURES
+================================================================
+
+On BOTH Nexus switches:
+
+  show feature | include vpc|lacp
+
+Expected:
+  vPC = enabled
+  LACP = enabled
+
+The startup configs already enable them.
+
+================================================================
+6. VERIFY PEER-KEEPALIVE
+================================================================
+
+On N9K-01:
+
+  show vpc peer-keepalive
+
+On N9K-02:
+
+  show vpc peer-keepalive
+
+Expected:
+  peer is alive
+
+Test the dedicated L3 keepalive path.
+
+N9K-01:
+
+  ping 10.255.0.2 vrf VPC-KA
+
+N9K-02:
+
+  ping 10.255.0.1 vrf VPC-KA
+
+If this fails, check:
+
+  show interface Ethernet1/3
+  show ip route vrf VPC-KA
+
+Do not continue until the keepalive path is healthy.
+
+================================================================
+7. VERIFY THE vPC PEER-LINK
+================================================================
+
+Run on N9K-01:
+
+  show port-channel summary
+
+Expected:
+  Po100 is up.
+
+Then:
+
+  show vpc brief
+
+Expected:
+- peer adjacency = formed/up
+- peer-link = up
+
+Repeat on N9K-02.
+
+Check consistency:
+
+  show vpc consistency-parameters global
+
+Expected:
+No Type-1 consistency failure preventing the vPC from becoming operational.
+
+================================================================
+8. VERIFY THE DOWNSTREAM vPCs
+================================================================
+
+On BOTH Nexus:
+
+  show vpc brief
+
+Expected vPC IDs:
+  20
+  21
+  30
+  40
+
+These IDs intentionally match on both Nexus peers.
+
+Then:
+
+  show port-channel summary
+
+Expected:
+  Po20
+  Po21
+  Po30
+  Po40
+
+The PA-facing channels may not yet be fully bundled until the PA AE/LACP
+configuration is completed. The client-side vPCs should be able to form once
+the Linux bonds are up.
+
+================================================================
+9. VERIFY THE CLIENT LACP BONDS
+================================================================
+
+Inside client:
+
+  docker exec -it clab-palo-nexus-vpc-lacp-poc-mt-inside bash
+
+Run:
+
+  ip -br addr show bond0
+  cat /proc/net/bonding/bond0
+
+Expected:
+  bond0 = 10.100.100.10/24
+  mode = IEEE 802.3ad
+  two slaves = eth1 and eth2
+
+Outside client:
+
+  docker exec -it clab-palo-nexus-vpc-lacp-poc-mt-outside bash
+
+Run:
+
+  ip -br addr show bond0
+  cat /proc/net/bonding/bond0
+
+Expected:
+  bond0 = 10.200.200.10/24
+  mode = IEEE 802.3ad
+  two slaves = eth1 and eth2
+
+================================================================
+10. CONFIGURE THE PALO ALTO
+================================================================
+
+Open the PA management UI:
+
+  https://172.30.30.13
+
+Or connect to CLI:
+
+  ssh admin@172.30.30.13
+
+Verify PAN-OS:
+
+  show system info
+
+Expected:
+  PAN-OS 11.2.x
+
+Record the exact version.
+
+================================================================
+11. CREATE VIRTUAL ROUTER
+================================================================
+
+GUI:
+
+  Network
+    > Virtual Routers
+      > Add
+
+Name:
+
+  VR-POC
+
+Save.
+
+WHY?
+The PA has two Layer 3 AE interfaces and must route between them. Both AEs
+will use the same virtual router.
+
+================================================================
+12. CREATE SECURITY ZONES
+================================================================
+
+GUI:
+
+  Network
+    > Zones
+      > Add
+
+Create:
+
+  INSIDE
+    Type = Layer3
+
+  OUTSIDE
+    Type = Layer3
+
+Do not add IP addressing to the zones. Interfaces will be associated later.
+
+================================================================
+13. CREATE AE1 — INSIDE
+================================================================
+
+GUI:
+
+  Network
+    > Interfaces
+      > Ethernet
+        > Add Aggregate Group
+
+Configure:
+
+  Interface Name: ae1
+  Interface Type: Layer3
+
+Layer 3 settings:
+
+  Virtual Router: VR-POC
+  Security Zone: INSIDE
+  IPv4 Address: 10.100.100.1/24
+
+LACP settings:
+
+  Enable LACP: yes
+  Mode: Active
+  Transmission Rate: Fast
+  Max Interfaces: 2
+
+Optional:
+  Fast Failover = enabled for the failure test
+
+WHY ACTIVE?
+Palo Alto recommends one peer be Active and the other Passive. Active is used
+here so the PA initiates LACP. The Nexus side is also configured as Active;
+Active/Active is valid. Do not configure Passive/Passive.
+
+================================================================
+14. ASSIGN AE1 MEMBERS
+================================================================
+
+Select Ethernet1/1.
+
+Configure:
+  Interface Type = Aggregate Ethernet
+  Aggregate Group = ae1
+
+Select Ethernet1/2.
+
+Configure:
+  Interface Type = Aggregate Ethernet
+  Aggregate Group = ae1
+
+The result must be:
+
+  ae1
+   +-- ethernet1/1
+   +-- ethernet1/2
+
+IMPORTANT:
+Do NOT put the IP address directly on Ethernet1/1 or Ethernet1/2.
+The Layer 3 IP belongs on ae1.
+
+================================================================
+15. CREATE AE2 — OUTSIDE
+================================================================
+
+Create another Aggregate Group:
+
+  Interface Name: ae2
+  Interface Type: Layer3
+
+Configure:
+
+  Virtual Router: VR-POC
+  Security Zone: OUTSIDE
+  IPv4 Address: 10.200.200.1/24
+
+LACP:
+
+  Enable LACP: yes
+  Mode: Active
+  Transmission Rate: Fast
+  Max Interfaces: 2
+
+================================================================
+16. ASSIGN AE2 MEMBERS
+================================================================
+
+Ethernet1/3:
+  Interface Type = Aggregate Ethernet
+  Aggregate Group = ae2
+
+Ethernet1/4:
+  Interface Type = Aggregate Ethernet
+  Aggregate Group = ae2
+
+Expected:
+
+  ae2
+   +-- ethernet1/3
+   +-- ethernet1/4
+
+================================================================
+17. COMMIT THE PA INTERFACE CONFIG
+================================================================
+
+Review the pending change first.
+
+In CLI:
+
+  show config diff
+
+Then commit from GUI or CLI.
+
+Suggested commit description:
+
+  POC-001 PA AE/LACP baseline
+
+================================================================
+18. VERIFY PA AE1
+================================================================
+
+CLI:
+
+  show interface ae1
+
+Expected key items:
+- operation mode = layer3
+- aggregate group members = 2
+- ethernet1/1
+- ethernet1/2
+- IP = 10.100.100.1/24
+- zone = INSIDE
+- virtual router = VR-POC
+
+Then:
+
+  show lacp aggregate-ethernet ae1
+
+Expected:
+LACP is operational.
+
+================================================================
+19. VERIFY PA AE2
+================================================================
+
+Run:
+
+  show interface ae2
+
+Expected:
+- operation mode = layer3
+- members = ethernet1/3 + ethernet1/4
+- IP = 10.200.200.1/24
+- zone = OUTSIDE
+- virtual router = VR-POC
+
+Then:
+
+  show lacp aggregate-ethernet ae2
+
+Expected:
+LACP is operational.
+
+================================================================
+20. NOW VERIFY NEXUS LACP TO PA
+================================================================
+
+On N9K-01:
+
+  show lacp neighbor
+  show port-channel summary
+
+On N9K-02:
+
+  show lacp neighbor
+  show port-channel summary
+
+Expected PA-facing channels:
+
+  Po20 = vPC20 = PA AE1
+  Po21 = vPC21 = PA AE2
+
+Each should have one member on N9K-01 and one member on N9K-02.
+
+Conceptually:
+
+  PA AE1
+  /    \
+ e1/1  e1/2
+  |      |
+N9K-01 N9K-02
+  \      /
+  vPC20
+
+and similarly for AE2 / vPC21.
+
+================================================================
+21. VERIFY AE/IP CONNECTIVITY
+================================================================
+
+Inside client:
+
+  ping -c 5 10.100.100.1
+
+Expected:
+Success.
+
+Outside client:
+
+  ping -c 5 10.200.200.1
+
+Expected:
+Success.
+
+If the gateway ping fails, troubleshoot only one layer at a time:
+
+  Client bond
+    -> Nexus vPC
+    -> VLAN
+    -> PA AE
+    -> PA IP
+
+Useful Nexus commands:
+
+  show port-channel summary
+  show vpc brief
+  show interface Ethernet1/4
+  show interface Ethernet1/6
+
+Useful PA commands:
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+================================================================
+22. CREATE THE FIREWALL SECURITY POLICY
+================================================================
+
+GUI:
+
+  Policies
+    > Security
+      > Add
+
+Name:
+
+  ALLOW-INSIDE-OUTSIDE
+
+Source Zone:
+  INSIDE
+
+Destination Zone:
+  OUTSIDE
+
+Source:
+  any
+
+Destination:
+  any
+
+Application:
+  any
+
+Service:
+  any
+
+Action:
+  Allow
+
+Enable session-end logging if desired.
+
+Commit.
+
+No NAT is required for this PoC.
+
+================================================================
+23. TEST END-TO-END TRAFFIC
+================================================================
+
+From MT-INSIDE:
+
+  ping -c 5 10.200.200.10
+
+Expected:
+Success.
+
+Traffic path:
+
+MT-INSIDE
+   |
+   | VLAN100 / vPC30
+   |
+Nexus vPC pair
+   |
+   | vPC20 / LACP
+   |
+PA AE1 — INSIDE
+   |
+PA routing
+   |
+security policy
+   |
+PA AE2 — OUTSIDE
+   |
+   | vPC21 / LACP
+   |
+Nexus vPC pair
+   |
+   | VLAN200 / vPC40
+   |
+MT-OUTSIDE
+
+================================================================
+24. VERIFY THE SESSION ON PA
+================================================================
+
+GUI:
+
+  Monitor
+    > Traffic
+
+Filter:
+
+  (addr.src eq 10.100.100.10) and (addr.dst eq 10.200.200.10)
+
+Expected:
+A session is logged and allowed by:
+  ALLOW-INSIDE-OUTSIDE
+
+This is stronger evidence than a successful ping alone.
+
+================================================================
+25. GENERATE TCP TRAFFIC
+================================================================
+
+Use the multitool containers for additional traffic.
+
+From MT-INSIDE, try one of:
+
+  nc -vz 10.200.200.10 80
+
+or:
+
+  curl -v http://10.200.200.10
+
+If the outside image does not have a listener on port 80, use ping and other
+available tools instead.
+
+The purpose is to generate a stateful flow through the PA.
+
+================================================================
+26. FAILURE TEST — AE1 MEMBER ON N9K-01
+================================================================
+
+Start continuous ping from MT-INSIDE:
+
+  ping 10.200.200.10
+
+Now on N9K-01:
+
+  configure terminal
+  interface Ethernet1/4
+  shutdown
+
+Observe immediately:
+
+  show port-channel summary
+  show vpc brief
+  show lacp neighbor
+
+On the PA:
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+Expected:
+- AE1 stays up.
+- One AE1 member is down.
+- The other AE1 member remains operational.
+- Traffic may lose a few packets during convergence, then continues.
+
+Restore:
+
+  interface Ethernet1/4
+  no shutdown
+
+================================================================
+27. FAILURE TEST — AE1 MEMBER ON N9K-02
+================================================================
+
+Repeat the same test:
+
+  N9K-02
+    interface Ethernet1/4
+    shutdown
+
+Expected:
+AE1 remains operational through N9K-01.
+
+Restore with:
+
+  no shutdown
+
+================================================================
+28. FAILURE TEST — AE2
+================================================================
+
+Repeat on:
+
+  N9K-01 Ethernet1/5
+  N9K-02 Ethernet1/5
+
+Expected:
+AE2 remains operational with one remaining member.
+
+Restore both links after testing.
+
+================================================================
+29. FAILURE TEST — CLIENT vPC
+================================================================
+
+This validates the downstream vPC itself.
+
+On N9K-01:
+
+  interface Ethernet1/6
+  shutdown
+
+On MT-INSIDE:
+
+  cat /proc/net/bonding/bond0
+
+Expected:
+One member fails but bond0 remains operational via the N9K-02 member.
+
+Restore:
+
+  interface Ethernet1/6
+  no shutdown
+
+Repeat with N9K-02 Ethernet1/6.
+
+Repeat the same process on Ethernet1/7 for MT-OUTSIDE.
+
+================================================================
+30. FINAL NEXUS VERIFICATION
+================================================================
+
+On both Nexus:
+
+  show vpc brief
+  show vpc peer-keepalive
+  show vpc consistency-parameters global
+  show port-channel summary
+  show lacp neighbor
+  show running-config vpc
+
+Expected:
+- vPC peer = up
+- peer-link = up
+- keepalive = alive
+- consistency = clean
+- Po20/Po21 = up
+- Po30/Po40 = up
+- LACP neighbors present
+
+================================================================
+31. FINAL PA VERIFICATION
+================================================================
+
+Run:
+
+  show system info
+  show interface all
+  show interface ae1
+  show interface ae2
+  show lacp aggregate-ethernet ae1
+  show lacp aggregate-ethernet ae2
+
+In GUI:
+
+  Monitor > Traffic
+
+Confirm at least one successful INSIDE -> OUTSIDE session.
+
+================================================================
+32. TROUBLESHOOTING — PA AE DOWN
+================================================================
+
+Check the PA:
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+Check the PA member assignments in:
+
+  Network > Interfaces > Ethernet
+
+Confirm:
+  ethernet1/1 -> ae1
+  ethernet1/2 -> ae1
+
+Then check Nexus:
+
+  show port-channel summary
+  show lacp neighbor
+  show vpc brief
+
+Common causes:
+- PA physical port not assigned to AE.
+- LACP disabled on PA.
+- Nexus physical interfaces not in the same Po.
+- vPC IDs differ between peers.
+- vPC peer-link is down.
+- one side is Passive and the other is also Passive.
+
+================================================================
+33. TROUBLESHOOTING — PA AE UP, BUT TRAFFIC FAILS
+================================================================
+
+Step 1:
+Ping PA AE1 IP from MT-INSIDE.
+
+Step 2:
+Ping PA AE2 IP from MT-OUTSIDE.
+
+Step 3:
+Verify both AEs use:
+  VR-POC
+
+Step 4:
+Verify zones:
+  AE1 -> INSIDE
+  AE2 -> OUTSIDE
+
+Step 5:
+Verify security policy:
+  INSIDE -> OUTSIDE = allow
+
+Step 6:
+Check Monitor > Traffic.
+
+Step 7:
+Check client default gateways:
+  MT-INSIDE -> 10.100.100.1
+  MT-OUTSIDE -> 10.200.200.1
+
+================================================================
+34. IMPORTANT VPC CONCEPT
+================================================================
+
+The two Nexus peers are separate switches, but vPC presents them to the
+PA downstream device as one logical port-channel system.
+
+For AE1:
+
+  PA ethernet1/1 ---- N9K-01
+  PA ethernet1/2 ---- N9K-02
+                \\    /
+                 vPC20
+
+For AE2:
+
+  PA ethernet1/3 ---- N9K-01
+  PA ethernet1/4 ---- N9K-02
+                \\    /
+                 vPC21
+
+That is why one PA AE can contain members physically connected to two
+separate Nexus chassis.
+
+================================================================
+35. IMPORTANT AE CONCEPT
+================================================================
+
+An AE interface is the logical interface.
+
+Example:
+
+  ae1
+   |
+   +-- ethernet1/1
+   +-- ethernet1/2
+
+AE1 owns:
+- the IP address
+- the zone
+- the virtual router association
+- LACP state
+
+The member ports do not each get their own routed IP address.
+
+================================================================
+36. IMPORTANT FAILURE CONCEPT
+================================================================
+
+Normal:
+
+  AE1
+  | \
+  |  \
+ N9K1 N9K2
+  |      |
+  +-- LACP --+
+
+One member fails:
+
+  AE1
+  | X
+  |   \
+ N9K1  N9K2
+        |
+      ACTIVE
+
+The logical AE stays up as long as the remaining member is operational.
+
+This is one of the main reasons to use AE/LACP.
+
+================================================================
+37. FINAL ACCEPTANCE CHECKLIST
+================================================================
+
+NEXUS
+[ ] vPC domain 10 operational
+[ ] peer-keepalive alive
+[ ] peer-link Po100 up
+[ ] consistency clean
+[ ] vPC20 up
+[ ] vPC21 up
+[ ] vPC30 up
+[ ] vPC40 up
+[ ] LACP neighbors visible
+
+PALO ALTO
+[ ] PAN-OS 11.2.x confirmed
+[ ] AE1 exists
+[ ] AE2 exists
+[ ] AE1 members = e1/1 + e1/2
+[ ] AE2 members = e1/3 + e1/4
+[ ] AE1 LACP operational
+[ ] AE2 LACP operational
+[ ] AE1 IP = 10.100.100.1/24
+[ ] AE2 IP = 10.200.200.1/24
+[ ] AE1 zone = INSIDE
+[ ] AE2 zone = OUTSIDE
+[ ] both AEs use VR-POC
+[ ] security policy committed
+
+TRAFFIC
+[ ] MT-INSIDE -> 10.100.100.1 works
+[ ] MT-OUTSIDE -> 10.200.200.1 works
+[ ] MT-INSIDE -> MT-OUTSIDE works
+[ ] Traffic Log shows allowed session
+[ ] AE1 member failure tested
+[ ] AE2 member failure tested
+[ ] client vPC member failure tested
+
+================================================================
+OFFICIAL DOCUMENTATION BASIS
+================================================================
+
+PALO ALTO NETWORKS
+1. Aggregate Ethernet (AE) Interface Group — PAN-OS 11.2
+   https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface-group
+
+2. Aggregate Ethernet (AE) Interface — PAN-OS 11.2
+   https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface
+
+3. PAN-OS 11.2 Configure CLI Command Hierarchy
+   https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/cli-command-hierarchy/pan-os-11-2-configure-cli-command-hierarchy
+
+4. PAN-OS 11.2 CLI Ops Command Hierarchy
+   https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/cli-command-hierarchy/pan-os-11-2-cli-ops-command-hierarchy
+
+5. VM-Series Link Aggregation Control Protocol
+   https://docs.paloaltonetworks.com/vm-series/deployment/private-cloud/set-up-the-vm-series-firewall-on-kvm/install-the-vm-series-firewall-on-kvm/configure-link-aggregation-control-protocol-for-kvm.html
+
+6. PAN-OS 11.1 Virtualization Features — link aggregation introduced
+   https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-release-notes/features-introduced-in-pan-os/virtualization-features
+
+CONTAINERLAB
+7. Palo Alto PA-VM
+   https://containerlab.dev/manual/kinds/vr-pan/
+
+8. Cisco Nexus 9000v
+   https://containerlab.dev/manual/kinds/vr-n9kv/
+
+9. VM-based routers / vrnetlab
+   https://containerlab.dev/manual/vrnetlab/
+
+CISCO
+10. Nexus 9000 vPC configuration
+    https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/104x/configuration/interfaces/cisco-nexus-9000-series-nx-os-interfaces-configuration-guide-release-104x/m_configuring_vpcs_9x.html
+
+================================================================
+END
+================================================================

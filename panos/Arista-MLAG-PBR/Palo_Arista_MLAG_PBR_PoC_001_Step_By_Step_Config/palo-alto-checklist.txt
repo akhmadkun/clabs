@@ -1,0 +1,47 @@
+PALO ALTO — PO C-001 DATA-PLANE CHECKLIST
+
+GUI OBJECTS
+-----------
+Virtual Router:
+  VR-POC
+
+Zones:
+  INSIDE
+  OUTSIDE
+
+Aggregate Ethernet:
+  ae1
+  LACP Active
+  Two members
+
+Subinterface:
+  ae1.100
+    Tag 100
+    10.100.100.254/24
+    VR-POC
+    INSIDE
+
+  ae1.200
+    Tag 200
+    10.200.200.254/24
+    VR-POC
+    OUTSIDE
+
+Security Policy:
+  ALLOW-INSIDE-OUTSIDE
+  Source Zone: INSIDE + OUTSIDE
+  Destination Zone: INSIDE + OUTSIDE
+  Source Address: any
+  Destination Address: any
+  Application: any
+  Service: any
+  Action: allow
+  Log at Session End: enabled
+  No NAT
+
+PA CLI VERIFY
+-------------
+show interface ae1
+show lacp aggregate-ethernet ae1
+show session all filter source 10.100.100.10 destination 10.200.200.10
+show session all filter source 10.200.200.10 destination 10.100.100.10

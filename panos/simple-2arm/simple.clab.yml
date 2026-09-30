@@ -8,7 +8,7 @@ topology:
     linux:
       image: ghcr.io/srl-labs/network-multitool:latest
     paloalto_panos:
-      image: arthurk99/paloalto-pa-vm:10.1.0
+      image: vrnetlab/paloalto_pa-vm:11.2.5
   nodes:
     ngfw:
       kind: paloalto_panos

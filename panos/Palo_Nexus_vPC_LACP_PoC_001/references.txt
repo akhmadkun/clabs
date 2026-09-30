@@ -1,0 +1,87 @@
+OFFICIAL DOCUMENTATION REFERENCES
+===================================
+
+PALO ALTO NETWORKS
+------------------
+1. Aggregate Ethernet (AE) Interface Group — PAN-OS 11.2
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface-group
+
+Relevant:
+- IEEE 802.1AX AE group behavior
+- Layer 3 AE
+- LACP enable/mode/rate/max interfaces
+- one active + one passive recommendation
+- Fast Failover
+- HA passive pre-negotiation fields
+
+2. Aggregate Ethernet (AE) Interface — PAN-OS 11.2
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface
+
+Relevant:
+- Create AE group first
+- Assign physical Ethernet interfaces to the AE group
+- Interface member consistency
+
+3. PAN-OS 11.2 Configure CLI Command Hierarchy
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/cli-command-hierarchy/pan-os-11-2-configure-cli-command-hierarchy
+
+Relevant:
+- AE configuration commands
+- LACP configuration hierarchy
+- Layer 3 interface hierarchy
+- zone/security-policy hierarchy
+
+4. PAN-OS 11.2 CLI Ops Command Hierarchy
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/cli-command-hierarchy/pan-os-11-2-cli-ops-command-hierarchy
+
+Relevant:
+- show lacp aggregate-ethernet <value>
+
+5. VM-Series Link Aggregation Control Protocol — KVM
+https://docs.paloaltonetworks.com/vm-series/deployment/private-cloud/set-up-the-vm-series-firewall-on-kvm/install-the-vm-series-firewall-on-kvm/configure-link-aggregation-control-protocol-for-kvm.html
+
+Relevant:
+- VM-Series link aggregation/LACP
+- AE redundancy and load balancing
+- documented CLI commands for AE and member assignment
+- prerequisites listed by Palo Alto
+
+6. PAN-OS 11.1 Virtualization Features
+https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-release-notes/features-introduced-in-pan-os/virtualization-features
+
+Relevant:
+- VM-Series link aggregation introduced in PAN-OS 11.1.0
+
+CONTAINERLAB
+------------
+7. Palo Alto PA-VM
+https://containerlab.dev/manual/kinds/vr-pan/
+
+8. Cisco Nexus 9000v
+https://containerlab.dev/manual/kinds/vr-n9kv/
+
+9. VM-based routers / vrnetlab
+https://containerlab.dev/manual/vrnetlab/
+
+CISCO
+-----
+10. Cisco Nexus 9000 vPC configuration
+https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/104x/configuration/interfaces/cisco-nexus-9000-series-nx-os-interfaces-configuration-guide-release-104x/m_configuring_vpcs_9x.html
+
+Relevant:
+- vPC peer-link
+- peer-keepalive
+- downstream vPC port-channels
+- LACP on vPC
+- verification commands
+
+LAB-SPECIFIC VALUES
+-------------------
+The following are design choices for this PoC only:
+- vPC domain 10
+- Po100
+- VLAN 100/200
+- vPC 20/21/30/40
+- 172.30.30.0/24 management
+- 10.100.100.0/24 inside
+- 10.200.200.0/24 outside

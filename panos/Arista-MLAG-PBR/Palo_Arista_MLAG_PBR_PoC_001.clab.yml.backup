@@ -1,0 +1,53 @@
+name: palo-arista-mlag-pbr-poc
+prefix: ""
+
+mgmt:
+  network: palo-arista-mlag-pbr-mgmt
+  ipv4-subnet: 172.30.40.0/24
+
+topology:
+  nodes:
+    arista-01:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.30.40.11
+      startup-config: ./configs/ceos/arista-01.cfg
+    arista-02:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.30.40.12
+      startup-config: ./configs/ceos/arista-02.cfg
+    pa-01:
+      kind: paloalto_panos
+      image: vrnetlab/paloalto_pa-vm:11.2.5
+      mgmt-ipv4: 172.30.40.13
+    mt-inside-pbr:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      binds:
+        - ./configs/clients/inside-pbr-init.sh:/config/inside-pbr-init.sh:ro
+      exec:
+        - bash /config/inside-pbr-init.sh
+    mt-inside-normal:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      binds:
+        - ./configs/clients/inside-normal-init.sh:/config/inside-normal-init.sh:ro
+      exec:
+        - bash /config/inside-normal-init.sh
+    mt-outside:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      binds:
+        - ./configs/clients/outside-init.sh:/config/outside-init.sh:ro
+      exec:
+        - bash /config/outside-init.sh
+  links:
+    - endpoints: ["arista-01:eth1", "arista-02:eth1"]
+    - endpoints: ["arista-01:eth2", "arista-02:eth2"]
+    - endpoints: ["arista-01:eth3", "arista-02:eth3"]
+    - endpoints: ["arista-01:eth4", "pa-01:eth1"]
+    - endpoints: ["arista-02:eth4", "pa-01:eth2"]
+    - endpoints: ["arista-01:eth5", "mt-inside-pbr:eth1"]
+    - endpoints: ["arista-01:eth6", "mt-inside-normal:eth1"]
+    - endpoints: ["arista-02:eth5", "mt-outside:eth1"]

@@ -1,0 +1,962 @@
+POC-001 — STEP-BY-STEP CONFIGURATION GUIDE
+Palo Alto + Arista MLAG + LACP + Selective PBR
+
+Lab version
+-----------
+Arista cEOS: 4.35.0F
+Palo Alto VM-Series / PAN-OS: 11.2.5
+
+PURPOSE
+-------
+Build the PoC from two blank Arista switches, then integrate them with
+one Palo Alto Aggregate Ethernet (AE1).
+
+The lab proves:
+
+  1. Arista MLAG (vPC-like redundancy)
+  2. VARP gateway on both Arista switches
+  3. LACP from Palo Alto to both Arista peers
+  4. Normal routing without the firewall in the path
+  5. Selective PBR for one specific flow
+  6. Reverse PBR for the selected return flow
+  7. Palo Alto security-policy enforcement
+  8. MLAG/LACP member failure and recovery
+
+IMPORTANT
+---------
+This guide follows the SUCCESSFUL PoC design that was actually tested.
+
+It intentionally uses:
+  - VLAN 100 = INSIDE
+  - VLAN 200 = OUTSIDE
+  - PA ae1.100 = 10.100.100.254/24
+  - PA ae1.200 = 10.200.200.254/24
+  - Forward PBR next-hop = 10.100.100.254
+  - Reverse PBR next-hop = 10.200.200.254
+
+A later PoC can move to dedicated /30 transit VLANs. Do not change the
+addressing in this guide when reproducing PoC-001.
+
+TOPOLOGY
+--------
+                           +----------------------+
+                           |      Palo Alto       |
+                           |       PA-01          |
+                           |        AE1           |
+                           |   ae1.100 / ae1.200  |
+                           +----------+-----------+
+                                      ||
+                                  LACP / AE1
+                              =================
+                               /              \
+                              /                \
+                     +-------+-------+  +-------+-------+
+                     |   ARISTA-01   |  |   ARISTA-02   |
+                     |    MLAG PEER  |  |    MLAG PEER  |
+                     +-------+-------+  +-------+-------+
+                        ||  Eth1/2        Eth1/2  ||
+                        +==========================+
+                              MLAG PEER-LINK
+                                  Po100
+
+VLAN 100:
+  ARISTA VARP 10.100.100.1/24
+  ARISTA-01 10.100.100.2/24
+  ARISTA-02 10.100.100.3/24
+  PA ae1.100 10.100.100.254/24
+  mt-inside-pbr     10.100.100.10/24
+  mt-inside-normal  10.100.100.11/24
+
+VLAN 200:
+  ARISTA VARP 10.200.200.1/24
+  ARISTA-01 10.200.200.2/24
+  ARISTA-02 10.200.200.3/24
+  PA ae1.200 10.200.200.254/24
+  mt-outside        10.200.200.10/24
+
+MLAG control:
+  VLAN 4094
+  ARISTA-01 Vlan4094 = 172.31.254.1/30
+  ARISTA-02 Vlan4094 = 172.31.254.2/30
+  Po100 = Eth1 + Eth2 on each Arista
+
+PA downstream MLAG:
+  ARISTA-01 Eth4 -> PA Ethernet1/1
+  ARISTA-02 Eth4 -> PA Ethernet1/2
+  Arista Po20 / MLAG ID 20
+  PA AE1
+
+CLIENT PORTS
+------------
+ARISTA-01:
+  Eth5 -> mt-inside-pbr
+  Eth6 -> mt-inside-normal
+
+ARISTA-02:
+  Eth5 -> mt-outside
+
+ETHERNET3
+---------
+The successful lab topology had an Eth3 connection between ARISTA-01 and
+ARISTA-02, but that link is not used by the final working configuration.
+Leave Eth3 unconfigured unless you have a separate purpose for it.
+
+================================================================
+PART 1 — ARISTA-01 CONFIGURATION FROM BLANK
+================================================================
+
+Enter enable/config mode:
+
+1. Enable routing:
+2. Create VLANs:
+  - 100 : INSIDE
+  - 200 : OUTSIDE
+  - 4094 : MLAG-PEER (trunk group)
+
+3. Build MLAG peer-link member interfaces:
+  - Eth1 & Eth2
+  - po number : 100
+  - description : MLAG Peer Link
+
+4. Build the peer-link port-channel:
+  - description : MLAG Peer Link
+  - trunk group : MLAG-PEER
+
+5. Build the MLAG local SVI:
+  - create svi for mlag peer
+  - 172.31.254.0/30
+
+
+6. Disable STP for the dedicated MLAG control VLAN:
+
+7. Configure VLAN 100 SVI and VARP:
+  - description : INSIDE GW
+  - gw : 10.100.100.2/24 (ar01), 10.100.100.3/24 (ar02)
+  - varp : 10.100.100.1
+
+8. Configure VLAN 200 SVI and VARP:
+  - description : OUTSIDE GW
+  - gw : 10.200.200.2/24 (ar01), 10.200.200.3/24 (ar02)
+  - varp : 10.200.200.1
+
+9. Configure the common VARP virtual MAC:
+  - mac : 00:1c:73:00:99:99
+
+10. Configure MLAG:
+  - domain : MLAG-PALO
+  - Use MLAG local SVI as source and peer-address
+  - peer link : po100
+
+11. Build the MLAG downlink toward PA using Ethernet4:
+  - description PA-AE1
+  - po and mlag 20
+  - allow vlan INSIDE and OUTSIDE
+
+12. Build inside client ports:
+  - ar01
+    - Eth5 : vlan 100
+    - Eth6 : vlan 100
+  - ar02
+    - Eth5 : vlan 200
+
+13. Exit and save:
+
+  end
+  copy running-config startup-config
+
+14. Verify:
+
+  show ip interface brief
+  show port-channel summary
+  show mlag
+  show mlag config-sanity
+  show mlag interfaces
+
+15. Clients should be able to ping their respective VARP Gateway
+
+
+================================================================
+PART 3 — VERIFY MLAG BEFORE TOUCHING PA
+================================================================
+
+On ARISTA-01:
+
+  ping 172.31.254.2
+
+On ARISTA-02:
+
+  ping 172.31.254.1
+
+On BOTH:
+
+  show mlag
+  show mlag config-sanity
+  show mlag interface
+  show port-channel dense
+
+Expected:
+
+  MLAG peer state: Active
+
+and:
+
+  Po100 = up
+  Po20  = down
+  MLAG 20 = present
+
+Do not continue until the MLAG peer is healthy.
+
+================================================================
+PART 4 — PALO ALTO INITIAL NETWORK OBJECTS
+================================================================
+
+ASSUMPTION
+----------
+PA management is already configured and reachable.
+Open:
+
+  https://192.168.122.10 (KVM Palo)
+
+The PA dataplane will use:
+
+  AE1
+    ae1.100 = INSIDE
+    ae1.200 = OUTSIDE
+
+1. Create virtual router
+
+  Name: VR-POC
+
+2. Create zones
+
+  Name:
+    INSIDE
+    OUTSIDE
+  Type: Layer3
+
+
+================================================================
+PART 5 — CREATE PA AGGREGATE ETHERNET AE1
+================================================================
+
+Create:
+
+  ae1
+
+Set:
+
+  Interface Type = Layer3
+  Enable LACP = Yes
+  LACP Mode = Active
+  Transmission Rate = Fast
+
+Use two member interfaces.
+
+Assign:
+
+  Ethernet1/1 -> AE1
+  Ethernet1/2 -> AE1
+
+================================================================
+PART 6 — CREATE PA ae1.100
+================================================================
+
+GUI:
+
+  Network > Interfaces > Ethernet
+  select AE1
+  Add Subinterface
+
+Interface:
+
+  ae1.100
+
+Set:
+
+  Tag = 100
+  Interface Type = Layer3
+  IPv4 = 10.100.100.254/24
+  Virtual Router = VR-POC
+  Security Zone = INSIDE
+
+Save.
+
+================================================================
+PART 7 — CREATE PA ae1.200
+================================================================
+
+Create:
+
+  ae1.200
+
+Set:
+
+  Tag = 200
+  Interface Type = Layer3
+  IPv4 = 10.200.200.254/24
+  Virtual Router = VR-POC
+  Security Zone = OUTSIDE
+
+Save.
+
+================================================================
+PART 8 — COMMIT PA BASELINE
+================================================================
+
+Before commit, review the pending changes.
+
+Then:
+
+  Commit
+
+Optional CLI verification after commit:
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+Expected:
+  - AE1 operational
+  - both member interfaces participating in LACP
+
+On the Arista side:
+
+  show port-channel summary
+  show lacp neighbor
+  show mlag interfaces
+
+Expected:
+  - Po20 up
+  - LACP neighbor is PA
+  - MLAG ID 20 is operational
+
+================================================================
+PART 9 — TEST PA SUBINTERFACES
+================================================================
+
+From inside-pbr client:
+
+  ping -c 5 10.100.100.254
+
+From outside client:
+
+  ping -c 5 10.200.200.254
+
+Expected:
+  Both PA subinterface IPs reply.
+
+If either fails, STOP and fix:
+  - AE/LACP
+  - VLAN 100/200 allowed on Po20
+  - PA subinterface VLAN tag
+  - PA zone
+  - PA virtual router
+  - IP addressing
+
+================================================================
+PART 10 — CREATE PA SECURITY POLICY
+================================================================
+
+For this PoC, use one simple lab rule.
+
+GUI:
+
+  Policies > Security > Add
+
+Name:
+
+  ALLOW-INSIDE-OUTSIDE
+
+SOURCE TAB
+----------
+Source Zone:
+
+  INSIDE
+  OUTSIDE
+
+Source Address:
+
+  any
+
+DESTINATION TAB
+---------------
+Destination Zone:
+
+  INSIDE
+  OUTSIDE
+
+Destination Address:
+
+  any
+
+APPLICATION
+-----------
+  any
+
+SERVICE / URL CATEGORY
+----------------------
+  Service = any
+
+ACTION
+------
+  Allow
+
+LOGGING
+-------
+  Log at Session End = enabled
+
+NAT
+---
+No NAT is configured for this PoC.
+
+Commit.
+
+IMPORTANT
+---------
+This rule is deliberately broad because this is a lab proving datapath
+and PBR behavior. In a production policy base, narrow source/destination
+zones, addresses, applications, and services to the required traffic.
+
+================================================================
+PART 11 — VERIFY NORMAL ROUTING BEFORE PBR
+================================================================
+
+At this stage, PBR does not exist.
+
+Test:
+
+  10.100.100.10 -> 10.200.200.10
+  10.100.100.11 -> 10.200.200.10
+
+Both should work through normal Arista routing.
+
+From mt-inside-pbr:
+
+  ping -c 10 10.200.200.10
+
+From mt-inside-normal:
+
+  ping -c 10 10.200.200.10
+
+Expected:
+  Both succeed.
+
+This gives us the baseline.
+
+The PA should not be required for these normal routed flows.
+
+================================================================
+PART 12 — CONFIGURE FORWARD PBR ON BOTH ARISTAS
+================================================================
+
+The selected flow is:
+
+  source = 10.100.100.10
+  destination = 10.200.200.10
+
+The PBR next-hop is:
+
+  10.100.100.254
+
+ARISTA-01 + ARISTA-02:
+
+1. ACL PBR
+2. Class map pbr : PBR
+3. Policy map pbr : PBR, nexthop 10.100.100.254
+4. Apply to VLAN 100 ingress
+
+================================================================
+PART 13 — CONFIGURE RETURN PBR ON BOTH ARISTAS
+================================================================
+
+The selected reverse flow is:
+
+  source = 10.200.200.10
+  destination = 10.100.100.10
+
+The reverse PBR next-hop is:
+
+  10.200.200.254
+
+
+ARISTA-01 + ARISTA-02:
+
+1. ACL PBR-RETURN
+2. Class map pbr : PBR-RETURN
+3. Policy map pbr : PBR-RETURN, nexthop 10.200.200.254
+4. Apply to VLAN 200 ingress
+
+================================================================
+PART 14 — VERIFY PBR CONFIGURATION
+================================================================
+
+On BOTH Aristas:
+
+  show class-map type pbr PBR-FWD-CMAP
+  show class-map type pbr PBR-RETURN-CMAP
+
+  show policy-map type pbr PBR-FWD-PMAP
+  show policy-map type pbr PBR-RETURN-PMAP
+
+  show ip access-lists PBR-FWD
+  show ip access-lists PBR-RETURN
+
+You should see:
+
+FORWARD:
+  10.100.100.10 -> 10.200.200.10
+  set nexthop 10.100.100.254
+  applied on Vlan100 input
+
+RETURN:
+  10.200.200.10 -> 10.100.100.10
+  set nexthop 10.200.200.254
+  applied on Vlan200 input
+
+Also verify the PA next-hops are directly reachable from the relevant
+Arista SVIs:
+
+  show ip route 10.100.100.254
+  show ip route 10.200.200.254
+
+================================================================
+PART 15 — TEST SELECTIVE PBR
+================================================================
+
+TEST A — SELECTED FLOW
+
+From mt-inside-pbr:
+
+  ping -c 10 10.200.200.10
+
+Expected:
+  - Ping succeeds
+  - The selected traffic crosses PA
+  - PA Traffic log/session shows the flow
+
+In PA GUI:
+
+  Monitor > Traffic
+
+Example filter:
+
+  (addr.src eq 10.100.100.10) and (addr.dst eq 10.200.200.10)
+
+Expected:
+  Session is visible and allowed by ALLOW-INSIDE-OUTSIDE.
+
+TEST B — NON-SELECTED FLOW
+
+From mt-inside-normal:
+
+  ping -c 10 10.200.200.10
+
+Expected:
+  - Ping succeeds
+  - Traffic does NOT need to cross PA
+  - No corresponding PA session for 10.100.100.11 -> 10.200.200.10
+
+This proves the PBR is selective instead of forcing the whole VLAN through
+the firewall.
+
+================================================================
+PART 16 — TEST REVERSE PBR
+================================================================
+
+From mt-outside:
+
+  ping -c 10 10.100.100.10
+
+Expected:
+  - Ping succeeds
+  - Reverse PBR matches
+  - Traffic enters PA from OUTSIDE
+  - PA allows it
+  - PA forwards it toward INSIDE
+
+Control test:
+
+  ping -c 10 10.100.100.11
+
+Expected:
+  - Ping succeeds
+  - This flow is NOT matched by PBR-RETURN
+  - It follows normal routing
+
+This .10/.11 pair is a very useful control test.
+
+================================================================
+PART 17 — PA SESSION VERIFICATION
+================================================================
+
+On PA CLI:
+
+  show session all filter source 10.100.100.10 destination 10.200.200.10
+
+and:
+
+  show session all filter source 10.200.200.10 destination 10.100.100.10
+
+Use the Traffic log in the GUI as the easiest verification.
+
+The point of this check is to prove that only the selected traffic is
+being inserted into the firewall path.
+
+================================================================
+PART 18 — FAILURE / MLAG-LACP TEST
+================================================================
+
+This PoC also has a useful resilience test.
+
+Before the test, start a continuous ping from the selected inside client:
+
+  ping 10.200.200.10
+
+Then on ARISTA-01:
+
+  configure terminal
+  interface Ethernet4
+     shutdown
+     exit
+  end
+
+This removes one PA AE1/MLAG member.
+
+Expected behavior:
+  - There may be a short convergence event
+  - One or more ICMP sequences may be lost during convergence
+  - Traffic should recover through ARISTA-02
+  - PA AE1 should remain operational with the remaining member
+
+Verify:
+
+  show port-channel summary
+  show lacp neighbor
+  show mlag interfaces
+
+Then restore:
+
+  configure terminal
+  interface Ethernet4
+     no shutdown
+     exit
+  end
+
+Verify LACP/MLAG returns to normal.
+
+================================================================
+PART 19 — TROUBLESHOOTING ORDER
+================================================================
+
+If PBR traffic fails, troubleshoot in this order.
+
+1. Arista MLAG
+
+  show mlag
+  show mlag config-sanity
+  show port-channel summary
+  show mlag interfaces
+
+2. Arista PA-facing LACP
+
+  show lacp neighbor
+  show port-channel summary
+
+3. VLANs
+
+  show vlan
+  show interfaces Port-Channel20
+  show running-config interfaces Port-Channel20
+
+Confirm:
+  switchport mode trunk
+  allowed VLANs = 100,200
+
+4. PA AE/LACP
+
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+
+5. PA subinterfaces
+
+Confirm:
+  ae1.100
+    tag 100
+    10.100.100.254/24
+    INSIDE
+    VR-POC
+
+  ae1.200
+    tag 200
+    10.200.200.254/24
+    OUTSIDE
+    VR-POC
+
+6. PBR ACL
+
+  show ip access-lists PBR-FWD
+  show ip access-lists PBR-RETURN
+
+7. PBR policy
+
+  show policy-map type pbr
+
+8. PA security policy
+
+Confirm:
+  source zones = INSIDE + OUTSIDE
+  destination zones = INSIDE + OUTSIDE
+  action = allow
+
+9. PA Traffic log
+
+Look for the exact source/destination pair.
+
+================================================================
+PART 20 — FINAL RUNNING CONFIG REFERENCE
+================================================================
+
+ARISTA-01:
+
+  hostname ARISTA-01
+  ip routing
+
+  vlan 100
+     name INSIDE
+  vlan 200
+     name OUTSIDE
+  vlan 4094
+     name MLAG-PEER
+     trunk group MLAG-PEER
+
+  interface Ethernet1
+     description MLAG PEER-LINK MEMBER 1
+     channel-group 100 mode active
+
+  interface Ethernet2
+     description MLAG PEER-LINK MEMBER 2
+     channel-group 100 mode active
+
+  interface Port-Channel100
+     description MLAG PEER-LINK
+     switchport mode trunk
+     switchport trunk group MLAG-PEER
+
+  interface Vlan4094
+     description MLAG LOCAL INTERFACE
+     ip address 172.31.254.1/30
+     no autostate
+
+  no spanning-tree vlan-id 4094
+
+  interface Vlan100
+     description INSIDE GATEWAY
+     ip address 10.100.100.2/24
+     ip address virtual 10.100.100.1/24
+     service-policy type pbr input PBR-FWD-PMAP
+
+  interface Vlan200
+     description OUTSIDE GATEWAY
+     ip address 10.200.200.2/24
+     ip address virtual 10.200.200.1/24
+     service-policy type pbr input PBR-RETURN-PMAP
+
+  ip virtual-router mac-address 00:1c:73:00:99:99
+
+  mlag configuration
+     domain-id MLAG-PALO-01
+     local-interface Vlan4094
+     peer-address 172.31.254.2
+     peer-link Port-Channel100
+     heartbeat-interval 2500
+
+  interface Ethernet4
+     description PA-AE1 MEMBER
+     channel-group 20 mode active
+
+  interface Port-Channel20
+     description PA-AE1 MLAG DOWNLINK
+     switchport mode trunk
+     switchport trunk allowed vlan 100,200
+     mlag 20
+
+  interface Ethernet5
+     description MT-INSIDE-PBR
+     switchport mode access
+     switchport access vlan 100
+     spanning-tree portfast
+
+  interface Ethernet6
+     description MT-INSIDE-NORMAL
+     switchport mode access
+     switchport access vlan 100
+     spanning-tree portfast
+
+  ip access-list PBR-FWD
+     10 permit ip host 10.100.100.10 host 10.200.200.10
+
+  class-map type pbr match-any PBR-FWD-CMAP
+     10 match ip access-group PBR-FWD
+
+  policy-map type pbr PBR-FWD-PMAP
+     10 class PBR-FWD-CMAP
+        set nexthop 10.100.100.254
+
+  ip access-list PBR-RETURN
+     10 permit ip host 10.200.200.10 host 10.100.100.10
+
+  class-map type pbr match-any PBR-RETURN-CMAP
+     10 match ip access-group PBR-RETURN
+
+  policy-map type pbr PBR-RETURN-PMAP
+     10 class PBR-RETURN-CMAP
+        set nexthop 10.200.200.254
+
+
+ARISTA-02:
+
+  hostname ARISTA-02
+  ip routing
+
+  vlan 100
+     name INSIDE
+  vlan 200
+     name OUTSIDE
+  vlan 4094
+     name MLAG-PEER
+     trunk group MLAG-PEER
+
+  interface Ethernet1
+     description MLAG PEER-LINK MEMBER 1
+     channel-group 100 mode active
+
+  interface Ethernet2
+     description MLAG PEER-LINK MEMBER 2
+     channel-group 100 mode active
+
+  interface Port-Channel100
+     description MLAG PEER-LINK
+     switchport mode trunk
+     switchport trunk group MLAG-PEER
+
+  interface Vlan4094
+     description MLAG LOCAL INTERFACE
+     ip address 172.31.254.2/30
+     no autostate
+
+  no spanning-tree vlan-id 4094
+
+  interface Vlan100
+     description INSIDE GATEWAY
+     ip address 10.100.100.3/24
+     ip address virtual 10.100.100.1/24
+     service-policy type pbr input PBR-FWD-PMAP
+
+  interface Vlan200
+     description OUTSIDE GATEWAY
+     ip address 10.200.200.3/24
+     ip address virtual 10.200.200.1/24
+     service-policy type pbr input PBR-RETURN-PMAP
+
+  ip virtual-router mac-address 00:1c:73:00:99:99
+
+  mlag configuration
+     domain-id MLAG-PALO-01
+     local-interface Vlan4094
+     peer-address 172.31.254.1
+     peer-link Port-Channel100
+     heartbeat-interval 2500
+
+  interface Ethernet4
+     description PA-AE1 MEMBER
+     channel-group 20 mode active
+
+  interface Port-Channel20
+     description PA-AE1 MLAG DOWNLINK
+     switchport mode trunk
+     switchport trunk allowed vlan 100,200
+     mlag 20
+
+  interface Ethernet5
+     description MT-OUTSIDE
+     switchport mode access
+     switchport access vlan 200
+     spanning-tree portfast
+
+  ip access-list PBR-FWD
+     10 permit ip host 10.100.100.10 host 10.200.200.10
+
+  class-map type pbr match-any PBR-FWD-CMAP
+     10 match ip access-group PBR-FWD
+
+  policy-map type pbr PBR-FWD-PMAP
+     10 class PBR-FWD-CMAP
+        set nexthop 10.100.100.254
+
+  ip access-list PBR-RETURN
+     10 permit ip host 10.200.200.10 host 10.100.100.10
+
+  class-map type pbr match-any PBR-RETURN-CMAP
+     10 match ip access-group PBR-RETURN
+
+  policy-map type pbr PBR-RETURN-PMAP
+     10 class PBR-RETURN-CMAP
+        set nexthop 10.200.200.254
+
+================================================================
+KEY CONCEPTS TO REMEMBER
+================================================================
+
+1. MLAG
+   Arista-01 and Arista-02 act as a redundant pair for the PA AE.
+
+2. VARP
+   Both Aristas can own the virtual gateway IP simultaneously.
+
+3. LACP
+   PA AE1 has two physical members:
+     PA Eth1/1 -> ARISTA-01
+     PA Eth1/2 -> ARISTA-02
+
+4. PBR
+   PBR is applied at ingress on the SVI where the packet enters the
+   routing engine.
+
+5. Selective PBR
+   Only the exact .10 -> .10 flow is redirected.
+
+6. Reverse PBR
+   The return direction must also be redirected to the PA because the
+   destination is behind the firewall insertion point.
+
+7. Security Policy
+   A session initiated from OUTSIDE is a new session and must be allowed
+   by the Palo Alto security policy. That is why the tested lab rule has
+   both INSIDE and OUTSIDE in Source Zone and Destination Zone.
+
+8. Normal routing remains
+   PBR does not remove the ordinary connected routes. Non-matching
+   packets still use normal routing.
+
+================================================================
+OFFICIAL DOCUMENTATION BASIS
+================================================================
+
+Arista EOS 4.35.0F — Traffic Management / PBR
+https://www.arista.com/en/um-eos/eos-traffic-management
+
+Arista MLAG
+https://www.arista.com/en/um-eos/eos-multi-chassis-link-aggregation
+
+Arista VARP
+https://www.arista.com/en/um-eos/eos-vrrp-and-varp
+
+Palo Alto PAN-OS 11.2 — Aggregate Ethernet
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface
+
+Palo Alto PAN-OS — Common Building Blocks for Firewall Interfaces
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/common-building-blocks-for-firewall-interfaces
+
+Palo Alto PAN-OS — Basic Security Policy
+https://docs.paloaltonetworks.com/ngfw/getting-started/initial-setup-configuration-ngfws/set-up-a-basic-security-policy
+
+EOF

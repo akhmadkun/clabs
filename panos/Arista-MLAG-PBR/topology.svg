@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800">
+<rect width="100%" height="100%" fill="white"/>
+<text x="640" y="35" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold">PoC-001 — Arista MLAG + Palo AE + Selective PBR</text>
+<text x="640" y="62" text-anchor="middle" font-family="Arial" font-size="16">Normal routing first → selected traffic redirected to Palo</text>
+
+<rect x="70" y="95" width="280" height="110" rx="12" fill="#eef5ff" stroke="#4a78a8" stroke-width="2"/>
+<text x="210" y="132" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">ARISTA-01</text>
+<text x="210" y="162" text-anchor="middle" font-family="Arial" font-size="15">Po100 MLAG Peer-Link</text>
+<text x="210" y="186" text-anchor="middle" font-family="Arial" font-size="15">Po20 / MLAG20 → PA</text>
+
+<rect x="930" y="95" width="280" height="110" rx="12" fill="#eef5ff" stroke="#4a78a8" stroke-width="2"/>
+<text x="1070" y="132" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">ARISTA-02</text>
+<text x="1070" y="162" text-anchor="middle" font-family="Arial" font-size="15">Po100 MLAG Peer-Link</text>
+<text x="1070" y="186" text-anchor="middle" font-family="Arial" font-size="15">Po20 / MLAG20 → PA</text>
+
+<line x1="350" y1="125" x2="930" y2="125" stroke="#333" stroke-width="4"/>
+<line x1="350" y1="180" x2="930" y2="180" stroke="#333" stroke-width="4"/>
+<text x="640" y="155" text-anchor="middle" font-family="Arial" font-size="16">Po100 — MLAG Peer-Link</text>
+
+<rect x="460" y="250" width="360" height="155" rx="14" fill="#fff7e6" stroke="#b8860b" stroke-width="2"/>
+<text x="640" y="288" text-anchor="middle" font-family="Arial" font-size="23" font-weight="bold">PA-VM 11.2.5</text>
+<text x="640" y="318" text-anchor="middle" font-family="Arial" font-size="16">AE1 — LACP Active</text>
+<text x="640" y="347" text-anchor="middle" font-family="Arial" font-size="15">ae1.100 = INSIDE 10.100.100.254</text>
+<text x="640" y="375" text-anchor="middle" font-family="Arial" font-size="15">ae1.200 = OUTSIDE 10.200.200.254</text>
+
+<line x1="350" y1="205" x2="520" y2="270" stroke="#333" stroke-width="3"/>
+<line x1="930" y1="205" x2="760" y2="270" stroke="#333" stroke-width="3"/>
+<text x="385" y="242" font-family="Arial" font-size="14">MLAG20 / LACP</text>
+<text x="895" y="242" text-anchor="end" font-family="Arial" font-size="14">MLAG20 / LACP</text>
+
+<rect x="45" y="505" width="320" height="105" rx="12" fill="#eef9ee" stroke="#4f8a4f" stroke-width="2"/>
+<text x="205" y="540" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">MT-INSIDE-PBR</text>
+<text x="205" y="570" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.10/24</text>
+<text x="205" y="593" text-anchor="middle" font-family="Arial" font-size="14">Selected by PBR</text>
+
+<rect x="45" y="640" width="320" height="105" rx="12" fill="#f7f7f7" stroke="#777" stroke-width="2"/>
+<text x="205" y="675" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">MT-INSIDE-NORMAL</text>
+<text x="205" y="705" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.11/24</text>
+<text x="205" y="728" text-anchor="middle" font-family="Arial" font-size="14">Bypasses PA</text>
+
+<rect x="915" y="505" width="320" height="105" rx="12" fill="#f9eeee" stroke="#a85a5a" stroke-width="2"/>
+<text x="1075" y="540" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">MT-OUTSIDE</text>
+<text x="1075" y="570" text-anchor="middle" font-family="Arial" font-size="15">10.200.200.10/24</text>
+<text x="1075" y="593" text-anchor="middle" font-family="Arial" font-size="14">Destination</text>
+
+<line x1="205" y1="505" x2="205" y2="205" stroke="#4f8a4f" stroke-width="3"/>
+<line x1="205" y1="640" x2="230" y2="205" stroke="#777" stroke-width="3"/>
+<line x1="1075" y1="505" x2="1075" y2="205" stroke="#a85a5a" stroke-width="3"/>
+
+<rect x="395" y="475" width="490" height="190" rx="14" fill="#fafafa" stroke="#777" stroke-width="2"/>
+<text x="640" y="515" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">PHASE 1 — NORMAL</text>
+<text x="640" y="545" text-anchor="middle" font-family="Arial" font-size="15">VLAN100 → VARP → normal routing → VLAN200</text>
+<text x="640" y="572" text-anchor="middle" font-family="Arial" font-size="15">PA connected, but not in forwarding path</text>
+<text x="640" y="618" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">PHASE 2 — PBR</text>
+<text x="640" y="648" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.10 → PBR → PA → 10.200.200.10</text>
+</svg>

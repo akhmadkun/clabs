@@ -1,0 +1,39 @@
+POC-002 QUICK REFERENCE
+========================
+
+N9K-01  mgmt 172.30.30.11
+N9K-02  mgmt 172.30.30.12
+PA-01   mgmt 172.30.30.13
+
+vPC domain 10
+Po100 = peer-link
+Po20 = PA downstream vPC20
+
+PA:
+  AE1
+    ae1.100 VLAN100 IP 10.100.100.254 INSIDE
+    ae1.200 VLAN200 IP 10.200.200.254 OUTSIDE
+
+Clients:
+  selected    10.100.100.10
+  normal      10.100.100.11
+  outside     10.200.200.10
+
+PBR:
+  FWD: 10.100.100.10 -> 10.200.200.10
+       next-hop 10.100.100.254
+  REV: 10.200.200.10 -> 10.100.100.10
+       next-hop 10.200.200.254
+
+Verify:
+  show vpc brief
+  show port-channel summary
+  show lacp neighbor
+  show ip policy
+  show route-map PBR-TO-PA-FWD pbr-statistics
+  show route-map PBR-TO-PA-REV pbr-statistics
+
+PA:
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+  Monitor > Traffic

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="760" viewBox="0 0 1250 760">
+<rect width="1250" height="760" fill="white"/>
+<text x="625" y="38" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold">POC-001 — Palo Alto 11.2.5 + Nexus vPC/LACP</text>
+<text x="625" y="68" text-anchor="middle" font-family="Arial" font-size="16">True dual-homed AE/LACP — standalone PA-VM</text>
+
+<rect x="75" y="95" width="300" height="105" rx="12" fill="#eef5ff" stroke="#4a78a8" stroke-width="2"/>
+<text x="225" y="135" text-anchor="middle" font-family="Arial" font-size="23" font-weight="bold">N9K-01</text>
+<text x="225" y="165" text-anchor="middle" font-family="Arial" font-size="15">Po100 • Po20 • Po21 • Po30 • Po40</text>
+
+<rect x="875" y="95" width="300" height="105" rx="12" fill="#eef5ff" stroke="#4a78a8" stroke-width="2"/>
+<text x="1025" y="135" text-anchor="middle" font-family="Arial" font-size="23" font-weight="bold">N9K-02</text>
+<text x="1025" y="165" text-anchor="middle" font-family="Arial" font-size="15">Po100 • Po20 • Po21 • Po30 • Po40</text>
+
+<line x1="375" y1="122" x2="875" y2="122" stroke="#333" stroke-width="4"/>
+<line x1="375" y1="172" x2="875" y2="172" stroke="#333" stroke-width="4"/>
+<text x="625" y="151" text-anchor="middle" font-family="Arial" font-size="16">Po100 — vPC Peer-Link</text>
+
+<rect x="455" y="260" width="340" height="170" rx="14" fill="#fff7e6" stroke="#b8860b" stroke-width="2"/>
+<text x="625" y="300" text-anchor="middle" font-family="Arial" font-size="23" font-weight="bold">PA-VM 11.2.5</text>
+<text x="625" y="330" text-anchor="middle" font-family="Arial" font-size="16">AE1 • INSIDE • 10.100.100.1/24</text>
+<text x="625" y="360" text-anchor="middle" font-family="Arial" font-size="16">AE2 • OUTSIDE • 10.200.200.1/24</text>
+<text x="625" y="390" text-anchor="middle" font-family="Arial" font-size="14">LACP Active • 2 members/AE</text>
+<text x="625" y="414" text-anchor="middle" font-family="Arial" font-size="13">VR-POC • firewall policy INSIDE→OUTSIDE</text>
+
+<line x1="375" y1="200" x2="520" y2="260" stroke="#333" stroke-width="3"/>
+<line x1="875" y1="200" x2="730" y2="260" stroke="#333" stroke-width="3"/>
+<text x="395" y="235" font-family="Arial" font-size="14">Po20 / vPC20</text>
+<text x="810" y="235" font-family="Arial" font-size="14">Po20 / vPC20</text>
+
+<line x1="375" y1="205" x2="520" y2="405" stroke="#333" stroke-width="3"/>
+<line x1="875" y1="205" x2="730" y2="405" stroke="#333" stroke-width="3"/>
+<text x="395" y="300" font-family="Arial" font-size="14">Po21 / vPC21</text>
+<text x="810" y="300" font-family="Arial" font-size="14">Po21 / vPC21</text>
+
+<rect x="70" y="515" width="310" height="115" rx="12" fill="#eef9ee" stroke="#4f8a4f" stroke-width="2"/>
+<text x="225" y="555" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">MT-INSIDE</text>
+<text x="225" y="584" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.10/24</text>
+<text x="225" y="609" text-anchor="middle" font-family="Arial" font-size="14">bond0 → vPC30 → VLAN100</text>
+
+<rect x="870" y="515" width="310" height="115" rx="12" fill="#f9eeee" stroke="#a85a5a" stroke-width="2"/>
+<text x="1025" y="555" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">MT-OUTSIDE</text>
+<text x="1025" y="584" text-anchor="middle" font-family="Arial" font-size="15">10.200.200.10/24</text>
+<text x="1025" y="609" text-anchor="middle" font-family="Arial" font-size="14">bond0 → vPC40 → VLAN200</text>
+
+<line x1="225" y1="515" x2="225" y2="200" stroke="#4f8a4f" stroke-width="3"/>
+<line x1="225" y1="515" x2="1025" y2="200" stroke="#4f8a4f" stroke-width="3" stroke-dasharray="8,6"/>
+<line x1="1025" y1="515" x2="1025" y2="200" stroke="#a85a5a" stroke-width="3"/>
+<line x1="1025" y1="515" x2="225" y2="200" stroke="#a85a5a" stroke-width="3" stroke-dasharray="8,6"/>
+
+<rect x="365" y="665" width="520" height="62" rx="12" fill="#fafafa" stroke="#777" stroke-width="2"/>
+<text x="625" y="690" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">Peer-Keepalive</text>
+<text x="625" y="712" text-anchor="middle" font-family="Arial" font-size="14">10.255.0.1 ↔ 10.255.0.2 • VRF VPC-KA</text>
+</svg>

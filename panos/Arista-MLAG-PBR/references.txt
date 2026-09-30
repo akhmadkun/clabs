@@ -1,0 +1,49 @@
+OFFICIAL REFERENCES
+===================
+
+ARISTA EOS 4.35.0F — TRAFFIC MANAGEMENT / PBR
+https://www.arista.com/en/um-eos/eos-traffic-management
+
+Used for:
+- PBR behavior at ingress
+- class-map type pbr
+- policy-map type pbr
+- set nexthop
+- service-policy type pbr input
+- VLAN/SVI application
+
+ARISTA MLAG
+https://www.arista.com/en/um-eos/eos-multi-chassis-link-aggregation
+
+Used for:
+- peer-link
+- local-interface
+- peer-address
+- MLAG domain
+- MLAG ID
+- downstream LACP recommendation
+
+ARISTA VARP
+https://www.arista.com/en/um-eos/eos-vrrp-and-varp
+
+Used for:
+- active-active gateway
+- VARP preference in MLAG
+
+CONTAINERLAB CEOS
+https://containerlab.dev/manual/kinds/ceos/
+
+CONTAINERLAB PALO ALTO PA-VM
+https://containerlab.dev/manual/kinds/vr-pan/
+
+CONTAINERLAB VRNETLAB
+https://containerlab.dev/manual/vrnetlab/
+
+PALO ALTO PAN-OS 11.2 AGGREGATE ETHERNET
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface-group
+
+PALO ALTO PAN-OS 11.2 LAYER 3 SUBINTERFACE
+https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/layer-3-subinterface
+
+PALO ALTO VM-SERIES LACP ON KVM
+https://docs.paloaltonetworks.com/vm-series/deployment/private-cloud/set-up-the-vm-series-firewall-on-kvm/install-the-vm-series-firewall-on-kvm/configure-link-aggregation-control-protocol-for-kvm.html

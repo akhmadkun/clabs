@@ -1,0 +1,29 @@
+name: iol-ovs
+prefix: ""
+# OVS bridge 'ovs' must already exist on the host.
+# Containerlab attaches the veth peers created for each link to that bridge.
+
+topology:
+  nodes:
+    ovs:
+      kind: ovs-bridge
+
+    r1:
+      kind: cisco_iol
+      image: arthurk99/cisco-iol:17.15.01
+      startup-config: configs/r1.partial.cfg
+
+    r2:
+      kind: cisco_iol
+      image: arthurk99/cisco-iol:17.15.01
+      startup-config: configs/r2.partial.cfg
+
+    r3:
+      kind: cisco_iol
+      image: arthurk99/cisco-iol:17.15.01
+      startup-config: configs/r3.partial.cfg
+
+  links:
+    - endpoints: ["r1:Ethernet0/1", "ovs:ovsp1"]
+    - endpoints: ["r2:Ethernet0/1", "ovs:ovsp2"]
+    - endpoints: ["r3:Ethernet0/1", "ovs:ovsp3"]

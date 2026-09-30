@@ -1,0 +1,135 @@
+POC-002 — TASK ONLY
+Palo Alto + Nexus vPC + Selective PBR
+=====================================
+
+OBJECTIVE
+---------
+Demonstrate:
+1. normal destination-based routing on Nexus;
+2. Palo Alto connected through a vPC/LACP downstream port-channel;
+3. one Palo Alto AE with two Layer 3 subinterfaces;
+4. selective PBR from Nexus to Palo Alto;
+5. symmetric return PBR;
+6. selected traffic traversing the firewall while non-selected traffic
+   continues to use normal Nexus routing.
+
+IMAGES
+------
+N9K   : arthurk99/cisco-nxos9000v:10.3.5
+PA    : vrnetlab/paloalto_pa-vm:11.2.5
+MT    : ghcr.io/srl-labs/network-multitool:latest
+
+PHASE 1 — BASELINE
+------------------
+1. Deploy the topology.
+2. Verify vPC peer, peer-link, keepalive and vPC20.
+3. Verify VLAN100/VLAN200 and HSRP.
+4. Verify the three multitool nodes.
+5. Test:
+     10.100.100.10 -> 10.200.200.10
+     10.100.100.11 -> 10.200.200.10
+6. Prove both flows use normal Nexus routing.
+7. Prove the PA is not seeing these flows as firewall sessions.
+
+PHASE 2 — PA ONE-ARM SERVICE INSERTION
+--------------------------------------
+8. On PA create virtual router:
+     VR-POC
+
+9. Create zones:
+     INSIDE
+     OUTSIDE
+
+10. Create AE1:
+     Layer3
+     LACP enabled
+     Active
+     Fast
+     max interfaces 2
+
+11. Assign:
+     ethernet1/1 -> ae1
+     ethernet1/2 -> ae1
+
+12. Create:
+     ae1.100
+       VLAN tag 100
+       IP 10.100.100.254/24
+       zone INSIDE
+       VR-POC
+
+     ae1.200
+       VLAN tag 200
+       IP 10.200.200.254/24
+       zone OUTSIDE
+       VR-POC
+
+13. Create security policy:
+     INSIDE -> OUTSIDE
+     allow any/any/any
+     log at session end
+     no NAT
+
+14. Verify AE/LACP/subinterfaces.
+
+PHASE 3 — SELECTIVE PBR
+-----------------------
+15. Enable:
+     feature pbr
+
+16. Create forward ACL:
+     host 10.100.100.10 -> host 10.200.200.10
+
+17. Create forward route-map:
+     set ip next-hop 10.100.100.254
+
+18. Apply forward PBR to Vlan100.
+
+19. Create reverse ACL:
+     host 10.200.200.10 -> host 10.100.100.10
+
+20. Create reverse route-map:
+     set ip next-hop 10.200.200.254
+
+21. Apply reverse PBR to Vlan200.
+
+22. Enable route-map PBR statistics.
+
+PHASE 4 — VERIFY
+----------------
+23. Generate the selected flow.
+24. Verify PBR counters.
+25. Verify PA Traffic Log/session.
+26. Generate the non-selected flow.
+27. Prove it still bypasses PA.
+28. Prove the normal connected route remains installed on Nexus.
+
+PHASE 5 — FAILURE TEST
+----------------------
+29. Keep selected traffic running.
+30. Shut N9K-01 Ethernet1/4 (PA AE1 member).
+31. Verify:
+     Po20 remains up
+     AE1 remains up
+     one LACP member remains
+     traffic recovers
+32. Restore.
+33. Repeat with N9K-02 Ethernet1/4.
+
+FINAL ACCEPTANCE
+----------------
+[ ] vPC peer up
+[ ] peer-link up
+[ ] keepalive alive
+[ ] vPC20 up
+[ ] PA AE1 up
+[ ] LACP two members
+[ ] ae1.100 up
+[ ] ae1.200 up
+[ ] normal flow bypasses PA before PBR
+[ ] selected PBR flow crosses PA
+[ ] return traffic crosses PA
+[ ] non-selected flow still bypasses PA
+[ ] PBR statistics increase
+[ ] PA Traffic Log/session shows selected flow
+[ ] single AE member failure tested

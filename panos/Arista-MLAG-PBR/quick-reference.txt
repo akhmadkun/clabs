@@ -1,0 +1,49 @@
+POC-001 QUICK REFERENCE
+========================
+
+ARISTA:
+  ARISTA-01 172.30.40.11
+  ARISTA-02 172.30.40.12
+
+MLAG:
+  VLAN4094 172.31.254.1/30 <-> 172.31.254.2/30
+  Po100 = peer-link
+  MLAG domain = MLAG-PALO-01
+  Po20 / MLAG20 -> PA AE1
+
+PA:
+  AE1
+   e1/1 + e1/2
+   ae1.100 10.100.100.254/24 INSIDE
+   ae1.200 10.200.200.254/24 OUTSIDE
+
+CLIENTS:
+  selected = 10.100.100.10
+  normal   = 10.100.100.11
+  outside  = 10.200.200.10
+
+PBR FWD:
+  match .10 -> .10
+  nexthop 10.100.100.254
+  apply Vlan100 input
+
+PBR REV:
+  match .10 -> .10
+  nexthop 10.200.200.254
+  apply Vlan200 input
+
+ARISTA VERIFY:
+  show mlag
+  show mlag config-sanity
+  show mlag interfaces
+  show port-channel summary
+  show lacp neighbor
+  show class-map type pbr
+  show policy-map type pbr
+  show ip access-lists PBR-FWD
+  show ip access-lists PBR-REV
+
+PA VERIFY:
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+  Monitor > Traffic

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800">
+<rect width="1280" height="800" fill="white"/>
+<text x="640" y="38" text-anchor="middle" font-family="Arial" font-size="29" font-weight="bold">PoC-001 — Nexus vPC + Palo AE + Selective PBR</text>
+<text x="640" y="68" text-anchor="middle" font-family="Arial" font-size="16">Normal traffic stays on Nexus; selected traffic is redirected to PA by PBR</text>
+
+<rect x="70" y="100" width="270" height="110" rx="12" fill="#eef5ff" stroke="#4a78a8" stroke-width="2"/>
+<text x="205" y="137" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">N9K-01</text>
+<text x="205" y="167" text-anchor="middle" font-family="Arial" font-size="15">Po100 Peer-Link • Po20/vPC20</text>
+<text x="205" y="191" text-anchor="middle" font-family="Arial" font-size="14">Vlan100 / Vlan200 SVI</text>
+
+<rect x="940" y="100" width="270" height="110" rx="12" fill="#eef5ff" stroke="#4a78a8" stroke-width="2"/>
+<text x="1075" y="137" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">N9K-02</text>
+<text x="1075" y="167" text-anchor="middle" font-family="Arial" font-size="15">Po100 Peer-Link • Po20/vPC20</text>
+<text x="1075" y="191" text-anchor="middle" font-family="Arial" font-size="14">Vlan100 / Vlan200 SVI</text>
+
+<line x1="340" y1="125" x2="940" y2="125" stroke="#333" stroke-width="4"/>
+<line x1="340" y1="180" x2="940" y2="180" stroke="#333" stroke-width="4"/>
+<text x="640" y="155" text-anchor="middle" font-family="Arial" font-size="16">Po100 — vPC Peer-Link</text>
+
+<rect x="465" y="255" width="350" height="155" rx="14" fill="#fff7e6" stroke="#b8860b" stroke-width="2"/>
+<text x="640" y="292" text-anchor="middle" font-family="Arial" font-size="23" font-weight="bold">PA-VM 11.2.5</text>
+<text x="640" y="322" text-anchor="middle" font-family="Arial" font-size="16">AE1 — LACP Active</text>
+<text x="640" y="350" text-anchor="middle" font-family="Arial" font-size="15">ae1.100 = INSIDE 10.100.100.254</text>
+<text x="640" y="378" text-anchor="middle" font-family="Arial" font-size="15">ae1.200 = OUTSIDE 10.200.200.254</text>
+
+<line x1="340" y1="210" x2="525" y2="270" stroke="#333" stroke-width="3"/>
+<line x1="940" y1="210" x2="755" y2="270" stroke="#333" stroke-width="3"/>
+<text x="385" y="246" font-family="Arial" font-size="14">vPC20 / VLAN100+200</text>
+<text x="895" y="246" text-anchor="end" font-family="Arial" font-size="14">vPC20 / VLAN100+200</text>
+
+<rect x="55" y="500" width="300" height="105" rx="12" fill="#eef9ee" stroke="#4f8a4f" stroke-width="2"/>
+<text x="205" y="536" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">MT-INSIDE-PBR</text>
+<text x="205" y="566" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.10/24</text>
+<text x="205" y="589" text-anchor="middle" font-family="Arial" font-size="14">Selected flow</text>
+
+<rect x="55" y="635" width="300" height="105" rx="12" fill="#f7f7f7" stroke="#777" stroke-width="2"/>
+<text x="205" y="671" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">MT-INSIDE-NORMAL</text>
+<text x="205" y="701" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.11/24</text>
+<text x="205" y="724" text-anchor="middle" font-family="Arial" font-size="14">Never matched by PBR</text>
+
+<rect x="925" y="500" width="300" height="105" rx="12" fill="#f9eeee" stroke="#a85a5a" stroke-width="2"/>
+<text x="1075" y="536" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">MT-OUTSIDE</text>
+<text x="1075" y="566" text-anchor="middle" font-family="Arial" font-size="15">10.200.200.10/24</text>
+<text x="1075" y="589" text-anchor="middle" font-family="Arial" font-size="14">Destination</text>
+
+<line x1="205" y1="500" x2="205" y2="210" stroke="#4f8a4f" stroke-width="3"/>
+<line x1="205" y1="635" x2="230" y2="210" stroke="#777" stroke-width="3"/>
+<line x1="1075" y1="500" x2="1075" y2="210" stroke="#a85a5a" stroke-width="3"/>
+
+<rect x="400" y="470" width="480" height="190" rx="14" fill="#fafafa" stroke="#777" stroke-width="2"/>
+<text x="640" y="508" text-anchor="middle" font-family="Arial" font-size="19" font-weight="bold">NORMAL</text>
+<text x="640" y="538" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.10/11 → Nexus SVI → normal routing</text>
+<text x="640" y="565" text-anchor="middle" font-family="Arial" font-size="15">Palo physically connected, but not in forwarding path</text>
+<text x="640" y="610" text-anchor="middle" font-family="Arial" font-size="19" font-weight="bold">PBR</text>
+<text x="640" y="638" text-anchor="middle" font-family="Arial" font-size="15">10.100.100.10 → PBR → PA ae1.100 → ae1.200</text>
+
+<rect x="410" y="685" width="460" height="65" rx="12" fill="#fff7e6" stroke="#b8860b" stroke-width="2"/>
+<text x="640" y="712" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold">Return PBR → 10.200.200.254 → PA → 10.100.100.10</text>
+<text x="640" y="733" text-anchor="middle" font-family="Arial" font-size="13">Symmetric steering for stateful inspection</text>
+</svg>

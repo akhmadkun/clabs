@@ -1,0 +1,118 @@
+POC-001 EVIDENCE TEMPLATE
+=========================
+
+DATE:
+ENGINEER:
+
+VERSIONS
+--------
+Containerlab:
+NX-OS:
+PAN-OS:
+
+MANAGEMENT
+----------
+N9K-01: 172.30.30.11
+N9K-02: 172.30.30.12
+PA-01:  172.30.30.13
+
+VPC
+---
+Peer status:
+Peer-link:
+Keepalive:
+Role:
+Consistency:
+
+show vpc brief:
+[ paste ]
+
+show vpc peer-keepalive:
+[ paste ]
+
+show vpc consistency-parameters global:
+[ paste ]
+
+show port-channel summary:
+[ paste ]
+
+show lacp neighbor:
+[ paste ]
+
+PA AE1
+------
+IP:
+Zone:
+Virtual Router:
+Members:
+LACP:
+Mode:
+Rate:
+
+show interface ae1:
+[ paste ]
+
+show lacp aggregate-ethernet ae1:
+[ paste ]
+
+PA AE2
+------
+IP:
+Zone:
+Virtual Router:
+Members:
+LACP:
+Mode:
+Rate:
+
+show interface ae2:
+[ paste ]
+
+show lacp aggregate-ethernet ae2:
+[ paste ]
+
+SECURITY POLICY
+---------------
+Rule:
+Source:
+Destination:
+Action:
+Traffic Log:
+[ paste / screenshot ]
+
+TRAFFIC
+-------
+INSIDE -> PA AE1:
+[ evidence ]
+
+OUTSIDE -> PA AE2:
+[ evidence ]
+
+INSIDE -> OUTSIDE:
+[ evidence ]
+
+FAILURE TEST AE1
+-----------------
+Injected failure:
+Observed LACP/AE:
+Traffic impact:
+Recovery:
+
+FAILURE TEST AE2
+-----------------
+Injected failure:
+Observed LACP/AE:
+Traffic impact:
+Recovery:
+
+CLIENT VPC TEST
+---------------
+MT-INSIDE:
+MT-OUTSIDE:
+
+FINAL
+-----
+[ ] PASS
+[ ] NEEDS REWORK
+
+NOTES:

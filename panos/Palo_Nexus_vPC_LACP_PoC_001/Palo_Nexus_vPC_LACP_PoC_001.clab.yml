@@ -1,0 +1,56 @@
+name: palo-nexus-vpc-lacp-poc
+prefix: ""
+
+mgmt:
+  network: palo-nexus-vpc-lacp-mgmt
+  ipv4-subnet: 172.30.30.0/24
+
+topology:
+  nodes:
+    n9k-01:
+      kind: cisco_n9kv
+      image: arthurk99/cisco-nxos9000v:10.3.5
+      mgmt-ipv4: 172.30.30.11
+      startup-config: ./configs/n9k/n9k-01.cfg
+
+    n9k-02:
+      kind: cisco_n9kv
+      image: arthurk99/cisco-nxos9000v:10.3.5
+      mgmt-ipv4: 172.30.30.12
+      startup-config: ./configs/n9k/n9k-02.cfg
+
+    pa-01:
+      kind: paloalto_panos
+      image: vrnetlab/paloalto_pa-vm:11.2.5
+      mgmt-ipv4: 172.30.30.13
+
+    mt-inside:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      binds:
+        - ./configs/clients/inside-init.sh:/config/inside-init.sh:ro
+      exec:
+        - bash /config/inside-init.sh
+
+    mt-outside:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      binds:
+        - ./configs/clients/outside-init.sh:/config/outside-init.sh:ro
+      exec:
+        - bash /config/outside-init.sh
+
+  links:
+    - endpoints: ["n9k-01:eth1", "n9k-02:eth1"] # Peer Link Member Po100
+    - endpoints: ["n9k-01:eth2", "n9k-02:eth2"] # Peer Link Member Po100
+    - endpoints: ["n9k-01:eth3", "n9k-02:eth3"] # keepalive | vrf VPC-KA | 10.255.0.0/30
+
+    - endpoints: ["n9k-01:eth4", "pa-01:eth1"]
+    - endpoints: ["n9k-02:eth4", "pa-01:eth2"]
+    - endpoints: ["n9k-01:eth5", "pa-01:eth3"]
+    - endpoints: ["n9k-02:eth5", "pa-01:eth4"]
+
+    - endpoints: ["n9k-01:eth6", "mt-inside:eth1"]
+    - endpoints: ["n9k-02:eth6", "mt-inside:eth2"]
+    - endpoints: ["n9k-01:eth7", "mt-outside:eth1"]
+    - endpoints: ["n9k-02:eth7", "mt-outside:eth2"]

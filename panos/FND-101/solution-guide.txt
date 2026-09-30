@@ -11,7 +11,7 @@ Existing libvirt network:
        +---- PA-VM MGT
        |     192.168.121.10
        |
-       +---- server
+       +---- server (Service Nodes)
              192.168.121.20
 
 The PA-VM is external to containerlab in this lab. containerlab manages only
@@ -38,29 +38,58 @@ Configure:
     Speed: auto-negotiate
     MTU: 1500
 
-Administrative Management Services:
-    - HTTPS: enabled
-    - SSH: enabled
-    - HTTP: disabled
-    - Telnet: disabled
+3. Management Services
+----------------------
+GUI:
+    Device > Setup > Management > Management Interface Settings
+    or the Management Services section exposed by the PAN-OS version in use.
 
-Permitted IP Addresses:
-    - Add the verified administrator source IP.
-    - For the default host-side lab path, this will normally be 192.168.121.1.
+Enable:
+    HTTPS
+    SSH
 
-Commit the change.
+Disable:
+    HTTP
+    Telnet
+
+Keep console access available while testing.
+
+From server:
+    nc -vz 192.168.121.10 443
+    nc -vz 192.168.121.10 22
+
+Do not use TCP/80 as the PA web-management test.
 
 Operational verification:
     show system info
     show interface management
 
-Expected:
-    IP address:        192.168.121.10
-    Netmask:           255.255.255.0
-    Default gateway:  192.168.121.1
-    IP assignment:     static
+4. Permitted IP
+---------------
+Configure permitted Management IP addresses so that the intended management
+source is allowed.
 
-3. Hostname and Timezone
+For this lab, allow:
+    192.168.121.0/24
+
+Keep console access until the restriction is verified.
+
+Verify:
+    show deviceconfig system permitted-ip
+
+5. Commit Verification
+----------------------
+Commit:
+    commit
+
+Check:
+    show jobs all
+
+Then verify the active Management state:
+    show system info
+    show interface management
+
+6. Hostname and Timezone
 ------------------------
 GUI:
     Device > Setup > Management
@@ -68,7 +97,7 @@ GUI:
 Set:
     Hostname: pa1
 
-Set the timezone to the intended local lab timezone.
+Set the timezone to the intended local lab timezone. (Asia/Jakarta)
 
 Commit.
 
@@ -77,7 +106,7 @@ CLI verification:
 
 Verify the hostname and timezone fields in the returned output.
 
-4. DNS
+7. DNS
 ------
 GUI:
     Device > Setup > Services
@@ -100,7 +129,7 @@ Expected:
 On PA, verify the configured DNS settings:
     show deviceconfig system dns-setting
 
-5. NTP
+8. NTP
 ------
 GUI:
     Device > Setup > Services
@@ -120,52 +149,7 @@ On the service node:
 On PA, verify the configured NTP settings:
     show deviceconfig system ntp-servers
 
-6. Management Services
-----------------------
-GUI:
-    Device > Setup > Management > Management Interface Settings
-    or the Management Services section exposed by the PAN-OS version in use.
 
-Enable:
-    HTTPS
-    SSH
-
-Disable:
-    HTTP
-    Telnet
-
-Keep console access available while testing.
-
-From server:
-    nc -vz 192.168.121.10 443
-    nc -vz 192.168.121.10 22
-
-Do not use TCP/80 as the PA web-management test.
-
-7. Permitted IP
----------------
-Configure permitted Management IP addresses so that the intended management
-source is allowed.
-
-For this lab, allow:
-    192.168.121.0/24
-
-Keep console access until the restriction is verified.
-
-Verify:
-    show deviceconfig system permitted-ip
-
-8. Commit Verification
-----------------------
-Commit:
-    commit
-
-Check:
-    show jobs all
-
-Then verify the active Management state:
-    show system info
-    show interface management
 
 9. End-to-End Verification
 --------------------------

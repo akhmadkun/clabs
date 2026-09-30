@@ -1,0 +1,55 @@
+PA-VM 11.2 — AE/LACP CLI HELPER
+================================
+
+The main solution guide uses the GUI for the main PA build so a junior
+engineer can see the relationship between AE, member interfaces, zone and
+virtual router.
+
+DOCUMENTED CORE CLI
+-------------------
+Enter configuration mode:
+  configure
+
+Create AE1:
+  set network interface aggregate-ethernet ae1
+
+Assign Ethernet1/1 to AE1:
+  set network interface ethernet ethernet1/1 aggregate-group ae1
+
+Assign Ethernet1/2 to AE1:
+  set network interface ethernet ethernet1/2 aggregate-group ae1
+
+Create AE2:
+  set network interface aggregate-ethernet ae2
+
+Assign Ethernet1/3 to AE2:
+  set network interface ethernet ethernet1/3 aggregate-group ae2
+
+Assign Ethernet1/4 to AE2:
+  set network interface ethernet ethernet1/4 aggregate-group ae2
+
+The official VM-Series LACP documentation explicitly documents the AE creation
+and aggregate-member association commands.
+
+VERIFICATION
+------------
+  show interface all
+  show interface ae1
+  show interface ae2
+  show lacp aggregate-ethernet ae1
+  show lacp aggregate-ethernet ae2
+
+For this PoC, configure the Layer 3 IP, virtual router, zones, and security
+policy using the GUI workflow in solution-guide.txt. This avoids hiding the
+relationship between the objects from a junior engineer.
+
+COMMIT WORKFLOW
+---------------
+Review:
+  show config diff
+
+Validate:
+  validate full
+
+Commit:
+  commit description "POC-001 PA AE/LACP baseline"
