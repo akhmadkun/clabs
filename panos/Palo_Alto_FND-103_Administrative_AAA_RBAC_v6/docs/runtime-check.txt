@@ -1,0 +1,25 @@
+Runtime check
+=============
+
+After deployment run:
+  ./scripts/verify.sh
+
+For a longer observation window, repeat:
+  ./scripts/verify.sh
+
+The key indicators are:
+  - container state remains running
+  - RestartCount remains 0
+  - eth1 retains 192.168.122.20/24 and 192.168.122.21/24
+  - AAA sockets remain listening
+  - aa-test can reach the PA-VM and both AAA servers
+
+If eth1 disappears again, capture these immediately before changing anything:
+  docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'
+  docker inspect radius --format '{{json .State}}'
+  docker inspect tacacs --format '{{json .State}}'
+  docker inspect radius --format '{{json .NetworkSettings.Networks}}'
+  docker exec radius ip -br a
+  docker exec radius ip -d link show
+  ip link show virbr0
+  bridge link show master virbr0

@@ -1,0 +1,23 @@
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-001 — Junos CLI, Interfaces, VLAN & Access Ports
+
+Objective
+1. Become comfortable with Junos operational and configuration modes.
+2. Verify physical and logical interface state.
+3. Understand VLAN membership, access ports and a basic trunk.
+4. Verify MAC learning and endpoint connectivity.
+5. Practice safe Junos configuration workflow with compare/commit/rollback.
+
+Tasks
+1. Access both switches and identify hostname, model and Junos version.
+2. Check interface state with `show interfaces terse`.
+3. Inspect VLAN and switching configuration.
+4. Verify the host-facing port is an access port in VLAN USERS.
+5. Verify the inter-switch link is a trunk carrying VLAN USERS.
+6. Verify MAC learning on both switches.
+7. Ping HOST2 from HOST1.
+8. Make one harmless configuration change, inspect `show | compare`, then commit.
+9. Demonstrate rollback to the previous state.
+10. Re-verify VLAN, MAC learning and end-host connectivity.
+
+Rule: do not open the solution guide on the first attempt.

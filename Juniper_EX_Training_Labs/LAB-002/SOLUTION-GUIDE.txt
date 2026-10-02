@@ -1,0 +1,677 @@
+============================================================
+LAB-002
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LACP / AGGREGATED ETHERNET (AE)
+============================================================
+
+AUDIENCE
+--------
+Junior engineers who already completed LAB-001 and understand basic
+Junos CLI, VLANs, access ports, and basic Layer-2 verification.
+
+LAB GOAL
+--------
+Build a Layer-2 LACP bundle between SW1 and SW2, carry VLAN USERS
+across the bundle, verify the forwarding state, then troubleshoot a
+failed LACP member.
+
+KEY IDEA
+--------
+LACP combines multiple physical Ethernet links into one logical
+Aggregated Ethernet interface (ae0). The physical member links are
+still the real interfaces, but the service configuration is placed on
+the logical ae0 interface.
+
+This lab uses Junos commands documented for EX Series switches. Juniper
+documents ae interfaces as Aggregated Ethernet interfaces (LAGs), and
+the 802.3ad statement assigns a physical interface to an ae interface.
+LACP is configured under aggregated-ether-options on the ae interface.
+
+REFERENCE SOURCES
+-----------------
+Containerlab vJunos-switch:
+https://containerlab.dev/manual/kinds/vr-vjunosswitch/
+
+Juniper EX/QFX interface CLI reference:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/interfaces-interfaces-qfx-series.html
+
+Juniper LACP CLI reference:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/lacp-edit-interfaces-aggregated-ethernet-qfx-series.html
+
+Juniper 802.3ad CLI reference:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/8023ad-interfaces-ex-series.html
+
+============================================================
+TOPOLOGY
+============================================================
+
+             SW1                         SW2
+        +------------+              +------------+
+        |            |              |            |
+ HOST1--| ge-0/0/0   |              | ge-0/0/0   |--HOST2
+        |            |              |            |
+        | ge-0/0/1   |==============| ge-0/0/1   |
+        | ge-0/0/2   |==============| ge-0/0/2   |
+        +------------+              +------------+
+                    <--- LACP / ae0 --->
+
+VLAN 10: USERS
+HOST1: 10.10.10.11/24
+HOST2: 10.10.10.12/24
+
+IMPORTANT
+---------
+The inter-switch connection is two physical links. Once LACP is
+configured, they should operate as members of the same logical ae0
+bundle.
+
+============================================================
+PRE-LAB CHECK
+============================================================
+
+TASK
+----
+Before configuring anything, confirm the lab is deployed and the
+four nodes are running.
+
+COMMANDS
+--------
+containerlab inspect -t clab.yml
+
+docker ps --format 'table {{.Names}}\t{{.Status}}'
+
+EXPECTED RESULT
+---------------
+You should see:
+- sw1
+- sw2
+- host1
+- host2
+
+vJunos-switch can take several minutes to fully boot because it is a
+nested virtualized switch platform. Use docker logs if necessary.
+
+COMMAND
+-------
+docker logs -f sw1
+
+Stop following the logs with Ctrl-C once the device is ready.
+
+============================================================
+TASK 1 — Prepare Aggregated Ethernet
+============================================================
+
+TASK
+----
+Enable support for one aggregated Ethernet interface on SW1 and SW2.
+
+SOLUTION
+--------
+The required configuration is:
+
+SW1:
+
+configure
+set chassis aggregated-devices ethernet device-count 1
+commit
+
+SW2:
+
+configure
+set chassis aggregated-devices ethernet device-count 1
+commit
+
+WHY IS THIS REQUIRED?
+---------------------
+Junos does not automatically create an unlimited number of ae
+interfaces. You first define how many aggregated Ethernet devices the
+chassis needs. Here we need one interface: ae0.
+
+VERIFY
+------
+On both switches:
+
+show configuration chassis | display set
+
+EXPECTED RESULT
+---------------
+You should see:
+
+set chassis aggregated-devices ethernet device-count 1
+
+You can also check whether ae0 is now visible:
+
+show interfaces terse | match ae0
+
+IMPORTANT
+---------
+Do not confuse "ae0" with the physical member ports. ae0 is the
+logical aggregated Ethernet interface. ge-0/0/1 and ge-0/0/2 are the
+physical members.
+
+============================================================
+TASK 2 — Create ae0 and Add the Member Links
+============================================================
+
+TASK
+----
+On both switches, make ge-0/0/1 and ge-0/0/2 members of ae0.
+Do not configure LACP yet.
+
+SOLUTION
+--------
+SW1:
+
+configure
+set interfaces ge-0/0/1 ether-options 802.3ad ae0
+set interfaces ge-0/0/2 ether-options 802.3ad ae0
+
+SW2:
+
+configure
+set interfaces ge-0/0/1 ether-options 802.3ad ae0
+set interfaces ge-0/0/2 ether-options 802.3ad ae0
+
+At this stage you may commit:
+
+commit
+
+WHY 802.3ad?
+-------------
+The Junos 802.3ad statement specifies the Aggregated Ethernet logical
+interface that a physical Ethernet port belongs to. This is the link
+between the physical member and ae0.
+
+VERIFY THE CONFIGURATION
+------------------------
+Run on each switch:
+
+show configuration interfaces ge-0/0/1 | display set
+show configuration interfaces ge-0/0/2 | display set
+
+EXPECTED RESULT
+---------------
+Each physical port should show:
+
+set interfaces ge-0/0/1 ether-options 802.3ad ae0
+set interfaces ge-0/0/2 ether-options 802.3ad ae0
+
+Also check:
+
+show configuration interfaces ae0
+
+At this point ae0 exists, but the Layer-2 service configuration has not
+yet been placed on ae0.
+
+JUNIOR-ENGINEER TIP
+--------------------
+When troubleshooting an AE problem, always check both sides.
+A physical port pointing to ae0 on SW1 does not guarantee that the
+corresponding SW2 port is also pointing to ae0.
+
+============================================================
+TASK 3 — Enable LACP and Configure ae0 as a VLAN Trunk
+============================================================
+
+TASK
+----
+Configure ae0 on both switches so that:
+
+1. LACP is active.
+2. ae0 is a Layer-2 trunk.
+3. VLAN USERS is permitted.
+
+SOLUTION
+--------
+SW1:
+
+configure
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members USERS
+commit
+
+SW2:
+
+configure
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members USERS
+commit
+
+WHY LACP ACTIVE?
+----------------
+LACP active mode means the device actively sends LACP control
+information to negotiate the aggregate with the peer.
+
+WHY IS THE VLAN CONFIGURED ON ae0?
+----------------------------------
+Once the physical links are bundled, the service is logically attached
+to ae0. The Layer-2 switching configuration belongs on the logical
+bundle, not separately on both member interfaces.
+
+VERIFY
+------
+On each switch:
+
+show configuration interfaces ae0 | display set
+
+EXPECTED RESULT
+---------------
+You should see lines similar to:
+
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members USERS
+
+============================================================
+TASK 4 — Verify LACP
+============================================================
+
+TASK
+----
+Prove that the bundle is operational, both physical links are members,
+LACP is established, and VLAN USERS is carried over the bundle.
+
+STEP 1 — Check ae0
+-------------------
+COMMAND:
+
+show interfaces ae0 terse
+
+EXPECTED RESULT
+---------------
+ae0 should be operationally up once the peer has negotiated the
+bundle and the Layer-2 service is active.
+
+If ae0 is down, do not immediately change configuration. Continue with
+the following checks.
+
+STEP 2 — Check LACP
+-------------------
+COMMAND:
+
+show lacp interfaces ae0
+
+EXPECTED RESULT
+---------------
+Look for evidence that:
+- the local side is participating in LACP
+- the remote side is detected
+- member links are in an operational state
+
+The exact output formatting can vary by Junos release/platform.
+The important point is to confirm a healthy LACP partner and member
+state.
+
+STEP 3 — Check the Physical Members
+-----------------------------------
+COMMANDS:
+
+show interfaces terse | match 'ge-0/0/[12]'
+
+show configuration interfaces ge-0/0/1 | display set
+show configuration interfaces ge-0/0/2 | display set
+
+EXPECTED RESULT
+---------------
+Both physical links should be configured as members of ae0 and should
+be operationally up.
+
+STEP 4 — Check the ae0 Service Configuration
+---------------------------------------------
+COMMAND:
+
+show configuration interfaces ae0 | display set
+
+EXPECTED RESULT
+---------------
+You should see:
+
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members USERS
+
+STEP 5 — Check VLAN
+-------------------
+COMMAND:
+
+show vlans USERS
+
+EXPECTED RESULT
+---------------
+VLAN USERS with VLAN ID 10 should exist.
+
+STEP 6 — Check Ethernet Switching Information
+----------------------------------------------
+COMMANDS:
+
+show ethernet-switching interfaces
+show ethernet-switching table
+
+EXPECTED RESULT
+---------------
+You should be able to see the access interfaces and the learned MAC
+addresses. After host traffic crosses the bundle, the switches should
+learn MAC addresses associated with VLAN USERS.
+
+STEP 7 — Test End-to-End Connectivity
+--------------------------------------
+From host1:
+
+ping -c 5 10.10.10.12
+
+EXPECTED RESULT
+---------------
+The ping should succeed.
+
+If the ping fails, troubleshoot in this order:
+
+1. Host IP configuration
+2. Host-facing interface state
+3. VLAN membership on host-facing ports
+4. ae0 operational state
+5. LACP state
+6. VLAN allowed on ae0
+7. MAC learning
+
+JUNIOR-ENGINEER TIP
+--------------------
+Do not jump straight to "LACP is broken" just because ping fails.
+LACP can be healthy while the Layer-2 service is wrong.
+Separate the problem into:
+
+Physical → LACP → Logical AE → VLAN → MAC learning → Host reachability
+
+============================================================
+TASK 5 — Troubleshoot a Failed LACP Member
+============================================================
+
+TASK
+----
+We will now create a controlled failure.
+On SW2, administratively disable ge-0/0/2.
+Then troubleshoot the problem without being told the expected output.
+
+FAULT INJECTION
+---------------
+On SW2:
+
+configure
+set interfaces ge-0/0/2 disable
+commit
+
+Now verify connectivity from host1:
+
+ping -c 5 10.10.10.12
+
+IMPORTANT
+---------
+Because ae0 still has another member link, user traffic may continue
+to work. That is the point of this exercise.
+
+The service can remain up while one physical member has failed.
+
+STEP 1 — Check ae0
+-------------------
+COMMAND:
+
+show interfaces ae0 terse
+
+QUESTION TO ANSWER
+------------------
+Is ae0 itself down, or is the bundle still operational?
+
+STEP 2 — Check LACP
+-------------------
+COMMAND:
+
+show lacp interfaces ae0
+
+QUESTION TO ANSWER
+------------------
+Which member is operational and which member is not?
+
+STEP 3 — Check Physical Interfaces
+-----------------------------------
+COMMAND:
+
+show interfaces terse | match 'ge-0/0/[12]'
+
+EXPECTED OBSERVATION
+--------------------
+ge-0/0/2 on SW2 should show the administrative disable condition.
+
+STEP 4 — Check the Configuration
+---------------------------------
+COMMAND:
+
+show configuration interfaces ge-0/0/2 | display set
+
+EXPECTED RESULT
+---------------
+You should see:
+
+set interfaces ge-0/0/2 disable
+set interfaces ge-0/0/2 ether-options 802.3ad ae0
+
+This is an important troubleshooting lesson:
+A port can be configured correctly as an AE member but still be
+administratively disabled.
+
+STEP 5 — Restore the Member
+----------------------------
+On SW2:
+
+configure
+delete interfaces ge-0/0/2 disable
+commit
+
+STEP 6 — Verify Recovery
+-------------------------
+Commands:
+
+show interfaces terse | match 'ge-0/0/[12]'
+show lacp interfaces ae0
+show interfaces ae0 terse
+
+EXPECTED RESULT
+---------------
+Both physical members should return to the operational bundle.
+
+Then verify from host1:
+
+ping -c 5 10.10.10.12
+
+============================================================
+TASK 6 — Final Verification
+============================================================
+
+TASK
+----
+Confirm the final healthy state and save the configuration.
+
+COMMANDS
+--------
+
+On SW1 and SW2:
+
+show interfaces ae0 terse
+show lacp interfaces ae0
+show ethernet-switching interfaces
+show ethernet-switching table
+show vlans USERS
+
+Check the final configuration:
+
+show configuration interfaces ae0 | display set
+show configuration interfaces ge-0/0/1 | display set
+show configuration interfaces ge-0/0/2 | display set
+
+EXPECTED RESULT
+---------------
+Healthy end state:
+
+- ae0 is up.
+- ge-0/0/1 is a member of ae0.
+- ge-0/0/2 is a member of ae0.
+- LACP has a healthy peer relationship.
+- VLAN USERS is allowed on ae0.
+- HOST1 can ping HOST2.
+
+============================================================
+TROUBLESHOOTING METHODOLOGY
+============================================================
+
+When a bundle is not working, use this sequence instead of randomly
+changing configuration:
+
+1. Check physical state.
+   show interfaces terse
+
+2. Check member assignment.
+   show configuration interfaces ge-0/0/1 | display set
+   show configuration interfaces ge-0/0/2 | display set
+
+3. Check AE interface state.
+   show interfaces ae0 terse
+
+4. Check LACP state.
+   show lacp interfaces ae0
+
+5. Check the AE service configuration.
+   show configuration interfaces ae0 | display set
+
+6. Check VLAN membership.
+   show vlans USERS
+
+7. Check MAC learning.
+   show ethernet-switching table
+
+8. Test end-to-end connectivity.
+   ping -c 5 10.10.10.12
+
+9. Only then modify configuration.
+
+This prevents a common junior-engineer mistake: changing several things
+at once and then not knowing which change actually fixed the problem.
+
+============================================================
+COMMON PROBLEMS AND HOW TO THINK ABOUT THEM
+============================================================
+
+PROBLEM 1 — ae0 DOES NOT COME UP
+---------------------------------
+Possible causes:
+- member links are down
+- member links are not assigned to the same ae interface
+- LACP is not configured on both sides
+- the peer is not connected to the expected port
+- one or more member interfaces are disabled
+
+First checks:
+show interfaces terse
+show lacp interfaces ae0
+
+PROBLEM 2 — ONLY ONE MEMBER IS ACTIVE
+--------------------------------------
+Possible causes:
+- one physical link is down
+- one member is disabled
+- one member is configured for a different ae interface
+- configuration mismatch between the two switches
+
+First checks:
+show lacp interfaces ae0
+show interfaces terse | match 'ge-0/0/[12]'
+
+PROBLEM 3 — LACP IS UP BUT HOST PING FAILS
+--------------------------------------------
+Possible causes:
+- VLAN missing on ae0
+- VLAN mismatch on endpoint ports
+- MAC addresses are not learning
+- host IP configuration is incorrect
+
+Do not immediately rebuild LACP. Verify the Layer-2 service.
+
+PROBLEM 4 — MAC ADDRESS IS NOT LEARNED
+---------------------------------------
+Check:
+show ethernet-switching table
+show ethernet-switching interfaces
+
+Then verify the physical interface, VLAN membership, and traffic path.
+
+============================================================
+JUNIOR-ENGINEER NOTES
+============================================================
+
+1. Physical member interfaces and ae0 have different jobs.
+
+   ge-0/0/1 / ge-0/0/2
+       = physical transport/member links
+
+   ae0
+       = logical aggregate and Layer-2 service interface
+
+2. LACP is a control protocol.
+   It negotiates the bundle state. It does not replace VLAN
+   configuration.
+
+3. A single member failure does not necessarily mean the whole
+   service fails. One reason for link aggregation is redundancy.
+
+4. Always compare the two sides of the link.
+
+5. "Up" does not automatically mean "correct".
+   A link can be physically up while the VLAN/service configuration
+   is still wrong.
+
+============================================================
+ROLLBACK / CLEANUP
+============================================================
+
+OPTION A — Remove only the LAB-002 configuration manually
+-----------------------------------------------------------
+Use Junos configuration mode and remove the relevant hierarchy.
+
+For example:
+
+delete interfaces ae0
+delete interfaces ge-0/0/1 ether-options
+delete interfaces ge-0/0/2 ether-options
+
+Commit after reviewing the candidate configuration.
+
+OPTION B — Destroy and redeploy the lab
+----------------------------------------
+From the LAB-002 directory:
+
+containerlab destroy -t clab.yml
+containerlab deploy -t clab.yml
+
+This is the simplest way to return to the original lab baseline.
+
+============================================================
+FINAL TAKEAWAY
+============================================================
+
+The most important operational sequence from this lab is:
+
+PHYSICAL LINK
+     ↓
+MEMBER ASSIGNMENT
+     ↓
+LACP NEGOTIATION
+     ↓
+AE0 OPERATIONAL STATE
+     ↓
+VLAN SERVICE ON AE0
+     ↓
+MAC LEARNING
+     ↓
+END-TO-END CONNECTIVITY
+
+Use this sequence when troubleshooting real Juniper EX LAG/LACP
+incidents.

@@ -1,0 +1,574 @@
+================================================================================
+LAB-002 — FND-102
+SOLUTION GUIDE — JUNIOR ENGINEER WALKTHROUGH
+================================================================================
+
+PURPOSE
+Learn the PAN-OS configuration lifecycle and a controlled rollback.
+
+CORE MODEL
+  Candidate configuration = proposed changes
+  Running configuration  = active configuration
+
+A PAN-OS configuration change is first written to candidate configuration.
+The change becomes active when committed.
+
+-------------------------------------------------------------------------------
+0. IMPORTANT CORRECTION
+-------------------------------------------------------------------------------
+
+DO NOT change SSH to port 2222.
+
+For this lab, SSH stays on TCP/22. CR-102-B creates the management outage by
+disabling SSH itself, together with HTTPS.
+
+Relevant documented command forms include:
+  set deviceconfig system hostname <value>
+  set deviceconfig system login-banner <value>
+  set deviceconfig system service disable-https <yes|no>
+  set deviceconfig system service disable-ssh <yes|no>
+  save config to <value>
+  revert config
+  validate full
+  load config version <value>
+  commit description <value>
+
+-------------------------------------------------------------------------------
+1. STARTING CONDITION
+-------------------------------------------------------------------------------
+
+FND-101 must already be complete.
+
+From the management workstation:
+
+  ping -c 3 192.168.122.10
+
+  curl -kI https://192.168.122.10
+
+  ssh admin@192.168.122.10
+
+Expected:
+- ping works
+- HTTPS answers
+- SSH works on TCP/22
+
+BEFORE CR-102-B, keep a console session ready. The outage is intentional.
+
+-------------------------------------------------------------------------------
+2. RECORD BASELINE
+-------------------------------------------------------------------------------
+
+At the PA-VM CLI:
+
+  show system info
+
+Record:
+- hostname
+- PAN-OS version
+- management IP
+
+Then:
+
+  show config diff
+
+Expected:
+No meaningful pending differences.
+
+WHY?
+We need a known clean starting point before creating a candidate change.
+
+-------------------------------------------------------------------------------
+3. CR-102-A — CREATE CANDIDATE CHANGES
+-------------------------------------------------------------------------------
+
+Enter configuration mode:
+
+  configure
+
+Set the hostname:
+
+  set deviceconfig system hostname pa1-fnd102
+
+Set the login banner:
+
+  set deviceconfig system login-banner "AUTHORIZED LAB ACCESS — FND-102"
+
+IMPORTANT: Do NOT commit yet.
+
+Exit configuration mode:
+
+  exit
+
+-------------------------------------------------------------------------------
+4. PROVE CANDIDATE != RUNNING
+-------------------------------------------------------------------------------
+
+Run:
+
+  show config diff
+
+You should see the hostname and login-banner changes.
+
+Optionally inspect the candidate directly:
+
+  show config candidate
+
+Interpretation:
+  Candidate = changed
+  Running  = unchanged
+
+The changes are NOT active yet.
+
+-------------------------------------------------------------------------------
+5. SAVE A NAMED CANDIDATE SNAPSHOT
+-------------------------------------------------------------------------------
+
+Recommended learning path: GUI.
+
+1. Open https://192.168.122.10
+2. Select Config > Save Changes.
+3. Save a named configuration snapshot.
+4. Enter exactly:
+     FND102_CR102A_CANDIDATE
+5. Save.
+
+CLI alternative, from configuration mode:
+
+  configure
+  save config to FND102_CR102A_CANDIDATE
+
+The snapshot protects the candidate state so we can deliberately revert it
+and then load it back.
+
+-------------------------------------------------------------------------------
+6. REVERT CANDIDATE TO RUNNING
+-------------------------------------------------------------------------------
+
+From configuration mode:
+
+  configure
+  revert config
+
+Confirm the operation, then:
+
+  exit
+  show config diff
+
+Expected:
+The CR-102-A pending changes are gone.
+
+WHY?
+"revert config" discards pending candidate changes and returns candidate to
+the current running configuration. It does NOT undo a previous commit.
+
+-------------------------------------------------------------------------------
+7. LOAD THE NAMED SNAPSHOT AGAIN
+-------------------------------------------------------------------------------
+
+Use GUI:
+
+  Device > Setup > Operations
+
+Find:
+  Load named configuration snapshot
+
+Select:
+  FND102_CR102A_CANDIDATE
+
+Confirm the load.
+
+CLI:
+  load config from FND102_CR102A_CANDIDATE
+  show config diff
+
+Expected:
+The hostname/banner changes appear again as pending candidate changes.
+
+CRITICAL CONCEPT
+Loading a candidate snapshot changes the candidate configuration.
+It does NOT automatically activate the snapshot.
+A commit is still required.
+
+-------------------------------------------------------------------------------
+8. VALIDATE BEFORE COMMIT
+-------------------------------------------------------------------------------
+
+Enter configuration mode:
+
+  configure
+
+Run:
+
+  validate full
+
+PAN-OS returns a validation job ID.
+
+If needed, inspect jobs:
+
+  show jobs all
+
+Expected:
+The validation succeeds.
+
+WHY?
+Validation catches configuration problems before the commit is attempted.
+
+-------------------------------------------------------------------------------
+9. COMMIT CR-102-A
+-------------------------------------------------------------------------------
+
+Commit with an explicit description:
+
+  commit description "FND-102 CR-102-A baseline lifecycle"
+
+Wait for the commit job to finish successfully.
+
+Exit:
+
+  exit
+
+Check:
+
+  show config diff
+
+Expected:
+No pending changes.
+
+Verify:
+
+  show system info
+
+The hostname should be:
+  pa1-fnd102
+
+From the management workstation:
+
+  curl -kI https://192.168.122.10
+  ssh admin@192.168.122.10
+
+Expected:
+HTTPS works and SSH still works on TCP/22.
+
+-------------------------------------------------------------------------------
+10. VERIFY THE LOGIN BANNER
+-------------------------------------------------------------------------------
+
+Open a new SSH session:
+
+  ssh admin@192.168.122.10
+
+Expected login banner:
+
+  AUTHORIZED LAB ACCESS — FND-102
+
+Record evidence.
+
+-------------------------------------------------------------------------------
+11. RECORD THE CR-102-A RUNNING CONFIGURATION VERSION
+-------------------------------------------------------------------------------
+
+In the GUI open:
+
+  Device > Setup > Operations > Load configuration version
+
+Find the version created by the successful CR-102-A commit.
+Record the real version number in the evidence sheet.
+
+DO NOT invent the number. The actual value depends on the firewall's existing
+configuration history.
+
+This known-good version is the recovery target for CR-102-B.
+
+-------------------------------------------------------------------------------
+12. CR-102-B — PREPARE FOR THE CONTROLLED OUTAGE
+-------------------------------------------------------------------------------
+
+Before making the change:
+
+1. Confirm console access.
+2. Keep console access available.
+3. Confirm HTTPS works.
+4. Confirm SSH/22 works.
+5. Confirm the known-good running version was recorded.
+
+-------------------------------------------------------------------------------
+13. CREATE THE BAD CANDIDATE
+-------------------------------------------------------------------------------
+
+Enter configuration mode:
+
+  configure
+
+Disable HTTPS management:
+
+  set deviceconfig system service disable-https yes
+
+Disable SSH management:
+
+  set deviceconfig system service disable-ssh yes
+
+Exit:
+
+  exit
+
+DO NOT commit yet.
+
+-------------------------------------------------------------------------------
+14. PROVE THE BAD CHANGE IS ONLY CANDIDATE
+-------------------------------------------------------------------------------
+
+Run:
+
+  show config diff
+
+Expected pending changes:
+  HTTPS management disabled
+  SSH management disabled
+
+At this point the running configuration still has remote management enabled.
+
+-------------------------------------------------------------------------------
+15. VALIDATE AND COMMIT THE INTENTIONAL OUTAGE
+-------------------------------------------------------------------------------
+
+Enter configuration mode:
+
+  configure
+
+Validate:
+
+  validate full
+
+Then commit:
+
+  commit description "FND-102 CR-102-B intentional management outage"
+
+Wait for success.
+
+The current remote SSH session may disconnect. This is EXPECTED.
+
+-------------------------------------------------------------------------------
+16. PROVE THE OUTAGE FROM THE MANAGEMENT HOST
+-------------------------------------------------------------------------------
+
+HTTPS:
+
+  curl -kI https://192.168.122.10
+
+Expected:
+Connection failure / HTTPS unavailable.
+
+SSH:
+
+  ssh admin@192.168.122.10
+
+Expected:
+Connection failure.
+
+Optional port checks:
+
+  nc -vz -w 3 192.168.122.10 443
+  nc -vz -w 3 192.168.122.10 22
+
+Expected:
+Both management ports are unavailable.
+
+IMPORTANT
+Do not treat this as a normal network failure. We intentionally disabled the
+management services.
+
+-------------------------------------------------------------------------------
+17. RECOVER FROM CONSOLE
+-------------------------------------------------------------------------------
+
+Move to the PA-VM console and log in.
+
+Enter configuration mode:
+
+  configure
+
+Load the actual known-good version recorded after CR-102-A.
+
+Example only:
+
+  load config version 7
+
+Replace 7 with the REAL version on your firewall.
+
+IMPORTANT
+The command loads the old running configuration into the candidate
+configuration. It does not make it active until you commit.
+
+-------------------------------------------------------------------------------
+18. PROVE THE RESTORED CONFIG IS CANDIDATE
+-------------------------------------------------------------------------------
+
+Run:
+
+  show config diff
+
+Then optionally:
+
+  show config candidate
+
+You should see the restored configuration state, including the management
+services being returned to the known-good state.
+
+Think of the recovery sequence as:
+
+  Previous running version
+          |
+          v
+  Candidate configuration
+          |
+       validate
+          |
+        commit
+          |
+          v
+  Active/running configuration
+
+-------------------------------------------------------------------------------
+19. VALIDATE THE RESTORED CANDIDATE
+-------------------------------------------------------------------------------
+
+Run:
+
+  validate full
+
+Wait for successful validation.
+
+Optional:
+
+  show jobs all
+
+-------------------------------------------------------------------------------
+20. COMMIT THE ROLLBACK
+-------------------------------------------------------------------------------
+
+Commit:
+
+  commit description "FND-102 rollback from CR-102-B"
+
+Wait for success.
+
+Exit:
+
+  exit
+
+-------------------------------------------------------------------------------
+21. PROVE MANAGEMENT RECOVERY
+-------------------------------------------------------------------------------
+
+From the management workstation:
+
+  curl -kI https://192.168.122.10
+
+  ssh admin@192.168.122.10
+
+Expected:
+- HTTPS works again
+- SSH works again on TCP/22
+
+On the PA-VM:
+
+  show system info
+
+Expected hostname:
+  pa1-fnd102
+
+Then:
+
+  show config diff
+
+Expected:
+No pending candidate changes.
+
+-------------------------------------------------------------------------------
+22. THE FOUR CONCEPTS YOU MUST REMEMBER
+-------------------------------------------------------------------------------
+
+1) Candidate != Running
+   Changes are not active until commit.
+
+2) Revert candidate
+   "revert config" throws away pending changes and returns candidate to the
+   current running configuration.
+
+3) Load named snapshot
+   Loads a saved candidate state into candidate. Commit is still required.
+
+4) Load old running version
+   Loads a previous running configuration into candidate. Commit is still
+   required to make it active.
+
+-------------------------------------------------------------------------------
+23. COMMON JUNIOR-ENGINEER MISTAKES
+-------------------------------------------------------------------------------
+
+Mistake: Change -> immediate commit.
+Better:
+  show config diff
+  validate full
+  commit
+
+Mistake: Thinking revert config rolls back a previous commit.
+Correct:
+  it discards pending candidate changes.
+
+Mistake: Loading an old config and assuming it is immediately active.
+Correct:
+  the loaded version is candidate until commit.
+
+Mistake: Disabling remote management without console access.
+Correct:
+  prepare a recovery path first.
+
+Mistake: Trying to change SSH from 22 to 2222 for this exercise.
+Correct:
+  keep SSH on TCP/22 and use service disable for the controlled outage.
+
+-------------------------------------------------------------------------------
+24. FINAL ACCEPTANCE CRITERIA
+-------------------------------------------------------------------------------
+
+CR-102-A
+[ ] Candidate diff captured before commit
+[ ] Named snapshot FND102_CR102A_CANDIDATE saved
+[ ] Candidate reverted to running
+[ ] Named snapshot loaded again
+[ ] validate full succeeded
+[ ] CR-102-A commit succeeded
+[ ] Hostname = pa1-fnd102
+[ ] Login banner present
+[ ] SSH remains TCP/22
+[ ] HTTPS reachable
+[ ] Running version recorded
+
+CR-102-B
+[ ] Console ready before outage
+[ ] HTTPS disabled in candidate
+[ ] SSH disabled in candidate
+[ ] Candidate diff captured
+[ ] validate full succeeded
+[ ] Intentional outage committed
+[ ] HTTPS/443 unavailable
+[ ] SSH/22 unavailable
+[ ] Previous running version loaded from console
+[ ] Restored candidate validated
+[ ] Rollback committed
+[ ] HTTPS/443 works again
+[ ] SSH/22 works again
+[ ] No pending candidate changes
+
+-------------------------------------------------------------------------------
+OFFICIAL-DOC BASIS
+-------------------------------------------------------------------------------
+
+This guide was checked against Palo Alto Networks documentation covering
+candidate/running configuration, validation and commit, named candidate
+snapshots, reverting to running configuration, and restoring previous running
+configuration versions.
+
+See references.txt.
+================================================================================

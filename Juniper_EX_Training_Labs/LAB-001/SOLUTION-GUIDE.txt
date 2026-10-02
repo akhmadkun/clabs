@@ -1,0 +1,1169 @@
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-001 — Junos CLI, Interfaces, VLAN & Access Ports
+
+====================================================================
+LAB PURPOSE
+====================================================================
+
+This lab is designed for junior engineers who are new to Junos and
+Juniper EX switching.
+
+The goal is not to memorize commands. The goal is to build a repeatable
+operational workflow that can be used on a real Juniper EX switch:
+
+    1. Understand where you are in the Junos CLI.
+    2. Identify the device and its interfaces.
+    3. Check whether the physical link is up.
+    4. Check VLAN membership and port mode.
+    5. Check MAC address learning.
+    6. Check the uplink/trunk.
+    7. Test end-to-end connectivity.
+    8. Make a controlled configuration change.
+    9. Compare before committing.
+   10. Commit, rollback, and verify again.
+
+The troubleshooting sequence used throughout this lab is:
+
+    INTERFACE → VLAN → MAC → UPLINK → END-HOST TEST
+
+This sequence should become the default starting point when a user
+reports that a device cannot reach the network.
+
+
+====================================================================
+TOPOLOGY
+====================================================================
+
+                    ge-0/0/1
+              +----------------+
+              |                |
+        +-----------+    +-----------+
+        |    SW1    |----|    SW2    |
+        | EX-TRAIN  |    | EX-TRAIN  |
+        +-----------+    +-----------+
+          ge-0/0/0         ge-0/0/0
+              |                |
+              |                |
+        +-----------+    +-----------+
+        |   HOST1   |    |   HOST2   |
+        |10.10.10.11|    |10.10.10.12|
+        +-----------+    +-----------+
+
+VLAN:
+    USERS = VLAN 10
+
+Host addressing:
+    HOST1 = 10.10.10.11/24
+    HOST2 = 10.10.10.12/24
+
+Port roles:
+    SW1 ge-0/0/0 = HOST1 access port
+    SW2 ge-0/0/0 = HOST2 access port
+    SW1 ge-0/0/1 = trunk to SW2
+    SW2 ge-0/0/1 = trunk to SW1
+
+
+====================================================================
+IMAGE / ENVIRONMENT
+====================================================================
+
+Juniper image:
+    vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+Lab platform:
+    Containerlab
+
+Linux hosts:
+    ghcr.io/srl-labs/network-multitool:latest
+
+Deploy:
+    containerlab deploy -t clab.yml
+
+Verify:
+    ./scripts/verify.sh
+
+Destroy:
+    containerlab destroy -t clab.yml
+
+
+====================================================================
+JUNOS CLI QUICK REFERENCE
+====================================================================
+
+Junos has two primary CLI modes used in this lab.
+
+Operational mode:
+    user@switch>
+
+Configuration mode:
+    user@switch#
+
+Move from operational mode to configuration mode:
+
+    configure
+
+Return to operational mode:
+
+    exit
+
+Show operational information:
+
+    show version
+    show system uptime
+    show interfaces terse
+
+Show configuration:
+
+    show configuration
+
+Enter configuration mode and display pending changes:
+
+    configure
+    show | compare
+
+Commit configuration:
+
+    commit
+
+Commit with automatic rollback protection:
+
+    commit confirmed 5
+
+Discard uncommitted candidate changes:
+
+    rollback 0
+
+Load a previous committed configuration into the candidate configuration:
+
+    rollback 1
+
+Commit after rollback:
+
+    commit
+
+Important concept:
+
+    Junos separates the CURRENT ACTIVE CONFIGURATION from the
+    CANDIDATE CONFIGURATION.
+
+    You can make changes to the candidate configuration without
+    immediately affecting the active configuration. The change takes
+    effect when you commit it.
+
+    This is one of the most important differences to understand when
+    coming from other network operating systems.
+
+
+====================================================================
+TASK 1 — ACCESS BOTH SWITCHES AND IDENTIFY THE DEVICES
+====================================================================
+
+TASK
+----
+Access SW1 and SW2 and identify:
+
+- Hostname
+- Junos version
+- Chassis/platform information
+- System uptime
+
+SOLUTION
+--------
+
+Enter SW1:
+
+    ssh admin@sw1
+
+Check the hostname from the prompt. The startup configuration should
+identify SW1 as:
+
+    EX-TRAIN-SW1
+
+Check Junos version:
+
+    show version
+
+Check chassis hardware:
+
+    show chassis hardware
+
+Check uptime:
+
+    show system uptime
+
+Repeat the same steps on SW2.
+
+
+WHAT YOU ARE LOOKING FOR
+------------------------
+
+1. `show version`
+
+   Confirms the Junos software release and general software/platform
+   information.
+
+2. `show chassis hardware`
+
+   Confirms what Junos believes is installed in the virtual/physical
+   chassis. On a real EX switch this is useful for hardware inventory,
+   troubleshooting, and identifying the platform.
+
+3. `show system uptime`
+
+   Shows how long the system has been running since the last reboot.
+   A short uptime can be useful evidence when troubleshooting a recent
+   outage or unexpected restart.
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+Do not start changing configuration just because someone reports a
+problem. First identify the device and collect basic facts.
+
+A good first response to an incident is:
+
+    "I will verify the device, software, interface state, and current
+     configuration before making any change."
+
+
+EXPECTED RESULT
+---------------
+
+Both switches should be reachable and should identify themselves as:
+
+    SW1 = EX-TRAIN-SW1
+    SW2 = EX-TRAIN-SW2
+
+Both switches should return valid Junos and chassis information.
+
+
+====================================================================
+TASK 2 — CHECK INTERFACE STATE
+====================================================================
+
+TASK
+----
+Use `show interfaces terse` on both switches and identify:
+
+- HOST-facing interface
+- Inter-switch interface
+- Interface administrative state
+- Interface operational/link state
+
+SOLUTION
+--------
+
+On SW1:
+
+    show interfaces terse
+
+On SW2:
+
+    show interfaces terse
+
+To make the output easier to read, you can also filter it:
+
+    show interfaces terse | match ge-0/0/
+
+
+HOW TO READ THE OUTPUT
+----------------------
+
+The important idea is that an interface has more than one state.
+
+Think about these questions separately:
+
+    1. Is the interface administratively enabled?
+    2. Is the physical link actually up?
+    3. Is the logical interface present/up?
+
+For this lab you expect the connected interfaces to be operationally
+up after the topology has converged.
+
+
+EXPECTED INTERFACES
+-------------------
+
+SW1:
+
+    ge-0/0/0    → HOST1
+    ge-0/0/1    → SW2
+
+SW2:
+
+    ge-0/0/0    → HOST2
+    ge-0/0/1    → SW1
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+When a user says "the network is down", start at the edge.
+
+Example thought process:
+
+    User device
+        ↓
+    switch port
+        ↓
+    uplink
+        ↓
+    upstream network
+
+Do not immediately assume the problem is routing or the core network.
+A large percentage of access incidents can be isolated at the access
+port or VLAN level.
+
+
+COMMON INTERPRETATION
+---------------------
+
+Admin DOWN + Link DOWN:
+    The interface may have been disabled administratively.
+
+Admin UP + Link DOWN:
+    The interface is enabled, but the physical link may be disconnected,
+    the peer may be down, or there may be a virtualization/link issue.
+
+Admin UP + Link UP:
+    The physical layer is working. Continue to VLAN/MAC checks.
+
+
+====================================================================
+TASK 3 — INSPECT VLAN AND SWITCHING CONFIGURATION
+====================================================================
+
+TASK
+----
+Inspect the VLAN and Layer-2 configuration on both switches.
+
+SOLUTION
+--------
+
+Operational mode:
+
+    show vlans
+
+To look specifically at the USERS VLAN:
+
+    show vlans USERS
+
+Display the configured VLAN and interface settings:
+
+    show configuration vlans
+
+    show configuration interfaces ge-0/0/0
+
+    show configuration interfaces ge-0/0/1
+
+If you prefer the configuration in `set` format:
+
+    show configuration vlans | display set
+
+    show configuration interfaces ge-0/0/0 | display set
+
+    show configuration interfaces ge-0/0/1 | display set
+
+    show configuration interfaces | display set | match "ge-0/0/[01]"
+
+
+EXPECTED VLAN
+-------------
+
+The lab uses:
+
+    VLAN name = USERS
+    VLAN ID   = 10
+
+Both switches should have VLAN USERS defined with VLAN ID 10.
+
+
+EXPECTED PORT ROLES
+-------------------
+
+SW1 ge-0/0/0:
+    Access port
+    VLAN USERS
+
+SW2 ge-0/0/0:
+    Access port
+    VLAN USERS
+
+SW1 ge-0/0/1:
+    Trunk port
+    VLAN USERS is allowed on the trunk
+
+SW2 ge-0/0/1:
+    Trunk port
+    VLAN USERS is allowed on the trunk
+
+
+WHY THIS MATTERS
+----------------
+
+A switch port can be physically UP but still provide no usable
+connectivity because it is assigned to the wrong VLAN.
+
+Example:
+
+    Interface UP
+         ↓
+    User plugged in successfully
+         ↓
+    Wrong VLAN
+         ↓
+    User still cannot reach the expected network
+
+This is why interface status alone is never enough.
+
+
+====================================================================
+TASK 4 — VERIFY THE HOST-FACING ACCESS PORT
+====================================================================
+
+TASK
+----
+Verify that the host-facing interface is configured as an access port
+and belongs to VLAN USERS.
+
+SOLUTION
+--------
+
+On SW1:
+
+    show configuration interfaces ge-0/0/0 | display set
+
+On SW2:
+
+    show configuration interfaces ge-0/0/0 | display set
+
+You should see configuration equivalent to:
+
+    set interfaces ge-0/0/0 description HOST1-ACCESS
+    set interfaces ge-0/0/0 unit 0 family ethernet-switching interface-mode access
+    set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members USERS
+
+On SW2 the description identifies HOST2 instead.
+
+You can also verify from the operational switching table:
+
+    show ethernet-switching interfaces
+
+Filter to the specific port when useful:
+
+    show ethernet-switching interfaces | match ge-0/0/0
+
+
+WHAT "ACCESS" MEANS
+-------------------
+
+An access port is normally used for an end device such as:
+
+- PC
+- Server
+- Printer
+- IP phone (depending on design)
+- Camera
+- Other endpoint devices
+
+The endpoint is normally associated with one Layer-2 VLAN.
+
+In this lab:
+
+    HOST1 → VLAN USERS (10)
+    HOST2 → VLAN USERS (10)
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+For an endpoint problem, always verify these three things together:
+
+    1. Interface state
+    2. Access VLAN
+    3. MAC address learning
+
+If all three look correct, move toward the uplink.
+
+
+EXPECTED RESULT
+---------------
+
+SW1 ge-0/0/0:
+    interface-mode = access
+    VLAN           = USERS
+
+SW2 ge-0/0/0:
+    interface-mode = access
+    VLAN           = USERS
+
+
+====================================================================
+TASK 5 — VERIFY THE INTER-SWITCH TRUNK
+====================================================================
+
+TASK
+----
+Verify that ge-0/0/1 on both switches is a trunk and that VLAN USERS
+is allowed across the link.
+
+SOLUTION
+--------
+
+On SW1:
+
+    show configuration interfaces ge-0/0/1 | display set
+
+On SW2:
+
+    show configuration interfaces ge-0/0/1 | display set
+
+The important configuration should look like:
+
+    set interfaces ge-0/0/1 description SW2-TRUNK
+    set interfaces ge-0/0/1 unit 0 family ethernet-switching interface-mode trunk
+    set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members USERS
+
+SW2 is similar, except the description identifies SW1 as the peer.
+
+Operational verification:
+
+    show ethernet-switching interfaces
+
+Also verify the interface state:
+
+    show interfaces terse | match ge-0/0/1
+
+
+WHY THE TRUNK IS REQUIRED
+-------------------------
+
+HOST1 and HOST2 live on different physical switches.
+
+Traffic path:
+
+    HOST1
+      ↓
+    SW1 ge-0/0/0
+      ↓
+    VLAN USERS
+      ↓
+    SW1 ge-0/0/1
+      ↓
+    trunk
+      ↓
+    SW2 ge-0/0/1
+      ↓
+    VLAN USERS
+      ↓
+    SW2 ge-0/0/0
+      ↓
+    HOST2
+
+The trunk is what allows the VLAN to traverse between SW1 and SW2.
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+A common Layer-2 fault is:
+
+    "The endpoint is in the correct VLAN, but the VLAN is not allowed
+     on the uplink."
+
+So when the local access port looks correct but the remote endpoint
+cannot communicate, check the uplink/trunk next.
+
+
+EXPECTED RESULT
+---------------
+
+Both sides of ge-0/0/1 should:
+
+    - Be operationally up.
+    - Operate as trunk interfaces.
+    - Carry VLAN USERS.
+
+
+====================================================================
+TASK 6 — VERIFY MAC ADDRESS LEARNING
+====================================================================
+
+TASK
+----
+Verify that each switch learns the endpoint MAC address in VLAN USERS.
+
+SOLUTION
+--------
+
+On SW1:
+
+    show ethernet-switching table
+
+On SW2:
+
+    show ethernet-switching table
+
+You can also look specifically for VLAN USERS if supported by the
+running Junos command syntax:
+
+    show ethernet-switching table | match USERS
+
+
+WHAT YOU SHOULD EXPECT
+----------------------
+
+SW1 should learn HOST1 locally on:
+
+    ge-0/0/0.0
+
+and should learn HOST2 through the inter-switch connection, typically
+via the trunk interface.
+
+SW2 should show the opposite:
+
+    HOST2 locally on ge-0/0/0.0
+    HOST1 via the trunk
+
+The exact MAC addresses will be different from lab to lab and should
+not be hard-coded into the solution.
+
+
+WHY MAC LEARNING IS IMPORTANT
+-----------------------------
+
+An Ethernet switch uses learned MAC addresses to decide where to
+forward Layer-2 traffic.
+
+Simplified example:
+
+    MAC-A → ge-0/0/0
+    MAC-B → ge-0/0/1
+
+If the expected MAC address is missing, that is evidence.
+It does NOT automatically prove the exact root cause, but it gives you
+a direction for the next check.
+
+
+MAC TROUBLESHOOTING LOGIC
+-------------------------
+
+Expected local MAC missing:
+    Check interface state and endpoint connection.
+
+Local MAC present, remote MAC missing:
+    Check trunk/VLAN propagation and the remote switch.
+
+Both MACs present:
+    The Layer-2 switching path is likely learning correctly; continue
+    with connectivity testing and, if needed, move beyond Layer-2.
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+Think of the MAC table as the switch answering:
+
+    "Where did I last see this device?"
+
+That question is extremely useful during access-switch troubleshooting.
+
+
+====================================================================
+TASK 7 — TEST END-TO-END CONNECTIVITY
+====================================================================
+
+TASK
+----
+Verify that HOST1 can reach HOST2.
+
+SOLUTION
+--------
+
+Enter HOST1 and run:
+
+    docker exec -it clab-juniper-ex-training-lab-001-host1 bash
+
+Then test:
+
+    ping -c 4 10.10.10.12
+
+Or from the host shell without entering it:
+
+    docker exec clab-juniper-ex-training-lab-001-host1 ping -c 4 10.10.10.12
+
+
+EXPECTED RESULT
+---------------
+
+The ping should return successful replies from:
+
+    10.10.10.12
+
+You should normally see four successful replies and zero packet loss
+in a healthy lab.
+
+
+WHAT HAS NOW BEEN PROVEN
+------------------------
+
+A successful ping confirms much more than "the ping worked".
+It means the following path is functioning sufficiently for this test:
+
+    HOST1
+      ↓
+    SW1 access port
+      ↓
+    VLAN USERS
+      ↓
+    SW1/SW2 trunk
+      ↓
+    VLAN USERS
+      ↓
+    SW2 access port
+      ↓
+    HOST2
+
+It also confirms that both hosts are using the same IPv4 subnet in the
+lab and that Layer-2 forwarding is functioning end-to-end.
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+Always verify the fix from the user's perspective.
+
+Do not stop at:
+
+    "The interface is up."
+
+The better statement is:
+
+    "The interface is up, the VLAN is correct, MAC addresses are
+     learning, and the endpoint can successfully communicate."
+
+
+====================================================================
+TASK 8 — MAKE A HARMLESS CONFIGURATION CHANGE
+====================================================================
+
+TASK
+----
+Make one harmless configuration change, inspect the difference with
+`show | compare`, and commit the change.
+
+SOLUTION
+--------
+
+We will change only the interface description on SW1. This does not
+change forwarding behavior and is therefore a safe training change.
+
+Enter configuration mode on SW1:
+
+    configure
+
+Change the description:
+
+    set interfaces ge-0/0/0 description HOST1-ACCESS-TRAINING
+
+Before committing, always inspect the candidate change:
+
+    show | compare
+
+You should see a difference indicating that the description has
+changed.
+
+Commit the change:
+
+    commit
+
+Return to operational mode:
+
+    exit
+
+Verify:
+
+    show configuration interfaces ge-0/0/0 | display set
+
+
+WHY `show | compare` MATTERS
+----------------------------
+
+`show | compare` compares the candidate configuration with the current
+active configuration.
+
+It answers the question:
+
+    "What exactly am I about to change if I commit?"
+
+This is one of the most valuable habits to build as a junior engineer.
+
+Before a production change, avoid relying on memory.
+Read the diff.
+
+
+JUNIOR-ENGINEER RULE
+--------------------
+
+A safe Junos workflow is:
+
+    configure
+        ↓
+    make change
+        ↓
+    show | compare
+        ↓
+    verify the diff
+        ↓
+    commit
+        ↓
+    verify operational state
+
+Do not skip the compare step just because the change looks small.
+
+
+====================================================================
+TASK 9 — DEMONSTRATE ROLLBACK
+====================================================================
+
+TASK
+----
+Return SW1 to the configuration state that existed before the previous
+commit.
+
+SOLUTION
+--------
+
+First enter configuration mode:
+
+    configure
+
+Load the previous committed configuration as the candidate:
+
+    rollback 1
+
+Now inspect the candidate difference:
+
+    show | compare
+
+The change to the interface description should appear in the diff.
+
+Commit the rollback:
+
+    commit
+
+Return to operational mode:
+
+    exit
+
+Verify that the original description is back:
+
+    show configuration interfaces ge-0/0/0 | display set
+
+Expected description:
+
+    HOST1-ACCESS
+
+
+IMPORTANT: `rollback 1` vs `rollback 0`
+---------------------------------------
+
+These commands do different jobs.
+
+    rollback 0
+        Discards uncommitted candidate changes and returns the candidate
+        configuration to the current active configuration.
+
+    rollback 1
+        Loads the previous committed configuration into the candidate
+        configuration.
+
+That distinction is important.
+
+Example:
+
+    You make a change but have NOT committed it.
+        → rollback 0
+
+    You committed a change and now want to return to the previous
+    committed configuration.
+        → rollback 1
+
+
+JUNIOR-ENGINEER TIP
+-------------------
+
+Do not confuse "rollback" with "automatic recovery".
+
+A rollback loads a known configuration version into the candidate
+configuration. The actual change becomes active only after a commit.
+
+That means you still have an opportunity to inspect the rollback with:
+
+    show | compare
+
+before committing it.
+
+
+====================================================================
+TASK 10 — FINAL VERIFICATION
+====================================================================
+
+TASK
+----
+Re-verify the Layer-2 state and end-host connectivity after the
+rollback.
+
+SOLUTION
+--------
+
+Check interface state:
+
+    show interfaces terse | match ge-0/0/
+
+Check VLAN:
+
+    show vlans USERS
+
+Check switching interfaces:
+
+    show ethernet-switching interfaces
+
+Check MAC learning:
+
+    show ethernet-switching table
+
+From HOST1:
+
+    docker exec clab-juniper-ex-training-lab-001-host1 ping -c 4 10.10.10.12
+
+
+EXPECTED RESULT
+---------------
+
+All of the following should be true:
+
+    [OK] SW1 and SW2 are reachable.
+    [OK] ge-0/0/0 on each switch is up and is an access port.
+    [OK] ge-0/0/0 is a member of VLAN USERS.
+    [OK] ge-0/0/1 is an operational trunk on both switches.
+    [OK] VLAN USERS is carried across the trunk.
+    [OK] MAC addresses are learned on both switches.
+    [OK] HOST1 can ping HOST2.
+    [OK] SW1's interface description has returned to HOST1-ACCESS.
+
+
+====================================================================
+TROUBLESHOOTING SCENARIO — WHAT IF THE PING FAILS?
+====================================================================
+
+Use this sequence rather than guessing.
+
+STEP 1 — Check the endpoint-facing interface
+----------------------------------------------
+
+    show interfaces terse | match ge-0/0/0
+
+Question:
+    Is the link up?
+
+If DOWN:
+    Check the endpoint/container link and interface state first.
+
+
+STEP 2 — Check VLAN membership
+------------------------------
+
+    show configuration interfaces ge-0/0/0 | display set
+
+Question:
+    Is the port an access port and a member of USERS?
+
+If wrong:
+    Fix the local VLAN assignment before moving on.
+
+
+STEP 3 — Check MAC learning
+----------------------------
+
+    show ethernet-switching table
+
+Question:
+    Is the endpoint MAC learned?
+
+If not learned:
+    Return to interface/endpoint troubleshooting.
+
+
+STEP 4 — Check the trunk
+------------------------
+
+    show interfaces terse | match ge-0/0/1
+
+    show configuration interfaces ge-0/0/1 | display set
+
+Question:
+    Is the trunk up, and is VLAN USERS allowed on it?
+
+
+STEP 5 — Check the remote switch
+--------------------------------
+
+Repeat the same checks on SW2.
+
+
+STEP 6 — Test again
+-------------------
+
+    docker exec clab-juniper-ex-training-lab-001-host1 ping -c 4 10.10.10.12
+
+
+TROUBLESHOOTING PRINCIPLE
+--------------------------
+
+Always move from the closest observable point to the next point in the
+traffic path.
+
+Do not randomly type commands.
+
+A strong engineer can explain why the next command is being run.
+
+
+====================================================================
+COMMON JUNOS COMMANDS USED IN THIS LAB
+====================================================================
+
+DEVICE / SYSTEM
+---------------
+show version
+    Check Junos version and system information.
+
+show chassis hardware
+    Check chassis/platform hardware information.
+
+show system uptime
+    Check system uptime.
+
+INTERFACES
+----------
+show interfaces terse
+    Quick summary of interface state.
+
+show interfaces ge-0/0/0
+    Detailed information for one interface.
+
+show configuration interfaces ge-0/0/0
+    Show configured settings for one interface.
+
+show configuration interfaces ge-0/0/0 | display set
+    Show the same configuration as `set` commands.
+
+VLAN / SWITCHING
+----------------
+show vlans
+    Display VLAN information.
+
+show vlans USERS
+    Display information about VLAN USERS.
+
+show ethernet-switching interfaces
+    Display Layer-2 switching interface information.
+
+show ethernet-switching table
+    Display learned Ethernet MAC addresses.
+
+CONFIGURATION
+-------------
+configure
+    Enter configuration mode.
+
+show | compare
+    Show pending candidate changes versus active configuration.
+
+commit
+    Activate the candidate configuration.
+
+commit confirmed 5
+    Activate the change temporarily; if not confirmed within the
+    timeout, Junos can automatically roll back to the previous
+    committed state.
+
+rollback 0
+    Discard uncommitted candidate changes.
+
+rollback 1
+    Load the previous committed configuration into the candidate.
+
+
+====================================================================
+KEY TAKEAWAYS FOR A JUNIOR ENGINEER
+====================================================================
+
+1. Learn the Junos modes.
+
+    switch>
+        Operational mode
+
+    switch#
+        Configuration mode
+
+2. Separate CONFIGURATION from OPERATIONAL STATE.
+
+    `show configuration ...`
+        tells you what is configured.
+
+    `show interfaces ...`
+        tells you what is happening operationally.
+
+3. Do not stop at interface status.
+
+    UP interface ≠ correct VLAN ≠ correct end-to-end connectivity.
+
+4. Learn to verify MAC addresses.
+
+    The MAC table tells you where the switch learned an endpoint.
+
+5. Always understand the traffic path.
+
+    Endpoint → Access Port → VLAN → Trunk/Uplink → Remote Access Port
+
+6. Use `show | compare` before committing changes.
+
+7. Understand rollback levels.
+
+    rollback 0 = discard uncommitted changes
+    rollback 1 = previous committed configuration
+
+8. Verify after every change.
+
+    Configuration change
+        ↓
+    commit
+        ↓
+    operational verification
+        ↓
+    user/end-host test
+
+
+====================================================================
+FINAL LAB CHECKLIST
+====================================================================
+
+[ ] I can enter and exit Junos configuration mode.
+[ ] I can identify the Junos version and chassis information.
+[ ] I can quickly check interface state with `show interfaces terse`.
+[ ] I understand the difference between an access port and a trunk.
+[ ] I can verify VLAN membership.
+[ ] I can inspect the MAC address table.
+[ ] I can verify that a VLAN crosses the inter-switch trunk.
+[ ] I can perform an end-to-end ping test.
+[ ] I can use `show | compare` before a commit.
+[ ] I understand `rollback 0` versus `rollback 1`.
+[ ] I can troubleshoot a basic Layer-2 connectivity problem using a
+    repeatable sequence instead of guessing.
+
+
+====================================================================
+END OF LAB-001
+====================================================================

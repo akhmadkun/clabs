@@ -1,0 +1,49 @@
+FND-103 - Administrative AAA and RBAC
+=====================================
+
+Scenario
+--------
+A PA-VM management plane must use centralized administrative authentication
+while retaining local break-glass access.
+
+Requirements
+------------
+1. RADIUS is the first external authentication method.
+2. TACACS+ is the second external authentication method.
+3. Local Database remains the final fallback.
+4. Administrative access must support a least-privilege read-only role.
+5. A local break-glass superuser must remain available.
+6. Prove authentication behavior and failure-domain isolation.
+7. Break two to four realistic faults, including one misleading symptom.
+8. Diagnose each fault by ranking hypotheses before collecting evidence.
+9. Restore the intended state and prove no collateral regression.
+10. Document design trade-offs for RADIUS, TACACS+, authentication sequence,
+    RBAC, and local fallback.
+
+Baseline facts
+--------------
+PA-VM MGT: 192.168.122.10/24
+RADIUS:    192.168.122.20/UDP 1812, secret gns3
+TACACS+:   192.168.122.21/TCP 49, secret gns3
+
+Public AAA appliance users
+--------------------------
+RADIUS:  alice / gns3
+TACACS+: gns3 / gns3
+         readonly / gns3
+
+Lab constraint
+--------------
+Use the existing virbr0 network for the AAA service LAN. Do not modify
+virbr1-virbr6.
+
+Deliverables
+------------
+- PA-VM authentication profile(s)
+- PA-VM authentication sequence
+- least-privilege administrative role mapping
+- successful RADIUS authentication evidence
+- successful TACACS+ authentication evidence
+- local fallback evidence
+- fault / hypothesis / evidence / RCA notes
+- restore and no-regression evidence

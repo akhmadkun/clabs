@@ -1,0 +1,32 @@
+OFFICIAL PALO ALTO NETWORKS DOCUMENTATION
+============================================
+
+1. Commit Configuration Changes
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/use-the-cli/commit-configuration-changes
+
+2. Save Candidate Configurations
+https://docs.paloaltonetworks.com/ngfw/help/12-1/web-interface-basics/save-candidate-configurations
+
+3. Device > Setup > Operations
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-setup-operations
+
+4. Revert Firewall Configuration Changes
+https://docs.paloaltonetworks.com/ngfw/administration/firewall-administration/manage-configuration-backups/revert-firewall-configuration-changes
+
+5. PAN-OS 11.2 Configure CLI Command Hierarchy
+https://docs.paloaltonetworks.com/ngfw/pan-os-cli-quick-start/cli-command-hierarchy/pan-os-11-2-configure-cli-command-hierarchy
+
+Relevant documented CLI forms used in this lab:
+- set deviceconfig system hostname <value>
+- set deviceconfig system login-banner <value>
+- set deviceconfig system service disable-https <yes|no>
+- set deviceconfig system service disable-ssh <yes|no>
+- save config to <value>
+- revert config
+- validate full
+- load config version <value>
+- commit description <value>
+
+NOTE
+GUI wording may differ slightly between PAN-OS releases. Use the labels shown
+by your installed PAN-OS release.

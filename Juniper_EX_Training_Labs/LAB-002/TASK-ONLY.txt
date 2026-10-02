@@ -1,0 +1,119 @@
+============================================================
+LAB-002
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LACP / AGGREGATED ETHERNET (AE)
+============================================================
+
+OBJECTIVE
+---------
+Build a Layer-2 LACP bundle (ae0) between SW1 and SW2, carry VLAN
+USERS across the bundle, verify that both physical links are members
+of the bundle, and troubleshoot a deliberately broken member link.
+
+TOPOLOGY
+--------
+
+             SW1                         SW2
+        +------------+              +------------+
+        |            |              |            |
+ HOST1--| ge-0/0/0  |              | ge-0/0/0 |--HOST2
+        |            |              |            |
+        | ge-0/0/1  |==============| ge-0/0/1 |
+        | ge-0/0/2  |==============| ge-0/0/2 |
+        +------------+              +------------+
+
+VLAN 10: USERS
+HOST1: 10.10.10.11/24
+HOST2: 10.10.10.12/24
+
+============================================================
+TASK 1 — Prepare Aggregated Ethernet
+============================================================
+
+Enable support for one aggregated Ethernet interface on SW1 and SW2.
+
+Expected result:
+- The chassis has one aggregated Ethernet device available.
+- ae0 can be configured.
+
+============================================================
+TASK 2 — Create ae0 and Add the Member Links
+============================================================
+
+On both switches:
+
+1. Configure ge-0/0/1 as a member of ae0.
+2. Configure ge-0/0/2 as a member of ae0.
+
+Use the Junos 802.3ad configuration method.
+
+Do not configure LACP yet.
+
+============================================================
+TASK 3 — Enable LACP and Configure ae0 as a VLAN Trunk
+============================================================
+
+On both switches:
+
+1. Enable LACP active on ae0.
+2. Configure ae0 as a Layer-2 trunk.
+3. Allow VLAN USERS on ae0.
+4. Commit the configuration.
+
+============================================================
+TASK 4 — Verify LACP
+============================================================
+
+Verify:
+
+1. ae0 exists and is operational.
+2. ge-0/0/1 is a member of ae0.
+3. ge-0/0/2 is a member of ae0.
+4. LACP is established.
+5. VLAN USERS is present on the bundle.
+6. HOST1 can ping HOST2.
+
+Use operational commands to prove each point.
+
+============================================================
+TASK 5 — Troubleshoot a Failed LACP Member
+============================================================
+
+Create the following fault on SW2:
+
+- ge-0/0/2 must be administratively disabled.
+
+Then troubleshoot the bundle from SW1/SW2 without being told the
+exact fault location.
+
+Determine:
+
+1. Why ae0 still has service through one member.
+2. Which LACP member is down.
+3. Why the member is down.
+4. How to restore the member.
+
+============================================================
+TASK 6 — Final Verification
+============================================================
+
+After the repair:
+
+1. Confirm both LACP members are operational.
+2. Confirm ae0 is operational.
+3. Confirm VLAN USERS is carried across ae0.
+4. Confirm HOST1 can ping HOST2.
+5. Save the final configuration.
+
+============================================================
+COMPLETION CRITERIA
+============================================================
+
+The lab is complete when:
+
+- ae0 is up on both switches.
+- ge-0/0/1 and ge-0/0/2 are both active members.
+- LACP is established.
+- VLAN USERS is permitted on ae0.
+- HOST1 can ping HOST2.
+- The injected failure was identified and corrected.

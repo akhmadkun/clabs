@@ -52,6 +52,44 @@ Data:
     PA ae1.200 10.200.200.254
     destination 10.200.200.10
 
+PA:
+  AE1
+   e1/1 + e1/2
+   ae1.100 10.100.100.254/24 INSIDE
+   ae1.200 10.200.200.254/24 OUTSIDE
+
+CLIENTS:
+  selected = 10.100.100.10
+  normal   = 10.100.100.11
+  outside  = 10.200.200.10
+
+PBR FWD:
+  match .10 -> .10
+  nexthop 10.100.100.254
+  apply Vlan100 input
+
+PBR REV:
+  match .10 -> .10
+  nexthop 10.200.200.254
+  apply Vlan200 input
+
+ARISTA VERIFY:
+  show mlag
+  show mlag config-sanity
+  show mlag interfaces
+  show port-channel summary
+  show lacp neighbor
+  show class-map type pbr
+  show policy-map type pbr
+  show ip access-lists PBR-FWD
+  show ip access-lists PBR-REV
+
+PA VERIFY:
+  show interface ae1
+  show lacp aggregate-ethernet ae1
+  Monitor > Traffic
+
+
 Deploy:
   ./preflight.sh
   containerlab deploy -t Palo_Arista_MLAG_PBR_PoC_001.clab.yml

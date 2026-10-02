@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620">
+<rect width="1100" height="620" fill="#ffffff"/>
+<text x="550" y="45" text-anchor="middle" font-family="Arial" font-size="28" font-weight="700">FND-103 — Administrative AAA and RBAC</text>
+<text x="550" y="73" text-anchor="middle" font-family="Arial" font-size="15" fill="#555">Public GNS3 AAA appliance + existing virbr0 management LAN</text>
+
+<rect x="60" y="125" width="250" height="170" rx="15" fill="#eef5ff" stroke="#3465a4" stroke-width="2"/>
+<text x="185" y="155" text-anchor="middle" font-family="Arial" font-size="20" font-weight="700">PA-VM</text>
+<text x="185" y="185" text-anchor="middle" font-family="Arial" font-size="16">MGT 192.168.122.10/24</text>
+<text x="185" y="215" text-anchor="middle" font-family="Arial" font-size="15">RADIUS → UDP/1812</text>
+<text x="185" y="242" text-anchor="middle" font-family="Arial" font-size="15">TACACS+ → TCP/49</text>
+<text x="185" y="269" text-anchor="middle" font-family="Arial" font-size="14">RADIUS → TACACS+ → Local</text>
+
+<rect x="425" y="105" width="650" height="360" rx="22" fill="#f5f5f5" stroke="#777" stroke-width="2"/>
+<text x="750" y="140" text-anchor="middle" font-family="Arial" font-size="22" font-weight="700">virbr0 — 192.168.122.0/24</text>
+
+<rect x="465" y="175" width="250" height="125" rx="15" fill="#eaf8ea" stroke="#3a8a3a" stroke-width="2"/>
+<text x="590" y="205" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">RADIUS</text>
+<text x="590" y="232" text-anchor="middle" font-family="Arial" font-size="15">adosztal/aaa:latest</text>
+<text x="590" y="258" text-anchor="middle" font-family="Arial" font-size="15">192.168.122.20</text>
+<text x="590" y="282" text-anchor="middle" font-family="Arial" font-size="14">alice / gns3</text>
+
+<rect x="785" y="175" width="250" height="125" rx="15" fill="#fff3e8" stroke="#c77728" stroke-width="2"/>
+<text x="910" y="205" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">TACACS+</text>
+<text x="910" y="232" text-anchor="middle" font-family="Arial" font-size="15">adosztal/aaa:latest</text>
+<text x="910" y="258" text-anchor="middle" font-family="Arial" font-size="15">192.168.122.21</text>
+<text x="910" y="282" text-anchor="middle" font-family="Arial" font-size="14">gns3 / readonly</text>
+
+<rect x="595" y="345" width="310" height="85" rx="14" fill="#ffffff" stroke="#666" stroke-width="2"/>
+<text x="750" y="375" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">AA Test Host</text>
+<text x="750" y="402" text-anchor="middle" font-family="Arial" font-size="15">192.168.122.30/24</text>
+
+<line x1="310" y1="210" x2="465" y2="210" stroke="#333" stroke-width="3"/>
+<line x1="310" y1="245" x2="785" y2="245" stroke="#333" stroke-width="1.5" stroke-dasharray="7 6"/>
+<line x1="750" y1="300" x2="750" y2="345" stroke="#333" stroke-width="2"/>
+
+<text x="750" y="500" text-anchor="middle" font-family="Arial" font-size="15">Existing libvirt network is reused; virbr1–virbr6 are untouched.</text>
+<text x="550" y="565" text-anchor="middle" font-family="Arial" font-size="14" fill="#666">Containerlab management network: 172.30.103.0/24 (control/console only)</text>
+</svg>

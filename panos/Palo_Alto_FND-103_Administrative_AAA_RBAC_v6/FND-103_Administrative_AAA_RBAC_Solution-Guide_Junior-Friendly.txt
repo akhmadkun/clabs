@@ -1,0 +1,1254 @@
+FND-103 — ADMINISTRATIVE AAA AND RBAC
+JUNIOR-FRIENDLY SOLUTION GUIDE
+===============================================
+
+Lab revision: v6
+PAN-OS target: 10.1.x lab image from the Palo Alto expert roadmap
+Purpose: reusable training lab for administrative RADIUS, TACACS+,
+authentication sequence, local fallback, and least-privilege RBAC.
+
+IMPORTANT
+---------
+This guide is written for the existing FND-103 v6 lab package. It does NOT
+recreate or change the Containerlab topology.
+
+Use the supplied fnd103-aaa.clab.yml exactly as delivered.
+Do not rebuild the AAA images.
+Do not modify virbr0 or virbr1-virbr6.
+Do not remove the existing PA-VM break-glass administrator before testing.
+
+The v6 topology uses this public ready-made AAA image:
+  adosztal/aaa:latest
+
+The image provides both RADIUS and TACACS+ with preconfigured lab identities.
+RADIUS users: alice, bob
+TACACS+ users: gns3, readonly
+The documented lab password for those identities and AAA clients is:
+  gns3
+
+Official image references:
+  https://hub.docker.com/r/adosztal/aaa
+  https://github.com/GNS3/gns3-registry/blob/master/appliances/aaa.gns3a
+
+================================================================
+1. LAB OBJECTIVES
+================================================================
+
+By the end of the lab, the engineer should be able to:
+
+1. Verify RADIUS and TACACS+ reachability from the PA-VM management plane.
+2. Create a RADIUS Server Profile.
+3. Create a TACACS+ Server Profile.
+4. Create Authentication Profiles for RADIUS, TACACS+, and Local Database.
+5. Build an Authentication Sequence in this order:
+       RADIUS -> TACACS+ -> Local Database
+6. Assign an administrative account to the sequence.
+7. Create a least-privilege read-only Admin Role.
+8. Prove that a read-only administrator cannot perform configuration writes.
+9. Prove fallback behavior when RADIUS or TACACS+ is unavailable.
+10. Distinguish transport failure, secret mismatch, credential failure,
+    sequence behavior, and RBAC authorization failure.
+11. Restore the baseline with no collateral changes.
+
+CORE DESIGN
+-----------
+
+                 192.168.122.0/24
+
+        +---------------- PA-VM ----------------+
+        | MGT 192.168.122.10                   |
+        +-------------------+------------------+
+                            |
+              existing libvirt virbr0
+                            |
+          +-----------------+------------------+
+          |                                    |
+   +------v------+                       +------v------+
+   | RADIUS      |                       | TACACS+     |
+   | 192.168.122.20                    | 192.168.122.21
+   | UDP/1812    |                       | TCP/49       |
+   +-------------+                       +-------------+
+          |
+   +------v------+
+   | AA Test     |
+   | 192.168.122.30
+   +-------------+
+
+The PA-VM authenticates administrators through its management plane.
+The AAA services are not data-plane traffic and do not require a security
+policy for this lab.
+
+================================================================
+2. PRE-FLIGHT — DO THIS BEFORE TOUCHING PAN-OS
+================================================================
+
+From the FND-103 v6 directory:
+
+  docker pull adosztal/aaa:latest
+  ./scripts/preflight.sh
+
+Expected:
+  PRE-FLIGHT PASSED
+
+If preflight fails, STOP.
+Do not continue to the PAN-OS configuration until the prerequisite is fixed.
+
+Deploy/redeploy only with the topology supplied with v6:
+
+  sudo containerlab deploy -t fnd103-aaa.clab.yml
+
+Then:
+
+  ./scripts/verify.sh
+
+The verification script is the first health gate. It checks the containers,
+interfaces, listeners, reachability, and short-term persistence.
+
+================================================================
+3. UNDERSTAND THE INTERFACES BEFORE CONFIGURATION
+================================================================
+
+The AAA containers have two logical connections:
+
+  eth0 = Containerlab management network
+         172.30.103.0/24
+
+  eth1 = actual AAA service LAN on existing virbr0
+         192.168.122.0/24
+
+Expected addresses:
+
+  radius   eth1 192.168.122.20/24
+  tacacs   eth1 192.168.122.21/24
+  aa-test  eth1 192.168.122.30/24
+
+The PA-VM management interface is:
+
+  MGT 192.168.122.10/24
+  Gateway 192.168.122.1
+
+Check the nodes from the host:
+
+  docker exec radius ip -br a
+  docker exec tacacs ip -br a
+  docker exec aa-test ip -br a
+
+Expected service interfaces:
+
+  radius   -> eth1  UP  192.168.122.20/24
+  tacacs   -> eth1  UP  192.168.122.21/24
+  aa-test  -> eth1  UP  192.168.122.30/24
+
+Check the service listeners:
+
+  docker exec radius sh -c 'ss -lunp | grep 1812 || netstat -lunp | grep 1812'
+  docker exec tacacs sh -c 'ss -lntp | grep 49 || netstat -lntp | grep 49'
+
+Expected:
+
+  RADIUS listening on UDP/1812
+  TACACS+ listening on TCP/49
+
+Check restart count:
+
+  docker inspect -f '{{.RestartCount}}' radius
+  docker inspect -f '{{.RestartCount}}' tacacs
+
+Expected before fault injection:
+  0
+
+================================================================
+4. CHECK BASIC CONNECTIVITY FROM THE AAA TEST NODE
+================================================================
+
+Run:
+
+  docker exec aa-test ping -c 3 192.168.122.10
+  docker exec aa-test ping -c 3 192.168.122.20
+  docker exec aa-test ping -c 3 192.168.122.21
+
+Expected:
+  all three addresses reply.
+
+This test proves basic L3 reachability, but it does NOT prove that the
+AAA protocols are working.
+
+Remember:
+
+  Ping works + authentication fails
+        !=
+  routing is automatically correct for AAA.
+
+You still need to prove UDP/1812 or TCP/49 and the AAA exchange itself.
+
+================================================================
+5. VERIFY PA-VM MANAGEMENT CONNECTIVITY
+================================================================
+
+Log in to the PA-VM CLI with the existing break-glass account.
+
+Run:
+
+  show interface management
+  ping host 192.168.122.20
+  ping host 192.168.122.21
+
+Expected:
+
+  MGT = up/up
+  192.168.122.20 replies
+  192.168.122.21 replies
+
+DO NOT change administrative authentication yet.
+First make sure the current local break-glass account works.
+
+Write down the current working admin username.
+
+================================================================
+6. CREATE THE RADIUS SERVER PROFILE
+================================================================
+
+PAN-OS Web UI:
+
+  Device
+    > Server Profiles
+      > RADIUS
+        > Add
+
+Use these values:
+
+  Profile Name:
+    FND103-RADIUS
+
+  Location:
+    Shared
+
+  Administrator Use Only:
+    Enabled
+
+  Timeout:
+    3 seconds (default is fine for the lab)
+
+  Authentication Protocol:
+    PAP
+
+  Servers:
+    Name:
+      RADIUS-LAB
+
+    RADIUS Server:
+      192.168.122.20
+
+    Secret:
+      gns3
+
+    Confirm Secret:
+      gns3
+
+    Port:
+      1812
+
+Why PAP here?
+-----------
+The v6 public appliance is a simple lab RADIUS server with preconfigured
+users. PAP is selected explicitly so the client/server authentication method
+is deterministic for this exercise. Palo Alto documents the available RADIUS
+protocol choices and notes that the selected method must match what the server
+supports.
+
+Do not commit yet unless you want a checkpoint. The authentication test can be
+performed before commit.
+
+================================================================
+7. CREATE THE RADIUS AUTHENTICATION PROFILE
+================================================================
+
+Go to:
+
+  Device
+    > Authentication Profile
+      > Add
+
+Values:
+
+  Name:
+    FND103-AUTH-RADIUS
+
+  Type:
+    RADIUS
+
+  Server Profile:
+    FND103-RADIUS
+
+For Advanced / Allow List:
+
+  Add:
+    alice
+
+Use this profile for the RADIUS-specific authentication test.
+
+Why use an Allow List?
+----------------------
+It makes the lab behavior easier to understand: the RADIUS profile is the
+intended authentication path for alice. Palo Alto documents that the
+Authentication Profile can restrict which users/groups are allowed to
+authenticate.
+
+================================================================
+8. TEST RADIUS BEFORE CREATING THE SEQUENCE
+================================================================
+
+From the PA-VM CLI:
+
+  test authentication authentication-profile FND103-AUTH-RADIUS username alice password
+
+The CLI will prompt for the password.
+Enter:
+
+  gns3
+
+Expected:
+
+  Authentication succeeded
+
+At the same time, on the RADIUS node run:
+
+  docker exec radius ip -br a
+  docker exec radius sh -c 'ss -lunp | grep 1812 || netstat -lunp | grep 1812'
+
+For packet-level proof, start this BEFORE the authentication test:
+
+  docker exec radius tcpdump -ni eth1 udp port 1812
+
+Then run the PAN-OS authentication test again.
+
+Expected packet sequence:
+
+  PA-VM -> RADIUS Access-Request
+  RADIUS -> PA-VM Access-Accept
+
+If the RADIUS test fails, DO NOT proceed.
+Diagnose RADIUS first.
+
+================================================================
+9. CREATE THE TACACS+ SERVER PROFILE
+================================================================
+
+PAN-OS Web UI:
+
+  Device
+    > Server Profiles
+      > TACACS+
+        > Add
+
+Values:
+
+  Profile Name:
+    FND103-TACACS
+
+  Location:
+    Shared
+
+  Administrator Use Only:
+    Enabled
+
+  Timeout:
+    3 seconds
+
+  Authentication Protocol:
+    CHAP
+
+  Servers:
+    Name:
+      TACACS-LAB
+
+    TACACS+ Server:
+      192.168.122.21
+
+    Secret:
+      gns3
+
+    Confirm Secret:
+      gns3
+
+    Port:
+      49
+
+Why CHAP?
+----------
+PAN-OS 10.1 documents CHAP as the default/preferred TACACS+ authentication
+protocol when supported by the server. The public appliance is used here as
+a ready-made TACACS+ service for the lab.
+
+================================================================
+10. CREATE THE TACACS+ AUTHENTICATION PROFILE
+================================================================
+
+Go to:
+
+  Device
+    > Authentication Profile
+      > Add
+
+Values:
+
+  Name:
+    FND103-AUTH-TACACS
+
+  Type:
+    TACACS+
+
+  Server Profile:
+    FND103-TACACS
+
+Advanced / Allow List:
+
+  Add:
+    gns3
+    readonly
+
+================================================================
+11. TEST TACACS+ BEFORE CREATING THE SEQUENCE
+================================================================
+
+From the PA-VM CLI:
+
+  test authentication authentication-profile FND103-AUTH-TACACS username gns3 password
+
+Enter password:
+
+  gns3
+
+Expected:
+
+  Authentication succeeded
+
+Packet capture:
+
+  docker exec tacacs tcpdump -ni eth1 tcp port 49
+
+Then repeat the PAN-OS test.
+
+Expected:
+
+  TCP connection to 192.168.122.21:49
+  TACACS+ authentication exchange
+  Successful authentication
+
+Test the read-only identity too:
+
+  test authentication authentication-profile FND103-AUTH-TACACS username readonly password
+
+Expected:
+
+  Authentication succeeded
+
+================================================================
+12. CREATE LOCAL DATABASE USER FOR FALLBACK
+================================================================
+
+The local database provides the final emergency authentication path.
+
+Go to:
+
+  Device
+    > Local User Database
+      > Users
+        > Add
+
+Create a lab user:
+
+  Username:
+    alice
+
+  Password:
+    LocalAlice-103!
+
+Create another lab user:
+
+  Username:
+    gns3
+
+  Password:
+    LocalGns3-103!
+
+Important:
+
+  These local passwords are intentionally different from the public AAA
+  password "gns3".
+
+This distinction makes fallback testing obvious.
+
+Do NOT replace or delete the existing break-glass superuser.
+
+================================================================
+13. CREATE THE LOCAL AUTHENTICATION PROFILE
+================================================================
+
+Go to:
+
+  Device
+    > Authentication Profile
+      > Add
+
+Values:
+
+  Name:
+    FND103-AUTH-LOCAL
+
+  Type / Method:
+    Local Database
+
+Advanced / Allow List:
+
+  Add:
+    alice
+    gns3
+
+You now have three independent authentication profiles:
+
+  FND103-AUTH-RADIUS
+  FND103-AUTH-TACACS
+  FND103-AUTH-LOCAL
+
+================================================================
+14. BUILD THE AUTHENTICATION SEQUENCE
+================================================================
+
+Go to:
+
+  Device
+    > Authentication Sequence
+      > Add
+
+Name:
+
+  FND103-AUTH-SEQUENCE
+
+Add authentication profiles in EXACTLY this order:
+
+  1. FND103-AUTH-RADIUS
+  2. FND103-AUTH-TACACS
+  3. FND103-AUTH-LOCAL
+
+Do not reverse the order.
+
+The sequence logic is:
+
+  User login
+      |
+      v
+  RADIUS
+      |
+      +-- success --> STOP
+      |
+      +-- failure --> TACACS+
+                         |
+                         +-- success --> STOP
+                         |
+                         +-- failure --> Local Database
+                                              |
+                                              +-- success --> login
+                                              +-- failure --> deny
+
+This matches Palo Alto's documented Authentication Sequence model: the
+firewall evaluates authentication profiles from top to bottom until one
+successfully authenticates; access is denied when all profiles fail.
+
+================================================================
+15. CREATE THE READ-ONLY ADMIN ROLE
+================================================================
+
+Go to:
+
+  Device
+    > Admin Roles
+      > Add
+
+Name:
+
+  FND103-READONLY
+
+Role scope:
+
+  Device
+
+Web UI:
+
+  Set required operational areas to:
+    Read Only
+
+  Configuration-changing areas should NOT be Enable.
+
+For this lab, a good broad read-only baseline is:
+
+  Dashboard       Read Only
+  ACC             Read Only
+  Monitor         Read Only
+  Policies        Read Only
+  Objects         Read Only
+  Network         Read Only
+  Device          Read Only
+
+If your PAN-OS menu exposes more feature categories, keep them Read Only
+unless the lab specifically requires them to be hidden.
+
+Command Line:
+
+  devicereader
+
+XML API:
+
+  Disable
+
+REST API:
+
+  Disable
+
+The PAN-OS 10.1 Admin Roles documentation states that custom roles can set
+Web UI access to Enable, Read Only, or Disable and can assign the Device CLI
+role `devicereader`, which provides read-only access to device settings.
+
+================================================================
+16. CREATE THE ADMIN ACCOUNT THAT USES THE SEQUENCE
+================================================================
+
+Go to:
+
+  Device
+    > Administrators
+      > Add
+
+Create:
+
+  Name:
+    alice
+
+  Authentication Profile:
+    FND103-AUTH-SEQUENCE
+
+  Administrator Type:
+    Role Based
+
+  Admin Role Profile:
+    FND103-READONLY
+
+Do NOT enter a local admin password here when the administrator uses the
+Authentication Profile/Sequence.
+
+Because the username is the same across the test sources, the same login name
+can exercise different parts of the sequence depending on which backend is
+available:
+
+  alice + RADIUS healthy
+      -> RADIUS succeeds
+
+  alice + RADIUS unavailable
+      -> TACACS does not have alice
+      -> Local Database can authenticate alice
+
+For TACACS-specific sequence testing, create another administrator:
+
+  Name:
+    gns3
+
+  Authentication Profile:
+    FND103-AUTH-SEQUENCE
+
+  Administrator Type:
+    Role Based
+
+  Admin Role Profile:
+    FND103-READONLY
+
+With `gns3`:
+
+  RADIUS does not have gns3
+      -> TACACS+ authenticates gns3
+
+This gives us a controlled demonstration of sequence progression.
+
+================================================================
+17. FIRST COMMIT
+================================================================
+
+Before committing:
+
+  Confirm the existing break-glass admin still works.
+  Confirm all profile names are correct.
+  Confirm RADIUS secret = gns3.
+  Confirm TACACS secret = gns3.
+  Confirm sequence order is RADIUS -> TACACS+ -> Local.
+  Confirm the read-only role is assigned to the test admin accounts.
+
+Commit with a descriptive message, for example:
+
+  FND-103 administrative AAA and RBAC baseline
+
+After commit, log out/in using the test administrator.
+
+================================================================
+18. BASELINE ACCEPTANCE TESTS
+================================================================
+
+TEST A — RADIUS path
+
+Login as:
+  alice
+Password:
+  gns3
+
+Expected:
+  login succeeds
+  read-only permissions apply
+
+TEST B — TACACS path
+
+Login as:
+  gns3
+Password:
+  gns3
+
+Expected:
+  login succeeds
+  read-only permissions apply
+
+TEST C — Local fallback path
+
+The easiest controlled test is to temporarily make the external paths fail
+for the selected user, then use the local password.
+
+For alice, disable RADIUS first and then use:
+
+  alice
+  LocalAlice-103!
+
+Expected:
+  RADIUS fails or times out
+  TACACS does not authenticate alice
+  Local Database authenticates alice
+  login succeeds
+
+NOTE:
+The failure sequence may take several seconds because external authentication
+uses timeout/retry timers. This is normal and is useful evidence for the
+failure-domain exercise.
+
+================================================================
+19. PROVE RBAC, NOT JUST AUTHENTICATION
+================================================================
+
+Authentication answers:
+  "Who are you?"
+
+RBAC answers:
+  "What are you allowed to do?"
+
+With `alice` logged in under FND103-READONLY:
+
+1. Open Monitor and view operational information.
+2. Open Network or Device pages and verify that information is visible.
+3. Attempt to modify a harmless configuration object.
+4. Attempt to commit a configuration change.
+5. Attempt a CLI configuration command if CLI access is enabled by the role.
+
+Expected:
+
+  Operational read access = allowed
+  Configuration write = denied
+  Commit = denied
+
+Do NOT use a destructive test.
+Use a harmless temporary object only, then cancel/clean it up using the
+break-glass administrator if needed.
+
+================================================================
+20. FAILURE INJECTION 1 — RADIUS SHARED SECRET MISMATCH
+================================================================
+
+Goal:
+  Distinguish an authentication failure caused by the shared secret from a
+  user password failure.
+
+Before changing anything, write ranked hypotheses. Example:
+
+  H1  RADIUS transport unreachable
+  H2  RADIUS shared secret mismatch
+  H3  username/password mismatch
+  H4  Authentication Profile / Allow List issue
+  H5  authentication sequence order issue
+
+Inject:
+
+  Change ONLY the RADIUS secret on the PA-VM server profile.
+
+Do NOT change the server container.
+
+Test:
+
+  test authentication authentication-profile FND103-AUTH-RADIUS username alice password
+
+Observe:
+
+  docker exec radius tcpdump -ni eth1 udp port 1812
+
+Expected evidence:
+
+  RADIUS packets still reach the server.
+  Therefore transport exists.
+  Authentication still fails.
+
+The important diagnostic conclusion is:
+
+  packet reaches server + authentication rejected
+  is not the same as
+  packet never reached server.
+
+Restore the correct PA-VM secret:
+
+  gns3
+
+================================================================
+21. FAILURE INJECTION 2 — RADIUS SERVER UNAVAILABLE
+================================================================
+
+Goal:
+  Demonstrate sequence fallback.
+
+Stop only RADIUS:
+
+  docker stop radius
+
+Do NOT stop TACACS+.
+
+Now test `alice` using the authentication sequence.
+
+Expected sequence behavior:
+
+  RADIUS -> unavailable / timeout
+  TACACS+ -> alice not present on TACACS appliance
+  Local Database -> alice accepted with LocalAlice-103!
+
+This proves the sequence is doing more than a simple retry of the same
+server.
+
+Bring RADIUS back:
+
+  docker start radius
+
+Verify:
+
+  docker inspect -f '{{.RestartCount}}' radius
+  docker exec radius ip -br a
+
+Then repeat the RADIUS-specific authentication test.
+
+================================================================
+22. FAILURE INJECTION 3 — TACACS+ SHARED SECRET MISMATCH
+================================================================
+
+Goal:
+  Demonstrate that a healthy RADIUS path and a bad TACACS secret are different
+  failure domains.
+
+Use `gns3` as the test username.
+
+First make RADIUS unable to authenticate gns3 by design:
+  gns3 is not a RADIUS user in the public appliance.
+
+Then intentionally change the TACACS+ secret on the PA-VM profile so that it
+no longer matches `gns3`.
+
+Capture:
+
+  docker exec tacacs tcpdump -ni eth1 tcp port 49
+
+Test through the sequence.
+
+Expected:
+
+  RADIUS -> user not authenticated
+  TACACS+ -> server reached, authentication fails
+  Local Database -> gns3 accepted using LocalGns3-103!
+
+Restore:
+
+  TACACS secret = gns3
+
+================================================================
+23. FAILURE INJECTION 4 — MISLEADING SYMPTOM
+================================================================
+
+Goal:
+  Learn not to conclude "bad password" from a generic login failure.
+
+Temporarily isolate the TACACS service interface inside the TACACS container:
+
+  docker exec tacacs ifconfig eth1 down
+
+Now test `gns3` through the sequence.
+
+Expected diagnostic clue:
+
+  The user may see a generic login/authentication failure or a delayed
+  fallback. The visible symptom is not sufficient to identify the root cause.
+
+Check:
+
+  docker exec tacacs ip -br a
+  docker exec tacacs sh -c 'ss -lntp | grep 49 || netstat -lntp | grep 49'
+  docker exec tacacs tcpdump -ni eth1 tcp port 49
+
+You should recognize this as a service-path problem, not immediately as a
+credential problem.
+
+Restore the interface:
+
+  docker exec tacacs ifconfig eth1 192.168.122.21 netmask 255.255.255.0 up
+
+Then verify:
+
+  docker exec tacacs ip -br a
+  docker exec aa-test ping -c 3 192.168.122.21
+
+================================================================
+24. DIAGNOSTIC WORKFLOW FOR JUNIOR ENGINEERS
+================================================================
+
+When authentication fails, ALWAYS work from outside to inside.
+
+STEP 1 — Is the service path alive?
+
+  PA-VM -> AAA IP reachable?
+
+Commands:
+
+  ping host 192.168.122.20
+  ping host 192.168.122.21
+
+STEP 2 — Is the correct service listening?
+
+RADIUS:
+
+  docker exec radius sh -c 'ss -lunp | grep 1812 || netstat -lunp | grep 1812'
+
+TACACS+:
+
+  docker exec tacacs sh -c 'ss -lntp | grep 49 || netstat -lntp | grep 49'
+
+STEP 3 — Did the packet reach the server?
+
+RADIUS:
+
+  docker exec radius tcpdump -ni eth1 udp port 1812
+
+TACACS+:
+
+  docker exec tacacs tcpdump -ni eth1 tcp port 49
+
+STEP 4 — If packets arrive, is the secret correct?
+
+Compare the PA-VM server profile secret against the lab image's documented
+client secret.
+
+STEP 5 — Is the username present in the expected backend?
+
+Public appliance users:
+
+  RADIUS  : alice, bob
+  TACACS+ : gns3, readonly
+
+STEP 6 — Is the Authentication Profile Allow List blocking the user?
+
+Check:
+
+  Device > Authentication Profile > <profile> > Advanced > Allow List
+
+STEP 7 — Is the Authentication Sequence in the correct order?
+
+Expected:
+
+  RADIUS
+  TACACS+
+  Local Database
+
+STEP 8 — Did authentication succeed but authorization fail?
+
+Then investigate RBAC / Admin Role, not AAA transport.
+
+This distinction is critical:
+
+  Authentication failure
+      = identity was not successfully authenticated.
+
+  Authorization/RBAC failure
+      = identity authenticated, but the account lacks permission.
+
+================================================================
+25. USE THE PAN-OS TEST AUTHENTICATION COMMAND
+================================================================
+
+The preferred first-line PAN-OS test is:
+
+  test authentication authentication-profile <profile-name> username <username> password
+
+Examples:
+
+  test authentication authentication-profile FND103-AUTH-RADIUS username alice password
+
+  test authentication authentication-profile FND103-AUTH-TACACS username gns3 password
+
+This test can be performed against candidate configuration, so it is useful
+before committing the configuration.
+
+If the command returns an error, read it as evidence — not as a final root
+cause. Palo Alto notes that network problems such as an incorrect server IP or
+port may result in a non-specific error because the initial handshake never
+completes.
+
+================================================================
+26. COMMON FAILURE MODES IN THIS LAB
+================================================================
+
+FAILURE: ping to AAA IP fails
+
+Likely areas:
+  virbr0 attachment
+  eth1 state/address
+  host bridge state
+
+Minimum evidence:
+  ip -br a on the container
+  ping from aa-test
+  ping from PA-VM
+
+FAILURE: ping works, RADIUS test fails immediately
+
+Likely areas:
+  wrong RADIUS port
+  wrong server profile
+  wrong authentication method
+  shared secret mismatch
+  user/Allow List mismatch
+
+Minimum evidence:
+  RADIUS tcpdump
+  server listener
+  PA-VM test authentication output
+
+FAILURE: ping works, TACACS test fails immediately
+
+Likely areas:
+  wrong TCP/49 server profile
+  shared secret mismatch
+  CHAP/PAP mismatch
+  user/Allow List mismatch
+
+Minimum evidence:
+  TCP/49 tcpdump
+  TACACS listener
+  PA-VM test authentication output
+
+FAILURE: authentication succeeds but user cannot configure anything
+
+Likely area:
+  Admin Role / RBAC
+
+This is NOT primarily an AAA transport problem.
+
+FAILURE: fallback does not happen
+
+Check:
+  sequence order
+  whether the selected administrator uses the sequence
+  Allow Lists
+  local database user exists
+  local username exactly matches the login username
+
+================================================================
+27. RESTORE TO BASELINE
+================================================================
+
+Restore every deliberate fault:
+
+  RADIUS secret       -> gns3
+  TACACS secret       -> gns3
+  RADIUS container    -> running
+  TACACS eth1         -> UP, 192.168.122.21/24
+  Authentication order -> RADIUS -> TACACS+ -> Local
+
+Run:
+
+  ./scripts/verify.sh
+
+Then verify:
+
+  docker inspect -f '{{.RestartCount}}' radius
+  docker inspect -f '{{.RestartCount}}' tacacs
+
+Expected:
+  no unexpected restart loops.
+
+From PA-VM:
+
+  ping host 192.168.122.20
+  ping host 192.168.122.21
+
+Then test all three paths again:
+
+  RADIUS: alice / gns3
+  TACACS: gns3 / gns3
+  Local fallback: alice / LocalAlice-103!
+
+Finally, verify that the existing break-glass administrator still works.
+
+================================================================
+28. FINAL ACCEPTANCE CRITERIA
+================================================================
+
+The lab is COMPLETE only when all of the following are true:
+
+[ ] RADIUS listener is UP on UDP/1812.
+[ ] TACACS+ listener is UP on TCP/49.
+[ ] PA-VM can reach both AAA IPs.
+[ ] RADIUS authentication succeeds for alice.
+[ ] TACACS+ authentication succeeds for gns3.
+[ ] Authentication Sequence order is RADIUS -> TACACS+ -> Local.
+[ ] Local fallback succeeds with the local password.
+[ ] Read-only administrator can view operational information.
+[ ] Read-only administrator cannot perform configuration writes.
+[ ] Read-only administrator cannot commit changes.
+[ ] Failure injection 1 was diagnosed as a secret mismatch.
+[ ] Failure injection 2 demonstrated RADIUS outage handling.
+[ ] Failure injection 3 demonstrated TACACS+ secret failure and fallback.
+[ ] Failure injection 4 demonstrated a misleading transport symptom.
+[ ] All injected faults are restored.
+[ ] Existing break-glass administrator still works.
+[ ] No unrelated PA-VM management settings were changed.
+
+================================================================
+29. DESIGN / TRADE-OFF DISCUSSION
+================================================================
+
+RADIUS
+------
+The lab demonstrates RADIUS as one external authentication source using
+UDP/1812. It is straightforward for centralized authentication, but this
+exercise intentionally keeps authorization simple/local on the firewall.
+
+TACACS+
+--------
+The lab demonstrates TACACS+ as a second authentication source using TCP/49.
+Palo Alto documents TACACS+ support for administrative authentication and
+also supports TACACS+ VSAs for external role and access-domain authorization.
+
+Authentication Sequence
+-----------------------
+The sequence provides a controlled order of authentication providers. The
+trade-off is that a login may take longer while unreachable external systems
+time out before the next profile is attempted.
+
+Local fallback
+--------------
+The local database protects access during an external identity-service
+failure. The trade-off is security responsibility: the local fallback
+credential becomes operationally important and must be tightly controlled in
+real environments.
+
+Least privilege
+---------------
+A dedicated read-only role limits what the administrator can do after
+authentication. Palo Alto recommends least privilege and individual
+administrator accounts rather than shared administrative identities.
+
+================================================================
+30. EXPERT EXTENSION — EXTERNAL RBAC VIA VSA
+================================================================
+
+The core lab deliberately uses local authorization because the public AAA
+image is designed as a general GNS3 AAA appliance and its documented users
+are not presented as a Palo Alto-specific production directory.
+
+Once the core lab is understood, extend it with Palo Alto-specific VSAs.
+
+Palo Alto TACACS+ VSAs include:
+
+  service = PaloAlto
+  protocol = firewall
+  PaloAlto-Admin-Role = <role-name>
+
+For a custom role, the role name on the firewall and the VSA value must match.
+Palo Alto also documents VSAs for access domains and user groups.
+
+Do NOT add VSA syntax by guessing.
+Use the Palo Alto documentation and the TACACS+/RADIUS server documentation
+for the exact syntax required by the backend implementation.
+
+================================================================
+31. JUNIOR ENGINEER CHECKLIST — FAST REFERENCE
+================================================================
+
+When someone says:
+  "AAA is broken."
+
+Ask, in this order:
+
+  1. Can PA-VM ping the AAA server?
+  2. Is the correct port listening?
+  3. Does a packet leave PA-VM / arrive at the server?
+  4. Is the shared secret correct?
+  5. Does the backend know the username?
+  6. Does the Authentication Profile allow the username?
+  7. Is the Authentication Sequence ordered correctly?
+  8. Does local fallback contain the username?
+  9. Did authentication succeed but RBAC deny the action?
+
+Never jump directly to:
+  "the password must be wrong."
+
+================================================================
+32. OFFICIAL PALO ALTO REFERENCES
+================================================================
+
+PAN-OS 10.1 — Device > Server Profiles > RADIUS
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-server-profiles-radius
+
+PAN-OS 10.1 — Device > Server Profiles > TACACS+
+https://docs.paloaltonetworks.com/pan-os/10-1/pan-os-web-interface-help/device/device-server-profiles-tacacs
+
+Configure RADIUS Authentication
+https://docs.paloaltonetworks.com/ngfw/administration/authentication/configure-radius-authentication
+
+Configure TACACS+ Authentication
+https://docs.paloaltonetworks.com/ngfw/administration/authentication/configure-tacacs-authentication
+
+Device > Authentication Profile — PAN-OS 10.1
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-authentication-profile
+
+Device > Authentication Sequence — PAN-OS 10.1
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-authentication-sequence
+
+Configure an Authentication Profile and Sequence
+https://docs.paloaltonetworks.com/ngfw/administration/authentication/configure-an-authentication-profile-and-sequence
+
+Test Authentication Server Connectivity
+https://docs.paloaltonetworks.com/ngfw/administration/authentication/test-authentication-server-connectivity
+
+Device > Admin Roles — PAN-OS 10.1
+https://docs.paloaltonetworks.com/ngfw/help/10-1/device/device-admin-roles
+
+Configure a Firewall Administrator Account
+https://docs.paloaltonetworks.com/ngfw/administration/firewall-administration/manage-firewall-administrators/configure-administrative-accounts-and-authentication/configure-a-firewall-administrator-account
+
+Administrative Authentication
+https://docs.paloaltonetworks.com/ngfw/administration/firewall-administration/manage-firewall-administrators/administrative-authentication
+
+Administrative Access Best Practices
+https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices/administrative-access-best-practices
+
+Palo Alto TACACS+ reference
+https://docs.paloaltonetworks.com/ngfw/administration/authentication/authentication-types/tacacs
+
+================================================================
+END OF GUIDE
+================================================================

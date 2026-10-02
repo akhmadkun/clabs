@@ -1,0 +1,25 @@
+Official / authoritative references used for the lab design
+============================================================
+
+Palo Alto Networks
+- Configure an Authentication Profile and Sequence
+  https://docs.paloaltonetworks.com/ngfw/administration/authentication/configure-an-authentication-profile-and-sequence
+- Authentication documentation
+  https://docs.paloaltonetworks.com/ngfw/administration/authentication
+
+Containerlab
+- Linux bridge kind
+  https://containerlab.dev/manual/kinds/bridge/
+- Topology definition / external bridge examples
+  https://containerlab.dev/manual/kinds/bridge/
+  https://containerlab.dev/lab-examples/ext-bridge/
+
+GNS3 / AAA image
+- GNS3 appliance registry entry for AAA
+  https://github.com/GNS3/gns3-registry/blob/master/appliances/aaa.gns3a
+- Docker Hub image: adosztal/aaa
+  https://hub.docker.com/r/adosztal/aaa
+
+The GNS3 registry describes the AAA appliance as stable and documents its
+preconfigured RADIUS and TACACS+ users and password. The image is used only
+for isolated lab testing.

@@ -1,0 +1,38 @@
+name: fnd103-aaa
+prefix: ""
+
+mgmt:
+  network: fnd103-aaa-mgmt
+  ipv4-subnet: 172.30.103.0/24
+
+topology:
+  nodes:
+    radius:
+      kind: linux
+      image: adosztal/aaa:latest
+      exec:
+        - "ifconfig eth1 192.168.122.20 netmask 255.255.255.0 up"
+
+    tacacs:
+      kind: linux
+      image: adosztal/aaa:latest
+      binds:
+        - ./configs/tac_plus.conf:/etc/tacacs+/tac_plus.conf:ro
+      exec:
+        - "ifconfig eth1 192.168.122.21 netmask 255.255.255.0 up"
+
+    aa-test:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - "ip link set eth1 up"
+        - "ip addr flush dev eth1"
+        - "ip addr add 192.168.122.30/24 dev eth1"
+
+    virbr0:
+      kind: bridge
+
+  links:
+    - endpoints: ["radius:eth1", "virbr0:radius-aa"]
+    - endpoints: ["tacacs:eth1", "virbr0:tacacs-aa"]
+    - endpoints: ["aa-test:eth1", "virbr0:aa-test"]

@@ -1,0 +1,200 @@
+FND-103 Solution Guide - Administrative AAA and RBAC
+=====================================================
+
+Audience
+--------
+Junior-to-senior network engineers. This guide assumes the PA-VM already has
+working management access on 192.168.122.10/24.
+
+1. Prepare
+----------
+Run:
+  docker pull adosztal/aaa:latest
+  ./scripts/preflight.sh
+
+Do not deploy if preflight fails. Fix the reported prerequisite first.
+
+2. Deploy
+----------
+Run:
+  sudo containerlab deploy -t fnd103-aaa.clab.yml
+
+Immediately run:
+  ./scripts/verify.sh
+
+The verification script checks container state, restart count, eth1 addresses,
+AAA listening sockets, reachability and short-term interface persistence.
+
+3. Inspect the AAA containers
+------------------------------
+RADIUS node:
+  docker exec -it radius bash
+  ip -br addr
+  netstat -lunpt
+
+TACACS+ node:
+  docker exec -it tacacs bash
+  ip -br addr
+  ss -lntp
+
+Expected service LAN addresses:
+  radius  192.168.122.20/24
+  tacacs  192.168.122.21/24
+
+4. PA-VM baseline
+-----------------
+Confirm:
+  show interface management
+  ping host 192.168.122.20
+  ping host 192.168.122.21
+
+Confirm the existing local break-glass administrator still works before
+changing the authentication method.
+
+5. RADIUS authentication
+------------------------
+Create an Authentication Profile using RADIUS.
+
+Server:
+  192.168.122.20
+Port:
+  1812/UDP
+Secret:
+  gns3
+
+Test user:
+  alice / gns3
+
+Use PAN-OS administrative authentication testing to verify the request reaches
+the RADIUS server and succeeds.
+
+On the RADIUS container, capture evidence with:
+  docker logs radius
+  docker exec radius ss -lunp
+
+When packet-level proof is required:
+  docker exec radius tcpdump -ni eth1 udp port 1812
+
+6. TACACS+ authentication
+--------------------------
+Create a TACACS+ Authentication Profile.
+
+Server:
+  192.168.122.21
+Port:
+  TCP 49
+Secret:
+  gns3
+
+Test users from the public appliance:
+  gns3 / gns3
+  readonly / gns3
+
+Use PAN-OS administrative authentication testing to verify the TCP/49
+connection and authentication result.
+
+Packet-level proof:
+  docker exec tacacs tcpdump -ni eth1 tcp port 49
+
+7. Authentication Sequence
+---------------------------
+Create the Authentication Sequence in this order:
+  1. RADIUS profile
+  2. TACACS+ profile
+  3. Local Database
+
+The sequence is intentionally ordered so the first healthy external provider
+is preferred while a local break-glass method remains available.
+
+Validate the actual PAN-OS behavior with a controlled failure. Do not remove
+the local break-glass account.
+
+8. RBAC
+--------
+Create or use a least-privilege read-only administrative role on the PA-VM.
+The role should allow operational visibility while denying configuration
+writes/commit.
+
+For external TACACS+/RADIUS authorization, use the Palo Alto Networks
+administrative AAA documentation for the exact vendor-specific attribute
+format supported by the PAN-OS release in the lab. Do not guess VSA names or
+formats from another platform.
+
+9. Failure injection
+---------------------
+Fault A - RADIUS shared-secret mismatch:
+  Change only the RADIUS secret on PA-VM.
+  Keep TACACS+ working.
+  Expected result: RADIUS attempts fail; then observe the sequence behavior.
+
+Fault B - RADIUS unavailable:
+  Stop only the RADIUS container:
+    docker stop radius
+  Verify TCP/49 TACACS+ still works.
+
+Fault C - TACACS shared-secret mismatch while RADIUS is unavailable:
+  Stop RADIUS, then change only the TACACS+ secret on PA-VM.
+  Expected result: both external methods fail and local fallback becomes the
+  remaining path.
+
+Fault D - Misleading symptom:
+  Leave authentication configured correctly but isolate only the service
+  path (for example by disconnecting the AAA container interface from the
+  bridge). Confirm that the symptom looks like authentication failure while
+  the root cause is transport reachability.
+
+10. Diagnostic method
+----------------------
+Before running commands, write 3-5 ranked hypotheses.
+
+Minimum evidence set:
+  PA-VM authentication/system logs
+  ping / TCP or UDP reachability from the PA management plane
+  AAA server process/listener state
+  packet capture when the failure boundary is unclear
+
+Separate these failure classes:
+  - transport failure
+  - shared-secret mismatch
+  - username/password failure
+  - authentication-sequence behavior
+  - authorization/RBAC mapping
+  - local fallback behavior
+
+11. Restore
+-----------
+Return every changed item to its baseline value.
+
+Run:
+  ./scripts/verify.sh
+
+Then prove:
+  - RADIUS authentication works
+  - TACACS+ authentication works
+  - read-only administrative role is enforced
+  - local break-glass access still works
+  - AAA container restart count remains 0
+  - no unrelated PA-VM management settings changed
+
+12. Design / trade-off discussion
+----------------------------------
+RADIUS:
+  simpler deployment model and widely used for authentication, but TACACS+
+  is often preferred when separating authentication, authorization and
+  accounting for device administration.
+
+TACACS+:
+  TCP transport and richer device-administration authorization semantics.
+  Requires careful shared-secret and vendor-attribute handling.
+
+Authentication Sequence:
+  improves failure-domain resilience but can make a bad external method look
+  like a generic login problem, so log interpretation matters.
+
+Local fallback:
+  protects administrative access during an identity-service outage, but the
+  break-glass credential must be tightly controlled.
+
+Public AAA image note:
+  adosztal/aaa is used here because it is a ready-made GNS3 AAA appliance
+  providing both RADIUS and TACACS+ with preconfigured lab identities.

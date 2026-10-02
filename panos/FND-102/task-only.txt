@@ -1,0 +1,49 @@
+================================================================================
+LAB-002 — FND-102
+Candidate Config, Commit and Rollback
+================================================================================
+
+OBJECTIVE
+Practice: candidate -> diff -> save snapshot -> revert -> reload snapshot
+-> validate -> commit -> identify running version -> restore previous version
+-> commit rollback.
+
+PRE-REQUISITES
+1. FND-101 complete.
+2. PA-VM management IP: 192.168.121.10/24.
+3. Console access available before CR-102-B.
+
+IMPORTANT
+- Keep SSH on TCP/22. Do NOT configure port 2222.
+- Do not commit until candidate/running differences are proven.
+
+CR-102-A — Candidate Configuration Lifecycle
+
+1. Record hostname, PAN-OS version, management IP, and current config state.
+2. Create candidate changes:
+   - hostname: pa1-fnd102
+   - login banner: AUTHORIZED LAB ACCESS — FND-102
+3. Prove candidate != running with configuration diff.
+4. Save named candidate snapshot: FND102_CR102A_CANDIDATE
+5. Revert candidate to running; prove the diff disappears.
+6. Reload the named snapshot; prove the diff returns.
+7. Run full validation, then commit:
+   FND-102 CR-102-A baseline lifecycle
+8. Verify hostname, banner, HTTPS/443, SSH/22, and record new running version.
+
+CR-102-B — Controlled Management Outage and Recovery
+
+9. Record the CR-102-A known-good running configuration version.
+10. Create candidate changes:
+    - disable HTTPS management
+    - disable SSH management
+11. Prove the changes are pending. Validate and commit:
+    FND-102 CR-102-B intentional management outage
+12. Prove HTTPS/443 and SSH/22 are unavailable.
+13. Using console, load the previous running configuration version.
+14. Prove the restored version is in candidate, validate, then commit:
+    FND-102 rollback from CR-102-B
+15. Prove HTTPS/443 and SSH/22 work again and no candidate changes remain.
+
+Capture evidence for diffs, snapshots, validation, commits, outage, restore,
+and final recovery.

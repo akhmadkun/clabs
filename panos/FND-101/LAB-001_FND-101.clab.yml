@@ -3,7 +3,7 @@ prefix: ""
 
 topology:
   nodes:
-    virbr1:
+    virbr0:
       kind: bridge
 
     server:
@@ -21,4 +21,4 @@ topology:
         - ip addr replace 192.168.121.20/24 dev eth0
 
   links:
-    - endpoints: ["server:eth0", "virbr1:server"]
+    - endpoints: ["server:eth0", "virbr0:server"]
