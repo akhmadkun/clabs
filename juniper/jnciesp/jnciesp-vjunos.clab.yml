@@ -4,52 +4,69 @@ prefix: ""
 topology:
   kinds:
     juniper_vjunosrouter:
-      image: arthurk99/juniper-vjunos-router:23.4
-      #cpu: 1.5
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12-rcvmm
+      cpu: 1.5
   
   nodes:
     # --- Router Definitions ---
     r1:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r1:/labconfigs:rw
     r2:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r2:/labconfigs:rw
     r3:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r3:/labconfigs:rw
     r4:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r4:/labconfigs:rw
     r5:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r5:/labconfigs:rw
     r6:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r6:/labconfigs:rw
     r7:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r7:/labconfigs:rw
     r8:
       kind: juniper_vjunosrouter
+      binds:
+        - ./configs/r8:/labconfigs:rw
 
-    # --- Switch untuk interkoneksi ge-0/0/4 ---
-    virbr3:
+
+    # note, that the bridge br-clab must be created manually
+    # sudo ip link add br-universal type bridge
+    # sudo ip link set br-universal up
+    br-univ:
       kind: bridge
 
   links:
     # --- Point-to-Point Links (LAG) R1 <-> R2 ---
-    # eth2 = ge-0/0/1
+    # eth2 = ge-0/0/1   eth3 = ge-0/0/2
     - endpoints: ["r1:eth2", "r2:eth2"]
-    # eth3 = ge-0/0/2
     - endpoints: ["r1:eth3", "r2:eth3"]
 
     # --- Point-to-Point Links (LAG) R5 <-> R6 ---
-    # eth2 = ge-0/0/1
+    # eth2 = ge-0/0/1   eth3 = ge-0/0/2
     - endpoints: ["r5:eth2", "r6:eth2"]
-    # eth3 = ge-0/0/2
     - endpoints: ["r5:eth3", "r6:eth3"]
 
     # --- Mesh Connections (Semua connect ke Switch s1) ---
     # Menggunakan eth5 yang mapping ke ge-0/0/4
-    - endpoints: ["r1:eth5", "virbr3:r1_ge4"]
-    - endpoints: ["r2:eth5", "virbr3:r2_ge4"]
-    - endpoints: ["r3:eth5", "virbr3:r3_ge4"]
-    - endpoints: ["r4:eth5", "virbr3:r4_ge4"]
-    - endpoints: ["r5:eth5", "virbr3:r5_ge4"]
-    - endpoints: ["r6:eth5", "virbr3:r6_ge4"]
-    - endpoints: ["r7:eth5", "virbr3:r7_ge4"]
-    - endpoints: ["r8:eth5", "virbr3:r8_ge4"]
+    - endpoints: ["r1:eth5", "br-univ:r1_ge4"]
+    - endpoints: ["r2:eth5", "br-univ:r2_ge4"]
+    - endpoints: ["r3:eth5", "br-univ:r3_ge4"]
+    - endpoints: ["r4:eth5", "br-univ:r4_ge4"]
+    - endpoints: ["r5:eth5", "br-univ:r5_ge4"]
+    - endpoints: ["r6:eth5", "br-univ:r6_ge4"]
+    - endpoints: ["r7:eth5", "br-univ:r7_ge4"]
+    - endpoints: ["r8:eth5", "br-univ:r8_ge4"]

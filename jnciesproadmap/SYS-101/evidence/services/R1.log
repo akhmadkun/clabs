@@ -1,0 +1,733 @@
+2026-09-01T06:38:31+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788244710-4' and old database revision 're0-1788243973-3'
+2026-09-01T06:38:31+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T06:38:36+00:00 R1 mgd[20423]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-01T06:38:41+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 1 to power on FPC 0 timed out; restarted it
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 91042, jnxFruLastPowerOn 1042)
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 91042, jnxFruLastPowerOn 1042)
+2026-09-01T06:38:41+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-01T06:38:57+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 91042, jnxFruLastPowerOn 92644)
+2026-09-01T06:40:18+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:42:12+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:42:31+00:00 R1 mgd[20423]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-09-01T06:42:48+00:00 R1 mgd[20423]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-01T06:42:51+00:00 R1 mgd[20423]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-09-01T06:43:06+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] unconfigured -- "HEHE"
+2026-09-01T06:43:21+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: hehehe)
+2026-09-01T06:43:21+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T06:43:22+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T06:43:22+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788245001-5' and old database revision 're0-1788244710-4'
+2026-09-01T06:43:22+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T06:43:39+00:00 R1 mgd[20423]: UI_LOAD_EVENT: User 'admin' is performing a 'rollback 1'
+2026-09-01T06:43:39+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' rollback: /config/juniper.conf 
+2026-09-01T06:43:45+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T06:43:46+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T06:43:46+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T06:43:46+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788245025-6' and old database revision 're0-1788245001-5'
+2026-09-01T06:43:46+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T06:43:52+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:45:46+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:47:02+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system services telnet] 
+2026-09-01T06:47:04+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system services ftp] 
+2026-09-01T06:48:06+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:48:21+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24 next-hop 10.0.0.2] 
+2026-09-01T06:48:21+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] unconfigured -- "retain"
+2026-09-01T06:48:21+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] unconfigured -- "no-readvertise"
+2026-09-01T06:48:55+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T06:48:56+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T06:48:56+00:00 R1 mgd[20423]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 1 minutes
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: L2VPN acquiring mastership for primary
+2026-09-01T06:48:56+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: L2CKT acquiring mastership for primary
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: RPD_COMMIT_JOBS_STATUS: RPD commit jobs started on MASTER
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 17 [2026-09-01 06:48:56]
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 18 [2026-09-01 06:48:56]
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+2026-09-01T06:48:56+00:00 R1 last message repeated 2 times
+2026-09-01T06:48:56+00:00 R1 rpd[19282]: RPD_RT_HWM_NOTICE: New FIB highwatermark for routes: 3 [2026-09-01 06:48:56]
+2026-09-01T06:48:56+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788245335-7' and old database revision 're0-1788245025-6'
+2026-09-01T06:48:56+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T06:49:35+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T06:49:35+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T06:49:35+00:00 R1 mgd[20423]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 10 minutes
+2026-09-01T06:49:35+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788245375-8' and old database revision 're0-1788245335-7'
+2026-09-01T06:49:35+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T06:50:26+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:50:47+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: xixixi)
+2026-09-01T06:50:47+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T06:50:47+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788245447-9' and old database revision 're0-1788245375-8'
+2026-09-01T06:50:47+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T06:52:26+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 2 to power on FPC 0 timed out; restarted it
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 182868, jnxFruLastPowerOn 92868)
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 182868, jnxFruLastPowerOn 92868)
+2026-09-01T06:54:00+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-01T06:54:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 182868, jnxFruLastPowerOn 184470)
+2026-09-01T06:54:32+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T06:55:09+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system name-server 172.31.1.100] 
+2026-09-01T06:55:09+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system name-server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-01T06:55:24+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system domain-name] unconfigured -- "sys101.lab"
+2026-09-01T06:55:34+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system time-zone] unconfigured -- "Asia/Jakarta"
+2026-09-01T06:56:21+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: taks 4 dns)
+2026-09-01T06:56:22+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T06:56:22+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T13:56:22+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788245781-10' and old database revision 're0-1788245447-9'
+2026-09-01T13:56:22+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T13:56:44+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T13:58:28+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T13:58:57+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0] 
+2026-09-01T13:58:57+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet] 
+2026-09-01T13:58:57+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet address 192.0.2.11/32] 
+2026-09-01T13:59:39+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp server 172.31.1.100] 
+2026-09-01T13:59:39+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-01T13:59:39+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp server 172.31.1.100 key]
+2026-09-01T14:00:05+00:00 R1 mgd[20423]: UI_LOAD_EVENT: User 'admin' is performing a 'rollback'
+2026-09-01T14:00:05+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' rollback: /config/juniper.conf 
+2026-09-01T14:00:18+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp server 172.31.1.100] 
+2026-09-01T14:00:18+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-01T14:00:36+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0] 
+2026-09-01T14:00:36+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet] 
+2026-09-01T14:00:36+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet address 192.0.2.11/32] 
+2026-09-01T14:00:51+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:01:13+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp server 172.31.1.100 key]
+2026-09-01T14:01:42+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp authentication-key 1] 
+2026-09-01T14:01:42+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp authentication-key 1 type] unconfigured -- "md5"
+2026-09-01T14:01:42+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp authentication-key 1 value]
+2026-09-01T14:01:58+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp trusted-key 1] 
+2026-09-01T14:02:15+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: task 5 ntp)
+2026-09-01T14:02:17+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:02:17+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-01T14:02:17+00:00 R1 xntpd[24883]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-09-01T14:02:17+00:00 R1 xntpd[24883]: Command line: /usr/sbin/xntpd -j -N -g
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: L2VPN acquiring mastership for primary
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: L2CKT acquiring mastership for primary
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: RPD_COMMIT_JOBS_STATUS: RPD commit jobs started on MASTER
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+2026-09-01T14:02:17+00:00 R1 last message repeated 2 times
+2026-09-01T14:02:17+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 18 [2026-09-01 14:02:17]
+2026-09-01T14:02:17+00:00 R1 rpd[19282]: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 19 [2026-09-01 14:02:17]
+2026-09-01T14:02:17+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788246135-11' and old database revision 're0-1788245781-10'
+2026-09-01T14:02:17+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:02:17+00:00 R1 xntpd[24883]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-09-01T14:02:17+00:00 R1 xntpd[24883]: Command line: /usr/sbin/xntpd -j -N -g
+2026-09-01T14:02:22+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-01T14:02:25+00:00 R1 xntpd[24883]: ntpd: time reset +1.027933 s
+2026-09-01T14:02:27+00:00 R1 kernel: hw.chassis.startup_time update to 1788243745.394384
+2026-09-01T14:02:28+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-01T14:02:33+00:00 R1 jlaunchd[18878]: ifstate-tracing-process is thrashing, not restarted
+2026-09-01T14:02:33+00:00 R1 jlaunchd[18878]: rtsock-messages is thrashing, not restarted
+2026-09-01T14:02:33+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-01T14:03:15+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:05:17+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:07:03+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:09:10+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 3 to power on FPC 0 timed out; restarted it
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 274695, jnxFruLastPowerOn 184695)
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 274695, jnxFruLastPowerOn 184695)
+2026-09-01T14:09:19+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-01T14:09:35+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 274695, jnxFruLastPowerOn 276296)
+2026-09-01T14:09:58+00:00 R1 /usr/bin/ssh[25088]: ssh: connect to host 172.31.1.100 port 22: No route to host
+2026-09-01T14:09:58+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive"] 
+2026-09-01T14:09:58+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive" password]
+2026-09-01T14:10:54+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration routing-instance] unconfigured -- "mgmt_junos"
+2026-09-01T14:10:58+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration] unconfigured -- "transfer-on-commit"
+2026-09-01T14:11:28+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:11:32+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:11:32+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:11:32+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788246692-12' and old database revision 're0-1788246135-11'
+2026-09-01T14:11:32+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:12:21+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] unconfigured -- "HOHOHO"
+2026-09-01T14:12:24+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:12:25+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:12:25+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T14:12:25+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788246744-13' and old database revision 're0-1788246692-12'
+2026-09-01T14:12:25+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:12:26+00:00 R1 logger[26405]: transfer-file failed to transfer /var/transfer/config/R1_20260901_071132_juniper.conf.gz rc 1
+2026-09-01T14:12:26+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 2, retry in 295 seconds...
+2026-09-01T14:13:26+00:00 R1 logger[26427]: transfer-file failed to transfer /var/transfer/config/R1_20260901_071132_juniper.conf.gz rc 1
+2026-09-01T14:13:26+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 2, retry in 295 seconds...
+2026-09-01T14:13:32+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' delete: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive"] 
+2026-09-01T14:13:37+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:13:37+00:00 R1 mustd[26434]: UI_CONFIGURATION_ERROR: Process: mgd, path: [edit system archival], statement: configuration, Missing mandatory statement: 'archive-sites'
+2026-09-01T14:13:37+00:00 R1 mgd[20423]: UI_CHILD_EXITED: Child exited: PID 26434, status 12, command '/usr/sbin/mustd'
+2026-09-01T14:13:50+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:14:07+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive"] 
+2026-09-01T14:14:07+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive" password]
+2026-09-01T14:14:21+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:14:21+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:14:22+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788246861-14' and old database revision 're0-1788246744-13'
+2026-09-01T14:14:22+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:14:26+00:00 R1 logger[27096]: transfer-file failed to transfer /var/transfer/config/R1_20260901_071132_juniper.conf.gz rc 1
+2026-09-01T14:14:26+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 2, retry in 295 seconds...
+2026-09-01T14:14:31+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] "HOHOHO -- "hehehe"
+2026-09-01T14:14:31+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:14:32+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:14:32+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T14:14:32+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788246871-15' and old database revision 're0-1788246861-14'
+2026-09-01T14:14:32+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:14:44+00:00 R1 mgd[20423]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-01T14:15:22+00:00 R1 LIBJNX_EXEC_WEXIT: Command exited: PID 27748, status 1, command '/usr/bin/scp'
+2026-09-01T14:15:26+00:00 R1 logger[27765]: transfer-file failed to transfer /var/transfer/config/R1_20260901_071132_juniper.conf.gz rc 1
+2026-09-01T14:15:26+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 2, retry in 295 seconds...
+2026-09-01T14:16:04+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:16:43+00:00 R1 mgd[20423]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-09-01T14:16:50+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] "hehehe -- "bahahaha"
+2026-09-01T14:16:52+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:16:53+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:16:53+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T14:16:53+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788247012-16' and old database revision 're0-1788246871-15'
+2026-09-01T14:16:53+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:17:22+00:00 R1 logger[28432]: transfer-file: Transferred /var/transfer/config/R1_20260901_071132_juniper.conf.gz
+2026-09-01T14:17:26+00:00 R1 logger[28448]: transfer-file: Transferred /var/transfer/config/R1_20260901_071225_juniper.conf.gz
+2026-09-01T14:17:27+00:00 R1 logger[28463]: transfer-file: Transferred /var/transfer/config/R1_20260901_071422_juniper.conf.gz
+2026-09-01T14:17:28+00:00 R1 logger[28478]: transfer-file: Transferred /var/transfer/config/R1_20260901_071432_juniper.conf.gz
+2026-09-01T14:17:29+00:00 R1 logger[28493]: transfer-file: Transferred /var/transfer/config/R1_20260901_071653_juniper.conf.gz
+2026-09-01T14:18:00+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:18:21+00:00 R1 logger[28501]: transfer-file: file /var/transfer/config/R1_20260901_071132_juniper.conf.gz not found
+2026-09-01T14:18:22+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 1, retry in 295 seconds...
+2026-09-01T14:19:21+00:00 R1 logger[28507]: transfer-file: file /var/transfer/config/R1_20260901_071132_juniper.conf.gz not found
+2026-09-01T14:19:22+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 1, retry in 295 seconds...
+2026-09-01T14:19:58+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:20:21+00:00 R1 logger[28516]: transfer-file: file /var/transfer/config/R1_20260901_071132_juniper.conf.gz not found
+2026-09-01T14:20:22+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED_ITER: Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'. Remaining retry attempts = 1, retry in 295 seconds...
+2026-09-01T14:22:10+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:23:17+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED:   Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'
+2026-09-01T14:23:47+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:24:17+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED:   Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE: Error for FPC 0: unresponsive to attempts to start it; left it offline
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Error
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 3, jnxFruLastPowerOff 366519, jnxFruLastPowerOn 276519)
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 3, jnxFruLastPowerOff 366519, jnxFruLastPowerOn 276519)
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-01T14:24:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP7: SNMP trap generated: Fru Failed (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0)
+2026-09-01T14:24:37+00:00 R1 alarmd: ALARMD_SET_ALERT: Alarm set: FPC id=16777320, color=RED, class=CHASSIS, reason=FPC 0 Hard errors 
+2026-09-01T14:24:37+00:00 R1 alarmd: ALARMD_STATE_SET: Alarm set: col = 1,cls = 100,obj = 104,short = FPC 0 Hard errors,long = FPC 0 Hard errors 
+2026-09-01T14:25:17+00:00 R1 pfed: ACCT_TRANSFER_FILE_FAILED:   Error <256> uploading file '/var/transfer/config/R1_20260901_071132_juniper.conf.gz'
+2026-09-01T14:25:30+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:27:33+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:29:45+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:31:58+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:32:52+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions clear] 
+2026-09-01T14:32:54+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions network] 
+2026-09-01T14:32:57+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions reset] 
+2026-09-01T14:33:00+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions view] 
+2026-09-01T14:33:48+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class noc-class permissions all] 
+2026-09-01T14:34:12+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:34:12+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system login class noc-class deny-commands] unconfigured -- "(clear|configure|edit|start shell)"
+2026-09-01T14:35:08+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions trace] 
+2026-09-01T14:35:45+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions firewall] 
+2026-09-01T14:36:21+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user radius-ops class] unconfigured -- "ops-class"
+2026-09-01T14:36:24+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:36:29+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user radius-noc class] unconfigured -- "noc-class"
+2026-09-01T14:37:16+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user remote class] unconfigured -- "read-only"
+2026-09-01T14:37:20+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:37:21+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:37:21+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788248240-17' and old database revision 're0-1788247012-16'
+2026-09-01T14:37:21+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:37:26+00:00 R1 logger[29326]: transfer-file: Transferred /var/transfer/config/R1_20260901_073721_juniper.conf.gz
+2026-09-01T14:38:28+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:38:56+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system authentication-order radius] 
+2026-09-01T14:38:57+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system authentication-order password] 
+2026-09-01T14:39:17+00:00 R1 mgd[20423]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system radius-server 172.31.1.100] 
+2026-09-01T14:39:17+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-01T14:39:25+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 routing-instance] "mgmt_junos -- "mgmt_junos"
+2026-09-01T14:39:25+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system radius-server 172.31.1.100 secret]
+2026-09-01T14:40:12+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 retry] unconfigured -- "1"
+2026-09-01T14:40:12+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 timeout] unconfigured -- "2"
+2026-09-01T14:40:19+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:40:44+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:40:44+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:40:44+00:00 R1 mgd[20423]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 3 minutes
+2026-09-01T14:40:44+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788248444-18' and old database revision 're0-1788248240-17'
+2026-09-01T14:40:44+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:41:19+00:00 R1 sshd: PAM_RADIUS_SEND_REQ_FAIL: Sending radius request failed with error (No valid RADIUS responses received).
+2026-09-01T14:41:19+00:00 R1 sshd[29985]: error: PAM: Authentication error for ops from 172.31.1.1
+2026-09-01T14:41:19+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'ops' from host '172.31.1.1'
+2026-09-01T14:41:26+00:00 R1 logger[30004]: transfer-file: Transferred /var/transfer/config/R1_20260901_074044_juniper.conf.gz
+2026-09-01T14:41:36+00:00 R1 sshd: PAM_RADIUS_SEND_REQ_FAIL: Sending radius request failed with error (No valid RADIUS responses received).
+2026-09-01T14:41:36+00:00 R1 sshd[29985]: error: PAM: Authentication error for ops from 172.31.1.1
+2026-09-01T14:41:36+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'ops' from host '172.31.1.1'
+2026-09-01T14:41:59+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:42:43+00:00 R1 mgd[20423]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system radius-server 172.31.1.100 secret]
+2026-09-01T14:42:51+00:00 R1 mgd[20423]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-01T14:42:52+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-01T14:42:52+00:00 R1 mgd[20423]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1788248571-19' and old database revision 're0-1788248444-18'
+2026-09-01T14:42:52+00:00 R1 mgd[20423]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-01T14:42:54+00:00 R1 inetd[18912]: /usr/sbin/sshd[29985]: exited, status 255
+2026-09-01T14:42:59+00:00 R1 sshd: PAM_RADIUS_SEND_REQ_FAIL: Sending radius request failed with error (No valid RADIUS responses received).
+2026-09-01T14:42:59+00:00 R1 sshd[30653]: error: PAM: Authentication error for ops from 172.31.1.1
+2026-09-01T14:42:59+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'ops' from host '172.31.1.1'
+2026-09-01T14:43:26+00:00 R1 logger[30672]: transfer-file: Transferred /var/transfer/config/R1_20260901_074252_juniper.conf.gz
+2026-09-01T14:43:45+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:43:57+00:00 R1 inetd[18912]: /usr/sbin/sshd[30653]: exited, status 255
+2026-09-01T14:45:47+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:47:10+00:00 R1 sshd: PAM_RADIUS_SEND_REQ_FAIL: Sending radius request failed with error (No valid RADIUS responses received).
+2026-09-01T14:47:18+00:00 R1 inetd[18912]: /usr/sbin/sshd[30694]: exited, status 255
+2026-09-01T14:47:38+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:48:00+00:00 R1 mgd[20423]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-01T14:49:50+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:51:29+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:52:23+00:00 R1 inetd[18912]: /usr/sbin/sshd[30724]: exited, status 255
+2026-09-01T14:52:34+00:00 R1 inetd[18912]: /usr/sbin/sshd[30731]: exited, status 255
+2026-09-01T14:53:02+00:00 R1 sshd: PAM_RADIUS_UNKNOWN_ATTR_ACS_REJ: unrecognized attribute(80) in Access-Reject.
+2026-09-01T14:53:02+00:00 R1 sshd[30737]: error: PAM: Authentication error for remote from 172.31.1.1
+2026-09-01T14:53:02+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'remote' from host '172.31.1.1'
+2026-09-01T14:53:03+00:00 R1 inetd[18912]: /usr/sbin/sshd[30737]: exited, status 255
+2026-09-01T14:53:11+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:53:13+00:00 R1 sshd: PAM_RADIUS_UNKNOWN_ATTR_ACS_REJ: unrecognized attribute(80) in Access-Reject.
+2026-09-01T14:53:13+00:00 R1 sshd[30742]: error: PAM: Authentication error for readonly from 172.31.1.1
+2026-09-01T14:53:13+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'readonly' from host '172.31.1.1'
+2026-09-01T14:53:15+00:00 R1 inetd[18912]: /usr/sbin/sshd[30742]: exited, status 255
+2026-09-01T14:53:22+00:00 R1 sshd: PAM_RADIUS_UNKNOWN_ATTR_ACS_REJ: unrecognized attribute(80) in Access-Reject.
+2026-09-01T14:53:22+00:00 R1 sshd[30746]: error: PAM: Authentication error for remote from 172.31.1.1
+2026-09-01T14:53:22+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'remote' from host '172.31.1.1'
+2026-09-01T14:53:29+00:00 R1 inetd[18912]: /usr/sbin/sshd[30746]: exited, status 255
+2026-09-01T14:55:23+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:57:26+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-01T14:59:27+00:00 R1 rpd[19282]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T07:47:34+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631253-4' and old database revision 're0-1789630040-3'
+2026-09-17T07:47:34+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T07:48:51+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system services telnet] 
+2026-09-17T07:48:55+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system services ftp] 
+2026-09-17T07:49:44+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T07:50:19+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24 next-hop 10.0.0.2] 
+2026-09-17T07:50:19+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] unconfigured -- "retain"
+2026-09-17T07:50:19+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] unconfigured -- "no-readvertise"
+2026-09-17T07:51:23+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T07:51:23+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T07:51:25+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T07:51:25+00:00 R1 mgd[19725]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 1 minutes
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: L2VPN acquiring mastership for primary
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: L2CKT acquiring mastership for primary
+2026-09-17T07:51:25+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS: RPD commit jobs started on MASTER
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 17 [2026-09-17 07:51:25]
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 18 [2026-09-17 07:51:25]
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+2026-09-17T07:51:25+00:00 R1 last message repeated 2 times
+2026-09-17T07:51:25+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New FIB highwatermark for routes: 3 [2026-09-17 07:51:25]
+2026-09-17T07:51:25+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631483-5' and old database revision 're0-1789631253-4'
+2026-09-17T07:51:25+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T07:53:00+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T07:53:01+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T07:53:01+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631580-6' and old database revision 're0-1789631483-5'
+2026-09-17T07:53:01+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T07:53:40+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T07:54:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system name-server 172.31.1.100] 
+2026-09-17T07:54:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system name-server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-17T07:54:54+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system domain-name] unconfigured -- "sys101.lab"
+2026-09-17T07:55:01+00:00 R1 mgd[19725]: UI_CHILD_EXITED: Child exited: PID 22067, status 1, command '/usr/libexec/ui/tzlist'
+2026-09-17T07:55:03+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system time-zone] unconfigured -- "Asia/Jakarta"
+2026-09-17T07:55:06+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T07:55:07+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T07:55:08+00:00 R1 mgd[19725]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 1 minutes
+2026-09-17T14:55:08+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T14:55:08+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631706-7' and old database revision 're0-1789631580-6'
+2026-09-17T14:55:08+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 2 to power on FPC 0 timed out; restarted it
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 182868, jnxFruLastPowerOn 92868)
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 182868, jnxFruLastPowerOn 92868)
+2026-09-17T14:55:13+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-17T14:55:25+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T14:55:29+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 182868, jnxFruLastPowerOn 184470)
+2026-09-17T14:55:33+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T14:55:33+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T14:55:33+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631733-8' and old database revision 're0-1789631706-7'
+2026-09-17T14:55:33+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T14:57:35+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0] 
+2026-09-17T14:57:35+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet] 
+2026-09-17T14:57:35+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet address 192.0.2.11/32] 
+2026-09-17T14:57:45+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T14:57:46+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T14:57:49+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: L2VPN acquiring mastership for primary
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: L2CKT acquiring mastership for primary
+2026-09-17T14:57:49+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS: RPD commit jobs started on MASTER
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+2026-09-17T14:57:49+00:00 R1 last message repeated 2 times
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 18 [2026-09-17 14:57:49]
+2026-09-17T14:57:49+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 19 [2026-09-17 14:57:49]
+2026-09-17T14:57:49+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631866-9' and old database revision 're0-1789631733-8'
+2026-09-17T14:57:49+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T14:58:27+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp authentication-key 1] 
+2026-09-17T14:58:27+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp authentication-key 1 type] unconfigured -- "md5"
+2026-09-17T14:58:27+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp authentication-key 1 value]
+2026-09-17T14:58:33+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp trusted-key 1] 
+2026-09-17T14:58:45+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp server 172.31.1.100] 
+2026-09-17T14:58:45+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp server 172.31.1.100 key]
+2026-09-17T14:58:45+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-17T14:58:52+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T14:58:52+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T14:58:52+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-17T14:58:53+00:00 R1 xntpd[23707]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-09-17T14:58:53+00:00 R1 xntpd[23707]: Command line: /usr/sbin/xntpd -j -N -g
+2026-09-17T14:58:53+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789631932-10' and old database revision 're0-1789631866-9'
+2026-09-17T14:58:53+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T14:58:55+00:00 R1 mgd[19725]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-17T14:58:58+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-17T15:02:44+00:00 R1 xntpd[23707]: ntpd: time reset +224.116049 s
+2026-09-17T15:02:45+00:00 R1 kernel: hw.chassis.startup_time update to 1789630039.745674
+2026-09-17T15:02:47+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-17T15:02:57+00:00 R1 last message repeated 3 times
+2026-09-17T15:03:02+00:00 R1 jlaunchd[18878]: rtsock-messages is thrashing, not restarted
+2026-09-17T15:03:02+00:00 R1 jlaunchd[18878]: ifstate-tracing-process is thrashing, not restarted
+2026-09-17T15:03:02+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-09-17T15:03:28+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:05:14+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:05:59+00:00 R1 mgd[19725]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-09-17T15:07:09+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:07:22+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp server 172.31.1.100 key]
+2026-09-17T15:07:22+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp server 172.31.1.100 routing-instance] "mgmt_junos -- "mgmt_junos"
+2026-09-17T15:07:22+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp server 172.31.1.100] unconfigured -- "prefer"
+2026-09-17T15:07:25+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T15:07:25+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T15:07:25+00:00 R1 xntpd[23707]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-09-17T15:07:25+00:00 R1 xntpd[23707]: Command line: /usr/sbin/xntpd -j -N -g
+2026-09-17T15:07:25+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789632445-11' and old database revision 're0-1789631932-10'
+2026-09-17T15:07:25+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T15:07:33+00:00 R1 xntpd[23707]: ntpd: time reset +0.444430 s
+2026-09-17T15:07:35+00:00 R1 kernel: hw.chassis.startup_time update to 1789630040.190096
+2026-09-17T15:07:39+00:00 R1 mgd[19725]: UI_LOAD_EVENT: User 'admin' is performing a 'rollback 1'
+2026-09-17T15:07:39+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' rollback: /config/juniper.conf 
+2026-09-17T15:07:40+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T15:07:40+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T15:07:41+00:00 R1 xntpd[23707]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-09-17T15:07:41+00:00 R1 xntpd[23707]: Command line: /usr/sbin/xntpd -j -N -g
+2026-09-17T15:07:41+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789632460-12' and old database revision 're0-1789632445-11'
+2026-09-17T15:07:41+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T15:09:29+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:11:15+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:13:12+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 3 to power on FPC 0 timed out; restarted it
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 274694, jnxFruLastPowerOn 184693)
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 274694, jnxFruLastPowerOn 184693)
+2026-09-17T15:14:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-17T15:14:32+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 274694, jnxFruLastPowerOn 276295)
+2026-09-17T15:15:03+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:17:04+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:19:17+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:23:22+00:00 R1 last message repeated 2 times
+2026-09-17T15:24:42+00:00 R1 l2cpd[19299]: JTASK_SCHED_SLIP_KEVENT: 7 sec 868706 usec kevent block
+2026-09-17T15:24:42+00:00 R1 mplsoamd[19300]: JTASK_SCHED_SLIP_KEVENT: 6 sec 154528 usec kevent block
+2026-09-17T15:24:42+00:00 R1 rpdtmd[19057]: JTASK_SCHED_SLIP_KEVENT: 5 sec 105634 usec kevent block
+2026-09-17T15:24:42+00:00 R1 secure-dot1xd[19018]: JTASK_SCHED_SLIP_KEVENT: 4 sec 665710 usec kevent block
+2026-09-17T15:25:24+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:27:47+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE: Error for FPC 0: unresponsive to attempts to start it; left it offline
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Error
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 3, jnxFruLastPowerOff 366520, jnxFruLastPowerOn 276519)
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 3, jnxFruLastPowerOff 366520, jnxFruLastPowerOn 276519)
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-09-17T15:29:34+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP7: SNMP trap generated: Fru Failed (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0)
+2026-09-17T15:29:34+00:00 R1 alarmd: ALARMD_SET_ALERT: Alarm set: FPC id=16777320, color=RED, class=CHASSIS, reason=FPC 0 Hard errors 
+2026-09-17T15:29:34+00:00 R1 alarmd: ALARMD_STATE_SET: Alarm set: col = 1,cls = 100,obj = 104,short = FPC 0 Hard errors,long = FPC 0 Hard errors 
+2026-09-17T15:29:56+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:31:50+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T15:33:32+00:00 R1 xntpd[25331]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-09-17T15:33:32+00:00 R1 xntpd[25331]: Command line: /usr/sbin/xntpd -j -N -g
+2026-09-17T16:14:23+00:00 R1 xntpd[25331]: ntpd: time reset +2443.834955 s
+2026-09-17T16:14:27+00:00 R1 kernel: hw.chassis.startup_time update to 1789632484.025039
+2026-09-17T16:14:42+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:16:49+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:19:03+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:19:11+00:00 R1 rpd[19284]: JTASK_SCHED_TASK_HEARTBEAT_EXPIRATION: time elapsed 2744 sec, heartbeat counter values current:12333 last:11553, BACKTRACE:[^0x30b98cb ^0x7baafb9 ^0x7baa577 ^0xffffea14 ^0x7ccfd08 ^0x30ffeb1 ^0x30ba8e8 ^0x30b9cda ^0x14264a7 ^0x7c3d996 ^0x13fab78]
+2026-09-17T16:20:05+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration routing-instance] unconfigured -- "mgmt_junos"
+2026-09-17T16:20:05+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration] unconfigured -- "transfer-on-commit"
+2026-09-17T16:20:09+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive"] 
+2026-09-17T16:20:09+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive" password]
+2026-09-17T16:20:37+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T16:20:37+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T16:20:38+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789636837-13' and old database revision 're0-1789632460-12'
+2026-09-17T16:20:38+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T16:20:46+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] unconfigured -- "JNCIE-HEHE"
+2026-09-17T16:20:49+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T16:20:50+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T16:20:50+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-09-17T16:20:50+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 366520, jnxFruLastPowerOn 429742)
+2026-09-17T16:20:50+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789636849-14' and old database revision 're0-1789636837-13'
+2026-09-17T16:20:50+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T16:20:58+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:21:05+00:00 R1 logger[26724]: transfer-file: Transferred /var/transfer/config/R1_20260917_092038_juniper.conf.gz
+2026-09-17T16:21:06+00:00 R1 logger[26739]: transfer-file: Transferred /var/transfer/config/R1_20260917_092050_juniper.conf.gz
+2026-09-17T16:22:28+00:00 R1 mgd[19725]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-17T16:23:20+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:24:05+00:00 R1 mgd[19725]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-09-17T16:24:23+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions clear] 
+2026-09-17T16:24:26+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions network] 
+2026-09-17T16:24:28+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions reset] 
+2026-09-17T16:24:30+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions trace] 
+2026-09-17T16:24:32+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions view] 
+2026-09-17T16:25:20+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:26:18+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class noc-class permissions all] 
+2026-09-17T16:26:18+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system login class noc-class deny-commands] unconfigured -- "(clear|configure|edit|start-shell)"
+2026-09-17T16:26:43+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user radius-ops class] unconfigured -- "ops-class"
+2026-09-17T16:27:09+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user radius-noc class] unconfigured -- "noc-class"
+2026-09-17T16:27:15+00:00 R1 xntpd[25331]: ntpd: time reset +0.813613 s
+2026-09-17T16:27:18+00:00 R1 kernel: hw.chassis.startup_time update to 1789632484.838648
+2026-09-17T16:27:27+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:27:36+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user remote class] unconfigured -- "read-only"
+2026-09-17T16:28:00+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T16:28:01+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T16:28:01+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789637280-15' and old database revision 're0-1789636849-14'
+2026-09-17T16:28:01+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T16:28:05+00:00 R1 logger[27504]: transfer-file: Transferred /var/transfer/config/R1_20260917_092801_juniper.conf.gz
+2026-09-17T16:28:35+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system authentication-order radius] 
+2026-09-17T16:28:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system authentication-order password] 
+2026-09-17T16:29:23+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:29:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system radius-server 172.31.1.100] 
+2026-09-17T16:29:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-09-17T16:29:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system radius-server 172.31.1.100 secret]
+2026-09-17T16:29:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 retry] unconfigured -- "1"
+2026-09-17T16:29:37+00:00 R1 mgd[19725]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 timeout] unconfigured -- "2"
+2026-09-17T16:29:40+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T16:29:41+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T16:29:41+00:00 R1 mgd[19725]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 1 minutes
+2026-09-17T16:29:41+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789637380-16' and old database revision 're0-1789637280-15'
+2026-09-17T16:29:41+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T16:30:01+00:00 R1 sshd: PAM_RADIUS_UNKNOWN_ATTR_ACS_REJ: unrecognized attribute(80) in Access-Reject.
+2026-09-17T16:30:05+00:00 R1 logger[28181]: transfer-file: Transferred /var/transfer/config/R1_20260917_092941_juniper.conf.gz
+2026-09-17T16:30:13+00:00 R1 inetd[18912]: /usr/sbin/sshd[28153]: exited, status 255
+2026-09-17T16:30:32+00:00 R1 mgd[19725]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-09-17T16:30:33+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-09-17T16:30:33+00:00 R1 mgd[19725]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1789637432-17' and old database revision 're0-1789637380-16'
+2026-09-17T16:30:33+00:00 R1 mgd[19725]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-09-17T16:30:52+00:00 R1 inetd[18912]: /usr/sbin/sshd[28183]: exited, status 255
+2026-09-17T16:30:56+00:00 R1 inetd[18912]: /usr/sbin/sshd[28350]: exited, status 255
+2026-09-17T16:31:05+00:00 R1 logger[28375]: transfer-file: Transferred /var/transfer/config/R1_20260917_093033_juniper.conf.gz
+2026-09-17T16:31:20+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:33:27+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-09-17T16:33:51+00:00 R1 inetd[18912]: /usr/sbin/sshd[28395]: exited, status 255
+2026-09-17T16:34:02+00:00 R1 mgd[19725]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-09-17T16:34:04+00:00 R1 inetd[18912]: /usr/sbin/sshd[19718]: exited, status 255
+2026-10-03T06:41:26+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791009686-4' and old database revision 're0-1791009142-3'
+2026-10-03T06:41:26+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T06:42:31+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:43:43+00:00 R1 mgd[19721]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-10-03T06:43:47+00:00 R1 mgd[19721]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-10-03T06:44:20+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] unconfigured -- "JNCIE"
+2026-10-03T06:44:22+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 1 to power on FPC 0 timed out; restarted it
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 91046, jnxFruLastPowerOn 1046)
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 91046, jnxFruLastPowerOn 1046)
+2026-10-03T06:46:03+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-10-03T06:46:19+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 91046, jnxFruLastPowerOn 92647)
+2026-10-03T06:46:41+00:00 R1 mgd[19721]: UI_LOAD_EVENT: User 'admin' is performing a 'rollback'
+2026-10-03T06:46:41+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' rollback: /config/juniper.conf 
+2026-10-03T06:46:45+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:46:46+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system services telnet] 
+2026-10-03T06:46:49+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system services ftp] 
+2026-10-03T06:48:30+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24 next-hop 10.0.0.2] 
+2026-10-03T06:48:34+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:48:58+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] unconfigured -- "retain"
+2026-10-03T06:49:16+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] "retain -- "retain"
+2026-10-03T06:49:16+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [routing-instances mgmt_junos routing-options static route 10.10.10.0/24] unconfigured -- "no-readvertise"
+2026-10-03T06:49:38+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T06:49:39+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T06:49:40+00:00 R1 mgd[19721]: UI_COMMIT_CONFIRMED_REMINDER: 'commit confirmed' must be confirmed within 2 minutes
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: L2VPN acquiring mastership for primary
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: L2CKT acquiring mastership for primary
+2026-10-03T06:49:40+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS: RPD commit jobs started on MASTER
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 17 [2026-10-03 06:49:40]
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 18 [2026-10-03 06:49:40]
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+2026-10-03T06:49:40+00:00 R1 last message repeated 2 times
+2026-10-03T06:49:40+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New FIB highwatermark for routes: 3 [2026-10-03 06:49:40]
+2026-10-03T06:49:40+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791010178-5' and old database revision 're0-1791009686-4'
+2026-10-03T06:49:40+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T06:50:16+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T06:50:16+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T06:50:16+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791010216-6' and old database revision 're0-1791010178-5'
+2026-10-03T06:50:16+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T06:50:21+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:52:20+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:53:57+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T06:59:51+00:00 R1 last message repeated 3 times
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 2 to power on FPC 0 timed out; restarted it
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 182873, jnxFruLastPowerOn 92871)
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 182873, jnxFruLastPowerOn 92871)
+2026-10-03T07:01:21+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-10-03T07:01:37+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 182873, jnxFruLastPowerOn 184475)
+2026-10-03T07:01:55+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T07:03:34+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T07:03:58+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system name-server 172.31.1.100] 
+2026-10-03T07:03:58+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system name-server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-10-03T07:04:08+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system domain-name] unconfigured -- "sys101.lab"
+2026-10-03T07:04:19+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system time-zone] unconfigured -- "Europe/Amsterdam"
+2026-10-03T07:04:42+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T07:04:44+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T07:04:44+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T09:04:44+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791011082-7' and old database revision 're0-1791010216-6'
+2026-10-03T09:04:44+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T09:05:28+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T09:07:25+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T09:09:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0] 
+2026-10-03T09:09:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet] 
+2026-10-03T09:09:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [interfaces lo0 unit 0 family inet address 192.0.0.1/32] 
+2026-10-03T09:09:16+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T09:10:03+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp server 172.31.1.100] 
+2026-10-03T09:10:03+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-10-03T09:10:03+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp server 172.31.1.100 key]
+2026-10-03T09:10:39+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp authentication-key 1] 
+2026-10-03T09:10:39+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system ntp authentication-key 1 type] unconfigured -- "md5"
+2026-10-03T09:10:39+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system ntp authentication-key 1 value]
+2026-10-03T09:11:09+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T09:11:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system ntp trusted-key 1] 
+2026-10-03T09:11:20+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T09:11:23+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T09:11:23+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-10-03T09:11:23+00:00 R1 xntpd[23406]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-10-03T09:11:23+00:00 R1 xntpd[23406]: Command line: /usr/sbin/xntpd -j -N -g
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: L2VPN acquiring mastership for primary
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: L2CKT acquiring mastership for primary
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS: RPD commit jobs started on MASTER
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+2026-10-03T09:11:23+00:00 R1 last message repeated 2 times
+2026-10-03T09:11:23+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 18 [2026-10-03 09:11:23]
+2026-10-03T09:11:23+00:00 R1 rpd[19284]: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 19 [2026-10-03 09:11:23]
+2026-10-03T09:11:23+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791011480-8' and old database revision 're0-1791011082-7'
+2026-10-03T09:11:23+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T09:11:24+00:00 R1 xntpd[23406]: ntpd 4.2.8p15-a Tue Dec 16 17:23:02  2025 (1): Starting
+2026-10-03T09:11:24+00:00 R1 xntpd[23406]: Command line: /usr/sbin/xntpd -j -N -g
+2026-10-03T09:11:28+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-10-03T12:08:08+00:00 R1 xntpd[23406]: ntpd: time reset +10597.072880 s
+2026-10-03T12:08:09+00:00 R1 kernel: hw.chassis.startup_time update to 1791019578.536432
+2026-10-03T12:08:10+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-10-03T12:08:10+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-10-03T12:08:20+00:00 R1 last message repeated 2 times
+2026-10-03T12:08:26+00:00 R1 jlaunchd[18878]: ifstate-tracing-process is thrashing, not restarted
+2026-10-03T12:08:26+00:00 R1 kernel: sysctl_net_ifstate_tracerec_max: IFSTATE tracerecord buffer size changed to 100000.
+2026-10-03T12:08:26+00:00 R1 jlaunchd[18878]: rtsock-messages is thrashing, not restarted
+2026-10-03T12:09:41+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:11:47+00:00 R1 /usr/bin/ssh[23546]: ssh: connect to host 172.31.1.100 port 22: No route to host
+2026-10-03T12:11:47+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive"] 
+2026-10-03T12:11:47+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system archival configuration archive-sites "scp://lab@172.31.1.100/srv/ftp/archive" password]
+2026-10-03T12:11:58+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:12:07+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration routing-instance] unconfigured -- "mgmt_junos"
+2026-10-03T12:12:27+00:00 R1 rpd[19284]: JTASK_SCHED_TASK_HEARTBEAT_EXPIRATION: time elapsed 10897 sec, heartbeat counter values current:7846 last:7029, BACKTRACE:[^0x30b98cb ^0x7baafb9 ^0x7baa577 ^0xffffea14 ^0x7ccfd08 ^0x30ffeb1 ^0x30ba8e8 ^0x30b9cda ^0x14264a7 ^0x7c3d996 ^0x13fab78]
+2026-10-03T12:12:45+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration routing-instance] "mgmt_junos -- "mgmt_junos"
+2026-10-03T12:12:45+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system archival configuration] unconfigured -- "transfer-on-commit"
+2026-10-03T12:13:13+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T12:13:14+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T12:13:14+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791022393-9' and old database revision 're0-1791011480-8'
+2026-10-03T12:13:14+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE_RETRY: Attempt 3 to power on FPC 0 timed out; restarted it
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Restarting unresponsive board
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 274699, jnxFruLastPowerOn 184699)
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 15, jnxFruLastPowerOff 274699, jnxFruLastPowerOn 184699)
+2026-10-03T12:13:16+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-10-03T12:13:19+00:00 R1 logger[24222]: transfer-file: Transferred /var/transfer/config/R1_20261003_101314_juniper.conf.gz
+2026-10-03T12:13:32+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power on (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 2, jnxFruLastPowerOff 274699, jnxFruLastPowerOn 276301)
+2026-10-03T12:14:10+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:14:17+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system location building] unconfigured -- "JNCIE"
+2026-10-03T12:14:20+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T12:14:21+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T12:14:22+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T12:14:22+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791022460-10' and old database revision 're0-1791022393-9'
+2026-10-03T12:14:22+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T12:15:19+00:00 R1 logger[24950]: transfer-file: Transferred /var/transfer/config/R1_20261003_101422_juniper.conf.gz
+2026-10-03T12:15:20+00:00 R1 mgd[19721]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-10-03T12:15:49+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:16:42+00:00 R1 /usr/bin/ssh[24957]: ssh: connect to host 172.31.1.100 port 22: No route to host
+2026-10-03T12:16:42+00:00 R1 LIBJNX_EXEC_WEXIT: Command exited: PID 24956, status 1, command '/usr/bin/scp'
+2026-10-03T12:17:36+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:17:59+00:00 R1 mgd[19721]: UI_DBASE_LOGIN_EVENT: User 'admin' entering configuration mode
+2026-10-03T12:19:48+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions clear] 
+2026-10-03T12:19:49+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:19:51+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions network] 
+2026-10-03T12:19:53+00:00 R1 xntpd[23406]: ntpd: time reset +1.223415 s
+2026-10-03T12:19:56+00:00 R1 kernel: hw.chassis.startup_time update to 1791019579.759845
+2026-10-03T12:20:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions reset] 
+2026-10-03T12:20:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions trace] 
+2026-10-03T12:20:12+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class ops-class permissions view] 
+2026-10-03T12:21:01+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system login class noc-class permissions all] 
+2026-10-03T12:21:01+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system login class noc-class deny-commands] unconfigured -- "(clear|configure|edit|start-shell)"
+2026-10-03T12:21:16+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user radius-ops class] unconfigured -- "ops-class"
+2026-10-03T12:21:44+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system login user radius-noc class] unconfigured -- "noc-class"
+2026-10-03T12:22:12+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:22:22+00:00 R1 mgd[19721]: UI_COMMIT: User 'admin' requested 'commit' operation (comment: none)
+2026-10-03T12:22:22+00:00 R1 ffp: "dynamic-profiles": No change to profiles 
+2026-10-03T12:22:23+00:00 R1 mgd[19721]: UI_CONFIGURATION_REVISION_UPDATED: New database revision 're0-1791022942-11' and old database revision 're0-1791022460-10'
+2026-10-03T12:22:23+00:00 R1 mgd[19721]: UI_COMMIT_COMPLETED:  : commit complete 
+2026-10-03T12:22:34+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system authentication-order radius] 
+2026-10-03T12:22:34+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system authentication-order password] 
+2026-10-03T12:23:15+00:00 R1 mgd[19721]: UI_CFG_AUDIT_OTHER: User 'admin' set: [system radius-server 172.31.1.100] 
+2026-10-03T12:23:15+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 routing-instance] unconfigured -- "mgmt_junos"
+2026-10-03T12:23:15+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 retry] unconfigured -- "1"
+2026-10-03T12:23:15+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET: User 'admin' set: [system radius-server 172.31.1.100 timeout] unconfigured -- "2"
+2026-10-03T12:23:15+00:00 R1 mgd[19721]: UI_CFG_AUDIT_SET_SECRET: User 'admin' set: [system radius-server 172.31.1.100 secret]
+2026-10-03T12:23:20+00:00 R1 logger[25704]: transfer-file: Transferred /var/transfer/config/R1_20261003_102223_juniper.conf.gz
+2026-10-03T12:24:03+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:24:09+00:00 R1 inetd[18913]: /usr/sbin/sshd[25707]: exited, status 255
+2026-10-03T12:24:20+00:00 R1 sshd[25712]: error: PAM: Authentication error for ops from 172.31.1.1
+2026-10-03T12:24:20+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'ops' from host '172.31.1.1'
+2026-10-03T12:24:23+00:00 R1 sshd[25712]: error: PAM: Authentication error for ops from 172.31.1.1
+2026-10-03T12:24:23+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'ops' from host '172.31.1.1'
+2026-10-03T12:24:37+00:00 R1 sshd[25712]: error: PAM: Authentication error for ops from 172.31.1.1
+2026-10-03T12:24:37+00:00 R1 sshd: SSHD_LOGIN_FAILED: Login failed for user 'ops' from host '172.31.1.1'
+2026-10-03T12:24:45+00:00 R1 inetd[18913]: /usr/sbin/sshd[25718]: exited, status 255
+2026-10-03T12:24:52+00:00 R1 sshd: SSHD_LOGIN_ATTEMPTS_THRESHOLD: Threshold for unsuccessful authentication attempts (3) reached by user 'ops'
+2026-10-03T12:24:52+00:00 R1 inetd[18913]: /usr/sbin/sshd[25712]: exited, status 255
+2026-10-03T12:25:52+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:27:45+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_FRU_UNRESPONSIVE: Error for FPC 0: unresponsive to attempts to start it; left it offline
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_IPC_WRITE_ERR_NULL_ARGS: FRU has no connection arguments fru_send_msg FPC 0
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_FRU_OFFLINE_NOTICE: Taking FPC 0 offline: Error
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 4, entStateAlarm 2)
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP0: ENTITY trap generated: entConfigChanged
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: FRU power off (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 3, jnxFruLastPowerOff 366526, jnxFruLastPowerOn 276525)
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP10: SNMP trap generated: Fru Offline (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0, jnxFruOfflineReason 3, jnxFruLastPowerOff 366526, jnxFruLastPowerOn 276525)
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP3: ENTITY trap generated: entStateOperDisabled (entPhysicalIndex 20, entStateAdmin 2, entStateAlarm 2)
+2026-10-03T12:28:36+00:00 R1 chassisd[18895]: CHASSISD_SNMP_TRAP7: SNMP trap generated: Fru Failed (jnxFruContentsIndex 7, jnxFruL1Index 1, jnxFruL2Index 0, jnxFruL3Index 0, jnxFruName FPC: Virtual FPC @ 0/*/*, jnxFruType 3, jnxFruSlot 0)
+2026-10-03T12:28:36+00:00 R1 alarmd: ALARMD_SET_ALERT: Alarm set: FPC id=16777320, color=RED, class=CHASSIS, reason=FPC 0 Hard errors 
+2026-10-03T12:28:36+00:00 R1 alarmd: ALARMD_STATE_SET: Alarm set: col = 1,cls = 100,obj = 104,short = FPC 0 Hard errors,long = FPC 0 Hard errors 
+2026-10-03T12:30:04+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:31:56+00:00 R1 rpd[19284]: JTASK_IO_CONNECT_FAILED: unix:/var/run/japi_rmopd_ac./var/run/japi_rmopd: Connecting to /var/run/japi_rmopd failed: No such file or directory
+2026-10-03T12:33:55+00:00 R1 mgd[19721]: UI_DBASE_LOGOUT_EVENT: User 'admin' exiting configuration mode
+2026-10-03T12:33:57+00:00 R1 inetd[18913]: /usr/sbin/sshd[19714]: exited, status 255

@@ -1,0 +1,171 @@
+2026-08-31 13:10:48,237 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2026-08-31 13:10:48,240 INFO supervisord started with pid 1
+2026-08-31 13:10:49,242 INFO spawned: 'chronyd' with pid 16
+2026-08-31 13:10:49,245 INFO spawned: 'dnsmasq' with pid 17
+2026-08-31 13:10:49,247 INFO spawned: 'radius' with pid 18
+2026-08-31 13:10:49,248 INFO spawned: 'rsyslog' with pid 19
+2026-08-31 13:10:49,250 INFO spawned: 'vsftpd' with pid 20
+2026-08-31 13:10:49,322 WARN exited: radius (exit status 1; not expected)
+2026-08-31 13:10:50,323 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-08-31 13:10:50,323 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-08-31 13:10:50,325 INFO spawned: 'radius' with pid 28
+2026-08-31 13:10:50,325 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-08-31 13:10:50,325 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-08-31 13:10:50,353 WARN exited: radius (exit status 1; not expected)
+2026-08-31 13:10:52,356 INFO spawned: 'radius' with pid 30
+2026-08-31 13:10:52,390 WARN exited: radius (exit status 1; not expected)
+2026-08-31 13:10:55,393 INFO spawned: 'radius' with pid 32
+2026-08-31 13:10:55,422 WARN exited: radius (exit status 1; not expected)
+2026-08-31 13:10:56,423 INFO gave up: radius entered FATAL state, too many start retries too quickly
+2026-09-01 06:21:55,826 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2026-09-01 06:21:55,828 INFO supervisord started with pid 1
+2026-09-01 06:21:56,831 INFO spawned: 'chronyd' with pid 16
+2026-09-01 06:21:56,832 INFO spawned: 'dnsmasq' with pid 17
+2026-09-01 06:21:56,834 INFO spawned: 'radius' with pid 18
+2026-09-01 06:21:56,835 INFO spawned: 'rsyslog' with pid 19
+2026-09-01 06:21:56,836 INFO spawned: 'vsftpd' with pid 20
+2026-09-01 06:21:56,894 WARN exited: radius (exit status 1; not expected)
+2026-09-01 06:21:57,896 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 06:21:57,896 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 06:21:57,897 INFO spawned: 'radius' with pid 28
+2026-09-01 06:21:57,897 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 06:21:57,897 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 06:21:57,920 WARN exited: radius (exit status 1; not expected)
+2026-09-01 06:21:59,923 INFO spawned: 'radius' with pid 30
+2026-09-01 06:21:59,945 WARN exited: radius (exit status 1; not expected)
+2026-09-01 06:22:02,950 INFO spawned: 'radius' with pid 32
+2026-09-01 06:22:02,988 WARN exited: radius (exit status 1; not expected)
+2026-09-01 06:22:03,990 INFO gave up: radius entered FATAL state, too many start retries too quickly
+2026-09-01 08:04:57,526 INFO Set uid to user 0 succeeded
+2026-09-01 08:04:57,527 INFO supervisord started with pid 1
+2026-09-01 08:04:58,530 INFO spawned: 'chronyd' with pid 19
+2026-09-01 08:04:58,532 INFO spawned: 'dnsmasq' with pid 20
+2026-09-01 08:04:58,533 INFO spawned: 'radius' with pid 21
+2026-09-01 08:04:58,534 INFO spawned: 'rsyslog' with pid 22
+2026-09-01 08:04:58,536 INFO spawned: 'sshd' with pid 23
+2026-09-01 08:04:58,537 INFO spawned: 'vsftpd' with pid 25
+2026-09-01 08:04:58,546 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:04:59,579 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:04:59,579 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:04:59,579 INFO success: radius entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:04:59,579 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:04:59,581 INFO spawned: 'sshd' with pid 37
+2026-09-01 08:04:59,581 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:04:59,588 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:05:01,591 INFO spawned: 'sshd' with pid 38
+2026-09-01 08:05:01,599 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:05:04,603 INFO spawned: 'sshd' with pid 45
+2026-09-01 08:05:04,612 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:05:05,614 INFO gave up: sshd entered FATAL state, too many start retries too quickly
+2026-09-01 08:10:05,151 INFO Set uid to user 0 succeeded
+2026-09-01 08:10:05,154 INFO supervisord started with pid 1
+2026-09-01 08:10:06,156 INFO spawned: 'chronyd' with pid 19
+2026-09-01 08:10:06,158 INFO spawned: 'dnsmasq' with pid 20
+2026-09-01 08:10:06,159 INFO spawned: 'radius' with pid 21
+2026-09-01 08:10:06,161 INFO spawned: 'rsyslog' with pid 22
+2026-09-01 08:10:06,162 INFO spawned: 'sshd' with pid 23
+2026-09-01 08:10:06,163 INFO spawned: 'vsftpd' with pid 24
+2026-09-01 08:10:06,164 WARN exited: chronyd (exit status 1; not expected)
+2026-09-01 08:10:06,164 WARN exited: rsyslog (exit status 1; not expected)
+2026-09-01 08:10:06,170 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:10:07,197 INFO spawned: 'chronyd' with pid 31
+2026-09-01 08:10:07,197 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:10:07,198 INFO success: radius entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:10:07,199 INFO spawned: 'rsyslog' with pid 32
+2026-09-01 08:10:07,202 INFO spawned: 'sshd' with pid 33
+2026-09-01 08:10:07,202 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:10:07,214 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:10:08,214 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:10:08,215 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-01 08:10:09,217 INFO spawned: 'sshd' with pid 40
+2026-09-01 08:10:09,225 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:10:12,228 INFO spawned: 'sshd' with pid 41
+2026-09-01 08:10:12,236 WARN exited: sshd (exit status 255; not expected)
+2026-09-01 08:10:13,236 INFO gave up: sshd entered FATAL state, too many start retries too quickly
+2026-09-17 07:22:08,068 INFO Set uid to user 0 succeeded
+2026-09-17 07:22:08,071 INFO supervisord started with pid 1
+2026-09-17 07:22:09,074 INFO spawned: 'chronyd' with pid 19
+2026-09-17 07:22:09,076 INFO spawned: 'dnsmasq' with pid 20
+2026-09-17 07:22:09,078 INFO spawned: 'radius' with pid 21
+2026-09-17 07:22:09,079 INFO spawned: 'rsyslog' with pid 22
+2026-09-17 07:22:09,081 INFO spawned: 'sshd' with pid 23
+2026-09-17 07:22:09,083 INFO spawned: 'vsftpd' with pid 24
+2026-09-17 07:22:09,093 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:22:10,163 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:22:10,164 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:22:10,164 INFO success: radius entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:22:10,164 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:22:10,165 INFO spawned: 'sshd' with pid 37
+2026-09-17 07:22:10,166 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:22:10,176 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:22:12,178 INFO spawned: 'sshd' with pid 38
+2026-09-17 07:22:12,188 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:22:15,193 INFO spawned: 'sshd' with pid 39
+2026-09-17 07:22:15,203 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:23:04,376 INFO Set uid to user 0 succeeded
+2026-09-17 07:23:04,378 INFO supervisord started with pid 1
+2026-09-17 07:23:05,380 INFO spawned: 'chronyd' with pid 19
+2026-09-17 07:23:05,382 INFO spawned: 'dnsmasq' with pid 20
+2026-09-17 07:23:05,383 INFO spawned: 'radius' with pid 21
+2026-09-17 07:23:05,385 INFO spawned: 'rsyslog' with pid 22
+2026-09-17 07:23:05,387 INFO spawned: 'sshd' with pid 23
+2026-09-17 07:23:05,388 INFO spawned: 'vsftpd' with pid 25
+2026-09-17 07:23:05,396 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:23:06,432 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:23:06,432 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:23:06,432 INFO success: radius entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:23:06,432 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:23:06,434 INFO spawned: 'sshd' with pid 37
+2026-09-17 07:23:06,434 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 07:23:06,445 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:23:08,448 INFO spawned: 'sshd' with pid 38
+2026-09-17 07:23:08,459 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:23:11,463 INFO spawned: 'sshd' with pid 39
+2026-09-17 07:23:11,473 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 07:23:12,474 INFO gave up: sshd entered FATAL state, too many start retries too quickly
+2026-09-17 09:33:22,359 INFO Set uid to user 0 succeeded
+2026-09-17 09:33:22,363 INFO supervisord started with pid 1
+2026-09-17 09:33:23,365 INFO spawned: 'chronyd' with pid 19
+2026-09-17 09:33:23,368 INFO spawned: 'dnsmasq' with pid 20
+2026-09-17 09:33:23,370 INFO spawned: 'radius' with pid 21
+2026-09-17 09:33:23,372 INFO spawned: 'rsyslog' with pid 22
+2026-09-17 09:33:23,374 INFO spawned: 'sshd' with pid 23
+2026-09-17 09:33:23,375 INFO spawned: 'vsftpd' with pid 25
+2026-09-17 09:33:23,376 WARN exited: chronyd (exit status 1; not expected)
+2026-09-17 09:33:23,377 WARN exited: rsyslog (exit status 1; not expected)
+2026-09-17 09:33:23,383 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 09:33:24,422 INFO spawned: 'chronyd' with pid 31
+2026-09-17 09:33:24,423 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 09:33:24,423 INFO success: radius entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 09:33:24,424 INFO spawned: 'rsyslog' with pid 32
+2026-09-17 09:33:24,426 INFO spawned: 'sshd' with pid 33
+2026-09-17 09:33:24,427 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 09:33:24,437 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 09:33:25,438 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 09:33:25,438 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-09-17 09:33:26,441 INFO spawned: 'sshd' with pid 40
+2026-09-17 09:33:26,451 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 09:33:29,456 INFO spawned: 'sshd' with pid 42
+2026-09-17 09:33:29,467 WARN exited: sshd (exit status 255; not expected)
+2026-09-17 09:33:30,469 INFO gave up: sshd entered FATAL state, too many start retries too quickly
+2026-10-03 06:29:08,887 INFO Set uid to user 0 succeeded
+2026-10-03 06:29:08,890 INFO supervisord started with pid 1
+2026-10-03 06:29:09,892 INFO spawned: 'chronyd' with pid 19
+2026-10-03 06:29:09,894 INFO spawned: 'dnsmasq' with pid 20
+2026-10-03 06:29:09,896 INFO spawned: 'radius' with pid 21
+2026-10-03 06:29:09,898 INFO spawned: 'rsyslog' with pid 22
+2026-10-03 06:29:09,899 INFO spawned: 'sshd' with pid 23
+2026-10-03 06:29:09,901 INFO spawned: 'vsftpd' with pid 24
+2026-10-03 06:29:09,912 WARN exited: sshd (exit status 255; not expected)
+2026-10-03 06:29:10,975 INFO success: chronyd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-10-03 06:29:10,975 INFO success: dnsmasq entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-10-03 06:29:10,975 INFO success: radius entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-10-03 06:29:10,975 INFO success: rsyslog entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-10-03 06:29:10,976 INFO spawned: 'sshd' with pid 37
+2026-10-03 06:29:10,976 INFO success: vsftpd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-10-03 06:29:10,984 WARN exited: sshd (exit status 255; not expected)
+2026-10-03 06:29:12,987 INFO spawned: 'sshd' with pid 38
+2026-10-03 06:29:12,995 WARN exited: sshd (exit status 255; not expected)
+2026-10-03 06:29:15,998 INFO spawned: 'sshd' with pid 39
+2026-10-03 06:29:16,007 WARN exited: sshd (exit status 255; not expected)
+2026-10-03 06:29:17,007 INFO gave up: sshd entered FATAL state, too many start retries too quickly
