@@ -126,7 +126,6 @@ Enter enable/config mode:
   - create svi for mlag peer
   - 172.31.254.0/30
 
-
 6. Disable STP for the dedicated MLAG control VLAN:
 
 7. Configure VLAN 100 SVI and VARP:
@@ -150,7 +149,14 @@ Enter enable/config mode:
 11. Build the MLAG downlink toward PA using Ethernet4:
   - description PA-AE1
   - po and mlag 20
-  - allow vlan INSIDE and OUTSIDE
+  # - allow vlan INSIDE and OUTSIDE
+  - allow vlan 20 (P2P Palo)
+
+11.5. Configure VLAN 20 SVI and VARP for p2p connection to palo:
+  - description : Point to Point Palo
+  - gw : 172.20.20.2/24 (ar01), 172.20.20.3/24 (ar02)
+  - varp : 172.20.20.1/24
+
 
 12. Build inside client ports:
   - ar01

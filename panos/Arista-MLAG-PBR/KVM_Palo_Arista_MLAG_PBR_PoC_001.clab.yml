@@ -6,6 +6,10 @@ mgmt:
   ipv4-subnet: 172.30.40.0/24
 
 topology:
+  kinds:
+    linux:
+      network-mode: none
+
   nodes:
 
     palo1:
@@ -26,21 +30,23 @@ topology:
       #startup-config: ./configs/ceos/arista-02.cfg
 
 
-    mt-inside-pbr:
+    mt-inside-pbr: # 10.100.100.10/24
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest
       binds:
         - ./configs/clients/inside-pbr-init.sh:/config/inside-pbr-init.sh:ro
       exec:
         - bash /config/inside-pbr-init.sh
-    mt-inside-normal:
+
+    mt-inside-normal: # 10.100.100.11/24
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest
       binds:
         - ./configs/clients/inside-normal-init.sh:/config/inside-normal-init.sh:ro
       exec:
         - bash /config/inside-normal-init.sh
-    mt-outside:
+
+    mt-outside: # 10.200.200.10/24
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest
       binds:
@@ -49,12 +55,12 @@ topology:
         - bash /config/outside-init.sh
 
   links:
-    - endpoints: ["arista-01:eth1", "arista-02:eth1"]
-    - endpoints: ["arista-01:eth2", "arista-02:eth2"]
+    - endpoints: ["arista-01:eth1", "arista-02:eth1"] # MLAG Peer Link Po100
+    - endpoints: ["arista-01:eth2", "arista-02:eth2"] # MLAG Peer Link Po100
     - endpoints: ["arista-01:eth3", "arista-02:eth3"]
 
-    - endpoints: ["arista-01:eth4", "palo1:eth1"]
-    - endpoints: ["arista-02:eth4", "palo2:eth2"]
+    - endpoints: ["arista-01:eth4", "palo1:eth1"] # ovs-bridge to KVM Palo Ethernet1, MLAG Port-Channel
+    - endpoints: ["arista-02:eth4", "palo2:eth2"] # ovs-bridge to KVM Palo Ethernet2, MLAG Port-Channel
 
     - endpoints: ["arista-01:eth5", "mt-inside-pbr:eth1"]
     - endpoints: ["arista-01:eth6", "mt-inside-normal:eth1"]
