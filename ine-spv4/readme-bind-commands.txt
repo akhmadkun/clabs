@@ -24,3 +24,21 @@ conf t
 
 dir unix:/labconfigs
 configure replace unix:/labconfigs/iol-base.ipv4.cfg force
+
+
+##### Bridge br-univ ####
+
+bridge definition file ie : univ.xml
+---------------------------------------
+<network>
+<name>univ</name>
+<bridge name='br-univ' stp='on' delay='0'/>
+</network>
+---------------------------------------
+
+
+sudo virsh net-define univ.xml
+sudo virsh net-autostart univ
+sudo virsh net-start univ
+
+
