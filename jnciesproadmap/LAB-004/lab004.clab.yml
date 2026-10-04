@@ -8,7 +8,7 @@ mgmt:
 topology:
   kinds:
     juniper_vjunosrouter:
-      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      image: arthurk99/juniper-vjunos-router:23.4
       enforce-startup-config: true
 
   nodes:

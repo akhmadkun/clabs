@@ -44,8 +44,8 @@ topology:
 
 
     # note, that the bridge br-clab must be created manually
-    # sudo ip link add br-universal type bridge
-    # sudo ip link set br-universal up
+    # sudo ip link add br-univ type bridge
+    # sudo ip link set br-univ up
     br-univ:
       kind: bridge
 

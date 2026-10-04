@@ -1,0 +1,4 @@
+<network>
+  <name>univ</name>
+  <bridge name='br-univ' stp='on' delay='0'/>
+</network>
