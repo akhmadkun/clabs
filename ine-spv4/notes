@@ -1,0 +1,7 @@
+XR1-XR4 = 6.3.1
+XR5 = 6.6.3
+XR6 = 6.6.3
+
+There are these links in EVE-NG, which might not be needed with proper switching:
+ - R3 Gi3 to R7 Gi3
+ - R9 Gi3 to XR4 Gi0/0/0/1
