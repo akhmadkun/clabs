@@ -13,25 +13,25 @@ topology:
     r1:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
-      startup-config: configs/r1.conf
+      startup-config: configs_crpd/r1.conf
       mgmt-ipv4: 172.31.4.11
 
     r2:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
-      startup-config: configs/r2.conf
+      startup-config: configs_crpd/r2.conf
       mgmt-ipv4: 172.31.4.12
 
     r3:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
-      startup-config: configs/r3.conf
+      startup-config: configs_crpd/r3.conf
       mgmt-ipv4: 172.31.4.13
 
     r4:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
-      startup-config: configs/r4.conf
+      startup-config: configs_crpd/r4.conf
       mgmt-ipv4: 172.31.4.14
 
     client1:
