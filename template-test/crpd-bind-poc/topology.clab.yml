@@ -1,0 +1,18 @@
+name: crpd-bind-poc
+prefix: ""
+
+mgmt:
+  network: crpd-bind-poc-mgmt
+  ipv4-subnet: 172.31.90.0/24
+
+topology:
+  nodes:
+    crpd1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      mgmt-ipv4: 172.31.90.11
+      binds:
+        - ./configs:/lab-configs:ro
+
+  # cRPD: eth0 = management, eth1 = first data interface.
+  # No data links are required for this bind/load PoC.

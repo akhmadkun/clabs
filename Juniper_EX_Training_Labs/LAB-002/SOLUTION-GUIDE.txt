@@ -139,9 +139,7 @@ You should see:
 
 set chassis aggregated-devices ethernet device-count 1
 
-You can also check whether ae0 is now visible:
 
-show interfaces terse | match ae0
 
 IMPORTANT
 ---------
@@ -166,11 +164,15 @@ configure
 set interfaces ge-0/0/1 ether-options 802.3ad ae0
 set interfaces ge-0/0/2 ether-options 802.3ad ae0
 
+
+
 SW2:
 
 configure
 set interfaces ge-0/0/1 ether-options 802.3ad ae0
 set interfaces ge-0/0/2 ether-options 802.3ad ae0
+
+
 
 At this stage you may commit:
 
@@ -196,12 +198,7 @@ Each physical port should show:
 set interfaces ge-0/0/1 ether-options 802.3ad ae0
 set interfaces ge-0/0/2 ether-options 802.3ad ae0
 
-Also check:
 
-show configuration interfaces ae0
-
-At this point ae0 exists, but the Layer-2 service configuration has not
-yet been placed on ae0.
 
 JUNIOR-ENGINEER TIP
 --------------------
@@ -308,7 +305,7 @@ STEP 3 — Check the Physical Members
 -----------------------------------
 COMMANDS:
 
-show interfaces terse | match 'ge-0/0/[12]'
+show interfaces terse ge-0/0/[12]
 
 show configuration interfaces ge-0/0/1 | display set
 show configuration interfaces ge-0/0/2 | display set
@@ -346,7 +343,7 @@ STEP 6 — Check Ethernet Switching Information
 ----------------------------------------------
 COMMANDS:
 
-show ethernet-switching interfaces
+show ethernet-switching interface
 show ethernet-switching table
 
 EXPECTED RESULT
@@ -436,7 +433,7 @@ STEP 3 — Check Physical Interfaces
 -----------------------------------
 COMMAND:
 
-show interfaces terse | match 'ge-0/0/[12]'
+show interfaces terse | match "ge-0/0/[12][.]0"
 
 EXPECTED OBSERVATION
 --------------------

@@ -1,0 +1,632 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-003 — RSTP & LAYER-2 LOOP PREVENTION
+SOLUTION GUIDE
+============================================================
+
+AUDIENCE
+Junior Network Engineers / Operations Engineers
+
+PURPOSE
+This lab teaches practical RSTP operations on Juniper EX-style
+switches. Focus on the workflow:
+
+  Observe -> Identify -> Verify -> Explain -> Test -> Restore
+
+
+============================================================
+LAB INFORMATION
+============================================================
+
+IMAGE
+vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+DEVICES
+  EX-TRAIN-SW1
+  EX-TRAIN-SW2
+  EX-TRAIN-SW3
+
+HOSTS
+  Host1 = 10.10.10.11/24
+  Host2 = 10.10.10.12/24
+
+VLAN
+  USERS / VLAN 10
+
+BRIDGE PRIORITIES
+  SW1 = 4k
+  SW2 = 8k
+  SW3 = 12k
+
+INTENDED ROOT BRIDGE
+  SW1
+
+
+============================================================
+IMPORTANT — RSTP ON EX SERIES
+============================================================
+
+EX Series switches use RSTP by default on Ethernet switching
+ports in the standard EX switching model.
+
+This lab still configures bridge priority and point-to-point
+mode explicitly so the intended design is easy to understand
+and reproduce.
+
+Reference:
+https://www.juniper.net/documentation/us/en/software/junos/stp-l2/topics/topic-map/spanning-tree-configuring-rstp.html
+
+
+============================================================
+TASK 1 — Verify Basic Connectivity
+============================================================
+
+TASK
+Verify Host1 can reach Host2, verify the relevant switch
+interfaces, and verify VLAN USERS.
+
+
+SOLUTION
+--------
+
+On Host1:
+
+ping -c 4 10.10.10.12
+
+On Host2:
+
+ping -c 4 10.10.10.11
+
+
+On SW1:
+
+run show interfaces terse | match "ge-0/0/(1|2)[.]0"
+
+On SW2:
+
+run show interfaces terse | match "ge-0/0/(1|2|10)[.]0"
+
+On SW3:
+
+run show interfaces terse | match "ge-0/0/(1|2|10)[.]0"
+
+
+Check VLAN:
+
+run show vlans USERS
+
+
+EXPECTED RESULT
+---------------
+
+Host1 can ping Host2.
+
+VLAN USERS exists with VLAN ID 10.
+
+Inter-switch links are physically up.
+
+
+EXPLANATION
+-----------
+
+The hosts are in the same Layer-2 VLAN and subnet. The switches
+do not need an IRB interface for this particular connectivity
+test because the traffic remains inside VLAN 10.
+
+For a junior engineer, first separate the problem into:
+
+  Physical connectivity
+  VLAN configuration
+  MAC learning
+  STP state
+
+Do not change STP simply because a host cannot ping.
+
+
+============================================================
+TASK 2 — Verify RSTP Status
+============================================================
+
+TASK
+Check spanning-tree status and identify:
+
+  Root Bridge
+  Root Port
+  Designated Port
+  Non-forwarding redundant path
+
+
+SOLUTION
+--------
+
+On all switches:
+
+run show spanning-tree bridge
+run show spanning-tree interface
+
+
+EXPECTED RESULT
+---------------
+
+SW1 is the Root Bridge.
+
+The ring contains three physical Layer-2 paths, but one redundant
+path is not used for forwarding.
+
+
+EXPLANATION
+-----------
+
+The topology forms a triangle:
+
+        SW1
+       /   \
+     SW2---SW3
+
+Without loop prevention, Ethernet frames could circulate
+indefinitely.
+
+RSTP calculates a loop-free active topology and keeps a
+redundant path available for recovery.
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+A port can be physically healthy and still be intentionally
+non-forwarding because of STP.
+
+So:
+
+  "not forwarding" != "broken"
+
+
+============================================================
+TASK 3 — Verify Root Bridge Election
+============================================================
+
+TASK
+Verify:
+
+  SW1 = 4k
+  SW2 = 8k
+  SW3 = 12k
+
+and confirm SW1 is the Root Bridge.
+
+
+SOLUTION
+--------
+
+SW1:
+
+show configuration protocols rstp | display set
+
+Expected:
+set protocols rstp bridge-priority 4k
+
+
+SW2:
+
+show configuration protocols rstp | display set
+
+Expected:
+set protocols rstp bridge-priority 8k
+
+
+SW3:
+
+show configuration protocols rstp | display set
+
+Expected:
+set protocols rstp bridge-priority 12k
+
+
+
+
+EXPECTED RESULT
+---------------
+
+SW1 is the Root Bridge.
+
+The configured priorities are:
+
+  4k < 8k < 12k
+
+The lowest bridge priority is preferred for the root election.
+
+
+EXPLANATION
+-----------
+
+Bridge priority is one component of the Bridge ID. When comparing
+switches for root election, the switch with the lower Bridge ID
+wins.
+
+For this lab, the priorities are deliberately separated so the
+result is deterministic.
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+Remember:
+
+  LOWER bridge priority = preferred for root election.
+
+Do not confuse this with routing metrics where the meaning of
+higher/lower can differ.
+
+
+============================================================
+TASK 4 — Inspect Individual RSTP Interfaces
+============================================================
+
+TASK
+Inspect all inter-switch ports and determine their role/state.
+
+
+SOLUTION
+--------
+
+Use:
+
+run show spanning-tree interface ge-0/0/1 detail
+run show spanning-tree interface ge-0/0/2 detail
+
+
+Repeat on SW1, SW2, and SW3.
+
+
+WHAT TO LOOK FOR
+----------------
+
+Look for terms such as:
+
+  Root
+  Designated
+  Alternate
+  Forwarding
+  Discarding / Blocking
+
+
+EXPECTED LOGIC
+--------------
+
+SW1 is the root, so its inter-switch ports are Designated Ports.
+
+SW2 selects its path toward SW1 as the Root Port.
+
+SW3 selects its direct path toward SW1 as the Root Port.
+
+The SW2-SW3 path is redundant. The SW3-side path toward SW2
+should be the non-forwarding/alternate side in the stable
+topology.
+
+The exact formatting and wording can vary slightly by Junos
+release/build.
+
+
+EXPLANATION
+-----------
+
+RSTP is trying to create a tree.
+
+The desired logical shape is:
+
+           SW1
+          /   \
+        SW2   SW3
+
+The third physical link is what closes the triangle. RSTP keeps
+that extra path from forwarding at the same time.
+
+
+============================================================
+TASK 5 — Validate Loop Prevention
+============================================================
+
+TASK
+Confirm the redundant path is not forwarding while end-to-end
+connectivity remains available.
+
+
+SOLUTION
+--------
+
+Run:
+
+run show spanning-tree
+
+
+Check MAC learning:
+
+SW1:
+run show ethernet-switching table | match 10.10.10.11
+
+SW3:
+run show ethernet-switching table | match 10.10.10.12
+
+
+From Host1:
+
+ping -c 4 10.10.10.12
+
+
+EXPECTED RESULT
+---------------
+
+Host1 reaches Host2.
+
+One redundant path is non-forwarding.
+
+
+EXPLANATION
+-----------
+
+RSTP trades one redundant forwarding path for loop prevention.
+
+That is intentional.
+
+Think of the topology as:
+
+  Active path(s) = forwarding
+  Backup path    = ready to take over
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+When you see a blocked port in a production network, ask:
+
+  "What path is this port protecting?"
+
+before asking:
+
+  "Why is this port broken?"
+
+
+============================================================
+TASK 6 — Simulate a Link Failure
+============================================================
+
+TASK
+Break the direct SW1-SW3 path and observe RSTP reconvergence.
+
+
+SOLUTION
+--------
+
+On SW1:
+
+configure
+
+set interfaces ge-0/0/2 disable
+
+commit
+
+
+Immediately verify:
+
+run show interfaces terse | match "ge-0/0/2[.]0"
+
+Then check:
+
+run show spanning-tree
+
+
+On SW3, inspect the formerly redundant path:
+
+run show spanning-tree interface ge-0/0/1 detail
+
+
+Finally:
+
+Host1:
+ping -c 10 10.10.10.12
+
+
+EXPECTED RESULT
+---------------
+
+SW1-SW3 is down.
+
+SW3 loses its direct path toward the root.
+
+The SW2-SW3 path becomes usable.
+
+Host1 still reaches Host2 after the topology converges.
+
+
+EXPLANATION
+-----------
+
+Before failure:
+
+  SW3 has a direct path to SW1.
+  The SW2-SW3 link is redundant.
+
+After SW1-SW3 fails:
+
+  SW3 must reach the root through SW2.
+
+The alternate path therefore becomes active.
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+When testing a failure, always verify both:
+
+  1. Control-plane/topology reaction
+  2. End-user/service connectivity
+
+Seeing the STP role change is useful, but proving the host can
+still communicate is the actual service test.
+
+
+============================================================
+TASK 7 — Restore the Original Topology
+============================================================
+
+TASK
+Restore the failed interface and verify that the stable topology
+returns.
+
+
+SOLUTION
+--------
+
+On SW1:
+
+configure
+
+activate interfaces ge-0/0/2
+
+commit
+
+
+Verify:
+
+run show interfaces terse | match "ge-0/0/2[.]0"
+
+run show spanning-tree
+
+
+EXPECTED RESULT
+---------------
+
+The SW1-SW3 link is back.
+
+The triangle topology is restored.
+
+RSTP again selects the redundant path as non-forwarding.
+
+
+IMPORTANT
+---------
+
+Wait for the topology to settle before taking the final verification.
+
+
+============================================================
+OPTIONAL CHALLENGE — Change the Root Bridge
+============================================================
+
+TASK
+Make SW2 the Root Bridge.
+
+
+SOLUTION
+--------
+
+On SW2:
+
+configure
+
+set protocols rstp bridge-priority 0
+
+commit
+
+
+Verify:
+
+run show spanning-tree
+
+
+EXPECTED RESULT
+---------------
+
+SW2 becomes the Root Bridge.
+
+The Root Port on SW1 and/or SW3 can change because the root
+reference point changed.
+
+
+RESTORE
+-------
+
+On SW2:
+
+configure
+
+set protocols rstp bridge-priority 8k
+
+commit
+
+
+Verify SW1 is root again.
+
+
+EXPLANATION
+-----------
+
+STP roles are calculated from the current topology and bridge
+identifiers. Roles are therefore not permanently tied to a port.
+
+Changing the root changes the tree.
+
+
+============================================================
+COMMAND CHEAT SHEET
+============================================================
+
+run show spanning-tree
+run show spanning-tree bridge
+run show spanning-tree interface
+run show interfaces terse
+run show vlans
+run show ethernet-switching table
+
+
+PRACTICAL TROUBLESHOOTING ORDER
+
+  1. Physical link
+  2. Interface configuration
+  3. VLAN membership
+  4. MAC learning
+  5. STP role/state
+  6. Root bridge
+  7. Topology changes
+  8. End-to-end verification
+
+
+============================================================
+COMMON MISTAKES
+============================================================
+
+MISTAKE
+"Blocking means the port is broken."
+
+CORRECTION
+A healthy port can be non-forwarding because RSTP is protecting
+the network.
+
+
+MISTAKE
+"Higher bridge priority wins."
+
+CORRECTION
+Lower bridge priority is preferred for the root election.
+
+
+MISTAKE
+"All three links in the triangle should forward."
+
+CORRECTION
+That would create a Layer-2 loop. RSTP must suppress one path.
+
+
+============================================================
+FINAL CHECKLIST
+============================================================
+
+[ ] Host1 can reach Host2
+[ ] VLAN USERS exists
+[ ] SW1 is Root Bridge
+[ ] Root/Designated/Alternate roles identified
+[ ] One redundant path is non-forwarding
+[ ] Link failure causes alternate path to become usable
+[ ] Host1 still reaches Host2 after failure
+[ ] Original topology restored
+[ ] Optional root-bridge challenge completed

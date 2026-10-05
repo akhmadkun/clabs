@@ -1,0 +1,89 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-003 — RSTP & LAYER-2 LOOP PREVENTION
+============================================================
+
+OBJECTIVE
+Learn how RSTP prevents Layer-2 loops, identify the root bridge,
+understand port roles/states, and verify reconvergence after a
+link failure.
+
+TOPOLOGY
+
+                 SW1
+              /       \
+             /         \
+            /           \
+          SW2 ----------- SW3
+           |               |
+                    VLAN 10 / USERS
+           Host1           Host2
+
+Inter-switch links:
+  SW1 ge-0/0/1 <-> SW2 ge-0/0/1
+  SW2 ge-0/0/2 <-> SW3 ge-0/0/1
+  SW3 ge-0/0/2 <-> SW1 ge-0/0/2
+
+Host links:
+  Host1 <-> SW1 ge-0/0/10
+  Host2 <-> SW3 ge-0/0/10
+
+Host1: 10.10.10.11/24
+Host2: 10.10.10.12/24
+
+TASK 1 — Verify Basic Connectivity
+1. Verify Host1 can ping Host2.
+2. Verify the inter-switch and host interfaces.
+3. Verify VLAN USERS exists with VLAN ID 10.
+
+TASK 2 — Verify RSTP Status
+1. Check spanning-tree status on SW1, SW2, and SW3.
+2. Identify the Root Bridge.
+3. Identify Root Ports and Designated Ports.
+4. Identify the non-forwarding redundant path.
+
+TASK 3 — Verify Root Bridge Election
+Intended priorities:
+  SW1 = 4k
+  SW2 = 8k
+  SW3 = 12k
+
+Verify SW1 is the Root Bridge and explain why.
+
+TASK 4 — Inspect Individual RSTP Interfaces
+Inspect the six inter-switch interfaces:
+  SW1 ge-0/0/1
+  SW1 ge-0/0/2
+  SW2 ge-0/0/1
+  SW2 ge-0/0/2
+  SW3 ge-0/0/1
+  SW3 ge-0/0/2
+
+Determine each interface role/state.
+
+TASK 5 — Validate Loop Prevention
+1. Confirm one redundant path is not forwarding.
+2. Confirm Host1 can still reach Host2.
+3. Explain why connectivity works while one path is non-forwarding.
+
+TASK 6 — Simulate a Link Failure
+On SW1:
+  deactivate interfaces ge-0/0/2
+  commit
+
+Observe RSTP reconvergence and verify Host1 can still reach Host2.
+
+TASK 7 — Restore the Original Topology
+On SW1:
+  activate interfaces ge-0/0/2
+  commit
+
+Verify the original stable topology returns.
+
+OPTIONAL CHALLENGE — Change the Root Bridge
+On SW2:
+  set protocols rstp bridge-priority 0
+  commit
+
+Verify SW2 becomes the Root Bridge, observe role changes, then
+restore SW2 to 8k.

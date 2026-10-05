@@ -1,0 +1,942 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-003 — RSTP & LAYER-2 LOOP PREVENTION
+SOLUTION GUIDE
+============================================================
+
+AUDIENCE
+Junior Network Engineers / Operations Engineers
+
+PURPOSE
+This lab teaches practical RSTP operations on Juniper EX-style
+switches. Focus on the workflow:
+
+  Observe -> Identify -> Verify -> Explain -> Test -> Restore
+
+
+============================================================
+LAB INFORMATION
+============================================================
+
+IMAGE
+vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+DEVICES
+  EX-TRAIN-SW1
+  EX-TRAIN-SW2
+  EX-TRAIN-SW3
+
+HOSTS
+  Host1 = 10.10.10.11/24
+  Host2 = 10.10.10.12/24
+
+VLAN
+  USERS / VLAN 10
+
+BRIDGE PRIORITIES
+  SW1 = 4k
+  SW2 = 8k
+  SW3 = 12k
+
+INTENDED ROOT BRIDGE
+  SW1
+
+
+============================================================
+IMPORTANT — RSTP ON EX SERIES
+============================================================
+
+EX Series switches use RSTP by default on Ethernet switching
+ports in the standard EX switching model.
+
+This lab still configures bridge priority and point-to-point
+mode explicitly so the intended design is easy to understand
+and reproduce.
+
+Reference:
+https://www.juniper.net/documentation/us/en/software/junos/stp-l2/topics/topic-map/spanning-tree-configuring-rstp.html
+
+
+============================================================
+TASK 1 — Verify Basic Connectivity
+============================================================
+
+TASK
+Verify Host1 can reach Host2, verify the relevant switch
+interfaces, and verify VLAN USERS.
+
+
+SOLUTION
+--------
+
+On Host1:
+
+ping -c 4 10.10.10.12
+
+On Host2:
+
+ping -c 4 10.10.10.11
+
+
+On SW1:
+
+run show interfaces terse | match "ge-0/0/(1|2|10)[.]0"
+
+On SW2:
+
+run show interfaces terse | match "ge-0/0/(1|2)[.]0"
+
+On SW3:
+
+run show interfaces terse | match "ge-0/0/(1|2|10)[.]0"
+
+
+Check VLAN:
+
+run show vlans USERS
+
+
+EXPECTED RESULT
+---------------
+
+Host1 can ping Host2.
+
+VLAN USERS exists with VLAN ID 10.
+
+Inter-switch links are physically up.
+
+
+EXPLANATION
+-----------
+
+The hosts are in the same Layer-2 VLAN and subnet. The switches
+do not need an IRB interface for this particular connectivity
+test because the traffic remains inside VLAN 10.
+
+For a junior engineer, first separate the problem into:
+
+  Physical connectivity
+  VLAN configuration
+  MAC learning
+  STP state
+
+Do not change STP simply because a host cannot ping.
+
+
+============================================================
+TASK 2 — Verify RSTP Status
+============================================================
+
+TASK
+Check spanning-tree status and identify:
+
+  Root Bridge
+  Root Port
+  Designated Port
+  Non-forwarding redundant path
+
+
+SOLUTION
+--------
+
+On all switches:
+
+run show spanning-tree bridge
+run show spanning-tree interface
+
+
+EXPECTED RESULT
+---------------
+
+SW1 is the Root Bridge.
+
+The ring contains three physical Layer-2 paths, but one redundant
+path is not used for forwarding.
+
+
+EXPLANATION
+-----------
+
+The topology forms a triangle:
+
+        SW1
+       /   \
+     SW2---SW3
+
+Without loop prevention, Ethernet frames could circulate
+indefinitely.
+
+RSTP calculates a loop-free active topology and keeps a
+redundant path available for recovery.
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+A port can be physically healthy and still be intentionally
+non-forwarding because of STP.
+
+So:
+
+  "not forwarding" != "broken"
+
+
+============================================================
+TASK 3 — Verify Root Bridge Election
+============================================================
+
+TASK
+Verify:
+
+  SW1 = 4k
+  SW2 = 8k
+  SW3 = 12k
+
+and confirm SW1 is the Root Bridge.
+
+
+SOLUTION
+--------
+
+SW1:
+
+show configuration protocols rstp | display set
+
+Expected:
+set protocols rstp bridge-priority 4k
+
+
+SW2:
+
+show configuration protocols rstp | display set
+
+Expected:
+set protocols rstp bridge-priority 8k
+
+
+SW3:
+
+show configuration protocols rstp | display set
+
+Expected:
+set protocols rstp bridge-priority 12k
+
+
+Operational verification:
+
+show spanning-tree bridge
+show spanning-tree interface
+EXPECTED RESULT
+---------------
+
+SW1 is the Root Bridge.
+
+The configured priorities are:
+
+  4k < 8k < 12k
+
+The lowest bridge priority is preferred for the root election.
+
+
+EXPLANATION
+-----------
+
+Bridge priority is one component of the Bridge ID. When comparing
+switches for root election, the switch with the lower Bridge ID
+wins.
+
+For this lab, the priorities are deliberately separated so the
+result is deterministic.
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+Remember:
+
+  LOWER bridge priority = preferred for root election.
+
+Do not confuse this with routing metrics where the meaning of
+higher/lower can differ.
+
+
+============================================================
+TASK 4 — Inspect Individual RSTP Interfaces
+============================================================
+
+TASK
+Inspect all inter-switch ports and determine their role/state.
+
+
+SOLUTION
+--------
+
+Use:
+
+run show spanning-tree interface ge-0/0/1 detail
+run show spanning-tree interface ge-0/0/2 detail
+
+
+Repeat on SW1, SW2, and SW3.
+
+
+WHAT TO LOOK FOR
+----------------
+
+Look for terms such as:
+
+  Root
+  Designated
+  Alternate
+  Forwarding
+  Discarding / Blocking
+
+
+EXPECTED LOGIC
+--------------
+
+SW1 is the root, so its inter-switch ports are Designated Ports.
+
+SW2 selects its path toward SW1 as the Root Port.
+
+SW3 selects its direct path toward SW1 as the Root Port.
+
+The SW2-SW3 path is redundant. The SW3-side path toward SW2
+should be the non-forwarding/alternate side in the stable
+topology.
+
+The exact formatting and wording can vary slightly by Junos
+release/build.
+
+
+EXPLANATION
+-----------
+
+RSTP is trying to create a tree.
+
+The desired logical shape is:
+
+           SW1
+          /   \
+        SW2   SW3
+
+The third physical link is what closes the triangle. RSTP keeps
+that extra path from forwarding at the same time.
+
+
+============================================================
+TASK 5 — Validate Loop Prevention
+============================================================
+
+TASK
+Confirm the redundant path is not forwarding while end-to-end
+connectivity remains available.
+
+
+SOLUTION
+--------
+
+Run:
+
+show spanning-tree bridge
+show spanning-tree interface
+Check MAC learning. The Layer-2 MAC table contains MAC addresses,
+not the hosts' IP addresses.
+
+First discover the host MAC addresses from the Linux containers:
+
+Host1:
+docker exec host1 ip link show eth1
+
+Host2:
+docker exec host2 ip link show eth1
+
+Then check the switch MAC table:
+
+SW1:
+run show ethernet-switching table vlan-name USERS
+
+SW3:
+run show ethernet-switching table vlan-name USERS
+
+If you know the MAC address, filter it directly, for example:
+run show ethernet-switching table | match aa:bb:cc
+
+
+From Host1:
+
+ping -c 4 10.10.10.12
+
+
+EXPECTED RESULT
+---------------
+
+Host1 reaches Host2.
+
+One redundant path is non-forwarding.
+
+
+EXPLANATION
+-----------
+
+RSTP trades one redundant forwarding path for loop prevention.
+
+That is intentional.
+
+Think of the topology as:
+
+  Active path(s) = forwarding
+  Backup path    = ready to take over
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+When you see a blocked port in a production network, ask:
+
+  "What path is this port protecting?"
+
+before asking:
+
+  "Why is this port broken?"
+
+
+============================================================
+TASK 6 — Simulate a Link Failure
+============================================================
+
+TASK
+Break the direct SW1-SW3 path and observe RSTP reconvergence.
+
+
+SOLUTION
+--------
+
+On SW1:
+
+configure
+
+deactivate interfaces ge-0/0/2
+
+commit
+
+
+Immediately verify:
+
+run show interfaces terse | match "ge-0/0/2[.]0"
+
+Then check:
+
+show spanning-tree bridge
+show spanning-tree interface
+On SW3, inspect the formerly redundant path:
+
+run show spanning-tree interface ge-0/0/1 detail
+
+
+Finally:
+
+Host1:
+ping -c 10 10.10.10.12
+
+
+EXPECTED RESULT
+---------------
+
+SW1-SW3 is down.
+
+SW3 loses its direct path toward the root.
+
+The SW2-SW3 path becomes usable.
+
+Host1 still reaches Host2 after the topology converges.
+
+
+EXPLANATION
+-----------
+
+Before failure:
+
+  SW3 has a direct path to SW1.
+  The SW2-SW3 link is redundant.
+
+After SW1-SW3 fails:
+
+  SW3 must reach the root through SW2.
+
+The alternate path therefore becomes active.
+
+
+JUNIOR ENGINEER TIP
+-------------------
+
+When testing a failure, always verify both:
+
+  1. Control-plane/topology reaction
+  2. End-user/service connectivity
+
+Seeing the STP role change is useful, but proving the host can
+still communicate is the actual service test.
+
+
+============================================================
+TASK 7 — Restore the Original Topology
+============================================================
+
+TASK
+Restore the failed interface and verify that the stable topology
+returns.
+
+
+SOLUTION
+--------
+
+On SW1:
+
+configure
+
+activate interfaces ge-0/0/2
+
+commit
+
+
+Verify:
+
+run show interfaces terse | match "ge-0/0/2[.]0"
+
+show spanning-tree bridge
+show spanning-tree interface
+EXPECTED RESULT
+---------------
+
+The SW1-SW3 link is back.
+
+The triangle topology is restored.
+
+RSTP again selects the redundant path as non-forwarding.
+
+
+IMPORTANT
+---------
+
+Wait for the topology to settle before taking the final verification.
+
+
+============================================================
+OPTIONAL CHALLENGE — Change the Root Bridge
+============================================================
+
+TASK
+Make SW2 the Root Bridge.
+
+
+SOLUTION
+--------
+
+On SW2:
+
+configure
+
+set protocols rstp bridge-priority 0
+
+commit
+
+
+Verify:
+
+show spanning-tree bridge
+show spanning-tree interface
+EXPECTED RESULT
+---------------
+
+SW2 becomes the Root Bridge.
+
+The Root Port on SW1 and/or SW3 can change because the root
+reference point changed.
+
+
+RESTORE
+-------
+
+On SW2:
+
+configure
+
+set protocols rstp bridge-priority 8k
+
+commit
+
+
+Verify SW1 is root again.
+
+
+EXPLANATION
+-----------
+
+STP roles are calculated from the current topology and bridge
+identifiers. Roles are therefore not permanently tied to a port.
+
+Changing the root changes the tree.
+
+
+============================================================
+EXTENDED PRODUCTION STP PROTECTION REFERENCE
+============================================================
+
+The core lab above uses one stable three-switch RSTP topology.
+The following items are NOT required to change the topology or
+configs in this lab. They are included here so the engineer can
+connect the basic RSTP concepts to real EX Series operations.
+
+These are the Junos concepts that map most closely to common
+Cisco operational protections:
+
+  Cisco concept        Junos EX concept
+  ------------------------------------------------------------
+  PortFast             edge
+  BPDU Guard           bpdu-block-on-edge
+  Root Guard           no-root-port
+  Loop Guard           bpdu-timeout-action block
+
+The behavior and configuration model are not always a literal
+1:1 vendor translation. Learn the intended protection first,
+then the Junos command used to implement it.
+
+
+============================================================
+REFERENCE 1 — EDGE PORT
+============================================================
+
+PURPOSE
+-------
+An edge port is an interface that connects to an endpoint such as
+a workstation, printer, camera, or server rather than another
+bridge.
+
+CONFIGURATION EXAMPLE
+---------------------
+set protocols rstp interface ge-0/0/10 edge
+
+VERIFY
+------
+show configuration protocols rstp interface ge-0/0/10 | display set
+
+
+Then inspect the operational state:
+show spanning-tree interface ge-0/0/10 detail
+
+IMPORTANT
+---------
+`edge` changes the interface's RSTP behavior so it can transition
+quickly to forwarding. It does not by itself mean that unexpected
+BPDUs are harmless.
+
+
+============================================================
+REFERENCE 2 — BPDU PROTECTION / BPDU GUARD
+============================================================
+
+PURPOSE
+-------
+Protect edge ports from an unexpected bridge sending BPDUs.
+
+CONFIGURATION EXAMPLE
+---------------------
+set protocols rstp bpdu-block-on-edge
+
+Typically combine this with edge access ports:
+set protocols rstp interface ge-0/0/10 edge
+
+VERIFY
+------
+show configuration protocols rstp | display set
+show spanning-tree interface ge-0/0/10 detail
+
+EXPECTED BEHAVIOR
+-----------------
+If an incompatible BPDU is received on an edge port while
+`bpdu-block-on-edge` is enabled, Junos shuts the interface down
+as a protection action.
+
+RECOVERY
+--------
+The error state can be cleared with:
+clear ethernet-switching bpdu-error interface ge-0/0/10
+
+If the feature is configured with a disable timeout, the device
+may re-enable the interface automatically after the configured
+period.
+
+JUNIOR ENGINEER MENTAL MODEL
+----------------------------
+"This port is for an endpoint. A switch should not appear here."
+
+
+============================================================
+REFERENCE 3 — ROOT PROTECTION
+============================================================
+
+PURPOSE
+-------
+Prevent a downstream interface from becoming a Root Port when a
+superior BPDU is received.
+
+JUNOS CONFIGURATION
+-------------------
+set protocols rstp interface ge-0/0/7 no-root-port
+
+VERIFY
+------
+show configuration protocols rstp interface ge-0/0/7 | display set
+show spanning-tree interface ge-0/0/7 detail
+
+EXPECTED BEHAVIOR
+-----------------
+The protected interface remains a designated interface. If a
+superior BPDU is received, the interface can be placed into a
+root-prevented/inconsistency state rather than becoming the Root
+Port.
+
+JUNIOR ENGINEER MENTAL MODEL
+----------------------------
+"This path must never become my path to a better root."
+
+IMPORTANT
+---------
+`no-root-port` is the Junos EX command commonly used for the
+behavior engineers know as Root Guard on Cisco.
+
+
+============================================================
+REFERENCE 4 — LOOP PROTECTION / BPDU TIMEOUT ACTION
+============================================================
+
+PURPOSE
+-------
+Protect a non-designated/alternate path when the expected BPDUs
+stop arriving even though the physical link itself remains up.
+
+JUNOS CONFIGURATION
+-------------------
+set protocols rstp interface ge-0/0/2 bpdu-timeout-action block
+
+VERIFY
+------
+show configuration protocols rstp interface ge-0/0/2 | display set
+show spanning-tree interface ge-0/0/2 detail
+
+EXPECTED BEHAVIOR
+-----------------
+The interface is configured to block when the BPDU timeout
+condition occurs, preventing an unsafe forwarding transition.
+
+JUNIOR ENGINEER MENTAL MODEL
+----------------------------
+"I expected STP control information here. If it disappears,
+do not assume it is safe to start forwarding."
+
+IMPORTANT
+---------
+This is the Junos mechanism to know for the loop-protection
+behavior commonly discussed as Loop Guard. The terminology is
+not identical between vendors.
+
+
+============================================================
+REFERENCE 5 — PATH COST
+============================================================
+
+PURPOSE
+-------
+Influence which path a switch prefers toward the Root Bridge.
+
+EXAMPLE
+-------
+set protocols rstp interface ge-0/0/1 cost 10
+set protocols rstp interface ge-0/0/2 cost 100
+
+VERIFY
+------
+show configuration protocols rstp | display set
+show spanning-tree bridge
+show spanning-tree interface
+
+KEY CONCEPT
+-----------
+Bridge priority answers:
+  "Who should be Root?"
+
+Path cost helps answer:
+  "Which path should I use to reach Root?"
+
+By default Junos derives link cost from interface speed, but the
+cost can be configured explicitly.
+
+
+============================================================
+REFERENCE 6 — INTERFACE PRIORITY
+============================================================
+
+PURPOSE
+-------
+Influence which interface is selected as a Root Port when the
+relevant path calculations are otherwise comparable.
+
+EXAMPLE
+-------
+set protocols rstp interface ge-0/0/1 priority 16
+
+VERIFY
+------
+show configuration protocols rstp | display set
+show spanning-tree interface
+
+JUNOS RULE
+----------
+Interface priority uses increments of 16.
+Default value: 128.
+
+Do not use interface priority as a substitute for bridge priority.
+Bridge priority is used for Root Bridge election; interface
+priority is an input to interface/Root Port selection.
+
+
+============================================================
+REFERENCE 7 — PROTECTION TROUBLESHOOTING WORKFLOW
+============================================================
+
+When an STP-protected interface is reported as down or blocked,
+do not immediately remove the protection.
+
+Use this workflow:
+
+  1. Check physical link state.
+  2. Check interface configuration.
+  3. Check VLAN membership if the port is a switching port.
+  4. Check spanning-tree bridge information.
+  5. Check spanning-tree interface information.
+  6. Determine whether a protection feature triggered.
+  7. Identify the event that caused the protection.
+  8. Correct the root cause.
+  9. Clear/recover the interface only when it is safe.
+ 10. Verify the stable topology and service connectivity.
+
+Useful commands:
+
+show spanning-tree bridge
+show spanning-tree interface
+show interfaces terse
+show log messages
+show ethernet-switching table vlan-name USERS
+
+
+============================================================
+REFERENCE 8 — CISCO TO JUNOS CHEAT SHEET
+============================================================
+
+Cisco PortFast
+  -> Junos `edge`
+
+Cisco BPDU Guard
+  -> Junos `bpdu-block-on-edge`
+
+Cisco Root Guard
+  -> Junos `no-root-port`
+
+Cisco Loop Guard
+  -> Junos `bpdu-timeout-action block`
+
+Cisco STP path cost
+  -> Junos `cost`
+
+Cisco STP port priority
+  -> Junos `priority`
+
+The operational intent matters more than the exact wording.
+
+
+============================================================
+REFERENCE SOURCES
+============================================================
+
+Juniper RSTP statement reference:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/rstp-edit-protocols.html
+
+Juniper RSTP configuration guide:
+https://www.juniper.net/documentation/us/en/software/junos/stp-l2/topics/topic-map/spanning-tree-configuring-rstp.html
+
+Juniper BPDU protection:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/bpdu-block-on-edge-edit-protocols-stp.html
+
+Juniper interface RSTP options:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/interface-edit-protocols-stp.html
+
+Juniper path cost:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/cost-edit-protocols-stp.html
+
+Juniper interface priority:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/priority-edit-protocols-stp.html
+
+
+============================================================
+COMMAND CHEAT SHEET
+============================================================
+
+show spanning-tree bridge
+show spanning-tree interface
+run show interfaces terse
+run show vlans
+run show ethernet-switching table
+
+
+PRACTICAL TROUBLESHOOTING ORDER
+
+  1. Physical link
+  2. Interface configuration
+  3. VLAN membership
+  4. MAC learning
+  5. STP role/state
+  6. Root bridge
+  7. Topology changes
+  8. End-to-end verification
+
+
+============================================================
+COMMON MISTAKES
+============================================================
+
+MISTAKE
+"Blocking means the port is broken."
+
+CORRECTION
+A healthy port can be non-forwarding because RSTP is protecting
+the network.
+
+
+MISTAKE
+"Higher bridge priority wins."
+
+CORRECTION
+Lower bridge priority is preferred for the root election.
+
+
+MISTAKE
+"All three links in the triangle should forward."
+
+CORRECTION
+That would create a Layer-2 loop. RSTP must suppress one path.
+
+
+============================================================
+FINAL CHECKLIST
+============================================================
+
+[ ] Host1 can reach Host2
+[ ] VLAN USERS exists
+[ ] SW1 is Root Bridge
+[ ] Root/Designated/Alternate roles identified
+[ ] One redundant path is non-forwarding
+[ ] Link failure causes alternate path to become usable
+[ ] Host1 still reaches Host2 after failure
+[ ] Original topology restored
+[ ] Optional root-bridge challenge completed

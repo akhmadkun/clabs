@@ -1,0 +1,143 @@
+
+===== VERSION =====
+$ show version
+Hostname: crpd1
+Model: cRPD
+Family: junos
+Junos: 25.2R1-S1.4
+cRPD package version : 25.2R1-S1.4 built by builder on 2025-09-25 02:08:11 UTC
+
+===== LICENSE =====
+$ show system license
+License usage: none
+
+Licenses installed: none
+
+===== FEATURE LIST =====
+$ show system license feature-list
+
+        Feature ID           Feature Name
+        243                  Containerized RPD Standard         
+        244                  Containerized RPD Advanced         
+        245                  Containerized RPD Premium          
+
+===== IPv4 route =====
+$ show route
+
+inet.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
++ = Active Route, - = Last Active, * = Both
+
+172.31.90.0/24     *[Direct/0] 00:09:19
+                    >  via eth0
+172.31.90.11/32    *[Local/0] 00:09:19
+                       Local via eth0
+
+inet6.0: 11 destinations, 12 routes (11 active, 0 holddown, 0 hidden)
++ = Active Route, - = Last Active, * = Both
+
+::/96              *[Direct/0] 00:09:19
+                    >  via sit0
+                    [Direct/0] 00:09:19
+                    >  via sit0
+::127.0.0.1/128    *[Local/0] 00:09:19
+                       Local via sit0
+::172.31.90.11/128 *[Local/0] 00:09:19
+                       Local via sit0
+fe80::1/128        *[Direct/0] 00:09:19
+                    >  via lo
+fe80::200:ff:fe00:0/128
+                   *[Local/0] 00:09:19
+                       Local via ip6tnl0
+fe80::200:ff:fe00:800/128
+                   *[Local/0] 00:09:19
+                       Local via gre0
+fe80::282f:38ff:fe53:efd6/128
+                   *[Local/0] 00:09:19
+                       Local via lsi
+fe80::4cdc:3dff:fe8a:1e35/128
+                   *[Direct/0] 00:09:19
+                    >  via lo0.0
+fe80::b85c:2bff:fe88:94fa/128
+                   *[Local/0] 00:09:19
+                       Local via irb
+fe80::c8ae:f1ff:fe32:64b3/128
+                   *[Local/0] 00:09:19
+                       Local via eth0
+ff02::2/128        *[INET6/0] 00:09:19
+                       MultiRecv
+
+===== Forwarding table =====
+$ show route forwarding-table
+
+error: command is not valid on the crpd
+
+===== IS-IS adjacency =====
+$ show isis adjacency
+IS-IS instance is not running
+
+===== IS-IS interfaces =====
+$ show isis interface
+IS-IS instance is not running
+
+===== IS-IS database =====
+$ show isis database
+IS-IS instance is not running
+
+===== OSPF neighbors =====
+$ show ospf neighbor
+OSPF instance is not running
+
+===== OSPF3 neighbors =====
+$ show ospf3 neighbor
+OSPF instance is not running
+
+===== BGP summary =====
+$ show bgp summary
+BGP is not running
+
+===== BFD sessions =====
+$ show bfd session
+
+0 sessions, 0 clients
+Cumulative transmit rate 0.0 pps, cumulative receive rate 0.0 pps
+
+===== MPLS interfaces =====
+$ show mpls interface
+MPLS not configured
+
+===== MPLS LSP =====
+$ show mpls lsp
+MPLS not configured
+
+===== LDP sessions =====
+$ show ldp session
+LDP instance is not running
+
+===== inet.3 =====
+$ show route table inet.3
+
+===== EVPN database =====
+$ show evpn database
+
+===== EVPN status =====
+$ show evpn instance
+
+===== Routing-instances =====
+$ show route instance
+Instance             Type
+         Primary RIB                                     Active/holddown/hidden
+master               forwarding     
+         inet.0                                          2/0/0
+         inet6.0                                         11/0/0
+
+__master.anon__      forwarding     
+
+mgmt_junos           forwarding     
+
+===== QUICK INTERPRETATION =====
+- "unknown command" / "syntax error"  = command is not available in this image/release.
+- "license" / "not licensed"           = feature is recognized but blocked by licensing.
+- Valid output with an empty table     = command works; the feature simply is not configured/up yet.
+- Valid protocol/session output        = strong evidence the feature is usable in the current image.
+
+This test is READ-ONLY: it does not load or commit configuration.
