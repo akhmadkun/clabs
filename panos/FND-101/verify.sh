@@ -2,8 +2,8 @@
 set -u -o pipefail
 
 CONTAINER="${1:-server}"
-PA_IP="${PA_IP:-192.168.121.10}"
-SERVICE_IP="${SERVICE_IP:-192.168.121.20}"
+PA_IP="${PA_IP:-192.168.122.10}"
+SERVICE_IP="${SERVICE_IP:-192.168.122.20}"
 
 fail=0
 ok(){ printf '[ OK ] %s\n' "$1"; }
@@ -33,10 +33,10 @@ echo "=== LAB-001 FND-101 Verification ==="
 
 echo
 echo "--- Service Node ---"
-ip -brief addr show eth0 || true
+ip -brief addr show eth1 || true
 
-if ip -4 addr show dev eth0 | grep -q '192.168.121.20/24'; then
-  ok "service IP 192.168.121.20/24 present"
+if ip -4 addr show dev eth1 | grep -q '192.168.122.20/24'; then
+  ok "service IP 192.168.122.20/24 present"
 else
   bad "service IP missing"
 fi

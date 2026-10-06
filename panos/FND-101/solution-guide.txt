@@ -6,13 +6,13 @@ Solution Guide
 Existing libvirt network:
 
     virbr1
-    192.168.121.0/24
+    192.168.122.0/24
        |
        +---- PA-VM MGT
-       |     192.168.121.10
+       |     192.168.122.10
        |
        +---- server (Service Nodes)
-             192.168.121.20
+             192.168.122.20
 
 The PA-VM is external to containerlab in this lab. containerlab manages only
 the Universal Services node and the existing bridge reference.
@@ -32,9 +32,9 @@ GUI:
 
 Configure:
     Type/IP Assignment: Static
-    IP Address:         192.168.121.10
+    IP Address:         192.168.122.10
     Netmask:            255.255.255.0
-    Default Gateway:    192.168.121.1
+    Default Gateway:    192.168.122.1
     Speed: auto-negotiate
     MTU: 1500
 
@@ -55,8 +55,8 @@ Disable:
 Keep console access available while testing.
 
 From server:
-    nc -vz 192.168.121.10 443
-    nc -vz 192.168.121.10 22
+    nc -vz 192.168.122.10 443
+    nc -vz 192.168.122.10 22
 
 Do not use TCP/80 as the PA web-management test.
 
@@ -70,7 +70,7 @@ Configure permitted Management IP addresses so that the intended management
 source is allowed.
 
 For this lab, allow:
-    192.168.121.0/24
+    192.168.122.0/24
 
 Keep console access until the restriction is verified.
 
@@ -112,19 +112,19 @@ GUI:
     Device > Setup > Services
 
 Set:
-    Primary DNS Server: 192.168.121.20
+    Primary DNS Server: 192.168.122.20
 
 Do not depend on Internet DNS for this isolated lab.
 
 Commit.
 
 From the service node:
-    dig +short @192.168.121.20 pa1.fndlab A
-    dig +short @192.168.121.20 services.fndlab A
+    dig +short @192.168.122.20 pa1.fndlab A
+    dig +short @192.168.122.20 services.fndlab A
 
 Expected:
-    pa1.fndlab       -> 192.168.121.10
-    services.fndlab  -> 192.168.121.20
+    pa1.fndlab       -> 192.168.122.10
+    services.fndlab  -> 192.168.122.20
 
 On PA, verify the configured DNS settings:
     show deviceconfig system dns-setting
@@ -136,7 +136,7 @@ GUI:
     NTP Servers
 
 Add:
-    192.168.121.20
+    192.168.122.20
 
 Commit.
 
@@ -154,16 +154,16 @@ On PA, verify the configured NTP settings:
 9. End-to-End Verification
 --------------------------
 From server:
-    ping -c 3 192.168.121.10
-    nc -vz 192.168.121.10 443
-    nc -vz 192.168.121.10 22
+    ping -c 3 192.168.122.10
+    nc -vz 192.168.122.10 443
+    nc -vz 192.168.122.10 22
 
 DNS:
-    dig +short @192.168.121.20 pa1.fndlab A
-    dig +short @192.168.121.20 services.fndlab A
+    dig +short @192.168.122.20 pa1.fndlab A
+    dig +short @192.168.122.20 services.fndlab A
 
 HTTPS:
-    curl -kI https://192.168.121.10
+    curl -kI https://192.168.122.10
 
 Expected:
     Management IP reachable
@@ -171,7 +171,7 @@ Expected:
     TCP/22 open
     HTTP/80 unavailable for management
     Telnet/23 unavailable
-    pa1.fndlab resolves to 192.168.121.10
+    pa1.fndlab resolves to 192.168.122.10
 
 10. Fault Injection / Diagnosis
 
@@ -189,7 +189,7 @@ Diagnose:
     show deviceconfig system dns-setting
 
 Restore:
-    Set primary DNS to 192.168.121.20.
+    Set primary DNS to 192.168.122.20.
     Commit.
     Re-test DNS-dependent functions.
 
@@ -203,7 +203,7 @@ Diagnose:
     show system info
 
 Restore:
-    Set NTP server to 192.168.121.20.
+    Set NTP server to 192.168.122.20.
     Commit.
     Re-check time synchronization/status.
 
@@ -213,8 +213,8 @@ Break:
     Disable HTTPS Management Service.
 
 Symptom from server:
-    nc -vz 192.168.121.10 443 fails.
-    curl -kI https://192.168.121.10 fails.
+    nc -vz 192.168.122.10 443 fails.
+    curl -kI https://192.168.122.10 fails.
 
 Diagnose:
     show deviceconfig system service
@@ -227,7 +227,7 @@ Restore:
 D. Permitted-IP Restriction
 ---------------------------
 Break:
-    Change permitted-IP configuration so 192.168.121.20 is not allowed.
+    Change permitted-IP configuration so 192.168.122.20 is not allowed.
 
 Symptom:
     Basic IP reachability can remain available while management access fails.
@@ -236,7 +236,7 @@ Diagnose:
     show deviceconfig system permitted-ip
 
 Restore:
-    Permit 192.168.121.0/24.
+    Permit 192.168.122.0/24.
     Commit.
     Re-test SSH/HTTPS.
 
@@ -256,18 +256,18 @@ four.
 11. Expected Final State
 ------------------------
 PA-VM:
-    MGT IP       192.168.121.10/24
-    Gateway      192.168.121.1
+    MGT IP       192.168.122.10/24
+    Gateway      192.168.122.1
     Hostname     pa1
-    DNS          192.168.121.20
-    NTP          192.168.121.20
+    DNS          192.168.122.20
+    NTP          192.168.122.20
     HTTPS        enabled
     SSH          enabled
     HTTP         disabled
     Telnet       disabled
-    Permitted    192.168.121.0/24
+    Permitted    192.168.122.0/24
 
 Universal Services:
-    192.168.121.20/24
+    192.168.122.20/24
     DNS          UDP/TCP 53
     NTP          UDP 123

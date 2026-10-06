@@ -17,8 +17,8 @@ topology:
         - ./service-data/tftp:/srv/tftp
 
       exec:
-        - ip link set eth0 up
-        - ip addr replace 192.168.121.20/24 dev eth0
+        - ip link set eth1 up
+        - ip addr replace 192.168.122.20/24 dev eth1
 
   links:
-    - endpoints: ["server:eth0", "virbr0:server"]
+    - endpoints: ["server:eth1", "virbr0:server"]

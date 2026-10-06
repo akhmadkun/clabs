@@ -1,0 +1,28 @@
+name: fnd-101
+prefix: ""
+
+mgmt:
+  network: sys101-mgmt
+  ipv4-subnet: 172.31.1.0/24
+
+topology:
+  nodes:
+    virbr0:
+      kind: bridge
+
+    server:
+      kind: linux
+      image: sys101-services:latest
+      #mgmt-ipv4: 192.168.122.20
+      exec:
+        - ip link set eth1 up
+        - ip addr replace 192.168.122.20/24 dev eth1
+      binds:
+        - service-config/dns/dnsmasq.conf:/etc/dnsmasq.conf
+
+      #binds:
+        #- services/archive:/srv/ftp/archive
+        #- evidence/services:/var/log/sys101
+
+  links:
+    - endpoints: ["server:eth1", "virbr0:server_eth1"]

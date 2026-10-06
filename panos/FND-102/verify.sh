@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -u
-PA_IP="${PA_IP:-192.168.121.10}"
+PA_IP="${PA_IP:-192.168.122.10}"
 SSH_PORT="${SSH_PORT:-22}"
 echo "=============================================="
 echo "FND-102 external management verification"
