@@ -1,0 +1,17 @@
+name: ipsec-csrx-poc-lr
+prefix: ""
+
+topology:
+  nodes:
+    csrx-a:
+      kind: juniper_csrx
+      image: meekley/csrx:23.4R1.9
+      startup-config: configs/01-startup.conf
+      binds:
+        - ./configs:/lab-config:ro
+
+    br-univ:
+      kind: bridge
+
+  links:
+    - endpoints: ["csrx-a:eth1", "br-univ:eth1"]

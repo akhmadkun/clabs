@@ -1,0 +1,21 @@
+name: ipsec-vsrx-http-poc
+prefix: ""
+
+topology:
+  nodes:
+    vsrx-a:
+      kind: juniper_vsrx
+      image: eacik8ssrv6/juniper_vsrx:23.2R2.21
+      startup-config: configs/startup.conf
+
+      binds:
+        - ./configs:/lab-config:ro
+
+      exec:
+        - sh -c 'cd /lab-config && nohup python3 -m http.server 81 --bind 0.0.0.0 --directory /lab-config >/tmp/config-http.log 2>&1 &'
+
+    br-univ:
+      kind: bridge
+
+  links:
+    - endpoints: ["vsrx-a:eth1", "br-univ:eth1"]

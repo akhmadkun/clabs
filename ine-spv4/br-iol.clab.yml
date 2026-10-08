@@ -82,11 +82,11 @@ topology:
 
 
   links:
-    - endpoints: ["R1:eth1","br-univ:eth1"]
-    - endpoints: ["R2:eth1","br-univ:eth2"]
-    - endpoints: ["R3:eth1","br-univ:eth3"]
-    - endpoints: ["R4:eth1","br-univ:eth4"]
-    - endpoints: ["R5:eth1","br-univ:eth5"]
-    - endpoints: ["R6:eth1","br-univ:eth6"]
-    - endpoints: ["XR1:Gi0-0-0-0","br-univ:eth11"]
-    - endpoints: ["XR2:Gi0-0-0-0","br-univ:eth12"]
+    - endpoints: ["R1:eth1","br-univ:R1_eth1"]
+    - endpoints: ["R2:eth1","br-univ:R2_eth1"]
+    - endpoints: ["R3:eth1","br-univ:R3_eth1"]
+    - endpoints: ["R4:eth1","br-univ:R4_eth1"]
+    - endpoints: ["R5:eth1","br-univ:R5_eth1"]
+    - endpoints: ["R6:eth1","br-univ:R6_eth1"]
+    - endpoints: ["XR1:Gi0-0-0-0","br-univ:XR1_eth1"]
+    - endpoints: ["XR2:Gi0-0-0-0","br-univ:XR2_eth1"]
