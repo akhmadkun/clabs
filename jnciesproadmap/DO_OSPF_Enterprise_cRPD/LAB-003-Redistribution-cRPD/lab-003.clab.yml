@@ -1,0 +1,60 @@
+name: ospf003
+prefix: ""
+
+# LAB-003 retains the LAB-001/LAB-002 physical wiring.
+# Router eth1 parent interfaces attach to the pre-existing host bridge br-univ.
+# Logical links are created by 802.1Q subinterfaces:
+#   VLAN 12: R1-R2, Area 0
+#   VLAN 13: R1-R3, Area 1
+#   VLAN 24: R2-R4, Area 2
+# Routing and OSPF configuration are intentionally absent from startup configs.
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r1.conf
+    r2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r2.conf
+    r3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r3.conf
+    r4:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r4.conf
+
+    # Existing external Linux bridge, managed outside Containerlab.
+    # This topology references br-univ; it must already exist and be UP.
+    br-univ:
+      kind: bridge
+
+    ep16:
+      kind: linux
+      cmd: sleep infinity
+    ep17:
+      kind: linux
+      cmd: sleep infinity
+    ep18:
+      kind: linux
+      cmd: sleep infinity
+
+  links:
+    # Shared L2 bridge: keep physical topology identical across OSPF labs.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+
+    # Routed endpoint networks behind R4; used to resolve static route next hop.
+    - endpoints: ["r4:eth2", "ep16:eth1"]
+    - endpoints: ["r4:eth3", "ep17:eth1"]
+    - endpoints: ["r4:eth4", "ep18:eth1"]

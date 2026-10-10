@@ -1,0 +1,438 @@
+LAB-003: OSPF REDISTRIBUTION AND DUAL DEFAULT ROUTES
+STEP-BY-STEP SOLUTION GUIDE FOR JUNIOR ENGINEERS
+Image: xzjt/crpd:25.2R1-S1.4
+Primary source: Day One: Advanced OSPF in the Enterprise, Chapter 4, "Redistribution"
+
+======================================================================
+1. WHAT YOU ARE BUILDING
+======================================================================
+
+This lab uses the same physical topology as LAB-001 and LAB-002. All four
+router parent interfaces eth1 attach to the existing host bridge br-univ.
+The logical OSPF connections are formed by VLAN-tagged Junos interfaces:
+
+  Area 0 / VLAN 12: R1 eth1.12 <----> R2 eth1.12
+  Area 1 / VLAN 13: R1 eth1.13 <----> R3 eth1.13
+  Area 2 / VLAN 24: R2 eth1.24 <----> R4 eth1.24
+
+R1 and R2 are ABRs. R3 and R4 are internal routers. R4 has the three connected
+endpoint networks from previous labs.
+
+The redistribution exercises are:
+  A. R4 exports two selected static prefixes as Type-5 external LSAs.
+  B. R1 and R2 independently originate a default Type-5 external LSA.
+  C. Optionally, R3 exports two static test routes to emulate the route-policy
+     mechanics in the book's RIP redistribution example.
+  D. Optionally, compare external Type 1 (E1) and external Type 2 (E2).
+
+The book's dual defaults point toward ISP-facing next hops, which are not part
+of this fixed physical topology. This lab uses static discard defaults to test
+the control-plane behavior only. Do not use these routes as an Internet path.
+
+The book's final example redistributes routes learned from RIP on a separate R5.
+This lab's optional R3 exercise uses static discard routes instead; that is an
+explicit topology-preserving adaptation, not actual RIP-to-OSPF redistribution.
+
+======================================================================
+2. DEPLOY AND VERIFY ADDRESSING ONLY
+======================================================================
+
+Destroy LAB-002 before deploying LAB-003. The labs reuse VLAN IDs, IP prefixes,
+and router IDs, so do not run them together.
+
+The host bridge br-univ must already exist and be UP. The lab references this
+external bridge but does not create, configure, or delete it.
+
+Run:
+  ./deploy.sh
+  ./configure-hosts.sh
+
+Open a Junos CLI as needed:
+  docker exec -it clab-ospf003-r1 cli
+  docker exec -it clab-ospf003-r2 cli
+  docker exec -it clab-ospf003-r3 cli
+  docker exec -it clab-ospf003-r4 cli
+
+At the Junos operational prompt (ending with >), inspect interfaces and direct
+routes on each router:
+  show interfaces terse
+  show route protocol direct
+
+Expected key addresses:
+  R1 eth1.12 = 10.0.12.1/24; eth1.13 = 10.0.13.1/24; lo0.0 = 10.1.1.1/32
+  R2 eth1.12 = 10.0.12.2/24; eth1.24 = 10.0.24.2/24; lo0.0 = 10.1.1.2/32
+  R3 eth1.13 = 10.0.13.3/24; lo0.0 = 10.1.1.3/32
+  R4 eth1.24 = 10.0.24.4/24; eth2.0 = 192.168.16.1/30
+     eth3.0 = 192.168.17.1/24; eth4.0 = 192.168.18.1/23; lo0.0 = 10.1.1.4/32
+
+cRPD may not provide the Junos operational ping command in this image. To ping,
+use a Linux shell and specify the source IP address. Do not pass lo0.0 to -I
+when you mean a source IP:
+  docker exec -it clab-ospf003-r2 bash
+  ping -c 3 -I 10.1.1.2 10.0.12.1
+
+The baseline configs contain addressing only. There should be no OSPF neighbors
+until you configure OSPF manually.
+
+======================================================================
+3. BUILD THE NORMAL MULTI-AREA OSPF BASELINE
+======================================================================
+
+Use router IDs matching the loopback addresses. The examples below show the
+key commands for each router. Enter configure mode, apply the commands, run
+commit check, and commit. Commands are entered at the [edit] hierarchy.
+
+R1:
+  configure
+  set routing-options router-id 10.1.1.1
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 255
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  commit check
+  commit
+
+R2:
+  configure
+  set routing-options router-id 10.1.1.2
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 100
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  commit check
+  commit
+
+R3:
+  configure
+  set routing-options router-id 10.1.1.3
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+  commit check
+  commit
+
+R4:
+  configure
+  set routing-options router-id 10.1.1.4
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth2.0 passive
+  set protocols ospf area 0.0.0.2 interface eth3.0 passive
+  set protocols ospf area 0.0.0.2 interface eth4.0 passive
+  commit check
+  commit
+
+Verify on the routers:
+  show ospf neighbor
+  show ospf interface
+  show ospf route
+  show route protocol ospf
+  show ospf database area 0.0.0.0
+  show ospf database area 0.0.0.1
+  show ospf database area 0.0.0.2
+
+Expected behavior:
+- R1 and R2 form a Full adjacency on eth1.12 in Area 0. On a fresh election,
+  R1's priority 255 should make it DR and R2's priority 100 should make it BDR.
+  If a DR/BDR election happened before the priorities were changed, a new
+  election may be needed; priority changes do not always preempt incumbents.
+- R1 and R3 form a Full point-to-point adjacency on VLAN 13.
+- R2 and R4 form a Full point-to-point adjacency on VLAN 24.
+- R1 and R2 are ABRs. R3 and R4 are internal routers.
+- The three endpoint prefixes connected to R4 are OSPF internal routes.
+
+Do not proceed until all three adjacencies reach Full and the loopback routes
+are visible. Fix interface state, VLAN ID/addressing, area ID, network type,
+passive status, and router-ID uniqueness before continuing.
+
+======================================================================
+4. REDISTRIBUTE SELECTED STATIC ROUTES FROM R4
+======================================================================
+
+The objective is to originate only the two test prefixes into OSPF. This task
+teaches that configuring a static route and redistributing it are separate
+steps: the route must exist in the routing table and the export policy must
+accept it.
+
+Step 4.1 - Add two static routes on R4
+
+On R4:
+  configure
+  set routing-options static route 192.168.29.0/24 next-hop 192.168.16.2
+  set routing-options static route 192.168.30.0/24 next-hop 192.168.16.2
+  commit check
+  commit
+  run show route 192.168.29.0/24
+  run show route 192.168.30.0/24
+
+Both routes should be active static routes. Their next-hop 192.168.16.2 is the
+EP16 address directly reachable on R4 eth2.0. The endpoints do not host the
+actual destination networks, so these routes are for control-plane learning.
+
+Step 4.2 - Create a narrow export policy
+
+On R4, create one policy with a separate term per prefix:
+  configure
+  set policy-options policy-statement ospf-r4-static term route-29 from protocol static
+  set policy-options policy-statement ospf-r4-static term route-29 from route-filter 192.168.29.0/24 exact
+  set policy-options policy-statement ospf-r4-static term route-29 then metric 20
+  set policy-options policy-statement ospf-r4-static term route-29 then external type 2
+  set policy-options policy-statement ospf-r4-static term route-29 then accept
+  set policy-options policy-statement ospf-r4-static term route-30 from protocol static
+  set policy-options policy-statement ospf-r4-static term route-30 from route-filter 192.168.30.0/24 exact
+  set policy-options policy-statement ospf-r4-static term route-30 then metric 20
+  set policy-options policy-statement ospf-r4-static term route-30 then external type 2
+  set policy-options policy-statement ospf-r4-static term route-30 then accept
+  set protocols ospf export ospf-r4-static
+  commit check
+  commit
+
+Why these conditions?
+- from protocol static selects static routes as the source protocol.
+- route-filter ... exact restricts the term to one exact prefix and prefix length.
+- metric 20 assigns the external metric for the advertised routes.
+- external type 2 sets OSPF external metric type E2 explicitly.
+- then accept permits matching routes to be exported. Routes matching no term
+  are rejected by the policy's implicit final reject.
+
+Step 4.3 - Verify the Type-5 LSAs
+
+On R4:
+  run show policy-options policy-statement ospf-r4-static
+  run show protocols ospf
+  run show ospf database external
+
+On R1, R2, and R3:
+  show ospf database external
+  show ospf route
+  show route protocol ospf
+
+Look for 192.168.29.0 and 192.168.30.0 advertised by R4 (router ID 10.1.1.4).
+These are AS-external Type-5 LSAs because R4 is injecting static routes into
+OSPF. The routes remain external when seen from other normal OSPF areas.
+
+Step 4.4 - Prove the policy does not export every static route
+
+On R4, add an active decoy route that the export policy does not match:
+  configure
+  set routing-options static route 198.51.100.0/24 discard
+  commit check
+  commit
+
+Verify:
+  run show route 198.51.100.0/24
+  run show ospf database external
+
+The route should exist locally as static but 198.51.100.0/24 should not be
+advertised in the OSPF external LSDB. The narrow policy has no matching term
+for that prefix. Do not add a broad catch-all accept term.
+
+======================================================================
+5. ORIGINATE TWO DEFAULT ROUTES FROM R1 AND R2
+======================================================================
+
+The ebook places a static default route toward an ISP on each backbone router,
+then redistributes only 0.0.0.0/0 into OSPF. Our topology has no ISP-facing links,
+so use discard as the next hop. This demonstrates OSPF LSAs and route selection,
+not working external connectivity. Do not use these discard defaults to test
+ping or application traffic to the Internet.
+
+Step 5.1 - Install default routes
+
+On R1:
+  configure
+  set routing-options static route 0.0.0.0/0 discard
+  commit check
+  commit
+  run show route 0.0.0.0/0
+
+On R2, do the same:
+  configure
+  set routing-options static route 0.0.0.0/0 discard
+  commit check
+  commit
+  run show route 0.0.0.0/0
+
+Step 5.2 - Export only the default route on R1
+
+On R1:
+  configure
+  set policy-options policy-statement ospf-default term default-route from protocol static
+  set policy-options policy-statement ospf-default term default-route from route-filter 0.0.0.0/0 exact
+  set policy-options policy-statement ospf-default term default-route then metric 1
+  set policy-options policy-statement ospf-default term default-route then external type 2
+  set policy-options policy-statement ospf-default term default-route then accept
+  set protocols ospf export ospf-default
+  commit check
+  commit
+
+Step 5.3 - Export only the default route on R2
+
+Repeat the same policy on R2:
+  configure
+  set policy-options policy-statement ospf-default term default-route from protocol static
+  set policy-options policy-statement ospf-default term default-route from route-filter 0.0.0.0/0 exact
+  set policy-options policy-statement ospf-default term default-route then metric 1
+  set policy-options policy-statement ospf-default term default-route then external type 2
+  set policy-options policy-statement ospf-default term default-route then accept
+  set protocols ospf export ospf-default
+  commit check
+  commit
+
+Why is exact matching important? R1 and R2 might have other static routes later.
+Only the static 0.0.0.0/0 route represents the simulated upstream default and
+should be exported by this policy. Route-policy export does not make a route
+exist; the route must already be active in the routing table.
+
+Step 5.4 - Verify that both default LSAs are present
+
+On R1 and R2:
+  show route 0.0.0.0/0
+  show ospf database external
+  show ospf route
+
+On R3 and R4:
+  show ospf database external
+  show ospf route
+  show route protocol ospf
+
+Expected behavior:
+- The external LSDB contains an LSA for 0.0.0.0 originated by router ID 10.1.1.1
+  and another LSA for 0.0.0.0 originated by router ID 10.1.1.2.
+- R3 and R4 can see both Type-5 LSAs because Area 1 and Area 2 are normal areas.
+- A routing table still selects an active route/path for the default prefix. The
+  existence of two LSAs does not mean both must appear as two independent active
+  route entries in the default routing table.
+
+Step 5.5 - Withdraw and restore one default advertisement
+
+On R1:
+  configure
+  deactivate routing-options static route 0.0.0.0/0
+  commit check
+  commit
+
+Check the external LSDB on R2, R3, and R4. The LSA originated by R1 should be
+withdrawn after OSPF converges; the LSA originated by R2 should remain.
+
+Restore R1:
+  configure
+  activate routing-options static route 0.0.0.0/0
+  commit check
+  commit
+
+After convergence, verify that the 10.1.1.1-originated default LSA returns.
+This is a manual route-withdrawal exercise, not automatic ISP failure detection.
+
+======================================================================
+6. OPTIONAL: STATIC-SOURCE ADAPTATION FOR THE BOOK'S RIP EXAMPLE
+======================================================================
+
+The ebook's final redistribution example uses routes learned by RIP on a new
+router R5, with those RIP routes redistributed by R3 into OSPF Area 1. This lab
+keeps the four-router physical topology and therefore uses static discard routes
+on R3. The commands below teach static route-policy filtering and external-LSA
+origination only; they do not prove RIP support or a RIP-to-OSPF exchange.
+
+Step 6.1 - Add source routes on R3
+
+On R3:
+  configure
+  set routing-options static route 192.168.71.0/24 discard
+  set routing-options static route 192.168.72.0/24 discard
+  commit check
+  commit
+
+Step 6.2 - Export only these two routes into OSPF
+
+On R3:
+  configure
+  set policy-options policy-statement ospf-r3-static term route-71 from protocol static
+  set policy-options policy-statement ospf-r3-static term route-71 from route-filter 192.168.71.0/24 exact
+  set policy-options policy-statement ospf-r3-static term route-71 then metric 2
+  set policy-options policy-statement ospf-r3-static term route-71 then external type 2
+  set policy-options policy-statement ospf-r3-static term route-71 then accept
+  set policy-options policy-statement ospf-r3-static term route-72 from protocol static
+  set policy-options policy-statement ospf-r3-static term route-72 from route-filter 192.168.72.0/24 exact
+  set policy-options policy-statement ospf-r3-static term route-72 then metric 2
+  set policy-options policy-statement ospf-r3-static term route-72 then external type 2
+  set policy-options policy-statement ospf-r3-static term route-72 then accept
+  set protocols ospf export ospf-r3-static
+  commit check
+  commit
+
+Step 6.3 - Verify
+
+On R3:
+  show route protocol static
+  show ospf database external
+
+On R1, R2, and R4:
+  show ospf database external
+  show ospf route
+
+Look for Type-5 external LSAs for 192.168.71.0/24 and 192.168.72.0/24 with
+advertising router ID 10.1.1.3. Since Area 1 is normal, Type-5 LSAs can be
+flooded to the rest of the OSPF domain.
+
+======================================================================
+7. OPTIONAL: COMPARE E1 AND E2
+======================================================================
+
+By default, OSPF external routes use Type 2 unless a policy changes the type.
+This extension makes 192.168.29.0/24 E1 while keeping 192.168.30.0/24 E2.
+
+On R4, change the route-29 policy term:
+  configure
+  delete policy-options policy-statement ospf-r4-static term route-29 then external
+  set policy-options policy-statement ospf-r4-static term route-29 then external type 1
+  commit check
+  commit
+
+Verify from R1 and R3:
+  show ospf route
+  show ospf database external
+
+Compare the path types and metrics. E1 considers both the external metric and
+internal OSPF cost to the ASBR. E2 uses the external metric as the primary
+comparison, with internal cost used as a tie-breaker when external metrics tie.
+
+To restore the original lab state:
+  configure
+  delete policy-options policy-statement ospf-r4-static term route-29 then external
+  set policy-options policy-statement ospf-r4-static term route-29 then external type 2
+  commit check
+  commit
+
+======================================================================
+8. TROUBLESHOOTING CHECKLIST
+======================================================================
+
+If a static route does not appear in OSPF:
+1. Check that it is active in the source router's route table.
+2. Check that the policy matches both source protocol and exact prefix.
+3. Check that the policy is applied under protocols ospf export.
+4. Check that the relevant term ends with then accept.
+5. Check that no other term or prior policy in the export chain terminates
+   evaluation unexpectedly.
+6. Check show configuration policy-options and show configuration protocols ospf.
+7. Check show ospf database external after allowing time for convergence.
+
+If the default route is missing:
+1. Check show route 0.0.0.0/0 on its origin router.
+2. Check the policy route-filter is 0.0.0.0/0 exact.
+3. Check the policy is applied to OSPF on both intended origin routers.
+4. Confirm the receiving area is not stub or NSSA; Type-5 LSAs are not flooded
+   into stub areas or NSSAs in the same way as normal areas.
+
+Useful commands supported by the cRPD Junos CLI in this lab:
+  show ospf neighbor
+  show ospf interface
+  show ospf route
+  show ospf database
+  show ospf database external
+  show route protocol ospf
+  show route protocol static
+  show policy-options policy-statement ospf-r4-static
+  show configuration protocols ospf
+  show configuration routing-options static
+
+For shell-level ping from cRPD, exit Junos CLI and run ping in the Linux shell.
+Use -I with a source IP address, such as -I 10.1.1.2, not with Junos name lo0.0.

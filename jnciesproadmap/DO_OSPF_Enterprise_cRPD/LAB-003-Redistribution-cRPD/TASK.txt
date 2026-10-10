@@ -1,0 +1,136 @@
+LAB-003: OSPF REDISTRIBUTION AND DUAL DEFAULT ROUTES
+TASK-ONLY WORKSHEET
+Image: xzjt/crpd:25.2R1-S1.4
+Source: Day One: Advanced OSPF in the Enterprise, Chapter 4, "Redistribution"
+
+GOAL
+Practice Junos route-policy configuration for OSPF redistribution. Originate
+selected static routes as Type-5 external LSAs, advertise a default route from
+two backbone routers, verify the OSPF LSDB and path types, and understand why
+redistribution policies must be narrow and deliberate.
+
+IMPORTANT DESIGN NOTES
+- This lab keeps the same physical topology as LAB-001 and LAB-002.
+- The four parent interfaces eth1 connect to the existing host bridge br-univ.
+- Logical router-to-router connections use 802.1Q subinterfaces:
+    VLAN 12: R1 eth1.12 <-> R2 eth1.12, Area 0
+    VLAN 13: R1 eth1.13 <-> R3 eth1.13, Area 1
+    VLAN 24: R2 eth1.24 <-> R4 eth1.24, Area 2
+- Startup configs provide addressing only. No router ID, OSPF, static routes, or
+  export policies are configured in the startup configs.
+- The book uses ISP next hops for dual defaults. This fixed topology has no ISP
+  links, so discard default routes are used to study Type-5 origination only.
+  Do not interpret these defaults as working Internet connectivity.
+- The book's final example redistributes RIP routes from an added R5. To retain
+  the same four-router topology, an optional adaptation uses static discard
+  routes on R3. This is not a live RIP-to-OSPF exercise.
+
+TASK 0 - DEPLOY AND VERIFY ADDRESSING ONLY
+1. Destroy LAB-002 before deploying LAB-003. Labs reuse IP addresses, router IDs,
+   and VLAN IDs; never run them simultaneously.
+2. Confirm that the host bridge br-univ exists and is UP. Do not delete it.
+3. Run ./deploy.sh, then ./configure-hosts.sh.
+4. Access a router CLI, for example:
+     docker exec -it clab-ospf003-r1 cli
+   Replace r1 with r2, r3, or r4 as needed.
+5. Inspect show interfaces terse and show route protocol direct on all routers.
+6. Confirm addresses against ADDRESS-PLAN.txt and test direct link reachability.
+   For cRPD pings, use its Linux shell and specify a source IP, not lo0.0 as the
+   -I argument. Example: ping -c 3 -I 10.1.1.2 10.0.12.1
+7. Verify there are no OSPF neighbors before starting OSPF configuration.
+
+Acceptance criteria:
+- All baseline addresses are present.
+- eth1.12, eth1.13, and eth1.24 have the intended VLAN IDs and IP addresses.
+- R4 can reach EP16, EP17, and EP18 on directly connected networks.
+- OSPF neighbor tables are empty before the OSPF task.
+
+TASK 1 - BUILD THE NORMAL MULTI-AREA OSPF BASELINE
+1. Configure unique and stable router IDs from the loopback addresses.
+2. Configure Area 0 on R1 eth1.12 and R2 eth1.12; keep R1/R2 loopbacks passive.
+3. Keep the R1-R2 VLAN 12 link as broadcast. Set R1 priority 255 and R2
+   priority 100, and verify DR/BDR after the election.
+4. Configure Area 1 on R1 eth1.13 and R3 eth1.13; set both interfaces to
+   point-to-point OSPF network type. Make R3's loopback passive.
+5. Configure Area 2 on R2 eth1.24 and R4 eth1.24; set both interfaces to
+   point-to-point OSPF network type. Make R4's loopback and eth2.0/eth3.0/eth4.0
+   passive in OSPF Area 2.
+6. Commit on each router and verify neighbors, OSPF interfaces, OSPF routes,
+   and per-area LSDBs.
+
+Acceptance criteria:
+- R1-R2 are Full on Area 0/VLAN 12; R1-R3 are Full on Area 1/VLAN 13;
+  R2-R4 are Full on Area 2/VLAN 24.
+- R1 and R2 are ABRs; R3 and R4 are internal routers.
+- Loopbacks and the three R4 connected prefixes are advertised by OSPF.
+- The Area 0 broadcast link has DR/BDR roles; the other two links do not.
+
+TASK 2 - REDISTRIBUTE SELECTED STATIC ROUTES FROM R4
+1. On R4, create static routes for 192.168.29.0/24 and 192.168.30.0/24 using
+   next-hop 192.168.16.2. Verify both static routes are active in inet.0.
+2. Create an OSPF export policy that matches protocol static AND matches only
+   the exact prefixes 192.168.29.0/24 and 192.168.30.0/24.
+3. Apply that policy under protocols ospf export and commit.
+4. Add a decoy active static route 198.51.100.0/24 with discard next-hop, but
+   do not add it to the export policy.
+5. Verify the two target routes are advertised as Type-5 external LSAs.
+6. Verify that 198.51.100.0/24 is present as a local static route on R4 but is
+   not present in the OSPF external LSDB on R1, R2, R3, or R4.
+7. Inspect the OSPF route path type and explain why an external route is not
+   classified as intra-area or inter-area.
+
+Acceptance criteria:
+- R4 has active static routes 192.168.29.0/24 and 192.168.30.0/24.
+- The two selected routes are visible in show ospf database external.
+- Remote routers learn them as OSPF external routes.
+- The decoy 198.51.100.0/24 does not appear in the OSPF LSDB.
+
+TASK 3 - ORIGINATE TWO DEFAULT ROUTES FROM AREA 0
+1. On both R1 and R2, configure a static 0.0.0.0/0 discard route. This is a
+   control-plane simulation because the physical topology has no ISP-facing link.
+2. On each router, create an OSPF export policy matching protocol static and
+   the exact route-filter 0.0.0.0/0 exact. Do not export every static route.
+3. Set a clear external metric and Type-2 external metric type, then accept the
+   route. Apply the policy to OSPF and commit on R1 and R2.
+4. Inspect show ospf database external on all routers. Identify both default
+   Type-5 LSAs by link-state ID and advertising router ID.
+5. On R3 and R4, inspect show ospf route and show route protocol ospf. Explain
+   how two LSAs can exist for 0.0.0.0/0 while a router installs one active route
+   or chooses one best path.
+6. As a withdrawal experiment, deactivate the default static route on R1 and
+   commit. Confirm that R1's default LSA is withdrawn while R2's remains. Then
+   reactivate R1's static route and confirm that its LSA returns.
+
+Acceptance criteria:
+- R1 and R2 each have an active static default route.
+- Both default routes appear as Type-5 LSAs with distinct advertising routers.
+- Other areas receive the default LSAs while Area 1 and Area 2 remain normal.
+- With R1's route deactivated, R2's default LSA remains available in the LSDB.
+
+TASK 4 - OPTIONAL STATIC-SOURCE ADAPTATION FOR THE BOOK'S RIP EXAMPLE
+1. On R3, create discard static routes 192.168.71.0/24 and 192.168.72.0/24.
+2. Create a narrow OSPF export policy on R3 matching protocol static and those
+   exact prefixes, then apply it to OSPF.
+3. Verify Type-5 LSAs originated by R3 in the external LSDB and inspect their
+   path types from R1, R2, and R4.
+4. Explain the limitation: these routes are static, not RIP-learned. A real
+   RIP-to-OSPF exercise requires a RIP peer/routing process and is outside this
+   four-router fixed-topology lab.
+
+TASK 5 - OPTIONAL E1 VS E2 COMPARISON
+1. Modify R4's export policy so 192.168.29.0/24 is advertised as external Type 1
+   with metric 20, while 192.168.30.0/24 is advertised as external Type 2 with
+   metric 20. Keep the exact-prefix filters in both terms.
+2. Verify the external route type and metric using show ospf route and the LSDB.
+3. Explain the difference between E1 (external metric plus internal OSPF cost)
+   and E2 (external metric is the primary comparison).
+4. Restore Type 2 on both routes before finishing if you want the base solution.
+
+DESIGN REVIEW QUESTIONS
+1. What does an OSPF export policy control in Junos?
+2. Why is 'from protocol static' alone potentially too broad?
+3. Why does this lab match 0.0.0.0/0 exact on R1 and R2?
+4. Why do R1 and R2 originate separate default LSAs rather than a single LSA?
+5. What operational risks come with multiple mutual redistribution points?
+6. When could hierarchical redistribution be preferable to mutual redistribution?
+7. Which parts of the ebook's RIP example are not covered by this adaptation?

@@ -8,16 +8,18 @@ topology:
   kinds:
     cisco_csr1000v:
       image: arthurk99/cisco-csr1000v:17.03.08
-      startup-delay: 300
-    ceos:
-      image: ceos:4.35.0F
+      startup-delay: 250
     cisco_xrd:
       image: sbezverk/xrd-control-plane:25.2.1
-      startup-delay: 300
+      startup-delay: 250
+
   nodes:
+    br-univ:
+      kind: bridge
     R1:
       kind: cisco_csr1000v
       mgmt-ipv4: 10.200.255.2
+      startup-delay: 10
       startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
         - ./lab_configs/R1:/tftpboot/configs:ro
@@ -25,6 +27,7 @@ topology:
     R2:
       kind: cisco_csr1000v
       mgmt-ipv4: 10.200.255.3
+      startup-delay: 20
       startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
         - ./lab_configs/R2:/tftpboot/configs:ro
@@ -32,6 +35,7 @@ topology:
     R3:
       kind: cisco_csr1000v
       mgmt-ipv4: 10.200.255.4
+      startup-delay: 30
       startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
         - ./lab_configs/R3:/tftpboot/configs:ro
@@ -39,6 +43,7 @@ topology:
     R4:
       kind: cisco_csr1000v
       mgmt-ipv4: 10.200.255.5
+      startup-delay: 40
       startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
         - ./lab_configs/R4:/tftpboot/configs:ro
@@ -46,6 +51,7 @@ topology:
     R5:
       kind: cisco_csr1000v
       mgmt-ipv4: 10.200.255.6
+      startup-delay: 50
       startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
         - ./lab_configs/R5:/tftpboot/configs:ro
@@ -54,6 +60,7 @@ topology:
     R6:
       kind: cisco_csr1000v
       mgmt-ipv4: 10.200.255.7
+      startup-delay: 60
       startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
         - ./lab_configs/R6:/tftpboot/configs:ro
@@ -75,18 +82,13 @@ topology:
         - ./lab_configs/XR2:/misc/config/labconfigs:ro
 
 
-    SW:
-      kind: ceos
-      mgmt-ipv4: 10.200.255.18
-      startup-config: lab_configs/SW.cfg
-
 
   links:
-    - endpoints: ["R1:eth1","SW:eth1"]
-    - endpoints: ["R2:eth1","SW:eth2"]
-    - endpoints: ["R3:eth1","SW:eth3"]
-    - endpoints: ["R4:eth1","SW:eth4"]
-    - endpoints: ["R5:eth1","SW:eth5"]
-    - endpoints: ["R6:eth1","SW:eth6"]
-    - endpoints: ["XR1:Gi0-0-0-0","SW:eth11"]
-    - endpoints: ["XR2:Gi0-0-0-0","SW:eth12"]
+    - endpoints: ["R1:eth1","br-univ:eth1"]
+    - endpoints: ["R2:eth1","br-univ:eth2"]
+    - endpoints: ["R3:eth1","br-univ:eth3"]
+    - endpoints: ["R4:eth1","br-univ:eth4"]
+    - endpoints: ["R5:eth1","br-univ:eth5"]
+    - endpoints: ["R6:eth1","br-univ:eth6"]
+    - endpoints: ["XR1:Gi0-0-0-0","br-univ:eth11"]
+    - endpoints: ["XR2:Gi0-0-0-0","br-univ:eth12"]

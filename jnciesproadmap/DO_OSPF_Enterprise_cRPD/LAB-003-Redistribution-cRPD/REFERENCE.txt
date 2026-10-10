@@ -1,0 +1,57 @@
+LAB-003 REFERENCES AND ADAPTATIONS
+
+PRIMARY BOOK SOURCE
+  Timothy Beaumont, Day One: Advanced OSPF in the Enterprise, Juniper Networks.
+  Chapter 4, "Redistribution", printed pages 44-54 in the uploaded PDF.
+
+CHAPTER TOPICS REFLECTED IN THIS LAB
+  - Route redistribution in Junos is performed using route policies.
+  - Types of redistribution: basic mutual, multiple mutual, and hierarchical.
+  - Static default route on each Area 0 router, followed by an export policy
+    matching only protocol static and route-filter 0.0.0.0/0 exact.
+  - Type-5 external LSAs for the two default routes from R1 and R2.
+  - Visibility of external routes in OSPF LSDB and route tables.
+  - Redistributing static prefixes 192.168.29.0/24 and 192.168.30.0/24 from R4.
+  - The book's final section redistributes RIP routes learned by R3 from an
+    additional R5; this part is intentionally adapted because this lab retains
+    the fixed four-router physical topology. The optional R3 example uses static
+    discard routes to demonstrate policy selection and Type-5 LSA origination,
+    and it is not presented as an actual RIP-to-OSPF lab.
+
+TOPOLOGY-PRESERVING ADAPTATIONS
+  - The book's Internet-facing static defaults use provider next hops on R1/R2.
+    This fixed topology has no provider links, so static discard default routes
+    are used to demonstrate control-plane origination/withdrawal of Type-5 LSAs.
+    This tests OSPF behavior only and does not simulate an operational ISP path.
+  - The R4 static routes use next-hop 192.168.16.2, as in the book's static test
+    prefix example. EP16 is not configured to host 192.168.29.0/24 or
+    192.168.30.0/24; reachability to those prefixes is not an objective.
+  - An additional decoy route 198.51.100.0/24 is used to verify that exact-prefix
+    route policy avoids exporting unrelated static routes.
+  - E1/E2 comparison is included as an optional learning extension; the main
+    dual-default and static prefix exercises explicitly set E2.
+
+OFFICIAL CONTAINERLAB DOCUMENTATION
+  Linux bridge kind (bridge must exist and be enabled before use):
+    https://containerlab.dev/manual/kinds/bridge/
+  Juniper cRPD kind and interface mapping:
+    https://containerlab.dev/manual/kinds/crpd/
+  Containerlab node definitions and startup-config:
+    https://containerlab.dev/manual/nodes/
+
+OFFICIAL JUNIPER DOCUMENTATION
+  Configuring OSPF routing policy, applying an export policy, and verifying LSAs:
+    https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-routing-policy.html
+  OSPF export statement:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/export-edit-protocols-ospf.html
+  Junos routing policy match conditions and actions:
+    https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/concept/policy-configuring-match-conditions-in-routing-policy-terms.html
+  Conditional default route and redistribution example:
+    https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/example/policy-default-static-route.html
+
+SOURCE LIMITATION
+  The book uses Junos 9.x-era examples and some syntax/context may have evolved.
+  The lab keeps the book's learning objectives but uses a current cRPD image and
+  current official documentation to guide the export policy syntax. No live
+  deployment was executed in the build environment; the user should validate
+  commands against the running xzjt/crpd:25.2R1-S1.4 image.
