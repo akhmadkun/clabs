@@ -1,0 +1,34 @@
+LAB-001 - SINGLE OSPF DOMAIN, MULTI-AREA
+ADDRESS PLAN
+
+ROUTER LOOPBACKS
+R1 lo0.0   10.1.1.1/32
+R2 lo0.0   10.1.1.2/32
+R3 lo0.0   10.1.1.3/32
+R4 lo0.0   10.1.1.4/32
+
+ROUTER-TO-ROUTER LINKS
+Area 0: R1 eth1.0 192.168.1.1/30 <----> R2 eth1.0 192.168.1.2/30
+Area 1: R1 eth2.0 192.168.2.1/30 <----> R3 eth1.0 192.168.2.2/30
+Area 2: R2 eth2.0 192.168.3.1/30 <----> R4 eth1.0 192.168.3.2/30
+
+AREA 2 CONNECTED NETWORKS FOR SUMMARIZATION
+R4 eth2.0 192.168.16.1/30 <----> ep16 eth1 192.168.16.2/30
+R4 eth3.0 192.168.17.1/24 <----> ep17 eth1 192.168.17.2/24
+R4 eth4.0 192.168.18.1/23 <----> ep18 eth1 192.168.18.2/23
+
+Endpoint return routes: configure-hosts.sh adds routes to 10.1.1.0/24 and
+192.168.0.0/16 via each endpoint subnet's R4 address. These routes allow a
+remote OSPF router to ping an endpoint and receive the reply.
+
+SUMMARY PREFIX
+192.168.16.0/21 covers 192.168.16.0 through 192.168.23.255.
+It contains the three connected prefixes above and leaves room for growth.
+
+INTERFACE NAMING NOTE
+Containerlab's cRPD kind uses eth0 for management, eth1 as the first data
+interface, and eth2 onward for subsequent data interfaces. The CLI uses eth1,
+eth2, etc. as well. In the Junos configuration, IPv4 addressing is configured
+under logical unit 0 (for example, interfaces eth1 unit 0 family inet address).
+Do not replace these cRPD interface names with ge-0/0/x names from a physical
+Junos router example.

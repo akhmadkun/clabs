@@ -1,0 +1,144 @@
+LAB-002: STUB AREAS, TOTALLY STUBBY AREAS, AND NSSA
+TASK-ONLY WORKSHEET
+Image: xzjt/crpd:25.2R1-S1.4
+Source topic: Day One: Advanced OSPF in the Enterprise, Chapter 3, "Stubbiness"
+
+GOAL
+Starting from the same physical topology as LAB-001, practice how normal,
+Stub, Totally Stubby, NSSA, and NSSA no-summaries area behavior changes the
+LSDB and routes learned by a router in Area 1. Pay particular attention to
+Type-3 Summary LSAs, Type-5 External LSAs, Type-7 NSSA LSAs, and default routes.
+
+IMPORTANT BASELINE RULE
+The files in configs/ contain addressing only. Do not add router IDs, OSPF,
+static test routes, or export policy to the startup configs. Perform those
+configuration tasks manually in the Junos CLI.
+
+PHYSICAL AND LOGICAL DESIGN
+All four router eth1 data interfaces connect to the existing host bridge
+br-univ, exactly as in LAB-001. The diagram intentionally omits the bridge and
+shows the logical VLAN links used when configuring the cRPD devices.
+  VLAN 12: R1 eth1.12 <-> R2 eth1.12, Area 0 (backbone)
+  VLAN 13: R1 eth1.13 <-> R3 eth1.13, Area 1
+  VLAN 24: R2 eth1.24 <-> R4 eth1.24, Area 2
+R1 and R2 are ABRs. R3 is the internal router in Area 1. R4 is the internal
+router in Area 2 and originates two static external test routes in the baseline.
+
+The book uses an external RIP neighbor R5 to generate routes inside its NSSA
+example. This four-router cRPD lab keeps the same physical topology and uses two
+static discard routes on R3 to practice the same Type-7 origination and ABR
+translation behavior. The adaptation is deliberate; no RIP router is required.
+
+TASK 0 - DEPLOY AND VERIFY ADDRESSING ONLY
+1. Ensure LAB-001 has been destroyed before deploying LAB-002. The two labs
+   reuse the same IPs, router IDs, and VLAN IDs; do not run them simultaneously.
+2. Confirm that the host bridge br-univ already exists and is UP.
+3. Run ./deploy.sh, then ./configure-hosts.sh.
+4. Access the cRPD Junos CLI, for example:
+   docker exec -it clab-ospf002-r1 cli
+5. On all routers, inspect show interfaces terse and show route protocol direct.
+6. Verify the baseline addresses against ADDRESS-PLAN.txt.
+7. Verify direct L3 reachability across the three VLAN links and from R4 to
+   EP16, EP17, and EP18. For cRPD shell pings, leave the Junos CLI first and run
+   ping with a source IP (for example, ping -c 3 -I 10.1.1.2 10.1.1.1).
+8. Confirm that no OSPF neighbors exist before configuring OSPF.
+
+Acceptance criteria:
+- VLAN subinterfaces eth1.12, eth1.13, and eth1.24 have the intended addresses.
+- R4's eth2/eth3/eth4 and all three Linux endpoints have correct addresses.
+- No OSPF neighbors exist yet.
+
+TASK 1 - BUILD THE NORMAL MULTI-AREA BASELINE
+
+1. load replace lab-configs/ospf.stubby.conf
+
+2. On R4, configure static routes 192.168.29.0/24 and 192.168.30.0/24 via
+   192.168.16.2. Create a policy matching protocol static and apply it under
+   protocols ospf export.
+3. Verify adjacencies, route tables, OSPF route path types, and LSDBs.
+
+Acceptance criteria:
+- All intended adjacencies reach Full.
+- R1/R2 form an adjacency on VLAN 12; R1/R3 on VLAN 13; R2/R4 on VLAN 24.
+- R1 and R2 act as ABRs; R3 and R4 are internal routers.
+- R1 can learn 192.168.29.0/24 and 192.168.30.0/24 as external OSPF routes.
+- R3 can also see these Type-5 external routes while Area 1 is normal.
+
+TASK 2 - CONVERT AREA 1 TO A STANDARD STUB AREA
+1. Configure Area 1 as stub on both R1 and R3.
+2. On the ABR R1, configure a default metric of 5 for the stub area.
+3. Do not configure no-summaries yet.
+4. Verify neighbor adjacency, area type, route table, and Area 1 LSDB.
+
+Acceptance criteria:
+- R1 and R3 remain Full neighbors.
+- R3 no longer learns R4's Type-5 external routes 192.168.29.0/24 and
+  192.168.30.0/24 into Area 1.
+- R3 can still learn inter-area Type-3 summary routes from the rest of OSPF.
+- R3 has a default route originated by R1 with the configured metric behavior.
+
+TASK 3 - CONVERT AREA 1 TO A TOTALLY STUBBY AREA
+1. Keep Area 1 configured as stub on R1 and R3.
+2. Add no-summaries on R1 only (the ABR). Leave default-metric 5 in place.
+3. Inspect R3's OSPF route table and Area 1 LSDB before and after the change.
+
+Acceptance criteria:
+- The R1-R3 adjacency remains Full.
+- R3 keeps its own area routes, but the only route learned from other areas
+  should be the default route 0.0.0.0/0.
+- Area 1 should not receive the regular Type-3 inter-area summaries or Type-5
+  external LSAs. The default route is advertised as a Type-3 Summary LSA.
+
+TASK 4 - REPLACE STUB WITH NSSA
+1. Remove the stub configuration from R1 and R3, then configure both routers
+   for NSSA on Area 1. An area cannot be both stub and NSSA.
+2. On R1, configure an NSSA default route with metric 1 and explicitly allow
+   summary LSAs into Area 1.
+3. On R3, add static discard routes 192.168.71.0/24 and 192.168.72.0/24.
+4. Create an export policy matching protocol static and apply it under OSPF.
+5. Verify that R3 originates Type-7 NSSA LSAs for its two test routes, and that
+   R1 translates those into Type-5 external LSAs for the rest of OSPF.
+6. Verify that Area 1 does not receive Type-5 routes originated outside the
+   NSSA (for example R4's 192.168.29.0/24 and 192.168.30.0/24).
+
+Acceptance criteria:
+- R1-R3 remain Full neighbors in Area 1.
+- R3's Area 1 LSDB includes Type-7/NSSA LSAs for 192.168.71.0/24 and
+  192.168.72.0/24.
+- R1's external LSDB includes translated Type-5 routes for both prefixes.
+- External routes originally advertised by R4 are not installed at R3 as
+  Type-5 routes from outside Area 1.
+- Inter-area summaries remain available in Area 1 while summaries are enabled.
+
+TASK 5 - OPTIONAL CHALLENGE: NSSA WITH NO-SUMMARIES
+1. On R1 only, stop advertising inter-area summaries into Area 1 by replacing
+   nssa summaries with nssa no-summaries.
+2. Configure the NSSA default-lsa type-7 option along with the default metric.
+3. Verify that R3 retains its own Type-7 external routes but receives only the
+   default route from outside Area 1.
+4. Verify that R1 still translates R3's Type-7 external LSAs to Type-5 LSAs.
+
+Acceptance criteria:
+- R3's learned inter-area routes are suppressed except for the default.
+- R3's locally originated Type-7 routes remain visible in Area 1.
+- The translated Type-5 routes remain visible from R1 and other non-stub areas.
+
+REQUIRED VERIFICATION COMMANDS
+From Junos CLI on relevant routers:
+  show ospf neighbor
+  show ospf interface detail
+  show ospf route
+  show route protocol ospf
+  show route 0.0.0.0/0
+  show ospf database area 0.0.0.1
+  show ospf database area 0.0.0.2
+  show ospf database
+
+Use show ospf route to distinguish intra-area, inter-area, and external path
+classes. The generic show route protocol ospf output identifies OSPF as the
+protocol but does not explicitly label each OSPF path as intra/inter/external.
+
+CLEAN RESET
+To reset all device configs to the addressing-only baseline, run ./destroy.sh
+and then ./deploy.sh followed by ./configure-hosts.sh. The external br-univ
+bridge is not removed by this lab.

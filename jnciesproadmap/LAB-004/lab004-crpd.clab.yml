@@ -34,7 +34,7 @@ topology:
       startup-config: configs_crpd/r4.conf
       mgmt-ipv4: 172.31.4.14
 
-    client1:
+    klien1:
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest
       mgmt-ipv4: 172.31.4.21
@@ -55,7 +55,7 @@ topology:
         - ip route add 192.168.40.0/24 via 198.51.100.1
 
   links:
-    - endpoints: ["client1:eth1", "r1:eth1"]
+    - endpoints: ["klien1:eth1", "r1:eth1"]
     - endpoints: ["r1:eth2", "r2:eth1"]
     - endpoints: ["r2:eth2", "r4:eth1"]
     - endpoints: ["r1:eth3", "r3:eth1"]

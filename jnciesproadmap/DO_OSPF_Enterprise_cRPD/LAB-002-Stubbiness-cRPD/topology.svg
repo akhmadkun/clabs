@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs><style>
+.title{font:700 34px Arial,sans-serif;fill:#17324d}.subtitle{font:18px Arial,sans-serif;fill:#526779}
+.area{font:700 23px Arial,sans-serif}.label{font:700 22px Arial,sans-serif;fill:#102a43}.small{font:17px Arial,sans-serif;fill:#17324d}.tiny{font:15px Arial,sans-serif;fill:#334e68}.ip{font:16px Arial,sans-serif;fill:#102a43}.note{font:16px Arial,sans-serif;fill:#3c5265}
+.panel{stroke-width:2;rx:22;ry:22}.pill{stroke-width:1.5;rx:12;ry:12}.link{stroke-width:5;fill:none;stroke-linecap:round}.router{fill:#1876aa;stroke:#0c4a6e;stroke-width:3}.routerline{stroke:white;stroke-width:4;stroke-linecap:round;fill:none}.host{fill:#fff;stroke:#91a4b7;stroke-width:2;rx:12;ry:12}
+</style></defs>
+<rect width="1600" height="1000" fill="#fff"/>
+<text x="800" y="48" text-anchor="middle" class="title">LAB-002 — OSPF Stub Areas, Totally Stubby &amp; NSSA</text>
+<text x="800" y="80" text-anchor="middle" class="subtitle">Logical topology reference • 802.1Q subinterfaces • Area 1 changes type during the lab</text>
+
+<!-- Area panels -->
+<rect x="220" y="120" width="1160" height="285" fill="#eaf4ff" stroke="#acd3f7" class="panel"/>
+<text x="800" y="157" text-anchor="middle" class="area" fill="#1c5fa8">Area 0 — Backbone</text>
+<rect x="55" y="435" width="700" height="420" fill="#edf9ee" stroke="#bce5c1" class="panel"/>
+<text x="530" y="464" text-anchor="middle" class="area" fill="#26733d">Area 1</text>
+<text x="530" y="488" text-anchor="middle" class="tiny">Type changes as tasks progress</text>
+<rect x="815" y="435" width="735" height="420" fill="#fff5e4" stroke="#f2d4a5" class="panel"/>
+<text x="1182" y="475" text-anchor="middle" class="area" fill="#a65a0a">Area 2</text>
+
+<!-- Logical links -->
+<line x1="636" y1="250" x2="964" y2="250" class="link" stroke="#2775c7"/>
+<line x1="558" y1="286" x2="430" y2="537" class="link" stroke="#2d8a57"/>
+<line x1="1020" y1="294" x2="1050" y2="536" class="link" stroke="#c7771c"/>
+
+<!-- VLAN 12 label -->
+<rect x="710" y="178" width="180" height="53" fill="#fff" stroke="#a8c9ea" class="pill"/>
+<text x="800" y="200" text-anchor="middle" class="small" fill="#1c5fa8">VLAN 12</text>
+<text x="800" y="220" text-anchor="middle" class="tiny">10.0.12.0/24 • Area 0</text>
+<text x="450" y="209" text-anchor="middle" class="ip">R1 eth1.12: 10.0.12.1/24</text>
+<text x="1155" y="209" text-anchor="middle" class="ip">R2 eth1.12: 10.0.12.2/24</text>
+
+<!-- R1 -->
+<g transform="translate(590 250)"><circle r="45" class="router"/><path d="M-21 -17 L18 19 M-18 19 L21 -17 M-23 -17 L-11 -17 L-11 -5 M23 -17 L11 -17 L11 -5 M-23 17 L-11 17 L-11 5 M23 17 L11 17 L11 5" class="routerline"/></g>
+<text x="590" y="314" text-anchor="middle" class="label">R1 (ABR)</text>
+<text x="590" y="344" text-anchor="middle" class="ip">Lo0: 10.1.1.1/32</text>
+
+<!-- R2 -->
+<g transform="translate(1010 250)"><circle r="45" class="router"/><path d="M-21 -17 L18 19 M-18 19 L21 -17 M-23 -17 L-11 -17 L-11 -5 M23 -17 L11 -17 L11 -5 M-23 17 L-11 17 L-11 5 M23 17 L11 17 L11 5" class="routerline"/></g>
+<text x="1010" y="314" text-anchor="middle" class="label">R2 (ABR)</text>
+<text x="1010" y="344" text-anchor="middle" class="ip">Lo0: 10.1.1.2/32</text>
+
+<!-- Area 1 VLAN link callout -->
+<rect x="85" y="503" width="280" height="118" fill="#fff" stroke="#addbb2" class="pill"/>
+<text x="225" y="526" text-anchor="middle" class="small" fill="#26733d">VLAN 13 • Area 1</text>
+<text x="225" y="548" text-anchor="middle" class="tiny">10.0.13.0/24</text>
+<text x="225" y="571" text-anchor="middle" class="tiny">R1 eth1.13: 10.0.13.1/24</text>
+<text x="225" y="594" text-anchor="middle" class="tiny">R3 eth1.13: 10.0.13.3/24</text>
+
+<!-- R3 -->
+<g transform="translate(415 590)"><circle r="45" class="router"/><path d="M-21 -17 L18 19 M-18 19 L21 -17 M-23 -17 L-11 -17 L-11 -5 M23 -17 L11 -17 L11 -5 M-23 17 L-11 17 L-11 5 M23 17 L11 17 L11 5" class="routerline"/></g>
+<text x="415" y="651" text-anchor="middle" class="label">R3 (Internal)</text>
+<text x="415" y="678" text-anchor="middle" class="ip">Lo0: 10.1.1.3/32</text>
+<rect x="100" y="724" width="600" height="94" fill="#fff" stroke="#addbb2" class="pill"/>
+<text x="400" y="750" text-anchor="middle" class="small">NSSA exercise (Tasks 4–5)</text>
+<text x="400" y="775" text-anchor="middle" class="tiny">R3 originates 192.168.71.0/24 and 192.168.72.0/24 as Type 7</text>
+<text x="400" y="798" text-anchor="middle" class="tiny">R1 translates these Type-7 LSAs into Type-5 LSAs</text>
+
+<!-- Area 2 VLAN link callout -->
+<rect x="825" y="496" width="170" height="142" fill="#fff" stroke="#edc78c" class="pill"/>
+<text x="910" y="519" text-anchor="middle" class="small" fill="#a65a0a">VLAN 24</text>
+<text x="910" y="540" text-anchor="middle" class="tiny">Area 2</text>
+<text x="910" y="561" text-anchor="middle" class="tiny">10.0.24.0/24</text>
+<text x="910" y="583" text-anchor="middle" class="tiny">R2 eth1.24</text>
+<text x="910" y="603" text-anchor="middle" class="tiny">10.0.24.2/24</text>
+<text x="910" y="622" text-anchor="middle" class="tiny">R4 eth1.24: .4/24</text>
+
+<!-- R4 -->
+<g transform="translate(1050 590)"><circle r="45" class="router"/><path d="M-21 -17 L18 19 M-18 19 L21 -17 M-23 -17 L-11 -17 L-11 -5 M23 -17 L11 -17 L11 -5 M-23 17 L-11 17 L-11 5 M23 17 L11 17 L11 5" class="routerline"/></g>
+<text x="1050" y="651" text-anchor="middle" class="label">R4 (Internal)</text>
+<text x="1050" y="678" text-anchor="middle" class="ip">Lo0: 10.1.1.4/32</text>
+
+<!-- endpoint links (logical routed interfaces on R4) -->
+<line x1="1095" y1="568" x2="1190" y2="530" class="link" stroke="#cc6b6b"/>
+<line x1="1095" y1="590" x2="1190" y2="635" class="link" stroke="#7d5ac7"/>
+<line x1="1090" y1="612" x2="1190" y2="740" class="link" stroke="#2aa198"/>
+<rect x="1190" y="495" width="320" height="74" fill="#fff" stroke="#e7b9b9" class="pill"/>
+<text x="1350" y="519" text-anchor="middle" class="small">R4 eth2.0 — EP16</text>
+<text x="1350" y="541" text-anchor="middle" class="tiny">192.168.16.1/30 ↔ .16.2/30</text>
+<text x="1350" y="559" text-anchor="middle" class="tiny">192.168.16.0/30</text>
+<rect x="1190" y="600" width="320" height="74" fill="#fff" stroke="#cab9e8" class="pill"/>
+<text x="1350" y="624" text-anchor="middle" class="small">R4 eth3.0 — EP17</text>
+<text x="1350" y="646" text-anchor="middle" class="tiny">192.168.17.1/24 ↔ .17.2/24</text>
+<text x="1350" y="664" text-anchor="middle" class="tiny">192.168.17.0/24</text>
+<rect x="1190" y="705" width="320" height="74" fill="#fff" stroke="#a9dcd6" class="pill"/>
+<text x="1350" y="729" text-anchor="middle" class="small">R4 eth4.0 — EP18</text>
+<text x="1350" y="751" text-anchor="middle" class="tiny">192.168.18.1/23 ↔ .18.2/23</text>
+<text x="1350" y="769" text-anchor="middle" class="tiny">192.168.18.0/23</text>
+
+<!-- external route note -->
+<rect x="845" y="724" width="320" height="94" fill="#fff" stroke="#edc78c" class="pill"/>
+<text x="1005" y="750" text-anchor="middle" class="small">Baseline external routes from R4</text>
+<text x="1005" y="775" text-anchor="middle" class="tiny">192.168.29.0/24</text>
+<text x="1005" y="798" text-anchor="middle" class="tiny">192.168.30.0/24 → Type 5</text>
+
+<text x="800" y="905" text-anchor="middle" class="note">Physical br-univ intentionally omitted. All four parent interfaces eth1 attach to the shared bridge;</text>
+<text x="800" y="930" text-anchor="middle" class="note">802.1Q VLAN tags create the logical connections shown here.</text>
+<text x="800" y="968" text-anchor="middle" class="tiny">Area 1 progression: Normal → Stub → Totally Stubby → NSSA → NSSA no-summaries</text>
+</svg>

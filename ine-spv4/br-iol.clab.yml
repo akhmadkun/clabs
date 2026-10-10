@@ -6,16 +6,12 @@ mgmt:
 
 topology:
   kinds:
-
     cisco_xrd:
       image: sbezverk/xrd-control-plane:25.2.1
       #startup-delay: 300
     cisco_iol:
       image: arthurk99/cisco-iol:17.15.01
   nodes:
-    # note, that the bridge br-clab must be created manually
-    # sudo ip link add br-univ type bridge
-    # sudo ip link set br-univ up
     br-univ:
       kind: bridge
 
@@ -77,7 +73,11 @@ topology:
       startup-config: lab_configs/XR2.cfg
       binds:
         - ./lab_configs/XR2:/misc/config/labconfigs:rw
-
+    crpd:
+      kind: juniper_crpd
+      mgmt-ipv4: 10.200.255.14
+      image: xzjt/crpd:25.2R1-S1.4
+      #startup-config: ./configs/r4.conf
 
 
 
@@ -88,5 +88,6 @@ topology:
     - endpoints: ["R4:eth1","br-univ:R4_eth1"]
     - endpoints: ["R5:eth1","br-univ:R5_eth1"]
     - endpoints: ["R6:eth1","br-univ:R6_eth1"]
+    - endpoints: ["crpd:eth1","br-univ:crpd_eth1"]
     - endpoints: ["XR1:Gi0-0-0-0","br-univ:XR1_eth1"]
     - endpoints: ["XR2:Gi0-0-0-0","br-univ:XR2_eth1"]

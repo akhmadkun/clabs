@@ -1,0 +1,128 @@
+LAB-001: SINGLE OSPF DOMAIN, MULTI-AREA
+TASK-ONLY WORKSHEET
+Image: xzjt/crpd:25.2R1-S1.4
+Reference topic: Day One: Advanced OSPF in the Enterprise, Chapter 2
+
+GOAL
+Build and verify one OSPF routing domain with Area 0, Area 1, and Area 2.
+Practice router-ID configuration, OSPF interface activation, passive interfaces,
+point-to-point links, DR/BDR election, route learning, LSA inspection, and
+inter-area route summarization.
+
+IMPORTANT BASELINE RULE
+The files in configs/ contain addressing only. They intentionally do not include
+routing-options router-id or any protocols ospf configuration. Configure OSPF
+manually during this lab.
+
+TOPOLOGY
+R1 and R2 share Area 0 (backbone).
+R1 connects to R3 in Area 1.
+R2 connects to R4 in Area 2.
+R1 and R2 are ABRs. R3 and R4 are internal routers.
+R4 has three connected networks in Area 2. These networks are used to practice
+area summarization on R2.
+
+TASK 0 - DEPLOY AND CHECK THE ADDRESSING BASELINE
+1. Deploy the topology with ./deploy.sh.
+2. Run ./configure-hosts.sh to assign IP addresses to endpoint containers.
+3. Connect to each router using:
+   docker exec -it clab-ospf001-r1 cli
+   Replace r1 with r2, r3, or r4 as needed.
+4. Verify the expected interface addresses on every router.
+5. Verify direct connectivity across each router-to-router link and from R4 to
+each endpoint. Use ping with an explicit source address where appropriate.
+6. Confirm that the directly connected routes are installed.
+
+Acceptance criteria:
+- Each router has the intended IPv4 addresses from ADDRESS-PLAN.txt.
+- R1 can ping R2 over 192.168.1.0/30.
+- R1 can ping R3 over 192.168.2.0/30.
+- R2 can ping R4 over 192.168.3.0/30.
+- R4 can ping ep16, ep17, and ep18.
+- No OSPF neighbors exist yet.
+
+TASK 1 - BUILD THE BACKBONE AREA 0
+1. Configure a unique, stable router ID on R1 and R2 using their loopback IPs.
+2. Enable OSPF Area 0 on the R1-R2 link.
+3. Keep both loopbacks advertised in Area 0 but prevent OSPF adjacency attempts
+   on loopback interfaces by configuring them as passive.
+4. Set R1's priority on the Area 0 Ethernet link to 255 and R2's priority to
+   100, then commit the configuration.
+5. Verify the neighbor state, router IDs, interface, and DR/BDR roles.
+
+Acceptance criteria:
+- R1 and R2 form a Full adjacency in Area 0.
+- R1 is DR and R2 is BDR on the shared broadcast link.
+- R1 learns 10.1.1.2/32 and R2 learns 10.1.1.1/32 via OSPF.
+
+TASK 2 - ADD AREA 1 AND AREA 2
+1. Configure the router IDs on R3 and R4.
+2. Add R1-R3 to Area 1 and R2-R4 to Area 2.
+3. Force these router-to-router links to OSPF point-to-point network type.
+4. Configure the loopback on R3 as passive in Area 1 and the loopback on R4
+   as passive in Area 2.
+5. Configure the three R4 interfaces facing ep16, ep17, and ep18 as passive
+   OSPF interfaces in Area 2. Do not create OSPF adjacencies with the hosts.
+6. Verify the neighbors and the OSPF interface types on all routers.
+
+Acceptance criteria:
+- R1 has Full neighbors R2 and R3.
+- R2 has Full neighbors R1 and R4.
+- R3 has R1 as its Full neighbor; R4 has R2 as its Full neighbor.
+- R1 and R2 behave as ABRs; R3 and R4 are internal routers.
+- R3 learns 10.1.1.4/32 and R4 learns 10.1.1.3/32 through OSPF.
+- The three connected networks on R4 are visible in Area 2 and can be reached
+  from the remote areas before summarization.
+
+CMD REF:
+  run start shell
+  ping 10.1.1.1 -I 10.1.1.2
+  ip route get 10.1.1.1 from 10.1.1.2
+  ip route show table all
+
+TASK 3 - VERIFY ROUTING TABLES AND LINK-STATE DATABASES
+On R1, R2, R3, and R4:
+1. Inspect the OSPF neighbor table and OSPF interfaces.
+2. Inspect the OSPF-learned routes in the routing table.
+3. Inspect the LSDB separately for Area 0, Area 1, and Area 2.
+4. Identify examples of Type 1 Router LSAs, Type 2 Network LSAs, and Type 3
+   Summary LSAs. Explain where each LSA type should appear and why.
+5. Explain why the Area 0 broadcast link has DR/BDR roles, while the Area 1
+   and Area 2 router-to-router links configured as point-to-point do not.
+6. Verify end-to-end reachability between loopbacks in different areas.
+
+TASK 4 - SUMMARIZE AREA 2 ROUTES
+1. Before applying summarization, record how R1 and R3 learn these routes:
+   192.168.16.0/30
+   192.168.17.0/24
+   192.168.18.0/23
+2. On R2, configure an Area 2 range that covers those three prefixes using
+   192.168.16.0/21.
+3. Verify the summary route in R1's routing table and Area 0 LSDB.
+4. Verify the effect in R3's routing table as well.
+5. Confirm that the three more-specific routes are no longer individually
+   advertised from Area 2 into Area 0, while the summary route is present.
+6. Verify traffic/reachability to all three endpoint networks after the change.
+
+Acceptance criteria:
+- R1 and R3 learn 192.168.16.0/21 as an inter-area OSPF route.
+- The three component prefixes are represented by the summary when viewed
+  from the other areas.
+- The Area 2 local routing information still contains the component prefixes.
+- End-to-end tests to all three endpoints continue to work.
+
+TASK 5 - TROUBLESHOOTING DRILL
+If the lab does not meet the acceptance criteria, work from the lower layers up:
+1. Verify the Containerlab links and Linux interface state.
+2. Verify interface addressing and directly connected reachability.
+3. Verify router-ID uniqueness and OSPF interface membership in the correct area.
+4. Compare interface-type, passive status, timers, and network type on both ends.
+5. Verify OSPF neighbor state, LSDB contents, and installed routes in that order.
+6. Use commit check before committing configuration changes.
+
+DELIVERABLES FROM THE ENGINEER
+- The final OSPF configuration on R1-R4.
+- Evidence/screenshots or saved CLI output for neighbor state, interface state,
+  route table, and LSDB before and after summarization.
+- A short explanation of why R1/R2 are ABRs, why Type 2 exists on Area 0,
+  and how area-range changes the Type 3 LSAs advertised to other areas.

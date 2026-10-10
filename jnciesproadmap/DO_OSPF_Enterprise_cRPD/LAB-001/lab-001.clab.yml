@@ -1,0 +1,66 @@
+name: ospf001
+prefix: ""
+
+# LAB-001 follows the four-router, three-area design from
+# Day One: Advanced OSPF in the Enterprise, Chapter 2.
+# cRPD data interfaces are eth1, eth2, eth3... (eth0 is management).
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+
+
+    r1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r1.conf
+    r2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r2.conf
+    r3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r3.conf
+    r4:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r4.conf
+
+    br-univ:
+      kind: bridge
+
+    # Lightweight hosts provide the three connected prefixes used for
+    # the Area 2 summarization exercise. OSPF itself runs on cRPD only.
+    ep16:
+      kind: linux
+      exec:
+        - ip addr add 192.168.16.2/30 dev eth1
+        - ip route add default via 192.168.16.1
+    ep17:
+      kind: linux
+      cmd: sleep infinity
+      exec:
+        - ip addr add 192.168.17.2/24 dev eth1
+        - ip route add default via 192.168.17.1
+    ep18:
+      kind: linux
+      exec:
+        - ip addr add 192.168.18.2/23 dev eth1
+        - ip route add default via 192.168.18.1
+
+  links:
+    # Backbone Area 0
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    # Area 1
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    # Area 2
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    # Area 2 connected networks for route summarization
+    - endpoints: ["r4:eth2", "ep16:eth1"]
+    - endpoints: ["r4:eth3", "ep17:eth1"]
+    - endpoints: ["r4:eth4", "ep18:eth1"]

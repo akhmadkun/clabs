@@ -1,0 +1,416 @@
+LAB-001: SINGLE OSPF DOMAIN, MULTI-AREA
+STEP-BY-STEP SOLUTION GUIDE FOR JUNIOR ENGINEERS
+Image: xzjt/crpd:25.2R1-S1.4
+Reference topic: Day One: Advanced OSPF in the Enterprise, Chapter 2
+
+======================================================================
+1. WHAT YOU ARE BUILDING
+======================================================================
+
+This lab uses one OSPF routing domain, split into three areas:
+
+  Area 0: R1 <--------broadcast Ethernet--------> R2
+           |                                    |
+         Area 1                               Area 2
+           |                                    |
+          R3                                   R4
+                                                | | |
+                                              ep16 ep17 ep18
+
+R1 has one interface in Area 0 and another in Area 1, so R1 is an ABR.
+R2 has one interface in Area 0 and another in Area 2, so R2 is an ABR.
+R3's OSPF interfaces all belong to Area 1, so R3 is an internal router.
+R4's OSPF interfaces all belong to Area 2, so R4 is an internal router.
+
+The three endpoint subnets hang off R4 in Area 2. They let us observe the
+route-summary behavior described in the ebook without needing more OSPF routers.
+The endpoint containers are ordinary Linux hosts; all OSPF routing is performed
+by the four cRPD routers.
+
+======================================================================
+2. DEPLOY AND CHECK THE BASELINE
+======================================================================
+
+From this directory, run:
+
+  ./deploy.sh
+  ./configure-hosts.sh
+
+The four cRPD nodes boot with addressing only. No OSPF has been configured yet.
+Containerlab maps cRPD's first data link to eth1, the second to eth2, and so on.
+eth0 is the management interface. Use eth1/eth2/etc. in both the cRPD interface
+configuration and the Containerlab link endpoints.
+
+The configs/r1.conf through configs/r4.conf files contain only interface
+addressing. They deliberately do not contain router IDs or OSPF configuration,
+so you can practice protocol configuration yourself. The host helper also adds
+return routes via R4 so pings sourced from router loopbacks can receive replies.
+
+Open each router CLI in a separate terminal, or connect when needed:
+
+  docker exec -it clab-ospf001-r1 cli
+  docker exec -it clab-ospf001-r2 cli
+  docker exec -it clab-ospf001-r3 cli
+  docker exec -it clab-ospf001-r4 cli
+
+At the operational prompt (the prompt ends with >), inspect interfaces:
+
+  show interfaces terse
+  show route protocol direct
+
+Confirm the IP address on each configured data interface and loopback. Then
+verify the directly connected router links. For example, on R1:
+
+  ping 192.168.1.2 source 192.168.1.1 count 3
+  ping 192.168.2.2 source 192.168.2.1 count 3
+
+On R2:
+
+  ping 192.168.1.1 source 192.168.1.2 count 3
+  ping 192.168.3.2 source 192.168.3.1 count 3
+
+On R4:
+
+  ping 192.168.3.1 source 192.168.3.2 count 3
+  ping 192.168.16.2 source 192.168.16.1 count 3
+  ping 192.168.17.2 source 192.168.17.1 count 3
+  ping 192.168.18.2 source 192.168.18.1 count 3
+
+If ping is issued from configuration mode (prompt ends with #), prefix the
+operational command with 'run', e.g. 'run ping 192.168.1.2 source 192.168.1.1 count 3'.
+Do not start the OSPF work until all directly connected address checks pass.
+
+======================================================================
+3. CONFIGURE BACKBONE AREA 0 ON R1 AND R2
+======================================================================
+
+Junos/cRPD configuration workflow:
+  configure
+  [enter the set commands]
+  commit check
+  commit
+  exit
+
+Use 'commit check' to validate the candidate configuration before applying it.
+Use 'show | compare' inside configuration mode if you want to review changes.
+
+On R1, enter:
+
+  configure
+  set routing-options router-id 10.1.1.1
+  set protocols ospf area 0.0.0.0 interface eth1 priority 255
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+  exit
+
+On R2, enter:
+
+  configure
+  set routing-options router-id 10.1.1.2
+  set protocols ospf area 0.0.0.0 interface eth1 priority 100
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+  exit
+
+Why these commands matter:
+- routing-options router-id sets a stable, unique OSPF router ID (and a router ID
+  used by other routing protocols). The loopback makes a convenient identity.
+- Putting eth1 in Area 0 activates OSPF on the R1-R2 backbone link.
+- Making lo0.0 passive advertises the loopback address without trying to form an
+  OSPF neighbor on the loopback.
+- Priority 255 on R1 is higher than R2's priority 100, so R1 is expected to be DR
+  and R2 BDR on the shared broadcast network. A fresh election is needed if a
+  DR/BDR election has already taken place; changing priority alone does not
+  necessarily preempt an existing DR.
+
+Verify from R1 and R2:
+
+  show ospf neighbor
+  show ospf interface
+  show route protocol ospf
+  show ospf database area 0.0.0.0
+
+Expected result:
+- R1 and R2 reach Full adjacency.
+- The neighbor table shows the other router's router ID.
+- R1 should be DR and R2 BDR on the Area 0 broadcast link, after election.
+- The loopback routes 10.1.1.1/32 and 10.1.1.2/32 are advertised by OSPF.
+
+If the adjacency does not reach Full, do not continue. Check that both endpoint
+interfaces are up, both IP addresses share 192.168.1.0/30, both interfaces are
+in Area 0, and neither interface is passive. Also check for duplicate router IDs.
+
+======================================================================
+4. ADD AREA 1: R1 TO R3
+======================================================================
+
+On R1, add the interface facing R3 to Area 1 and use point-to-point OSPF network
+type on the inter-router link:
+
+  configure
+  set protocols ospf area 0.0.0.1 interface eth2 interface-type p2p
+  commit check
+  commit
+  exit
+
+On R3, configure its router ID, activate the inter-router interface in Area 1,
+use point-to-point network type, and advertise its loopback passively:
+
+  configure
+  set routing-options router-id 10.1.1.3
+  set protocols ospf area 0.0.0.1 interface eth1 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+  commit check
+  commit
+  exit
+
+Verify on R1 and R3:
+
+  show ospf neighbor
+  show ospf interface
+  show route protocol ospf
+  show ospf database area 0.0.0.1
+
+Expected result:
+- R1 has a Full adjacency with R3 on eth2.
+- R3 has a Full adjacency with R1 on eth1.
+- The link is shown as point-to-point, so there is no DR/BDR election on this link.
+- R1 remains an ABR because it participates in Area 0 and Area 1.
+- R3 is an internal router because its OSPF interfaces are all in Area 1.
+
+======================================================================
+5. ADD AREA 2: R2 TO R4
+======================================================================
+
+On R2, add its interface toward R4 to Area 2 with point-to-point network type:
+
+  configure
+  set protocols ospf area 0.0.0.2 interface eth2 interface-type p2p
+  commit check
+  commit
+  exit
+
+On R4, configure router ID, the Area 2 point-to-point link, its passive
+loopback, and the three passive interfaces that advertise endpoint networks:
+
+  configure
+  set routing-options router-id 10.1.1.4
+  set protocols ospf area 0.0.0.2 interface eth1 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth2 passive
+  set protocols ospf area 0.0.0.2 interface eth3 passive
+  set protocols ospf area 0.0.0.2 interface eth4 passive
+  commit check
+  commit
+  exit
+
+The endpoint-facing interfaces are passive because R4 must advertise their
+connected networks into OSPF, but the Linux hosts do not run OSPF. Passive does
+not mean that the connected prefix is excluded from OSPF; it prevents OSPF
+neighbor formation and hello transmission on that interface while advertising
+the network as an OSPF stub network.
+
+Verify on R2 and R4:
+
+  show ospf neighbor
+  show ospf interface
+  show route protocol ospf
+  show ospf database area 0.0.0.2
+
+Expected result:
+- R2 and R4 have a Full adjacency across 192.168.3.0/30.
+- R2 and R4 loopbacks are advertised in Area 0 and Area 2 respectively, using
+  the area to which each loopback belongs.
+- R4 advertises 192.168.16.0/30, 192.168.17.0/24, and 192.168.18.0/23 in Area 2.
+- No OSPF neighbors form on eth2, eth3, or eth4 on R4.
+
+======================================================================
+6. VERIFY THE WHOLE MULTI-AREA OSPF DOMAIN
+======================================================================
+
+Run these operational commands on each router:
+
+  show ospf neighbor
+  show ospf interface
+  show route protocol ospf
+  show ospf database
+
+Helpful targeted checks:
+
+On R1:
+  show ospf database area 0.0.0.0
+  show route 10.1.1.4/32 exact
+  show route 192.168.16.0/30 exact
+  show route 192.168.17.0/24 exact
+  show route 192.168.18.0/23 exact
+
+On R3:
+  show ospf database area 0.0.0.1
+  show route 10.1.1.4/32 exact
+  show route 192.168.17.0/24 exact
+
+On R4:
+  show ospf database area 0.0.0.2
+  show route 10.1.1.1/32 exact
+
+Reachability checks from R3:
+  ping 10.1.1.1 source 10.1.1.3 count 3
+  ping 10.1.1.2 source 10.1.1.3 count 3
+  ping 10.1.1.4 source 10.1.1.3 count 3
+  ping 192.168.16.2 source 10.1.1.3 count 3
+  ping 192.168.17.2 source 10.1.1.3 count 3
+  ping 192.168.18.2 source 10.1.1.3 count 3
+
+LSA concepts to identify:
+- Type 1, Router LSA: describes a router's OSPF links within a single area.
+  Routers do not flood one area's Type 1 LSA into another area.
+- Type 2, Network LSA: generated by the DR on a multi-access/broadcast segment.
+  Expect this on Area 0 because the R1-R2 link retains the broadcast network type.
+  Do not expect it for the Area 1 and Area 2 links configured as point-to-point.
+- Type 3, Summary LSA: originated by ABRs to advertise inter-area prefixes.
+  It is how routes from Area 1 and Area 2 can be learned in Area 0 and vice versa.
+
+The precise LSDB rows and metrics can vary by implementation/version, so focus
+on the LSA type, Link State ID, Advertising Router, area, and resulting route.
+
+======================================================================
+7. CAPTURE THE ROUTES BEFORE SUMMARIZATION
+======================================================================
+
+On R1, inspect the three endpoint prefixes:
+
+  show route 192.168.16.0/30 exact
+  show route 192.168.17.0/24 exact
+  show route 192.168.18.0/23 exact
+
+On R3, repeat the same checks. At this point you should see the three component
+prefixes as inter-area OSPF routes, learned across the ABRs. Save this output;
+it is the before-state for the summarization exercise.
+
+If any prefix is missing, first check R4's direct routes, then its Area 2 OSPF
+LSDB, then R2's OSPF route table. Do not configure the summary until all three
+component prefixes are being advertised correctly.
+
+======================================================================
+8. CONFIGURE AREA 2 SUMMARIZATION ON R2
+======================================================================
+
+R2 is the ABR between Area 2 and Area 0. Configure an Area 2 range on R2:
+
+  configure
+  set protocols ospf area 0.0.0.2 area-range 192.168.16.0/21
+  commit check
+  commit
+  exit
+
+This range covers addresses from 192.168.16.0 through 192.168.23.255. The three
+component networks all fall within it. The range is configured on R2 because
+R2 is the ABR that advertises Area 2's prefixes into the other areas.
+
+Wait for OSPF to converge, then verify on R1:
+
+  show route 192.168.16.0/21 exact
+  show ospf database area 0.0.0.0
+  show route 192.168.16.0/30 exact
+  show route 192.168.17.0/24 exact
+  show route 192.168.18.0/23 exact
+
+Repeat the route checks on R3:
+
+  show route 192.168.16.0/21 exact
+  show route 192.168.16.0/30 exact
+  show route 192.168.17.0/24 exact
+  show route 192.168.18.0/23 exact
+
+Expected result on R1 and R3:
+- The 192.168.16.0/21 aggregate is present as an inter-area OSPF route.
+- The three component routes are no longer individually advertised from Area 2
+  into Area 0; the ABR advertises the aggregate instead.
+- R4 and the Area 2 LSDB still retain the underlying network information.
+- The endpoints remain reachable because the more-specific routes still exist
+  inside Area 2 and the summary provides reachability to that area from outside.
+
+If the specific routes still appear on R1, inspect the exact area-range prefix,
+confirm that it contains all intended component routes, check that the command
+was committed on R2 (not R4), and recheck OSPF convergence and the Area 0 LSDB.
+
+======================================================================
+9. TROUBLESHOOTING METHOD
+======================================================================
+
+Use this sequence whenever an expected neighbor or route is missing:
+
+A. LINK AND INTERFACE
+   show interfaces terse
+   Verify the containerlab endpoint names and that both interfaces are up.
+
+B. ADDRESSING
+   show route protocol direct
+   Ping the directly connected neighbor using the local interface IP as source.
+   For a /30 link, make sure both addresses belong to the same /30 network.
+
+C. OSPF INTERFACE
+   show ospf interface
+   Verify the correct area, interface type, priority, and passive state.
+
+D. NEIGHBOR
+   show ospf neighbor
+   Full should appear on expected router-to-router adjacencies. If there is no
+   neighbor, check area mismatch, interface passive state, network type, timers,
+   authentication, interface state, and unique router IDs.
+
+E. DATABASE
+   show ospf database
+   Verify the local router LSA and the remote router LSA in the same area before
+   troubleshooting inter-area advertisements.
+
+F. ROUTING TABLE
+   show route protocol ospf
+   If an LSA exists but a route is not installed, inspect the route detail and
+   possible preference/next-hop issues rather than repeatedly changing OSPF.
+
+G. CONFIGURATION
+   Use 'show | compare' in configuration mode before changes, 'commit check'
+   before 'commit', and 'rollback 1' only when you understand which candidate
+   configuration you are reverting.
+
+======================================================================
+10. RESET, SAVE, AND RE-RUN
+======================================================================
+
+To display the main verification outputs after the configuration is completed:
+
+  ./verify.sh
+
+To remove the lab containers and links:
+
+  ./destroy.sh
+
+To deploy a fresh addressing-only baseline:
+
+  ./deploy.sh
+  ./configure-hosts.sh
+
+Note: the router's learned/running configuration is not the same as the source
+startup-config files. If you redeploy and want to preserve a completed solution,
+export/save it separately before destroying the lab. The provided startup configs
+are intentionally kept free of OSPF so that each attempt starts as an OSPF exercise.
+
+======================================================================
+11. DOCUMENTATION REFERENCES
+======================================================================
+
+Containerlab - Juniper cRPD kind, interface mapping, and startup-config:
+https://containerlab.dev/manual/kinds/crpd/
+
+Containerlab - topology definition and link/interface naming:
+https://containerlab.dev/manual/topo-def-file/
+
+Containerlab - startup configuration management:
+https://containerlab.dev/manual/config-mgmt/
+
+Juniper - Configure Settings on cRPD, including an official OSPF example using
+eth1 and lo0.0:
+https://www.juniper.net/documentation/us/en/software/crpd/crpd-deployment/topics/task/configure-settings-on-crpd.html

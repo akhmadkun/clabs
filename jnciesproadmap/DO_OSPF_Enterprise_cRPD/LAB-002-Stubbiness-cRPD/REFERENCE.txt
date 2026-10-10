@@ -1,0 +1,49 @@
+LAB-002 REFERENCES AND ADAPTATIONS
+
+PRIMARY BOOK SOURCE
+  Timothy Beaumont, Day One: Advanced OSPF in the Enterprise, Juniper Networks,
+  Chapter 3: "Stubbiness", especially the sections:
+    - Without Stubs (printed pages 28-30)
+    - Totally Stubby Area (printed pages 31-33)
+    - Not-So-Stubby Area (printed pages 34-41)
+  Source file used for design: DO_OSPF_Enterprise.pdf uploaded in this conversation.
+
+BOOK-BASED DESIGN
+  - Keep the three-area R1/R2 backbone design with R3 in Area 1 and R4 in Area 2.
+  - First advertise external static routes from R4 and observe Type-5 LSAs.
+  - Convert Area 1 to totally stubby by configuring stub on both ends and
+    no-summaries at the ABR.
+  - Convert Area 1 to NSSA, originate local external routes inside it, and verify
+    Type-7 LSAs and Type-7-to-Type-5 translation by the ABR.
+  - The book uses an additional R5 running RIP to feed R3. This lab adapts that
+    part to static discard routes on R3 to preserve the four-cRPD physical design.
+  - A standard Stub stage is included as an extra intermediate learning step.
+  - The optional NSSA no-summaries stage reflects the chapter's final note and
+    current Juniper syntax guidance.
+
+OFFICIAL CONTAINERLAB DOCUMENTATION
+  Linux bridge kind:
+    https://containerlab.dev/manual/kinds/bridge/
+  cRPD kind, interface mapping, and startup-config:
+    https://containerlab.dev/manual/kinds/crpd/
+  Node configuration and startup-config behavior:
+    https://containerlab.dev/manual/nodes/
+
+OFFICIAL JUNIPER DOCUMENTATION
+  Configuring OSPF Areas (stub, no-summaries, NSSA, default route):
+    https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-areas.html
+  OSPF stub statement reference:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/stub-edit-protocols-ospf.html
+  OSPF NSSA statement reference:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/nssa-edit-protocols-ospf.html
+  OSPF NSSA default-lsa statement reference:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/default-lsa-edit-protocols-ospf.html
+
+NOTE ABOUT DEFAULT-LSA TYPE
+  The uploaded ebook's standard NSSA example includes a default-lsa type-7 line
+  while summaries are enabled. Current Juniper documentation describes the
+  type-7 option specifically for the no-summaries NSSA case. Therefore, this
+  lab's normal NSSA stage uses default-lsa default-metric with summaries enabled;
+  the explicit type-7 default option is introduced in the NSSA no-summaries stage.
+  The Type-7 LSAs for 192.168.71.0/24 and 192.168.72.0/24 are independently
+  originated by R3 throughout the NSSA stages.

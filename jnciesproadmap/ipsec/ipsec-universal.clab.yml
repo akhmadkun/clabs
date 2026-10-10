@@ -1,0 +1,144 @@
+name: ipsec-universal
+prefix: ""
+
+topology:
+  nodes:
+    # Three vSRX are the practical minimum for hub + two spokes,
+    # ADVPN shortcut experiments and scaled-down GroupVPNv2 scenarios.
+    # eth1 -> ge-0/0/0; eth2 -> ge-0/0/1; eth3 -> ge-0/0/2; eth4 -> ge-0/0/3.
+    vsrx-hub:
+      kind: juniper_vsrx
+      image: eacik8ssrv6/juniper_vsrx:23.2R2.21
+      startup-config: configs/bootstrap/vsrx-hub.conf
+      # Proven PoC pattern: serve the bind-mounted configs from this
+      # vSRX QEMU/vrnetlab container; guest loads via http://10.0.0.2:8000/.
+      binds:
+        - ./configs:/lab-config:ro
+      exec:
+        - sh -c 'cd /lab-config && nohup python3 -m http.server 8000 --bind 0.0.0.0 --directory /lab-config >/tmp/config-http.log 2>&1 &'
+
+    vsrx-spoke1:
+      kind: juniper_vsrx
+      image: eacik8ssrv6/juniper_vsrx:23.2R2.21
+      startup-config: configs/bootstrap/vsrx-spoke1.conf
+      # Proven PoC pattern: serve the bind-mounted configs from this
+      # vSRX QEMU/vrnetlab container; guest loads via http://10.0.0.2:8000/.
+      binds:
+        - ./configs:/lab-config:ro
+      exec:
+        - sh -c 'cd /lab-config && nohup python3 -m http.server 8000 --bind 0.0.0.0 --directory /lab-config >/tmp/config-http.log 2>&1 &'
+
+    vsrx-spoke2:
+      kind: juniper_vsrx
+      image: eacik8ssrv6/juniper_vsrx:23.2R2.21
+      startup-config: configs/bootstrap/vsrx-spoke2.conf
+      # Proven PoC pattern: serve the bind-mounted configs from this
+      # vSRX QEMU/vrnetlab container; guest loads via http://10.0.0.2:8000/.
+      binds:
+        - ./configs:/lab-config:ro
+      exec:
+        - sh -c 'cd /lab-config && nohup python3 -m http.server 8000 --bind 0.0.0.0 --directory /lab-config >/tmp/config-http.log 2>&1 &'
+
+    # Two cSRX nodes cover lightweight static site-to-site, NAT,
+    # overlap, certificate and troubleshooting scenarios.
+    csrx-a:
+      kind: juniper_csrx
+      image: meekley/csrx:23.4R1.9
+      startup-config: configs/bootstrap/csrx-a.conf
+      binds:
+        - ./configs:/lab-config:ro
+
+    csrx-b:
+      kind: juniper_csrx
+      image: meekley/csrx:23.4R1.9
+      startup-config: configs/bootstrap/csrx-b.conf
+      binds:
+        - ./configs:/lab-config:ro
+
+    # End-user / traffic-generation nodes.
+    host-hub-a:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.10/24 dev eth1
+        - ip route replace default via 10.10.10.1
+
+    host-hub-b:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.10.11.10/24 dev eth1
+        - ip route replace default via 10.10.11.1
+
+    host-spoke1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.20.10.10/24 dev eth1
+        - ip route replace default via 10.20.10.1
+
+    host-spoke2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.30.10.10/24 dev eth1
+        - ip route replace default via 10.30.10.1
+
+    host-csrx-a:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.40.10.10/24 dev eth1
+        - ip route replace default via 10.40.10.1
+
+    host-csrx-b:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.50.10.10/24 dev eth1
+        - ip route replace default via 10.50.10.1
+
+    # Service placeholders for PKI/OCSP and RADIUS. Install/configure the
+    # actual services when working on IPSEC-010..015 and IPSEC-072..073.
+    svc-ca:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 198.18.0.20/24 dev eth1
+
+    svc-radius:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 198.18.0.21/24 dev eth1
+
+    # WAN2 is a logical second subnet on the same bridge, not an isolated ISP.
+    br-univ:
+      kind: bridge
+
+  links:
+    # WAN1 / shared underlay and service placeholders (no config-server node)
+    - endpoints: ["vsrx-hub:eth1", "br-univ:eth1"]
+    - endpoints: ["vsrx-spoke1:eth1", "br-univ:eth2"]
+    - endpoints: ["vsrx-spoke2:eth1", "br-univ:eth3"]
+    - endpoints: ["csrx-a:eth1", "br-univ:eth4"]
+    - endpoints: ["csrx-b:eth1", "br-univ:eth5"]
+    - endpoints: ["svc-ca:eth1", "br-univ:eth6"]
+    - endpoints: ["svc-radius:eth1", "br-univ:eth7"]
+
+    # Hub LANs
+    - endpoints: ["vsrx-hub:eth2", "host-hub-a:eth1"]
+    - endpoints: ["vsrx-hub:eth3", "host-hub-b:eth1"]
+
+    # Spoke LANs
+    - endpoints: ["vsrx-spoke1:eth2", "host-spoke1:eth1"]
+    - endpoints: ["vsrx-spoke2:eth2", "host-spoke2:eth1"]
+
+    # cSRX LANs
+    - endpoints: ["csrx-a:eth2", "host-csrx-a:eth1"]
+    - endpoints: ["csrx-b:eth2", "host-csrx-b:eth1"]
+
+    # Logical WAN2: hub uses ge-0/0/3, spokes use ge-0/0/2.
+    - endpoints: ["vsrx-hub:eth4", "br-univ:eth8"]
+    - endpoints: ["vsrx-spoke1:eth3", "br-univ:eth9"]
+    - endpoints: ["vsrx-spoke2:eth3", "br-univ:eth10"]

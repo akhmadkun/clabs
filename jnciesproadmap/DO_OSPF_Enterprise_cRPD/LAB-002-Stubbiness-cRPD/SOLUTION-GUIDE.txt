@@ -1,0 +1,358 @@
+LAB-002: STUB AREAS, TOTALLY STUBBY, AND NSSA
+STEP-BY-STEP SOLUTION GUIDE FOR JUNIOR ENGINEERS
+Image: xzjt/crpd:25.2R1-S1.4
+Source: Day One: Advanced OSPF in the Enterprise, Chapter 3, "Stubbiness"
+
+======================================================================
+1. WHAT YOU ARE BUILDING
+======================================================================
+
+The physical topology is unchanged from LAB-001. All router parent ports eth1
+attach to the pre-existing Linux bridge br-univ. The VLAN subinterfaces create
+three separate logical OSPF links:
+
+  Area 0 / VLAN 12: R1 eth1.12 <----> R2 eth1.12
+  Area 1 / VLAN 13: R1 eth1.13 <----> R3 eth1.13
+  Area 2 / VLAN 24: R2 eth1.24 <----> R4 eth1.24
+
+R1 connects Areas 0 and 1, so R1 is an ABR. R2 connects Areas 0 and 2, so R2
+is an ABR. R3 is internal to Area 1, and R4 is internal to Area 2.
+
+The lab progresses through these Area 1 types:
+  A. Normal area: receives inter-area summaries and Type-5 external routes.
+  B. Stub area: rejects Type-5 external LSAs but keeps inter-area summaries.
+  C. Totally stubby: also suppresses inter-area summaries; default remains.
+  D. NSSA: allows locally originated Type-7 LSAs but does not import external
+     Type-5 LSAs from the rest of OSPF.
+  E. NSSA with no-summaries: keeps local Type-7 LSAs and receives only a default
+     from outside the area.
+
+The ebook uses RIP from an additional router R5 to create local NSSA external
+routes. This lab intentionally retains the four-cRPD physical topology and uses
+static discard routes on R3 instead. This demonstrates Type-7 origination and
+translation without introducing another router or RIP into the lab.
+
+======================================================================
+2. DEPLOY AND VERIFY THE ADDRESSING BASELINE
+======================================================================
+
+First destroy LAB-001, because the two labs reuse router IDs, VLAN IDs and IPs.
+Do not run both labs together.
+
+The host bridge br-univ must already exist and be UP. This lab references it but
+does not create or delete it. Then run:
+
+  ./deploy.sh
+  ./configure-hosts.sh
+
+Connect to a Junos CLI:
+
+  docker exec -it clab-ospf002-r1 cli
+  docker exec -it clab-ospf002-r2 cli
+  docker exec -it clab-ospf002-r3 cli
+  docker exec -it clab-ospf002-r4 cli
+
+At the Junos operational prompt (ending in >), check interfaces and direct routes:
+
+  show interfaces terse
+  show route protocol direct
+
+Expected key addresses:
+  R1 eth1.12 = 10.0.12.1/24, eth1.13 = 10.0.13.1/24, lo0.0 = 10.1.1.1/32
+  R2 eth1.12 = 10.0.12.2/24, eth1.24 = 10.0.24.2/24, lo0.0 = 10.1.1.2/32
+  R3 eth1.13 = 10.0.13.3/24, lo0.0 = 10.1.1.3/32
+  R4 eth1.24 = 10.0.24.4/24, eth2.0 = 192.168.16.1/30
+     eth3.0 = 192.168.17.1/24, eth4.0 = 192.168.18.1/23, lo0.0 = 10.1.1.4/32
+
+cRPD's Junos CLI may not provide a ping operational command in this image. To
+ping, exit to the container shell and select the source IP (not the interface):
+
+  docker exec -it clab-ospf002-r2 bash
+  ping -c 3 -I 10.1.1.2 10.0.12.1
+
+The command -I 10.1.1.2 binds the source address. Do not use -I lo0.0 to mean
+"source from the loopback IP"; in Linux ping that argument is interpreted as an
+interface name. The destination still requires a route in the Linux kernel.
+
+Before OSPF configuration, show ospf neighbor should be empty on all routers.
+
+======================================================================
+3. BUILD THE NORMAL MULTI-AREA BASELINE
+======================================================================
+
+Configure R1 first, then R2, to make the intended DR/BDR result more predictable
+on a fresh Area 0 broadcast segment. Always use commit check before commit.
+Commands below are entered in Junos configuration mode.
+
+R1:
+  configure
+  set routing-options router-id 10.1.1.1
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 255
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  commit check
+  commit
+  exit
+
+R2:
+  configure
+  set routing-options router-id 10.1.1.2
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 100
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  commit check
+  commit
+  exit
+
+R3:
+  configure
+  set routing-options router-id 10.1.1.3
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+  commit check
+  commit
+  exit
+
+R4:
+  configure
+  set routing-options router-id 10.1.1.4
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth2.0 passive
+  set protocols ospf area 0.0.0.2 interface eth3.0 passive
+  set protocols ospf area 0.0.0.2 interface eth4.0 passive
+  set routing-options static route 192.168.29.0/24 next-hop 192.168.16.2
+  set routing-options static route 192.168.30.0/24 next-hop 192.168.16.2
+  set policy-options policy-statement REDISTRIBUTE-STATIC term STATIC from protocol static
+  set policy-options policy-statement REDISTRIBUTE-STATIC term STATIC then accept
+  set protocols ospf export REDISTRIBUTE-STATIC
+  commit check
+  commit
+  exit
+
+Why the export policy is needed: OSPF does not automatically advertise R4's
+static routes as external OSPF routes. The export policy selects static routes
+and the OSPF export statement applies that policy to the OSPF process.
+
+Verify from all routers:
+  show ospf neighbor
+  show ospf interface detail
+  show ospf route
+  show route protocol ospf
+  show ospf database
+
+Expected adjacencies:
+  R1 <-> R2 through eth1.12, Area 0, broadcast network.
+  R1 <-> R3 through eth1.13, Area 1, point-to-point.
+  R2 <-> R4 through eth1.24, Area 2, point-to-point.
+R1 and R2 are ABRs. R3 and R4 are internal routers. R1 is expected to become DR
+and R2 BDR on the Area 0 VLAN if the election begins with the intended settings.
+OSPF DR election is not preemptive; if a prior election chose different roles,
+restart the OSPF adjacency cleanly after confirming both priorities.
+
+On R1 and R3, run:
+  show ospf route
+  show route protocol ospf
+  show ospf database
+
+Expected baseline behavior: 192.168.29.0/24 and 192.168.30.0/24 are external
+routes originated by R4. In show ospf route, look for external path type (often
+shown as Ext2 unless an external metric type was changed). In the LSDB, inspect
+the AS-scope external section for the Type-5 advertisements.
+
+======================================================================
+4. AREA 1 AS A STANDARD STUB AREA
+======================================================================
+
+In Junos, every router in the area must agree that Area 1 is stub. The ABR must
+also be told to generate a default route for the stub area. The ebook uses a
+metric of 5 on R1.
+
+On R1:
+  configure
+  set protocols ospf area 0.0.0.1 stub default-metric 5
+  commit check
+  commit
+  exit
+
+On R3:
+  configure
+  set protocols ospf area 0.0.0.1 stub
+  commit check
+  commit
+  exit
+
+Verify on R3:
+  show ospf neighbor
+  show ospf interface detail
+  show ospf route
+  show route protocol ospf
+  show ospf database area 0.0.0.1
+
+Expected results:
+- R1/R3 adjacency remains Full.
+- R3 stops learning R4's Type-5 external routes 192.168.29.0/24 and
+  192.168.30.0/24 into Area 1.
+- Inter-area Type-3 routes for Area 0 and Area 2 can still be present.
+- R1 originates a default summary route toward Area 1 with the configured
+  default metric. The area still has more than just a default route.
+
+Why both devices need 'stub': OSPF neighbors exchange area capability in Hello
+packets. If one side is stub and the other side is normal/NSSA, the adjacency
+will not form correctly.
+
+======================================================================
+5. AREA 1 AS A TOTALLY STUBBY AREA
+======================================================================
+
+Keep the stub configuration on R1 and R3. Add no-summaries only on the ABR R1:
+
+  configure
+  set protocols ospf area 0.0.0.1 stub no-summaries
+  commit check
+  commit
+  exit
+
+Verify on R3:
+  show ospf route
+  show route protocol ospf
+  show ospf database area 0.0.0.1
+
+Expected result: R3 retains routes local to Area 1, but learns only a default
+route from other areas. Type-3 summary LSAs for specific Area 0 and Area 2
+prefixes are suppressed. Type-5 external LSAs are not allowed into the stub
+area. The default advertised into a stub/totally-stubby area is a Type-3 Summary
+LSA (not a Type-7 NSSA LSA).
+
+The no-summaries option belongs on R1 because R1 is the ABR that originates the
+inter-area Type-3 Summary LSAs into Area 1. R3 still needs the stub statement.
+
+======================================================================
+6. REPLACE STUB WITH NSSA
+======================================================================
+
+Do not leave an area configured as both stub and NSSA. Delete stub on both ends.
+R1 (ABR):
+  configure
+  delete protocols ospf area 0.0.0.1 stub
+  set protocols ospf area 0.0.0.1 nssa
+  set protocols ospf area 0.0.0.1 nssa default-lsa default-metric 1
+  set protocols ospf area 0.0.0.1 nssa summaries
+  commit check
+  commit
+  exit
+
+R3:
+  configure
+  delete protocols ospf area 0.0.0.1 stub
+  set protocols ospf area 0.0.0.1 nssa
+  set routing-options static route 192.168.71.0/24 discard
+  set routing-options static route 192.168.72.0/24 discard
+  set policy-options policy-statement REDISTRIBUTE-NSSA-STATIC term STATIC from protocol static
+  set policy-options policy-statement REDISTRIBUTE-NSSA-STATIC term STATIC then accept
+  set protocols ospf export REDISTRIBUTE-NSSA-STATIC
+  commit check
+  commit
+  exit
+
+On current Junos documentation, an NSSA configured with default-lsa default-metric
+and summaries enabled receives a default route as a Type-3 LSA. The type-7 option
+is specifically useful when no-summaries is configured, as used in the next step.
+This keeps the behavior aligned with current Juniper reference documentation even
+though the older ebook example shows type-7 beside summaries.
+
+Verify on R3:
+  show ospf neighbor
+  show ospf route
+  show route protocol ospf
+  show ospf database area 0.0.0.1
+
+You should see the local external test routes 192.168.71.0/24 and 192.168.72.0/24
+as NSSA/Type-7 LSAs in Area 1. They are generated by R3's static-route export
+policy. R3 must not learn R4's Type-5 external routes 192.168.29.0/24 and
+192.168.30.0/24 from the backbone into Area 1.
+
+Verify translation on R1:
+  show ospf database
+  show ospf route
+  show route protocol ospf
+
+R1 should have Type-5 External LSAs for 192.168.71.0/24 and 192.168.72.0/24 in
+the external LSDB. R1 is the ABR that translates R3's Type-7 NSSA LSAs into
+Type-5 LSAs that can be flooded outside Area 1.
+
+======================================================================
+7. OPTIONAL CHALLENGE: NSSA WITH NO-SUMMARIES
+======================================================================
+
+The book notes that an NSSA can also suppress summary routes while still allowing
+an internal NSSA router to originate external routes. Replace the explicit
+summaries option on R1 with no-summaries, and enable the Type-7 default option.
+
+On R1:
+  configure
+  delete protocols ospf area 0.0.0.1 nssa summaries
+  set protocols ospf area 0.0.0.1 nssa no-summaries
+  set protocols ospf area 0.0.0.1 nssa default-lsa type-7
+  commit check
+  commit
+  exit
+
+Do not remove the NSSA statement or the static redistribution on R3.
+
+Verify on R3:
+  show ospf route
+  show ospf database area 0.0.0.1
+
+Expected result:
+- Inter-area summary routes are suppressed; R3 receives a default route from R1.
+- R3's local Type-7 routes 192.168.71.0/24 and 192.168.72.0/24 remain in the
+  Area 1 database.
+- R1 continues translating those Type-7 LSAs to Type-5 External LSAs.
+- The default-LSA type-7 option causes a Type-7 default advertisement in the
+  no-summaries NSSA mode, in accordance with the Juniper statement reference.
+
+When returning to ordinary NSSA behavior, undo the no-summaries and type-7 lines:
+  configure
+  delete protocols ospf area 0.0.0.1 nssa no-summaries
+  delete protocols ospf area 0.0.0.1 nssa default-lsa type-7
+  set protocols ospf area 0.0.0.1 nssa summaries
+  commit check
+  commit
+  exit
+
+======================================================================
+8. TROUBLESHOOTING CHECKLIST
+======================================================================
+
+If the R1-R3 adjacency drops after changing area type:
+1. Confirm both R1 and R3 have the same Area 1 type: both stub or both nssa.
+2. Confirm that neither side retains the old mutually exclusive area type.
+3. Check interface addresses, VLAN IDs, and the R1/R3 eth1.13 links.
+4. Run show ospf neighbor and show ospf interface detail.
+
+If Type-5 external routes appear in R3 while Area 1 is stub or NSSA:
+1. Confirm you are checking Area 1's learned routes rather than the process-wide
+   external LSDB view, since cRPD's output formatting can present LSDB scopes separately.
+2. Run show ospf route and inspect the exact route path type.
+3. Run show ospf database area 0.0.0.1 to inspect Area 1-specific LSAs.
+
+If Type-7 routes do not appear in the NSSA:
+1. Confirm R3 has both static routes in show route protocol static.
+2. Confirm the export policy matches protocol static and accepts the term.
+3. Confirm 'set protocols ospf export REDISTRIBUTE-NSSA-STATIC' is active.
+4. Confirm R3's Area 1 is NSSA and the R1-R3 adjacency is Full.
+5. Inspect show ospf database area 0.0.0.1 on R3.
+
+If R1 does not show translated Type-5 routes:
+1. Check R1 has Area 1 and Area 0 active and the R1/R3 adjacency is Full.
+2. Check the Area 1 Type-7 LSAs on R3.
+3. Inspect R1's full OSPF database for the external section.
+
+To fully reset to addressing-only baseline:
+  ./destroy.sh
+  ./deploy.sh
+  ./configure-hosts.sh
+
+The destroy script removes LAB-002 containers and their lab links. It does not
+delete the pre-existing br-univ bridge.

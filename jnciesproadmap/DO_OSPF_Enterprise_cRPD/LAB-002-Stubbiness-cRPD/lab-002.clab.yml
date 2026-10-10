@@ -1,0 +1,73 @@
+name: ospf002
+prefix: ""
+
+# LAB-002 keeps the LAB-001 physical topology.
+# All cRPD eth1 parent interfaces attach to the pre-existing host bridge br-univ.
+# Logical router-to-router connectivity is formed by 802.1Q VLAN subinterfaces:
+# VLAN 12 = Area 0, VLAN 13 = Area 1, VLAN 24 = Area 2.
+# Area assignments follow Day One: Advanced OSPF in the Enterprise, Chapter 3.
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r1/base.conf
+      binds:
+        - ./configs/r1:/lab-configs:ro
+    r2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r2/base.conf
+      binds:
+        - ./configs/r2:/lab-configs:ro
+    r3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r3/base.conf
+      binds:
+        - ./configs/r3:/lab-configs:ro
+    r4:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r4/base.conf
+      binds:
+        - ./configs/r4:/lab-configs:ro
+
+    # This is an existing Linux bridge managed outside Containerlab.
+    # Create/enable it on the host beforehand; this topology must not delete it.
+    br-univ:
+      kind: bridge
+
+    ep16:
+      kind: linux
+      exec:
+        - ip addr add 192.168.16.2/30 dev eth1
+        - ip route add default via 192.168.16.1
+    ep17:
+      kind: linux
+      cmd: sleep infinity
+      exec:
+        - ip addr add 192.168.17.2/24 dev eth1
+        - ip route add default via 192.168.17.1
+    ep18:
+      kind: linux
+      exec:
+        - ip addr add 192.168.18.2/23 dev eth1
+        - ip route add default via 192.168.18.1
+
+  links:
+    # Shared physical Layer-2 bridge; 802.1Q logical adjacencies are configured on cRPD.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+
+    # Three Area 2 connected prefixes behind R4, retained from LAB-001.
+    - endpoints: ["r4:eth2", "ep16:eth1"]
+    - endpoints: ["r4:eth3", "ep17:eth1"]
+    - endpoints: ["r4:eth4", "ep18:eth1"]
