@@ -1,0 +1,56 @@
+LAB-004 - REFERENCES AND SOURCE ADAPTATIONS
+
+PRIMARY SOURCE
+  Timothy Beaumont, Day One: Advanced OSPF in the Enterprise, Juniper Networks.
+  Chapter 5, "Multiple Homogeneous Domains", printed pages 57-72 in the uploaded
+  PDF. Key topics: routing instance, independent OSPF backbone, separate RIB,
+  RIB groups, OSPF export policies, external route tags, and cross-domain routes.
+
+SOURCE-DERIVED CONFIGURATION CONCEPTS
+  - The book creates a virtual routing instance named domain2 on R1.
+  - The added domain has an OSPF Area 0 and an Area 1, with R6 as its ABR and R7
+    as its Area 1 internal router.
+  - The book creates two routing-options RIB groups to share inet.0 and
+    domain2.inet.0 in opposite directions.
+  - The main/default OSPF process uses `rib-group sharing`; the domain2 OSPF
+    process uses `rib-group sharing2`.
+  - The book's policy `from_domain1` matches protocol ospf, sets external tag 11,
+    and accepts; `from_domain2` matches instance domain2, sets tag 10, and accepts.
+  - Route sharing and OSPF external-LSA origination are separate verification
+    stages. In the book, the route tables are inspected before/after both.
+
+LAB ADAPTATIONS (CLEARLY DISTINGUISHED FROM THE BOOK)
+  - R1-R4 retain the VLAN/IP plan used by the previous cRPD labs.
+  - The added Domain 2 logical links use VLAN 56 (R1 domain2 <-> R6 Area 0) and
+    VLAN 67 (R6 Area 1 <-> R7). Each new cRPD eth1 parent connects to br-univ.
+  - The R1 domain2 instance receives router ID 10.2.1.1 to distinguish it from
+    R1's default OSPF instance in outputs.
+  - R7's 172.19.21.1/32 and 172.19.22.1/32 are addressed loopbacks, advertised
+    passively in Area 1. These model the book's two remote host routes.
+  - All devices are cRPD using xzjt/crpd:25.2R1-S1.4; the old book used hardware
+    Juniper interfaces/routers and the output commands may differ by release.
+
+OFFICIAL CONTAINERLAB DOCUMENTATION
+  Linux bridge kind (bridge must exist and be enabled before use):
+    https://containerlab.dev/manual/kinds/bridge/
+  Juniper cRPD kind, interface mapping, and startup-config:
+    https://containerlab.dev/manual/kinds/crpd/
+  Containerlab node definitions:
+    https://containerlab.dev/manual/nodes/
+
+OFFICIAL JUNIPER DOCUMENTATION
+  Configuring OSPF routing instances:
+    https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-routing-instances.html
+  RIB groups statement:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/rib-groups-edit-routing-options.html
+  Routing instances statement/hierarchy:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/statement/routing-instances-edit.html
+  Router ID hierarchy and instance behavior:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/router-id-edit-routing-options.html
+
+VALIDATION LIMITATION
+  This package was statically checked for YAML syntax, shell script syntax,
+  addressing consistency and archive integrity. It has not been deployed live
+  against xzjt/crpd:25.2R1-S1.4 here. Validate the actual RIB-group and routing-
+  instance command support on your cRPD build with `commit check` as you follow
+  the solution guide. Do not interpret static validation as a live test.

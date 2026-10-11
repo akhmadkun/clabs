@@ -1,0 +1,329 @@
+LAB-004: MULTIPLE HOMOGENEOUS OSPF DOMAINS
+STEP-BY-STEP SOLUTION GUIDE FOR JUNIOR ENGINEERS
+Image: xzjt/crpd:25.2R1-S1.4
+Primary source: Day One: Advanced OSPF in the Enterprise, Chapter 5,
+"Multiple Homogeneous Domains" (printed pages 57-72 in the uploaded PDF).
+
+======================================================================
+1. UNDERSTAND THE DESIGN BEFORE CONFIGURING
+======================================================================
+
+This lab has two independent OSPF instances on the same logical router R1.
+The first/default instance uses inet.0 and is called Domain 1. It is the OSPF
+network you already built in LAB-001: R1/R2 in Area 0, R1/R3 in Area 1, and
+R2/R4 in Area 2.
+
+The second instance is a virtual-router routing-instance called domain2. Its
+route table is domain2.inet.0. It connects R1 to R6 in Area 0, then R6 to R7 in
+Area 1. Although R1 is one physical cRPD, each OSPF instance has its own LSDB
+and route table until we explicitly configure route sharing.
+
+Logical connections (all physical eth1 parent links use the same external
+bridge br-univ; VLANs separate the L3 adjacencies):
+  Domain 1, inet.0:
+    VLAN 12: R1 eth1.12 <----> R2 eth1.12, Area 0 (broadcast)
+    VLAN 13: R1 eth1.13 <----> R3 eth1.13, Area 1 (point-to-point)
+    VLAN 24: R2 eth1.24 <----> R4 eth1.24, Area 2 (point-to-point)
+  Domain 2, domain2.inet.0:
+    VLAN 56: R1 domain2 eth1.56 <----> R6 eth1.56, Area 0
+    VLAN 67: R6 eth1.67 <----> R7 eth1.67, Area 1
+
+The chapter's main progression is:
+  A. Build the second OSPF routing instance and verify it is separate.
+  B. Observe routes missing between the route tables.
+  C. Use two RIB groups to import OSPF routes into both routing tables.
+  D. Use OSPF export policies to originate external LSAs in the opposite domain.
+  E. Add tags 10 and 11 to identify which direction routes crossed.
+
+Do not confuse these three mechanisms:
+  - An OSPF adjacency exchanges LSAs inside one OSPF instance.
+  - A RIB group copies routes from an OSPF instance into another routing table.
+  - An OSPF export policy selects routes to originate as external LSAs.
+RIB sharing by itself does not automatically guarantee the route is advertised
+as an external LSA into the other OSPF domain; the export policy is a separate step.
+
+======================================================================
+2. DEPLOY AND VERIFY ADDRESSING ONLY
+======================================================================
+
+Destroy LAB-003 first: all labs reuse the existing br-univ bridge and several
+IP/VLAN values. This lab references the bridge but never creates or removes it.
+The bridge must already exist and be UP.
+
+From the lab directory:
+  ./deploy.sh
+  ./configure-hosts.sh
+
+Open CLIs when needed:
+  docker exec -it clab-ospf004-r1 cli
+  docker exec -it clab-ospf004-r2 cli
+  docker exec -it clab-ospf004-r3 cli
+  docker exec -it clab-ospf004-r4 cli
+  docker exec -it clab-ospf004-r6 cli
+  docker exec -it clab-ospf004-r7 cli
+
+On each router, run:
+  show interfaces terse
+  show route protocol direct
+
+Confirm that R1 has eth1.12 = 10.0.12.1/24, eth1.13 = 10.0.13.1/24,
+and eth1.56 = 10.0.56.1/30. R6 must have eth1.56 = 10.0.56.2/30 and
+eth1.67 = 10.0.67.5/30. R7 has eth1.67 = 10.0.67.6/30 plus loopbacks
+10.1.1.7/32, 172.19.21.1/32, and 172.19.22.1/32. Check the other baseline
+addresses in ADDRESS-PLAN.txt.
+
+At this stage there should be no OSPF neighbors, because all startup configs
+contain addressing only. cRPD may not have the Junos ping operational command;
+if you need a ping, exit the CLI and use its Linux shell with -I set to a source
+IP address (not a Junos name such as lo0.0):
+  ping -c 3 -I 10.0.56.1 10.0.56.2
+
+======================================================================
+3. BUILD DOMAIN 1, THE DEFAULT OSPF INSTANCE
+======================================================================
+
+Configure Domain 1 exactly as a shortened LAB-001 baseline. The commands below
+are entered in Junos configuration mode ([edit]); run commit check and commit.
+
+R1:
+  set routing-options router-id 10.1.1.1
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 255
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+
+R2:
+  set routing-options router-id 10.1.1.2
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 100
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+
+R3:
+  set routing-options router-id 10.1.1.3
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+
+R4:
+  set routing-options router-id 10.1.1.4
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth2.0 passive
+  set protocols ospf area 0.0.0.2 interface eth3.0 passive
+  set protocols ospf area 0.0.0.2 interface eth4.0 passive
+
+Configure R1 first, then R2, if you want R1 to be elected DR and R2 BDR on
+a fresh Area 0 broadcast link. OSPF priority changes do not necessarily preempt
+a DR already elected on a link.
+
+Verify on the default instance:
+  show ospf neighbor
+  show ospf interface
+  show ospf route
+  show route protocol ospf
+  show ospf database area 0.0.0.0
+  show ospf database area 0.0.0.1
+  show ospf database area 0.0.0.2
+
+Expected: R1-R2 are Full on Area 0, R1-R3 Full on Area 1, and R2-R4 Full on
+Area 2. R1 and R2 are ABRs. R3 and R4 are internal routers in Domain 1.
+
+======================================================================
+4. CREATE A SECOND OSPF DOMAIN AT R1
+======================================================================
+
+The `domain2` routing-instance belongs only to R1. It uses R1's tagged logical
+interface eth1.56. The matching VLAN interface on R6 is in R6's default OSPF
+instance; OSPF packets on this VLAN form the Domain 2 Area 0 adjacency.
+
+On R1:
+  configure
+  set routing-instances domain2 instance-type virtual-router
+  set routing-instances domain2 routing-options router-id 10.2.1.1
+  set routing-instances domain2 interface eth1.56
+  set routing-instances domain2 protocols ospf area 0.0.0.0 interface eth1.56
+  commit check
+  commit
+  exit
+
+Why use a second router ID? R1 is participating in two distinct OSPF instances.
+The explicit ID 10.2.1.1 makes the second instance easy to identify in outputs;
+it is not required to be an address configured on a local interface.
+
+On R6:
+  configure
+  set routing-options router-id 10.1.1.6
+  set protocols ospf area 0.0.0.0 interface eth1.56
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.67
+  commit check
+  commit
+  exit
+
+On R7:
+  configure
+  set routing-options router-id 10.1.1.7
+  set protocols ospf area 0.0.0.1 interface eth1.67
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+  commit check
+  commit
+  exit
+
+The ebook uses the default Ethernet/broadcast OSPF network type on its Domain 2
+links, so this lab does the same. You should expect neighbor state Full and DR/BDR
+election on VLAN 56 and VLAN 67 after the broadcast adjacency elections complete.
+
+Check neighbors:
+  R1: show ospf neighbor instance domain2
+  R6: show ospf neighbor
+  R7: show ospf neighbor
+
+At R1, the default command `show ospf neighbor` is for inet.0. Use the explicit
+`instance domain2` form to see the separate OSPF neighbor table.
+
+======================================================================
+5. PROVE THAT THE ROUTING TABLES ARE SEPARATE
+======================================================================
+
+Before you configure RIB groups, inspect both routing tables on R1:
+  show route
+  show route table domain2.inet.0
+  show route protocol ospf
+  show ospf route
+  show route table domain2.inet.0 172.19.21.1/32
+
+The Domain 1 routes are in inet.0. The Domain 2 routes are in domain2.inet.0.
+In particular, R1 should not yet have an OSPF-learned Domain 2 route to
+172.19.21.1/32 in inet.0. Likewise, Domain 1 prefixes should not all be present
+in domain2.inet.0. Take a note or save this output before you continue.
+
+If a route seems present in the wrong table already, inspect the route's protocol
+and table heading carefully; directly connected routes are not proof of OSPF
+route sharing. Also verify that no RIB group was accidentally configured earlier.
+
+======================================================================
+6. CREATE TWO RIB GROUPS
+======================================================================
+
+A RIB group specifies a primary RIB and one or more additional RIBs that receive
+routes. The primary RIB is the first table in the `import-rib` list. Follow the
+ebook's two-direction design.
+
+On R1:
+  configure
+  set routing-options rib-groups sharing import-rib [ inet.0 domain2.inet.0 ]
+  set routing-options rib-groups sharing2 import-rib [ domain2.inet.0 inet.0 ]
+  set protocols ospf rib-group sharing
+  set routing-instances domain2 protocols ospf rib-group sharing2
+  commit check
+  commit
+  exit
+
+Inspect both tables again:
+  show route protocol ospf
+  show route table domain2.inet.0
+  show ospf route
+
+The objective of this intermediate check is to understand route import into RIBs.
+Do not yet assume all routes are being re-originated as Type-5 LSAs in the other
+OSPF domain. That is the next step, handled by OSPF export policy.
+
+======================================================================
+7. CONFIGURE EXPORT POLICIES TO ORIGINATE EXTERNAL LSAs
+======================================================================
+
+The book uses two policies on R1. The policy applied to the default OSPF process
+selects routes associated with the domain2 instance and tags them 10. The policy
+applied to domain2 selects OSPF routes learned from the default domain and tags
+them 11. These tags are carried as OSPF external route tags to identify direction.
+
+On R1:
+  configure
+  set policy-options policy-statement from_domain1 term 1 from protocol ospf
+  set policy-options policy-statement from_domain1 term 1 then tag 11
+  set policy-options policy-statement from_domain1 term 1 then accept
+  set policy-options policy-statement from_domain2 term 1 from instance domain2
+  set policy-options policy-statement from_domain2 term 1 then tag 10
+  set policy-options policy-statement from_domain2 term 1 then accept
+  set protocols ospf export from_domain2
+  set routing-instances domain2 protocols ospf export from_domain1
+  commit check
+  commit
+  exit
+
+Interpret the direction correctly:
+  - `protocols ospf export from_domain2` affects Domain 1 (inet.0).
+  - `routing-instances domain2 protocols ospf export from_domain1` affects Domain 2.
+
+The default OSPF instance on R1 should now originate Type-5 external LSAs for
+selected Domain 2 routes; the Domain 2 instance should originate Type-5 LSAs for
+selected Domain 1 OSPF routes. The RIB groups move routes between local tables;
+export policies cause the separate OSPF process to advertise them to neighbors.
+
+======================================================================
+8. VERIFY INDEPENDENTLY, THEN VERIFY END-TO-END
+======================================================================
+
+On R1:
+  show ospf neighbor
+  show ospf neighbor instance domain2
+  show route protocol ospf
+  show route table domain2.inet.0
+  show ospf database external
+  show ospf database instance domain2
+
+On R2 and R3, which are Domain 1 routers:
+  show route protocol ospf
+  show ospf database external
+
+On R6 and R7, which are in Domain 2:
+  show route protocol ospf
+  show ospf database external
+
+Expected observations:
+  - R2 eventually learns 10.1.1.6/32, 10.1.1.7/32, 172.19.21.1/32 and
+    172.19.22.1/32 as external routes originated by R1 in Domain 1.
+  - Domain 2 routers learn some Domain 1 OSPF routes as external routes originated
+    by R1's domain2 OSPF instance.
+  - R1 has separate inet.0 and domain2.inet.0 table headings and each contains
+    routes learned from the other domain after the respective mechanisms are set.
+  - Inspect Type 5 external LSAs in each domain's database. The advertising
+    router should be R1's router ID for the corresponding OSPF instance.
+  - On R2, use `show ospf route` to distinguish intra, inter and external paths;
+    `show route protocol ospf` alone does not label path type as clearly.
+
+Some command syntax or output detail can differ by Junos/cRPD release. If
+`show ospf database instance domain2` is rejected by this cRPD build, use the
+normal `show ospf database` from R1's relevant OSPF instance context if available,
+and still capture `show route table domain2.inet.0` plus `show ospf neighbor instance domain2`.
+
+======================================================================
+9. TROUBLESHOOTING CHECKLIST
+======================================================================
+
+If the new R1-R6 adjacency is not Full:
+  - Check that R1 eth1.56 belongs to routing-instance domain2, not inet.0.
+  - Check that R6 eth1.56 has the same VLAN ID 56 and a matching /30.
+  - Check the OSPF interface is under `routing-instances domain2 protocols ospf`
+    on R1 and under `protocols ospf` on R6.
+  - Check area is 0.0.0.0 on both ends and interfaces are up.
+
+If R6-R7 is not Full:
+  - Check VLAN 67, 10.0.67.5/30 and 10.0.67.6/30, and Area 1 on both ends.
+  - The parent eth1 is a VLAN trunk; the OSPF addresses live on eth1.67.
+
+If adjacencies are Full but routes do not cross domains:
+  1. Check that `sharing` and `sharing2` use the correct import-rib table order.
+  2. Check that each RIB group is applied to the matching OSPF process.
+  3. Check the correct export policy is applied to the correct OSPF instance.
+  4. Check route tags and LSDB Type-5 LSAs in both domains.
+  5. Remember: route presence in a RIB and LSA origination are two separate checks.
+
+======================================================================
+10. RESETTING THE LAB
+======================================================================
+
+To destroy only this lab (the host bridge remains):
+  ./destroy.sh
+
+Before deploying another OSPF lab, ensure LAB-004's containers have been removed.
+Do not run multiple labs at once because they intentionally reuse VLAN IDs and
+addressing for the shared universal physical topology.

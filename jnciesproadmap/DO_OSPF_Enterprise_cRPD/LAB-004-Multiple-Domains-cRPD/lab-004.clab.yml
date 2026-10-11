@@ -1,0 +1,73 @@
+name: ospf004
+prefix: ""
+
+# LAB-004 follows Chapter 5, "Multiple Homogeneous Domains", of
+# Day One: Advanced OSPF in the Enterprise.
+# All router eth1 parent ports attach to the existing host bridge br-univ.
+# OSPF domains are separated by VLAN-tagged logical interfaces:
+#   Domain 1 / inet.0: VLAN 12 (R1-R2), VLAN 13 (R1-R3), VLAN 24 (R2-R4)
+#   Domain 2 / domain2.inet.0: VLAN 56 (R1 domain2 instance-R6),
+#                             VLAN 67 (R6-R7)
+# Baseline startup-configs contain addressing only. Configure OSPF, the
+# routing-instance, RIB groups, and route export policies manually.
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r1.conf
+    r2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r2.conf
+    r3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r3.conf
+    r4:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r4.conf
+    r6:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r6.conf
+    r7:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r7.conf
+
+    # External host bridge; must exist and be UP before deployment.
+    # This lab references br-univ but never creates or deletes it.
+    br-univ:
+      kind: bridge
+
+    ep16:
+      kind: linux
+      cmd: sleep infinity
+    ep17:
+      kind: linux
+      cmd: sleep infinity
+    ep18:
+      kind: linux
+      cmd: sleep infinity
+
+  links:
+    # Preserve the universal physical topology: each router eth1 attaches
+    # to the shared host bridge; VLAN tags form the logical router links.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r6:eth1", "br-univ:r6_eth1"]
+    - endpoints: ["r7:eth1", "br-univ:r7_eth1"]
+
+    # Domain 1 endpoints behind R4 (kept from LAB-001/002/003).
+    - endpoints: ["r4:eth2", "ep16:eth1"]
+    - endpoints: ["r4:eth3", "ep17:eth1"]
+    - endpoints: ["r4:eth4", "ep18:eth1"]

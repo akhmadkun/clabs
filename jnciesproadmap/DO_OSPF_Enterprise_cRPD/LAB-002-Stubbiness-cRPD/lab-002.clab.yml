@@ -37,6 +37,18 @@ topology:
       startup-config: ./configs/r4/base.conf
       binds:
         - ./configs/r4:/lab-configs:ro
+    r6:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r6/base.conf
+      binds:
+        - ./configs/r6:/lab-configs:ro
+    r7:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r7/base.conf
+      binds:
+        - ./configs/r7:/lab-configs:ro
 
     # This is an existing Linux bridge managed outside Containerlab.
     # Create/enable it on the host beforehand; this topology must not delete it.
@@ -66,6 +78,9 @@ topology:
     - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
     - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
     - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r6:eth1", "br-univ:r6_eth1"]
+    - endpoints: ["r7:eth1", "br-univ:r7_eth1"]
+
 
     # Three Area 2 connected prefixes behind R4, retained from LAB-001.
     - endpoints: ["r4:eth2", "ep16:eth1"]

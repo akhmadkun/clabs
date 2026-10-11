@@ -1,0 +1,81 @@
+LAB-004 - MULTIPLE HOMOGENEOUS OSPF DOMAINS
+ADDRESS PLAN AND LOGICAL VLAN MAPPING
+Source: Day One: Advanced OSPF in the Enterprise, Chapter 5.
+
+PHYSICAL DESIGN
+  R1 eth1 ----+
+  R2 eth1 ----+
+  R3 eth1 ----+---- existing host Linux bridge br-univ
+  R4 eth1 ----+
+  R6 eth1 ----+
+  R7 eth1 ----+
+
+br-univ is one shared Layer-2 broadcast domain, not an OSPF area. It must
+already exist and be UP. Containerlab references it but does not create/delete
+it. Logical router links are separated by 802.1Q VLAN tags on eth1 subinterfaces.
+The diagram intentionally focuses on logical links, not the bridge.
+
+DOMAIN 1 - DEFAULT INSTANCE, inet.0
+  Area 0 / VLAN 12 / broadcast:
+    R1 eth1.12  10.0.12.1/24 <----> R2 eth1.12  10.0.12.2/24
+    R1 and R2 are expected to form DR/BDR on a fresh election when priority
+    is configured as 255 on R1 and 100 on R2.
+
+  Area 1 / VLAN 13 / point-to-point:
+    R1 eth1.13  10.0.13.1/24 <----> R3 eth1.13  10.0.13.3/24
+
+  Area 2 / VLAN 24 / point-to-point:
+    R2 eth1.24  10.0.24.2/24 <----> R4 eth1.24  10.0.24.4/24
+
+  Loopbacks:
+    R1 lo0.0 10.1.1.1/32
+    R2 lo0.0 10.1.1.2/32
+    R3 lo0.0 10.1.1.3/32
+    R4 lo0.0 10.1.1.4/32
+
+  Networks behind R4, advertised as passive OSPF interfaces in Area 2:
+    R4 eth2.0 192.168.16.1/30 <----> EP16 eth1 192.168.16.2/30
+    R4 eth3.0 192.168.17.1/24 <----> EP17 eth1 192.168.17.2/24
+    R4 eth4.0 192.168.18.1/23 <----> EP18 eth1 192.168.18.2/23
+
+DOMAIN 2 - ROUTING INSTANCE domain2 / domain2.inet.0
+  R1 hosts both the default OSPF domain (inet.0) and a separate OSPF routing
+  instance named domain2. The instance gets a distinct router ID 10.2.1.1.
+
+  Area 0 / VLAN 56 / broadcast:
+    R1 domain2 interface eth1.56 10.0.56.1/30
+      <----> R6 eth1.56 10.0.56.2/30
+
+  Area 1 / VLAN 67 / broadcast:
+    R6 eth1.67 10.0.67.5/30 <----> R7 eth1.67 10.0.67.6/30
+
+  Loopbacks/prefixes on the domain2 side:
+    R6 lo0.0 10.1.1.6/32 (configured passive in Domain 2 Area 0)
+    R7 lo0.0 has three /32 addresses:
+      10.1.1.7/32       (router ID and loopback prefix)
+      172.19.21.1/32    (additional advertised host prefix)
+      172.19.22.1/32    (additional advertised host prefix)
+    Advertise all addresses via the single passive OSPF interface lo0.0.
+    Junos permits only one lo0 logical unit in the master routing instance;
+    additional lo0 units require separate routing instances.
+
+ROUTING TABLES AND EXPECTED BEHAVIOR
+  - Before RIB groups are configured, the routing instances are separate:
+      inet.0          = Domain 1 routes
+      domain2.inet.0  = Domain 2 routes
+  - At R1, RIB group "sharing" imports OSPF routes into [inet.0, domain2.inet.0].
+  - RIB group "sharing2" imports OSPF routes into [domain2.inet.0, inet.0].
+  - Domain1 -> Domain2 export policy tags injected routes with external tag 11.
+  - Domain2 -> Domain1 export policy tags injected routes with external tag 10.
+  - After route sharing, R2 should learn R6/R7 routes as OSPF external routes.
+    R6/R7 should learn routes from Domain 1. Check both RIBs on R1.
+
+IMPORTANT
+  The files configs/r1.conf through configs/r7.conf contain only interface
+  addresses and VLAN tags; no router IDs, OSPF, routing-instance, RIB-group,
+  policy, or route redistribution is preconfigured.
+  Prefixes 172.19.21.1/32 and 172.19.22.1/32 are additional addresses on
+  R7's lo0.0. They are advertised as OSPF intra/inter-area routes in Domain 2,
+  matching the host routes used to demonstrate Chapter 5 behavior. Keeping all
+  three /32 addresses on lo0.0 avoids placing multiple lo0 units in the master
+  routing instance, which Junos rejects.

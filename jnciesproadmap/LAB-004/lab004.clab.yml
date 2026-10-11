@@ -16,18 +16,22 @@ topology:
       kind: juniper_vjunosrouter
       startup-config: configs/r1.conf
       mgmt-ipv4: 172.31.4.11
+      startup-delay: 10
     r2:
       kind: juniper_vjunosrouter
       startup-config: configs/r2.conf
       mgmt-ipv4: 172.31.4.12
+      startup-delay: 20
     r3:
       kind: juniper_vjunosrouter
       startup-config: configs/r3.conf
       mgmt-ipv4: 172.31.4.13
+      startup-delay: 30
     r4:
       kind: juniper_vjunosrouter
       startup-config: configs/r4.conf
       mgmt-ipv4: 172.31.4.14
+      startup-delay: 40
     client1:
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest

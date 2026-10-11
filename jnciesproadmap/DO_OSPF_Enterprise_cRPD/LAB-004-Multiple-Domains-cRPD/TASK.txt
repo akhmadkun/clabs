@@ -1,0 +1,125 @@
+LAB-004: MULTIPLE HOMOGENEOUS OSPF DOMAINS
+TASK-ONLY WORKSHEET
+Image: xzjt/crpd:25.2R1-S1.4
+Source: Day One: Advanced OSPF in the Enterprise, Chapter 5
+
+GOAL
+Create two independent OSPF routing domains on the same cRPD router (R1),
+verify that their routing tables are separate, then connect them logically by
+using Junos routing-instance, RIB groups, and OSPF export policy. The physical
+network remains connected to br-univ; VLAN subinterfaces define each logical link.
+
+PHYSICAL / LOGICAL DESIGN
+All cRPD eth1 parent ports attach to the existing host bridge br-univ.
+  Domain 1 / inet.0:
+    VLAN 12: R1 eth1.12 <-> R2 eth1.12, Area 0 (broadcast)
+    VLAN 13: R1 eth1.13 <-> R3 eth1.13, Area 1 (point-to-point)
+    VLAN 24: R2 eth1.24 <-> R4 eth1.24, Area 2 (point-to-point)
+  Domain 2 / domain2.inet.0:
+    VLAN 16: R1 domain2 eth1.16 <-> R6 eth1.16, Area 0
+    VLAN 67: R6 eth1.67 <-> R7 eth1.67, Area 1
+See ADDRESS-PLAN.txt and topology.png.
+
+BASELINE RULE
+Startup configs contain interface addressing only. Configure all router IDs,
+OSPF interfaces, routing-instance, RIB groups and export policies manually.
+
+TASK 0 - DEPLOY AND VERIFY ADDRESSING ONLY
+1. Destroy LAB-003 first. LAB-001 through LAB-004 intentionally reuse the same
+   bridge, main-domain VLAN/IP plan, loopback addresses and endpoint subnets.
+2. Check that br-univ exists and is UP. Do not delete or recreate it.
+3. Run ./deploy.sh and ./configure-hosts.sh.
+4. Access devices with:
+     docker exec -it clab-ospf004-r1 cli
+     docker exec -it clab-ospf004-r6 cli
+     docker exec -it clab-ospf004-r7 cli
+5. Check show interfaces terse and show route protocol direct on all six routers.
+6. Verify the VLAN subinterfaces and the R4-to-endpoint addressing against the
+   address plan. Confirm there are no OSPF neighbors before protocol config.
+
+TASK 1 - BUILD DOMAIN 1 (inet.0)
+Configure the same multi-area OSPF baseline from LAB-001:
+1. Set R1/R2/R3/R4 router IDs to 10.1.1.1, .2, .3, and .4 respectively.
+2. R1 eth1.12 and R2 eth1.12 join Area 0. Leave this link broadcast. Set R1
+   priority 255 and R2 priority 100; verify DR/BDR after election.
+3. R1 eth1.13 and R3 eth1.13 join Area 1 with interface-type p2p.
+4. R2 eth1.24 and R4 eth1.24 join Area 2 with interface-type p2p.
+5. Advertise each router loopback passively in the relevant area. On R4, also
+   configure eth2.0, eth3.0 and eth4.0 as passive OSPF interfaces in Area 2.
+6. Verify all three adjacencies, internal/inter-area routes, and LSDBs.
+
+Acceptance criteria:
+- R1-R2 Full on Area 0; R1-R3 Full on Area 1; R2-R4 Full on Area 2.
+- R1/R2 act as ABRs; R3/R4 are internal routers.
+- The three connected EP subnets appear in Domain 1 OSPF routes.
+
+TASK 2 - BUILD A SECOND OSPF DOMAIN ON R1
+1. On R1, create routing-instance domain2 with instance-type virtual-router.
+2. Assign R1's eth1.16 to domain2. Configure the instance router ID 10.2.1.1.
+3. Configure OSPF Area 0 on domain2 interface eth1.16.
+4. On R6, set router ID 10.1.1.6. Configure Area 0 on eth1.16 and advertise
+   lo0.0 passively in Area 0.
+5. On R6 and R7, configure Area 1 on eth1.67. Set R7 router ID 10.1.1.7 and
+   advertise R7's lo0.0 passively in Area 1. The three /32 addresses
+   (10.1.1.7, 172.19.21.1, and 172.19.22.1) all reside on this single unit.
+6. Keep the default broadcast network type on VLAN 16 and VLAN 67 for this
+   chapter exercise. Verify adjacency in both domains.
+
+Acceptance criteria:
+- At R1, show ospf neighbor instance domain2 shows R6 Full.
+- At R6, show ospf neighbor shows R1 and R7 Full (under the relevant areas).
+- At R7, R6 is Full.
+- R1 shows distinct route tables inet.0 and domain2.inet.0.
+
+TASK 3 - PROVE THE ROUTING TABLES ARE SEPARATE BEFORE SHARING
+1. On R1 run show route and show route table domain2.inet.0.
+2. On R1 inspect show route 172.19.21.1 and show route table domain2.inet.0 10.1.1.2/32.
+3. Confirm domain2 prefixes such as 172.19.21.1/32 and .22/32 are not yet
+   learned in inet.0 through OSPF; similarly, domain1 routes should not all be
+   present in domain2.inet.0. Record this as the baseline.
+
+
+# SHELL
+  ip route show table all
+  ip rule show
+  ip -d link show type vrf
+  ip vrf show
+
+  ping -I __crpd-vrf1 -c 3 10.0.16.2
+
+
+TASK 4 - CONFIGURE RIB GROUPS AT R1
+1. Create RIB group sharing with import-rib [ inet.0 domain2.inet.0 ].
+2. Create RIB group sharing2 with import-rib [ domain2.inet.0 inet.0 ].
+3. Apply sharing under the main protocols ospf hierarchy.
+4. Apply sharing2 under routing-instances domain2 protocols ospf.
+5. Commit and inspect both RIBs again. Check which OSPF routes are now copied
+   into the other table before enabling cross-domain external LSA export.
+
+TASK 5 - EXPORT ROUTES BETWEEN THE OSPF DOMAINS
+On R1 create the two policies from the ebook's Chapter 5 example:
+1. from_domain1 matches protocol ospf, sets external tag 11, then accepts.
+2. from_domain2 matches instance domain2, sets external tag 10, then accepts.
+3. Apply from_domain2 under the default protocols ospf export statement.
+4. Apply from_domain1 under routing-instances domain2 protocols ospf export.
+5. Commit. Verify OSPF route tables and external LSAs on R1, R2, R6 and R7.
+
+Acceptance criteria:
+- R1 inet.0 learns the R7 prefixes 172.19.21.1/32 and 172.19.22.1/32
+  as OSPF external routes after route sharing and export policy are active.
+- The Domain 1 prefixes are visible in domain2.inet.0 and reach the Domain 2
+  routers as external OSPF routes after the reverse export policy is active.
+- R2 learns Domain 2 prefixes; R7 learns selected Domain 1 prefixes.
+- External route tags identify the direction used in the book example: 10 for
+  Domain 2 -> Domain 1; 11 for Domain 1 -> Domain 2.
+- The two route tables on R1 can be inspected independently.
+
+TASK 6 - TROUBLESHOOTING AND EXTENSION
+1. Disable one of the export policy statements; identify which directions stop
+   propagating external LSAs and which routes remain shared in the RIB.
+2. Remove one rib-group statement; inspect how this differs from disabling an
+   OSPF export policy.
+3. Explain why RIB import and OSPF LSA origination are distinct operations.
+4. OPTIONAL: Add a route-policy term to prevent a route tagged by the opposite
+   domain from being re-exported, then observe its effect. Do not add this until
+   you have captured the baseline exactly as in the ebook example.
