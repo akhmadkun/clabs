@@ -1,0 +1,387 @@
+LAB-005: MULTIPLE AUTONOMOUS SYSTEMS
+STEP-BY-STEP SOLUTION GUIDE FOR JUNIOR ENGINEERS
+Image: xzjt/crpd:25.2R1-S1.4
+Primary source: Day One: Advanced OSPF in the Enterprise, Chapter 6
+
+======================================================================
+1. WHAT YOU ARE BUILDING
+======================================================================
+
+AS 65001 keeps the LAB-004 design:
+  - Main OSPF process in inet.0: R1-R2 Area 0, R1-R3 Area 1, R2-R4 Area 2.
+  - A separate OSPF routing instance named domain2 on R1 connects to R6/R7.
+  - RIB groups and external route policies on R1 share selected routes between
+    the two OSPF domains, following Chapter 5.
+
+AS 65002 contains R8 and R9 with its own OSPF process:
+  - R8 loopback 10.1.1.8/32 is passive in Area 0.
+  - R8-R9 VLAN 89 is in Area 1.
+  - R9 has LANs 192.168.91.0/24 and 192.168.92.0/24.
+
+R2 and R8 are connected by eBGP over VLAN 28. They use AS numbers 65001 and
+65002. BGP and OSPF do not automatically redistribute routes between each
+other; route policies deliberately control each direction.
+
+======================================================================
+2. DEPLOY AND VERIFY ADDRESSING ONLY
+======================================================================
+
+Destroy the previous OSPF lab first. Never run multiple labs on br-univ together.
+The bridge br-univ must already exist and be UP; this package does not create or
+delete that bridge.
+
+Run from this directory:
+  ./deploy.sh
+  ./configure-hosts.sh
+
+Open CLIs as needed:
+  docker exec -it clab-ospf005-r1 cli
+  docker exec -it clab-ospf005-r2 cli
+  docker exec -it clab-ospf005-r3 cli
+  docker exec -it clab-ospf005-r4 cli
+  docker exec -it clab-ospf005-r6 cli
+  docker exec -it clab-ospf005-r7 cli
+  docker exec -it clab-ospf005-r8 cli
+  docker exec -it clab-ospf005-r9 cli
+
+On each router:
+  show interfaces terse
+  show route protocol direct
+
+Confirm addressing in ADDRESS-PLAN.txt. Do not continue until the addressing is
+correct and OSPF neighbor tables are empty. All router configs are addressing
+only: the protocol work is part of this exercise.
+
+For a router-sourced ping, exit to its Linux shell and use the source IP, not a
+Junos interface name as the -I argument. Example from R2:
+  ping -c 3 -I 10.0.28.1 10.0.28.2
+
+For endpoint pings, use:
+  docker exec -it clab-ospf005-ep16 sh
+  ping -c 3 192.168.91.10
+
+At the beginning this endpoint ping is expected to fail until both routing
+systems have been configured and the BGP/OSPF redistribution steps are done.
+
+======================================================================
+3. CONFIGURE AS 65001, DOMAIN 1 (inet.0)
+======================================================================
+
+Enter configuration mode on each router using `configure`. After each device's
+commands, run `commit check`, then `commit`, then `exit`.
+
+R1:
+  set routing-options router-id 10.1.1.1
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 255
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+
+R2:
+  set routing-options router-id 10.1.1.2
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 100
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+
+Configure R1 first and then R2 so that a fresh DR/BDR election is likely to
+choose R1 as DR and R2 as BDR. Changing priority after election does not always
+preempt the existing DR; if needed, reset the adjacency after saving config.
+
+R3:
+  set routing-options router-id 10.1.1.3
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+
+R4:
+  set routing-options router-id 10.1.1.4
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth2.0 passive
+  set protocols ospf area 0.0.0.2 interface eth3.0 passive
+  set protocols ospf area 0.0.0.2 interface eth4.0 passive
+
+Verify from R1/R2/R3/R4:
+  show ospf neighbor
+  show ospf interface
+  show ospf route
+  show route protocol ospf
+  show ospf database
+
+Expected adjacencies:
+  R1-R2 Full on eth1.12 (Area 0; broadcast)
+  R1-R3 Full on eth1.13 (Area 1; point-to-point)
+  R2-R4 Full on eth1.24 (Area 2; point-to-point)
+
+======================================================================
+4. REDISTRIBUTE TWO STATIC ROUTES FROM R4 INTO AS 65001 OSPF
+======================================================================
+
+On R4, create the two test static routes and one decoy. The test routes model
+external destinations from the ebook; the endpoints do not host these prefixes.
+
+  set routing-options static route 192.168.29.0/24 next-hop 192.168.16.2
+  set routing-options static route 192.168.30.0/24 next-hop 192.168.16.2
+  set routing-options static route 198.51.100.0/24 discard
+
+Build a narrow policy. Both route filters are alternatives within the term, but
+the protocol condition restricts the term to static routes.
+
+  set policy-options policy-statement r4-static-to-ospf term selected from protocol static
+  set policy-options policy-statement r4-static-to-ospf term selected from route-filter 192.168.29.0/24 exact
+  set policy-options policy-statement r4-static-to-ospf term selected from route-filter 192.168.30.0/24 exact
+  set policy-options policy-statement r4-static-to-ospf term selected then accept
+  set protocols ospf export r4-static-to-ospf
+
+Run `commit check` and `commit`.
+
+Verify:
+  show route protocol static
+  show route protocol ospf
+  show ospf database external
+
+Expected: 192.168.29.0/24 and 192.168.30.0/24 appear in the OSPF external LSDB
+on R1/R2/R3. The decoy 198.51.100.0/24 must not be advertised by OSPF.
+
+======================================================================
+5. CONFIGURE DOMAIN 2 ON R1, R6 AND R7
+======================================================================
+
+R1 is running the main OSPF instance and a second OSPF instance. The logical
+interface eth1.16 is in VLAN 16 and belongs to routing-instance domain2. Do not
+try to create an additional loopback unit for this instance; cRPD/Junos rejects
+multiple loopback interface units in the master instance. The separate instance
+uses a routing-options router ID instead.
+
+On R1:
+  set routing-instances domain2 instance-type virtual-router
+  set routing-instances domain2 routing-options router-id 10.2.1.1
+  set routing-instances domain2 interface eth1.16
+  set routing-instances domain2 protocols ospf area 0.0.0.0 interface eth1.16 interface-type p2p
+
+On R6:
+  set routing-options router-id 10.1.1.6
+  set protocols ospf area 0.0.0.0 interface eth1.16 interface-type p2p
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.67 interface-type p2p
+
+On R7:
+  set routing-options router-id 10.1.1.7
+  set protocols ospf area 0.0.0.1 interface eth1.67 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+
+Run commit check and commit on each node.
+
+Verify:
+  R1: show ospf neighbor instance domain2
+  R1: show route table domain2.inet.0
+  R6: show ospf neighbor
+  R6: show ospf route
+  R7: show route protocol ospf
+
+Expected: R1's domain2 instance forms Full with R6, and R6 forms Full with R7.
+
+======================================================================
+6. SHARE ROUTES BETWEEN THE TWO OSPF DOMAINS AT R1
+======================================================================
+
+Create RIB groups at R1:
+  set routing-options rib-groups sharing import-rib [ inet.0 domain2.inet.0 ]
+  set routing-options rib-groups sharing2 import-rib [ domain2.inet.0 inet.0 ]
+  set protocols ospf rib-group sharing
+  set routing-instances domain2 protocols ospf rib-group sharing2
+
+Create the policy for routes coming from Domain 1 into Domain 2. This mirrors
+the Chapter 5 convention: tag 11 marks the Domain 1 -> Domain 2 direction.
+  set policy-options policy-statement from_domain1 term 1 from protocol ospf
+  set policy-options policy-statement from_domain1 term 1 then tag 11
+  set policy-options policy-statement from_domain1 term 1 then accept
+  set routing-instances domain2 protocols ospf export from_domain1
+
+Create the reverse policy. Tag 10 marks Domain 2 -> Domain 1.
+  set policy-options policy-statement from_domain2 term 1 from instance domain2
+  set policy-options policy-statement from_domain2 term 1 then tag 10
+  set policy-options policy-statement from_domain2 term 1 then accept
+  set protocols ospf export from_domain2
+
+Commit, then verify separately on R1:
+  show route protocol ospf
+  show route table domain2.inet.0
+  show ospf database external
+
+On R2:
+  show route 172.19.21.1/32 exact
+  show route 172.19.22.1/32 exact
+
+Expected: R2 learns the R7 loopback test prefixes as OSPF external routes after
+R1 has shared and re-originated them. RIB groups and OSPF export policies have
+different roles: one shares a route between RIBs, the other originates LSAs.
+
+======================================================================
+7. CONFIGURE OSPF IN AS 65002
+======================================================================
+
+The R2-R8 interface in VLAN 28 is not part of OSPF. R8 uses it for eBGP only.
+R8 has a loopback in Area 0 and an OSPF point-to-point link to R9 in Area 1.
+
+On R8:
+  set routing-options router-id 10.1.1.8
+  set routing-options autonomous-system 65002
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.89 interface-type p2p
+
+On R9:
+  set routing-options router-id 10.1.1.9
+  set routing-options autonomous-system 65002
+  set protocols ospf area 0.0.0.1 interface eth1.89 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth2.0 passive
+  set protocols ospf area 0.0.0.1 interface eth3.0 passive
+
+Verify:
+  R8: show ospf neighbor
+  R8: show ospf route
+  R8: show ospf database
+  R9: show route protocol ospf
+
+Expected: R8 and R9 form Full adjacency on eth1.89. R8 learns 192.168.91.0/24
+and 192.168.92.0/24 as OSPF routes. The R2-R8 eBGP link is not an OSPF link.
+
+======================================================================
+8. CONFIGURE eBGP BETWEEN AS 65001 AND AS 65002
+======================================================================
+
+On R2:
+  set routing-options autonomous-system 65001
+  set protocols bgp group AS65002 type external
+  set protocols bgp group AS65002 peer-as 65002
+  set protocols bgp group AS65002 neighbor 10.0.28.2
+
+On R8:
+  set protocols bgp group AS65001 type external
+  set protocols bgp group AS65001 peer-as 65001
+  set protocols bgp group AS65001 neighbor 10.0.28.1
+
+AS 65002 was set in R8 in the preceding step. R2's AS number is set here.
+Commit and verify:
+  show bgp summary
+  show route protocol bgp
+
+Expected before any BGP export policy: peer 10.0.28.2 on R2 and 10.0.28.1 on
+R8 are Established, but no OSPF routes have been exchanged yet.
+
+======================================================================
+9. EXPORT AS 65001 OSPF ROUTES TO BGP
+======================================================================
+
+On R2 create and apply the policy:
+  set policy-options policy-statement ospf-to-bgp term 1 from protocol ospf
+  set policy-options policy-statement ospf-to-bgp term 1 then accept
+  set protocols bgp group AS65002 export ospf-to-bgp
+
+Commit and check on R8:
+  show bgp summary
+  show route protocol bgp
+  show route 10.1.1.1/32 exact detail
+
+Expected: AS 65001 routes now appear in R8 as BGP-learned paths. However, the
+routes do not automatically become OSPF external LSAs in AS 65002. That needs
+an explicit BGP-to-OSPF export policy in the next step.
+
+======================================================================
+10. EXPORT AS 65002 OSPF ROUTES TO BGP
+======================================================================
+
+On R8 create and apply:
+  set policy-options policy-statement ospf-to-bgp term 1 from protocol ospf
+  set policy-options policy-statement ospf-to-bgp term 1 then accept
+  set protocols bgp group AS65001 export ospf-to-bgp
+
+Commit and check on R2:
+  show bgp summary
+  show route protocol bgp
+  show route 192.168.91.0/24 exact detail
+  show route 192.168.92.0/24 exact detail
+
+Expected: R2 now receives AS 65002 routes as BGP, including R8/R9 loopbacks and
+R9's two LANs. They are still BGP routes in R2 until BGP-to-OSPF is configured.
+
+======================================================================
+11. REDISTRIBUTE BGP ROUTES INTO OSPF IN EACH AS
+======================================================================
+
+On R8, inject BGP routes (learned from AS 65001) into AS 65002 OSPF:
+  set policy-options policy-statement bgp-to-ospf term 1 from protocol bgp
+  set policy-options policy-statement bgp-to-ospf term 1 then accept
+  set protocols ospf export bgp-to-ospf
+
+On R2, inject BGP routes (learned from AS 65002) into AS 65001 OSPF:
+  set policy-options policy-statement bgp-to-ospf term 1 from protocol bgp
+  set policy-options policy-statement bgp-to-ospf term 1 then accept
+  set protocols ospf export bgp-to-ospf
+
+Commit on both. Verify:
+  R2: show ospf database external
+  R2: show route protocol ospf
+  R8: show ospf database external
+  R8: show route protocol ospf
+  R4: show route 192.168.91.0/24 exact
+  R9: show route 192.168.16.0/30 exact
+
+Expected:
+  - R9 sees AS 65001 routes as OSPF external routes.
+  - R4 sees AS 65002 routes as OSPF external routes.
+  - The OSPF external LSDB should contain Type-5 routes originated by each ASBR.
+
+Test end-to-end reachability using the endpoint Linux shells:
+  docker exec clab-ospf005-ep16 ping -c 3 192.168.91.10
+  docker exec clab-ospf005-ep91 ping -c 3 192.168.16.2
+  docker exec clab-ospf005-ep18 ping -c 3 192.168.92.10
+  docker exec clab-ospf005-ep92 ping -c 3 192.168.18.2
+
+If a ping fails, check in this order:
+  1. Direct interface address and L2 VLAN delivery.
+  2. OSPF adjacency on the relevant area.
+  3. BGP Established and route received from the peer.
+  4. Route active in the RIB (show route <prefix> exact detail).
+  5. External LSA appears (show ospf database external).
+  6. The endpoint has the right default gateway and route back.
+
+======================================================================
+12. UNDERSTAND WHAT EACH VERIFICATION PROVES
+======================================================================
+
+show bgp summary:
+  Proves the eBGP session is established. It does not by itself prove that a
+  route policy is sending any prefixes.
+
+show route protocol bgp:
+  Shows active BGP routes. After OSPF-to-BGP export, routes appear here on the
+  opposite AS. After BGP-to-OSPF export, they remain BGP paths in the local RIB
+  unless a different route wins, while other routers install OSPF external paths.
+
+show ospf database external:
+  Shows Type-5 external LSAs. Routes learned by BGP do not automatically appear
+  here: protocols ospf export policy must be applied to redistribute them.
+
+show ospf route:
+  Distinguishes path type (Intra, Inter, Ext1, Ext2) in releases where supported.
+  Use `show route protocol ospf` as a complementary RIB view.
+
+======================================================================
+13. TROUBLESHOOTING AND LOOP PREVENTION DISCUSSION
+======================================================================
+
+Before adding safeguards, capture the simple chapter example: OSPF-to-BGP on
+R2/R8 and BGP-to-OSPF on R2/R8. Then consider what would happen if there were
+multiple redistribution points or a redundant AS-to-AS connection.
+
+For an extension, tag routes injected from BGP into OSPF with direction-specific
+external tags, then filter those tags from the reverse OSPF-to-BGP policy. Test
+in a maintenance state: save `show route`, `show route protocol bgp`, `show ospf
+database external`, and `show configuration policy-options` before/after. Exact
+policy syntax can vary; always run `commit check` before committing.
+
+The central principle of Chapter 6 is a deliberate redistribution boundary:
+OSPF routes are not sent to BGP unless the BGP export policy accepts them, and
+BGP routes are not originated into OSPF unless the OSPF export policy accepts
+them. The tag extension prepares the design for more complex multi-boundary
+networks; it is not required for the initial single eBGP boundary exercise.

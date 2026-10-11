@@ -1,0 +1,56 @@
+LAB-005 REFERENCES AND ADAPTATIONS
+
+PRIMARY BOOK SOURCE
+  Timothy Beaumont, Day One: Advanced OSPF in the Enterprise, Chapter 6,
+  "Multiple Autonomous Systems", printed pages 74-84 in the uploaded PDF.
+
+SOURCE-DERIVED DESIGN
+  - The chapter adds R8 and R9 as a separate autonomous system.
+  - R8 has an OSPF Area 0 loopback and an Area 1 connection to R9.
+  - eBGP joins the existing network (R2) to R8 using different AS numbers.
+  - First verify eBGP before exchanging any routes.
+  - Export OSPF routes into BGP at R2, then inspect the routes at R8.
+  - BGP-learned routes need an OSPF export policy before they appear as external
+    routes in the remote OSPF database.
+  - Finally reverse route exchange so AS 65002 OSPF routes reach AS 65001.
+  - The book's summary cautions that multiple autonomous systems require careful
+    route redistribution and tag/metric policy to avoid loops.
+
+ADAPTATIONS FOR THIS CONTAINERLAB SERIES
+  - The package continues LAB-004's six-router topology (R1-R4, R6-R7), including
+    the two OSPF domains and RIB-group sharing at R1, then adds R8/R9.
+  - The old book interface addresses are replaced by the lab's logical VLAN
+    scheme on the shared external bridge br-univ.
+  - The established convention is applied consistently: VLAN number follows the
+    logical endpoint pair where practical; p2p addresses use /30 and .1/.2.
+  - R1-R6 uses VLAN 16; R2-R8 eBGP uses VLAN 28; R8-R9 OSPF uses VLAN 89.
+  - R9's two LAN networks use Linux endpoints EP91/EP92 instead of extra external
+    networks/RIP attachments in the book. They provide real bidirectional ping
+    tests after redistribution.
+  - R4's static test prefixes from earlier chapters are retained. A decoy prefix
+    verifies the exact-prefix export policy. R5 is omitted in this adaptation.
+  - All router startup-configs contain addressing only. Protocol configuration
+    is deliberately left to the learner.
+
+CONTAINERLAB DOCUMENTATION
+  Linux bridge kind (external bridge must already exist and be enabled):
+    https://containerlab.dev/manual/kinds/bridge/
+  Juniper cRPD and interface mapping:
+    https://containerlab.dev/manual/kinds/crpd/
+  Containerlab node configuration and startup-config:
+    https://containerlab.dev/manual/nodes/
+
+JUNIPER DOCUMENTATION
+  OSPF routing policy, including redistribution examples:
+    https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-routing-policy.html
+  Basic BGP routing policies and export semantics:
+    https://www.juniper.net/documentation/us/en/software/junos/bgp/topics/topic-map/basic-routing-policies.html
+  BGP autonomous systems:
+    https://www.juniper.net/documentation/us/en/software/junos/bgp/topics/topic-map/autonomous-systems.html
+  BGP peer-as statement:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/peer-as-edit-protocols-bgp.html
+
+VALIDATION NOTE
+  This package's YAML and scripts are syntax-checked locally. Live cRPD boot,
+  protocol commit checks, eBGP convergence and end-to-end forwarding must be
+  validated in the user's Containerlab runtime; they have not been run here.

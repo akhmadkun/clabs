@@ -1,0 +1,84 @@
+name: ospf005
+prefix: ""
+
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r1.conf
+    r2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r2.conf
+    r3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r3.conf
+    r4:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r4.conf
+    r6:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r6.conf
+    r7:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r7.conf
+    r8:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r8.conf
+    r9:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r9.conf
+
+    # External host bridge. It must already exist and be UP; the lab does not
+    # create, configure or delete br-univ. Each router eth1 is attached to it.
+    br-univ:
+      kind: bridge
+
+    ep16:
+      kind: linux
+      cmd: sleep infinity
+    ep17:
+      kind: linux
+      cmd: sleep infinity
+    ep18:
+      kind: linux
+      cmd: sleep infinity
+    ep91:
+      kind: linux
+      cmd: sleep infinity
+    ep92:
+      kind: linux
+      cmd: sleep infinity
+
+  links:
+    # All cRPD router parent eth1 interfaces share the external bridge.
+    # OSPF and eBGP logical adjacencies are separated by VLAN subinterfaces.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r6:eth1", "br-univ:r6_eth1"]
+    - endpoints: ["r7:eth1", "br-univ:r7_eth1"]
+    - endpoints: ["r8:eth1", "br-univ:r8_eth1"]
+    - endpoints: ["r9:eth1", "br-univ:r9_eth1"]
+
+    # AS 65001 endpoint LANs behind R4 (Area 2).
+    - endpoints: ["r4:eth2", "ep16:eth1"]
+    - endpoints: ["r4:eth3", "ep17:eth1"]
+    - endpoints: ["r4:eth4", "ep18:eth1"]
+
+    # AS 65002 endpoint LANs behind R9 (Area 1).
+    - endpoints: ["r9:eth2", "ep91:eth1"]
+    - endpoints: ["r9:eth3", "ep92:eth1"]

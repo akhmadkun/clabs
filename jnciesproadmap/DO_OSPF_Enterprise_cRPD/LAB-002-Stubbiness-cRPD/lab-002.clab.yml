@@ -18,38 +18,49 @@ topology:
       image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r1/base.conf
       binds:
-        - ./configs/r1:/lab-configs:ro
+        - ./configs/r1:/lab-configs:rw
     r2:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r2/base.conf
       binds:
-        - ./configs/r2:/lab-configs:ro
+        - ./configs/r2:/lab-configs:rw
     r3:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r3/base.conf
       binds:
-        - ./configs/r3:/lab-configs:ro
+        - ./configs/r3:/lab-configs:rw
     r4:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r4/base.conf
       binds:
-        - ./configs/r4:/lab-configs:ro
+        - ./configs/r4:/lab-configs:rw
     r6:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r6/base.conf
       binds:
-        - ./configs/r6:/lab-configs:ro
+        - ./configs/r6:/lab-configs:rw
     r7:
       kind: juniper_crpd
       image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r7/base.conf
       binds:
-        - ./configs/r7:/lab-configs:ro
-
+        - ./configs/r7:/lab-configs:rw
+    r8:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r8/base.conf
+      binds:
+        - ./configs/r8:/lab-configs:rw
+    r9:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r9/base.conf
+      binds:
+        - ./configs/r9:/lab-configs:rw
     # This is an existing Linux bridge managed outside Containerlab.
     # Create/enable it on the host beforehand; this topology must not delete it.
     br-univ:

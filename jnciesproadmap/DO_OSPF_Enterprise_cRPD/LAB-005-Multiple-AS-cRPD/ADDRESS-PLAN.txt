@@ -1,0 +1,90 @@
+LAB-005 - MULTIPLE AUTONOMOUS SYSTEMS
+ADDRESS PLAN AND LOGICAL VLAN MAPPING
+Source: Day One: Advanced OSPF in the Enterprise, Chapter 6.
+
+PHYSICAL CONNECTIVITY
+  R1, R2, R3, R4, R6, R7, R8 and R9 each connect parent eth1 to the existing
+  host bridge br-univ. VLAN subinterfaces on eth1 build logical links.
+  R4 eth2/eth3/eth4 connect directly to EP16/EP17/EP18.
+  R9 eth2/eth3 connect directly to EP91/EP92.
+  The diagram intentionally omits br-univ and shows only logical links.
+
+AUTONOMOUS SYSTEMS
+  AS 65001: original network. OSPF process in inet.0 across R1-R4, plus the
+             separate domain2 OSPF routing instance on R1 and R6-R7, with the
+             Chapter 5 RIB-group and export-policy sharing configured at R1.
+  AS 65002: separate OSPF network consisting of R8 and R9.
+  eBGP:     R2 (AS 65001) <-> R8 (AS 65002) over VLAN 28.
+
+ROUTER LOOPBACKS / ROUTER IDS TO CONFIGURE
+  R1 lo0.0 10.1.1.1/32; Domain 2 OSPF instance router ID 10.2.1.1
+  R2 lo0.0 10.1.1.2/32
+  R3 lo0.0 10.1.1.3/32
+  R4 lo0.0 10.1.1.4/32
+  R6 lo0.0 10.1.1.6/32
+  R7 lo0.0 10.1.1.7/32 plus 172.19.21.1/32 and 172.19.22.1/32 on lo0.0
+  R8 lo0.0 10.1.1.8/32
+  R9 lo0.0 10.1.1.9/32
+
+AS 65001 - DEFAULT OSPF DOMAIN / inet.0
+  Area 0 / VLAN 12 / broadcast:
+    R1 eth1.12 10.0.12.1/24 <----> R2 eth1.12 10.0.12.2/24
+    Used to practice DR/BDR election: R1 priority 255, R2 priority 100.
+  Area 1 / VLAN 13 / point-to-point:
+    R1 eth1.13 10.0.13.1/30 <----> R3 eth1.13 10.0.13.2/30
+  Area 2 / VLAN 24 / point-to-point:
+    R2 eth1.24 10.0.24.1/30 <----> R4 eth1.24 10.0.24.2/30
+  Networks behind R4 in Area 2:
+    R4 eth2.0 192.168.16.1/30 <----> EP16 eth1 192.168.16.2/30
+    R4 eth3.0 192.168.17.1/24 <----> EP17 eth1 192.168.17.2/24
+    R4 eth4.0 192.168.18.1/23 <----> EP18 eth1 192.168.18.2/23
+  R4 static routes used to practice redistribution from LAB-003:
+    192.168.29.0/24 via 192.168.16.2
+    192.168.30.0/24 via 192.168.16.2
+    198.51.100.0/24 discard (decoy; must not be exported by the narrow policy)
+
+AS 65001 - SEPARATE OSPF ROUTING INSTANCE domain2 ON R1
+  Domain 2 Area 0 / VLAN 16:
+    R1 routing-instance domain2 interface eth1.16 10.0.16.1/30
+      <----> R6 eth1.16 10.0.16.2/30
+  Domain 2 Area 1 / VLAN 67:
+    R6 eth1.67 10.0.67.1/30 <----> R7 eth1.67 10.0.67.2/30
+  R1's domain2 router ID: 10.2.1.1. R6 router ID 10.1.1.6; R7 router ID 10.1.1.7.
+  Use RIB groups and export policies from LAB-004 so the two OSPF domains
+  exchange routes at R1. Tags 10/11 follow the previous lab's convention.
+
+EBGP LINK BETWEEN THE AUTONOMOUS SYSTEMS
+  VLAN 28:
+    R2 eth1.28 10.0.28.1/30 <----> R8 eth1.28 10.0.28.2/30
+    R2 local AS 65001; peer AS 65002.
+    R8 local AS 65002; peer AS 65001.
+    This interface is eBGP-only; do not enable OSPF on this link.
+
+AS 65002 - OSPF NETWORK
+  Area 0:
+    R8 lo0.0 10.1.1.8/32 (passive). As in the book, the Area 0 identity is
+    represented by the R8 loopback; eBGP VLAN 28 is not an OSPF interface.
+  Area 1 / VLAN 89 / point-to-point:
+    R8 eth1.89 10.0.89.1/30 <----> R9 eth1.89 10.0.89.2/30
+  Additional Area 1 networks behind R9:
+    R9 eth2.0 192.168.91.1/24 <----> EP91 eth1 192.168.91.10/24
+    R9 eth3.0 192.168.92.1/24 <----> EP92 eth1 192.168.92.10/24
+    R9 lo0.0 10.1.1.9/32; passive along with eth2.0 and eth3.0 in OSPF.
+
+EXPECTED ROUTE EXCHANGE
+  Stage A: before redistribution, R2/R8 eBGP establishes but does not exchange
+           OSPF routes by default.
+  Stage B: R2 exports active AS 65001 OSPF routes to BGP; R8 receives BGP routes.
+  Stage C: R8 exports active AS 65002 OSPF routes to BGP; R2 receives BGP routes.
+  Stage D: BGP-to-OSPF export policies inject the other AS's BGP routes as
+           Type-5 external LSAs. R4 and R9 should learn the remote LAN prefixes.
+  Use show route protocol bgp, show route protocol ospf, show ospf route and
+  show ospf database external to distinguish BGP RIB routes from OSPF externals.
+
+ADDRESSING CONVENTIONS USED IN THIS LAB
+  - Every router parent eth1 is connected to br-univ.
+  - Logical p2p links use eth1.<VLAN>, the same VLAN ID at both ends, and /30.
+  - For p2p subnets, the first endpoint uses .1 and the second uses .2.
+  - The VLAN number is chosen to match the logical endpoint pair (for example,
+    R1-R6 uses VLAN 16; R2-R8 uses VLAN 28; R8-R9 uses VLAN 89).
+  - OSPF/BGP/instance/policy configuration is not in startup configs.

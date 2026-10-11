@@ -1,0 +1,139 @@
+LAB-005: MULTIPLE AUTONOMOUS SYSTEMS
+TASK-ONLY WORKSHEET
+Image: xzjt/crpd:25.2R1-S1.4
+Source: Day One: Advanced OSPF in the Enterprise, Chapter 6
+
+GOAL
+Connect two autonomous systems. AS 65001 contains the OSPF network built in
+LAB-004; AS 65002 has its own OSPF process on R8/R9. Use eBGP between R2 and R8,
+then deliberately redistribute OSPF routes into BGP and BGP routes into OSPF.
+Verify routes in RIBs and external LSAs.
+
+BASELINE RULE
+All startup configs contain addressing and VLAN IDs only. Do not preconfigure
+router IDs, AS numbers, OSPF, BGP, routing-instances, static routes, RIB groups,
+or export policies. Configure all of them manually during this lab.
+
+TASK 0 - DEPLOY AND CHECK ADDRESSING
+1. Destroy LAB-004 before deployment. Do not run two OSPF labs using br-univ
+   at the same time.
+2. Confirm br-univ exists and is UP; do not remove or recreate it.
+3. Run ./deploy.sh and ./configure-hosts.sh.
+4. Use `docker exec -it clab-ospf005-rN cli` to open a router CLI.
+5. Check `show interfaces terse` and `show route protocol direct` on all routers.
+6. Confirm VLAN addressing against ADDRESS-PLAN.txt. No OSPF neighbors or BGP
+   peers should exist before protocol configuration.
+
+Acceptance criteria:
+- R1-R4, R6-R9 boot from xzjt/crpd:25.2R1-S1.4.
+- All intended interface addresses and VLAN tags are present.
+- br-univ remains untouched by deploy/destroy scripts.
+- EP16/17/18 and EP91/92 have their expected addresses and default gateways.
+
+TASK 1 - REBUILD AS 65001 DOMAIN 1 (inet.0)
+1. Configure unique router IDs on R1-R4 using their loopbacks.
+2. Configure R1 eth1.12 and R2 eth1.12 in Area 0; keep broadcast network type.
+   Configure R1 priority 255 and R2 priority 100. Advertise both loopbacks
+   passively in Area 0. Verify DR/BDR after a fresh election.
+3. Configure R1 eth1.13 and R3 eth1.13 in Area 1 using OSPF point-to-point type.
+4. Configure R2 eth1.24 and R4 eth1.24 in Area 2 using OSPF point-to-point type.
+5. Advertise R3/R4 loopbacks passively; on R4 make eth2.0, eth3.0 and eth4.0
+   passive OSPF interfaces in Area 2.
+6. On R4, create static routes 192.168.29.0/24 and 192.168.30.0/24 via
+   192.168.16.2; also create decoy static route 198.51.100.0/24 discard.
+7. Use an exact-prefix export policy so only .29.0/24 and .30.0/24 are
+   redistributed into OSPF as Type-5 external routes. Do not export the decoy.
+
+Acceptance criteria:
+- R1-R2, R1-R3 and R2-R4 OSPF adjacencies reach Full.
+- R1 and R2 are ABRs; R3 and R4 are internal routers.
+- Remote routers learn the three R4 LAN routes and the two selected external
+  prefixes. 198.51.100.0/24 must not appear in OSPF.
+
+TASK 2 - REBUILD DOMAIN 2 (R1 routing-instance domain2, R6 and R7)
+1. On R1, create routing-instance domain2 with instance-type virtual-router,
+   set instance router ID 10.2.1.1, and assign eth1.16 to it.
+2. Configure Domain 2 Area 0 on R1 domain2 eth1.16. Configure R6 Area 0 on
+   eth1.16 and advertise R6 lo0.0 passively.
+3. Configure R6 and R7 eth1.67 in Domain 2 Area 1 using point-to-point type.
+   Advertise R7 lo0.0 passively; it contains 10.1.1.7/32, 172.19.21.1/32 and
+   172.19.22.1/32.
+4. Verify the R1 domain2-R6 neighbor and R6-R7 neighbor. Confirm R1 has two
+   separate routing tables: inet.0 and domain2.inet.0.
+
+TASK 3 - SHARE ROUTES BETWEEN R1'S TWO OSPF DOMAINS
+1. Configure RIB group sharing with import-rib [ inet.0 domain2.inet.0 ].
+2. Configure RIB group sharing2 with import-rib [ domain2.inet.0 inet.0 ].
+3. Attach sharing to the default protocols ospf process; attach sharing2 to
+   routing-instances domain2 protocols ospf.
+4. Configure from_domain1 policy to match OSPF, tag 11, and accept; apply it as
+   export policy under routing-instances domain2 protocols ospf.
+5. Configure from_domain2 policy to match instance domain2, tag 10, and accept;
+   apply it under the default protocols ospf export.
+6. Verify R2 learns 172.19.21.1/32 and 172.19.22.1/32 as OSPF external routes.
+
+TASK 4 - BUILD OSPF IN AS 65002
+1. Configure router IDs and autonomous system 65002 on R8/R9.
+2. On R8, make lo0.0 passive in OSPF Area 0. Configure eth1.89 in Area 1 with
+   OSPF point-to-point network type.
+3. On R9, configure eth1.89 in Area 1 point-to-point; make lo0.0, eth2.0 and
+   eth3.0 passive in Area 1.
+4. Verify R8-R9 Full adjacency and R8's OSPF routes to 192.168.91.0/24 and
+   192.168.92.0/24. At this stage these routes must not be in AS 65001.
+
+TASK 5 - ESTABLISH eBGP BETWEEN R2 (AS 65001) AND R8 (AS 65002)
+1. Configure routing-options autonomous-system 65001 on R2 and a BGP external
+   group to peer with 10.0.28.2, peer-as 65002.
+2. Configure routing-options autonomous-system 65002 on R8 and a BGP external
+   group to peer with 10.0.28.1, peer-as 65001.
+3. Commit and verify `show bgp summary` on both devices. Before export policies
+   are attached, the eBGP session should be Established with no OSPF routes
+   exchanged.
+
+TASK 6 - EXPORT AS 65001 OSPF ROUTES INTO BGP
+1. On R2, create policy ospf-to-bgp matching protocol ospf and accepting it.
+2. Apply the policy to the eBGP group export on R2.
+3. Verify R8 receives routes from AS 65001 as BGP routes, using `show route
+   protocol bgp` and `show route <prefix> detail`.
+4. Confirm that these prefixes do not yet appear as Type-5 LSAs in R8's OSPF
+   database merely because BGP received them. This demonstrates that route
+   propagation between protocols requires an explicit redistribution policy.
+
+TASK 7 - EXPORT AS 65002 OSPF ROUTES INTO BGP
+1. On R8, create an OSPF-to-BGP export policy matching protocol ospf and apply
+   it to the eBGP group toward R2.
+2. Verify R2 receives the AS 65002 routes as BGP routes, including 10.1.1.8/32,
+   10.1.1.9/32, 192.168.91.0/24 and 192.168.92.0/24.
+
+TASK 8 - REDISTRIBUTE BGP ROUTES INTO EACH OSPF PROCESS
+1. On R8, create a policy matching protocol bgp and accepting it; apply it as
+   `protocols ospf export`. This injects AS 65001 BGP routes into AS 65002 OSPF.
+2. On R2, create the equivalent BGP-to-OSPF policy and apply it under the
+   default protocols ospf export. This injects AS 65002 BGP routes into AS 65001.
+3. Verify Type-5 external LSAs, OSPF path types, and end-to-end reachability:
+   - From an EP16/EP17/EP18 host, ping EP91 and EP92.
+   - From EP91/EP92, ping an EP16/EP17/EP18 host.
+   - Use shell ping with the host's normal default gateway. cRPD does not provide
+     a Junos operational `ping` command in this image; use its Linux shell when
+     testing router-sourced packets.
+4. Identify the ASBRs and explain why BGP-learned routes do not automatically
+   appear in the remote OSPF LSDB until the export policy is applied.
+
+TASK 9 - TROUBLESHOOTING / ROUTE-LOOP DISCUSSION
+1. Remove one of the OSPF-to-BGP policies. Identify which AS loses routes.
+2. Remove one BGP-to-OSPF export policy. Compare BGP RIB visibility with OSPF
+   LSDB visibility.
+3. Explain the role of route tags and carefully scoped policies in avoiding
+   redistribution loops when multiple redistribution points are introduced.
+4. OPTIONAL: add direction-specific route tags and reject already-tagged routes
+   in the reverse export policy. Verify the effect before and after the change.
+
+FINAL ACCEPTANCE CRITERIA
+- eBGP R2-R8 is Established between AS 65001 and AS 65002.
+- AS 65001 routes are visible as BGP on R8 and, after BGP-to-OSPF export, as
+  Type-5 external routes within AS 65002.
+- AS 65002 routes are visible as BGP on R2 and, after BGP-to-OSPF export, as
+  Type-5 external routes within AS 65001.
+- R4-side and R9-side endpoints can reach each other in both directions.
+- All route exchange is caused by explicit routing policies, not by an
+  assumption that OSPF and BGP automatically share learned routes.
