@@ -49,8 +49,3 @@ JUNIPER DOCUMENTATION
     https://www.juniper.net/documentation/us/en/software/junos/bgp/topics/topic-map/autonomous-systems.html
   BGP peer-as statement:
     https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/peer-as-edit-protocols-bgp.html
-
-VALIDATION NOTE
-  This package's YAML and scripts are syntax-checked locally. Live cRPD boot,
-  protocol commit checks, eBGP convergence and end-to-end forwarding must be
-  validated in the user's Containerlab runtime; they have not been run here.

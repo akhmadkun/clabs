@@ -30,47 +30,56 @@ Acceptance criteria:
 - br-univ remains untouched by deploy/destroy scripts.
 - EP16/17/18 and EP91/92 have their expected addresses and default gateways.
 
-TASK 1 - REBUILD AS 65001 DOMAIN 1 (inet.0)
-1. Configure unique router IDs on R1-R4 using their loopbacks.
-2. Configure R1 eth1.12 and R2 eth1.12 in Area 0; keep broadcast network type.
-   Configure R1 priority 255 and R2 priority 100. Advertise both loopbacks
-   passively in Area 0. Verify DR/BDR after a fresh election.
-3. Configure R1 eth1.13 and R3 eth1.13 in Area 1 using OSPF point-to-point type.
-4. Configure R2 eth1.24 and R4 eth1.24 in Area 2 using OSPF point-to-point type.
-5. Advertise R3/R4 loopbacks passively; on R4 make eth2.0, eth3.0 and eth4.0
-   passive OSPF interfaces in Area 2.
-6. On R4, create static routes 192.168.29.0/24 and 192.168.30.0/24 via
-   192.168.16.2; also create decoy static route 198.51.100.0/24 discard.
-7. Use an exact-prefix export policy so only .29.0/24 and .30.0/24 are
-   redistributed into OSPF as Type-5 external routes. Do not export the decoy.
+-----------------------------------------------------------------------------
+TASK 1 - 3 can be loaded from startup-config ospf.multidomain.conf
+-----------------------------------------------------------------------------
 
-Acceptance criteria:
-- R1-R2, R1-R3 and R2-R4 OSPF adjacencies reach Full.
-- R1 and R2 are ABRs; R3 and R4 are internal routers.
-- Remote routers learn the three R4 LAN routes and the two selected external
-  prefixes. 198.51.100.0/24 must not appear in OSPF.
+    TASK 1 - REBUILD AS 65001 DOMAIN 1 (inet.0)
+    1. Configure unique router IDs on R1-R4 using their loopbacks.
+    2. Configure R1 eth1.12 and R2 eth1.12 in Area 0; keep broadcast network type.
+      Configure R1 priority 255 and R2 priority 100. Advertise both loopbacks
+      passively in Area 0. Verify DR/BDR after a fresh election.
+    3. Configure R1 eth1.13 and R3 eth1.13 in Area 1 using OSPF point-to-point type.
+    4. Configure R2 eth1.24 and R4 eth1.24 in Area 2 using OSPF point-to-point type.
+    5. Advertise R3/R4 loopbacks passively; on R4 make eth2.0, eth3.0 and eth4.0
+      passive OSPF interfaces in Area 2.
+    6. On R4, create static routes 192.168.29.0/24 and 192.168.30.0/24 via
+      192.168.16.2; also create decoy static route 198.51.100.0/24 discard.
+    7. Use an exact-prefix export policy so only .29.0/24 and .30.0/24 are
+      redistributed into OSPF as Type-5 external routes. Do not export the decoy.
 
-TASK 2 - REBUILD DOMAIN 2 (R1 routing-instance domain2, R6 and R7)
-1. On R1, create routing-instance domain2 with instance-type virtual-router,
-   set instance router ID 10.2.1.1, and assign eth1.16 to it.
-2. Configure Domain 2 Area 0 on R1 domain2 eth1.16. Configure R6 Area 0 on
-   eth1.16 and advertise R6 lo0.0 passively.
-3. Configure R6 and R7 eth1.67 in Domain 2 Area 1 using point-to-point type.
-   Advertise R7 lo0.0 passively; it contains 10.1.1.7/32, 172.19.21.1/32 and
-   172.19.22.1/32.
-4. Verify the R1 domain2-R6 neighbor and R6-R7 neighbor. Confirm R1 has two
-   separate routing tables: inet.0 and domain2.inet.0.
+    Acceptance criteria:
+    - R1-R2, R1-R3 and R2-R4 OSPF adjacencies reach Full.
+    - R1 and R2 are ABRs; R3 and R4 are internal routers.
+    - Remote routers learn the three R4 LAN routes and the two selected external
+      prefixes. 198.51.100.0/24 must not appear in OSPF.
 
-TASK 3 - SHARE ROUTES BETWEEN R1'S TWO OSPF DOMAINS
-1. Configure RIB group sharing with import-rib [ inet.0 domain2.inet.0 ].
-2. Configure RIB group sharing2 with import-rib [ domain2.inet.0 inet.0 ].
-3. Attach sharing to the default protocols ospf process; attach sharing2 to
-   routing-instances domain2 protocols ospf.
-4. Configure from_domain1 policy to match OSPF, tag 11, and accept; apply it as
-   export policy under routing-instances domain2 protocols ospf.
-5. Configure from_domain2 policy to match instance domain2, tag 10, and accept;
-   apply it under the default protocols ospf export.
-6. Verify R2 learns 172.19.21.1/32 and 172.19.22.1/32 as OSPF external routes.
+    TASK 2 - REBUILD DOMAIN 2 (R1 routing-instance domain2, R6 and R7)
+    1. On R1, create routing-instance domain2 with instance-type virtual-router,
+      set instance router ID 10.2.1.1, and assign eth1.16 to it.
+    2. Configure Domain 2 Area 0 on R1 domain2 eth1.16. Configure R6 Area 0 on
+      eth1.16 and advertise R6 lo0.0 passively.
+    3. Configure R6 and R7 eth1.67 in Domain 2 Area 1 using point-to-point type.
+      Advertise R7 lo0.0 passively; it contains 10.1.1.7/32, 172.19.21.1/32 and
+      172.19.22.1/32.
+    4. Verify the R1 domain2-R6 neighbor and R6-R7 neighbor. Confirm R1 has two
+      separate routing tables: inet.0 and domain2.inet.0.
+
+    TASK 3 - SHARE ROUTES BETWEEN R1'S TWO OSPF DOMAINS
+    1. Configure RIB group sharing with import-rib [ inet.0 domain2.inet.0 ].
+    2. Configure RIB group sharing2 with import-rib [ domain2.inet.0 inet.0 ].
+    3. Attach sharing to the default protocols ospf process; attach sharing2 to
+      routing-instances domain2 protocols ospf.
+    4. Configure from_domain1 policy to match OSPF, tag 11, and accept; apply it as
+      export policy under routing-instances domain2 protocols ospf.
+    5. Configure from_domain2 policy to match instance domain2, tag 10, and accept;
+      apply it under the default protocols ospf export.
+    6. Verify R2 learns 172.19.21.1/32 and 172.19.22.1/32 as OSPF external routes.
+
+-----------------------------------------------------------------------------
+TASK 1 - 3 can be loaded from startup-config ospf.multidomain.conf
+-----------------------------------------------------------------------------
+
 
 TASK 4 - BUILD OSPF IN AS 65002
 1. Configure router IDs and autonomous system 65002 on R8/R9.
@@ -100,7 +109,7 @@ TASK 6 - EXPORT AS 65001 OSPF ROUTES INTO BGP
    propagation between protocols requires an explicit redistribution policy.
 
 TASK 7 - EXPORT AS 65002 OSPF ROUTES INTO BGP
-1. On R8, create an OSPF-to-BGP export policy matching protocol ospf and apply
+1. On R8, create an OSPF-to-BGP export policy matching protocol ospf and r8's loopback. apply
    it to the eBGP group toward R2.
 2. Verify R2 receives the AS 65002 routes as BGP routes, including 10.1.1.8/32,
    10.1.1.9/32, 192.168.91.0/24 and 192.168.92.0/24.
