@@ -1,0 +1,69 @@
+name: ospf006
+prefix: ""
+
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r1.conf
+    r2:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r2.conf
+    r3:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r3.conf
+    r4:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r4.conf
+    r10:
+      kind: juniper_crpd
+      image: xzjt/crpd:25.2R1-S1.4
+      startup-config: ./configs/r10.conf
+
+    # External host bridge: must already exist and be UP. This lab does not
+    # create, configure or delete br-univ; all router parent eth1 ports attach.
+    br-univ:
+      kind: bridge
+
+    ep16:
+      kind: linux
+      cmd: sleep infinity
+    ep17:
+      kind: linux
+      cmd: sleep infinity
+    ep18:
+      kind: linux
+      cmd: sleep infinity
+    ep76:
+      kind: linux
+      cmd: sleep infinity
+    ep77:
+      kind: linux
+      cmd: sleep infinity
+
+  links:
+    # All router eth1 parent interfaces share br-univ. Logical adjacencies
+    # are isolated by 802.1Q VLAN subinterfaces configured in Junos.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r10:eth1", "br-univ:r10_eth1"]
+
+    # LANs in Area 2, behind R4.
+    - endpoints: ["r4:eth2", "ep16:eth1"]
+    - endpoints: ["r4:eth3", "ep17:eth1"]
+    - endpoints: ["r4:eth4", "ep18:eth1"]
+
+    # Area 3 prefixes behind R10; used to prove virtual-link route propagation.
+    - endpoints: ["r10:eth2", "ep76:eth1"]
+    - endpoints: ["r10:eth3", "ep77:eth1"]

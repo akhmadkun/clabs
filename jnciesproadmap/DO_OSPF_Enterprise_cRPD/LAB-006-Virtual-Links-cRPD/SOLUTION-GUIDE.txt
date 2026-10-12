@@ -1,0 +1,243 @@
+LAB-006: OSPF VIRTUAL LINKS
+STEP-BY-STEP SOLUTION GUIDE FOR JUNIOR ENGINEERS
+Image: xzjt/crpd:25.2R1-S1.4
+Primary source: Day One: Advanced OSPF in the Enterprise, Chapter 7, pages 88-96
+
+======================================================================
+1. WHAT YOU ARE BUILDING
+======================================================================
+
+The lab follows the Chapter 7 virtual-link concept. R1-R2 form the backbone.
+R1-R3 are in Area 1. R2-R4-R10 form the Area 2 transit path. R10 also connects
+Area 3 networks 192.168.76.0/24 and 192.168.77.0/24.
+
+  Area 0 / VLAN 12: R1 eth1.12 <----> R2 eth1.12 (broadcast)
+  Area 1 / VLAN 13: R1 eth1.13 <----> R3 eth1.13 (point-to-point)
+  Area 2 / VLAN 24: R2 eth1.24 <----> R4 eth1.24 (point-to-point)
+  Area 2 / VLAN 410: R4 eth1.410 <----> R10 eth1.410 (point-to-point)
+  Area 3: R10 eth2.0 and eth3.0 advertise the EP76/EP77 prefixes passively
+
+R2 is an ABR between Areas 0 and 2. R10 is an ABR between Areas 2 and 3. R4 is
+the transit router in Area 2. The virtual link connects R2 and R10 over Area 2,
+allowing Area 3's routes to become available through backbone Area 0.
+
+The ebook states that a virtual link is a short-term workaround for an area that
+is not connected to the backbone; it adds complexity and should ideally be
+replaced by a permanent Area 0 design.
+
+======================================================================
+2. DEPLOY AND CHECK BASELINE ADDRESSING
+======================================================================
+
+Destroy the previous OSPF lab first; the labs reuse br-univ, VLANs and prefixes.
+The external Linux bridge br-univ must already exist and be UP. This lab will
+reference it but will not create, configure or remove it.
+
+Run:
+  ./deploy.sh
+  ./configure-hosts.sh
+
+Open router CLI sessions as needed:
+  docker exec -it clab-ospf006-r1 cli
+  docker exec -it clab-ospf006-r2 cli
+  docker exec -it clab-ospf006-r3 cli
+  docker exec -it clab-ospf006-r4 cli
+  docker exec -it clab-ospf006-r10 cli
+
+On each router, verify addressing:
+  show interfaces terse
+  show route protocol direct
+
+Expected logical addressing:
+  R1 eth1.12 10.0.12.1/24; eth1.13 10.0.13.1/30; lo0.0 10.1.1.1/32
+  R2 eth1.12 10.0.12.2/24; eth1.24 10.0.24.1/30; lo0.0 10.1.1.2/32
+  R3 eth1.13 10.0.13.2/30; lo0.0 10.1.1.3/32
+  R4 eth1.24 10.0.24.2/30; eth1.410 10.0.41.1/30; lo0.0 10.1.1.4/32
+     eth2.0 192.168.16.1/30; eth3.0 192.168.17.1/24; eth4.0 192.168.18.1/23
+  R10 eth1.410 10.0.41.2/30; lo0.0 10.1.1.10/32
+      eth2.0 192.168.76.1/24; eth3.0 192.168.77.1/24
+
+The /30 P2P links use .1 and .2. VLAN 410 identifies the R4-R10 logical link;
+the IPv4 link subnet is 10.0.41.0/30 because an IPv4 octet cannot be 410.
+No router ID or OSPF statement should exist in startup configs.
+
+======================================================================
+3. BUILD AREA 0 AND AREA 1
+======================================================================
+
+Use configure / set commands on each router. After each batch, run `commit check`,
+then `commit`.
+
+R1:
+  set routing-options router-id 10.1.1.1
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 255
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+
+R2:
+  set routing-options router-id 10.1.1.2
+  set protocols ospf area 0.0.0.0 interface eth1.12 priority 100
+  set protocols ospf area 0.0.0.0 interface lo0.0 passive
+
+R3:
+  set routing-options router-id 10.1.1.3
+  set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+  set protocols ospf area 0.0.0.1 interface lo0.0 passive
+
+On R1 and R2 the shared Area 0 Ethernet link uses the default broadcast network
+type. On a fresh election, priority 255 on R1 should elect it DR and priority 100
+on R2 should make it BDR. OSPF DR election does not preempt an already elected DR,
+so configure on a fresh lab or restart the election if you need to prove roles.
+
+Verify:
+  show ospf neighbor
+  show ospf interface
+  show ospf route
+  show ospf database area 0.0.0.0
+
+Expected physical adjacencies: R1-R2 Full on Area 0, R1-R3 Full on Area 1.
+
+======================================================================
+4. BUILD AREA 2 AND AREA 3
+======================================================================
+
+R4:
+  set routing-options router-id 10.1.1.4
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface eth1.410 interface-type p2p
+  set protocols ospf area 0.0.0.2 interface lo0.0 passive
+  set protocols ospf area 0.0.0.2 interface eth2.0 passive
+  set protocols ospf area 0.0.0.2 interface eth3.0 passive
+  set protocols ospf area 0.0.0.2 interface eth4.0 passive
+
+R2 transit-area interface:
+  set protocols ospf area 0.0.0.2 interface eth1.24 interface-type p2p
+
+R10:
+  set routing-options router-id 10.1.1.10
+  set protocols ospf area 0.0.0.2 interface eth1.410 interface-type p2p
+  set protocols ospf area 0.0.0.3 interface lo0.0 passive
+  set protocols ospf area 0.0.0.3 interface eth2.0 passive
+  set protocols ospf area 0.0.0.3 interface eth3.0 passive
+
+Commit on the relevant routers. Confirm physical adjacencies:
+  R2:  show ospf neighbor
+  R4:  show ospf neighbor
+  R10: show ospf neighbor
+
+Expected:
+  - R2-R4 are Full on eth1.24 in Area 2.
+  - R4-R10 are Full on eth1.410 in Area 2.
+  - R10's Area 3 LSDB and route table contain 192.168.76.0/24 and 192.168.77.0/24.
+
+Why passive? R10 must advertise the connected host-facing prefixes without trying
+to form OSPF neighbors with Linux endpoints. The loopback is passive as well.
+
+======================================================================
+5. PROVE THE PROBLEM BEFORE THE VIRTUAL LINK
+======================================================================
+
+On R10:
+  show route protocol direct
+  show ospf database area 0.0.0.3
+  show ospf route
+
+Confirm the Area 3 host prefixes exist locally. Then on R2 and R1:
+  show route 192.168.76.0/24 exact
+  show route 192.168.77.0/24 exact
+  show ospf database area 0.0.0.0
+
+Before the virtual link, R2/R1 should not have active OSPF routes to these Area 3
+prefixes. The routes from Area 3 are not being propagated to backbone Area 0.
+Do not add static routes to force the test to pass; that would hide the lesson.
+
+======================================================================
+6. CONFIGURE THE VIRTUAL LINK ON BOTH ENDS
+======================================================================
+
+The ebook's key idea is to configure the virtual link under Area 0 at both
+endpoints, naming the remote router ID and the transit area. Here Area 2 is the
+transit area, so both ends must use 0.0.0.2. Area 2 must not be a stub area.
+
+On R2:
+  set protocols ospf area 0.0.0.0 virtual-link neighbor-id 10.1.1.10 transit-area 0.0.0.2
+
+On R10:
+  set protocols ospf area 0.0.0.0 virtual-link neighbor-id 10.1.1.2 transit-area 0.0.0.2
+
+On both routers:
+  commit check
+  commit
+
+If `commit check` rejects `virtual-link`, stop and retain the exact error output;
+do not approximate the behavior with static routes. Live support must be confirmed
+on the running cRPD image.
+
+Verify:
+  R2:  show ospf neighbor
+  R2:  show ospf interface vl-10.1.1.10 detail
+  R10: show ospf neighbor
+  R10: show ospf interface vl-10.1.1.2 detail
+
+Expected virtual-link interface names are formed from the remote router ID. The
+virtual interface should show Point-to-Point / Virtual type, transit Area 2, and
+one Full neighbor (R2 sees R10; R10 sees R2).
+
+If it does not reach Full, check in this order:
+  1. `show ospf neighbor` proves the physical Area 2 path R2-R4-R10 is Full.
+  2. R2 and R10 router IDs are unique and match neighbor-id on the opposite end.
+  3. Both virtual-link statements are under `area 0.0.0.0` and specify transit-area 0.0.0.2.
+  4. Area 2 is a normal transit area, not stub/NSSA.
+  5. Both commits succeeded and no interface/VLAN addressing mismatch exists.
+
+======================================================================
+7. VERIFY AREA 3 ROUTE PROPAGATION
+======================================================================
+
+On R2:
+  show route 192.168.76.0/24 exact
+  show route 192.168.77.0/24 exact
+  show ospf route inter
+  show ospf database area 0.0.0.0
+  show ospf database lsa-id 10.1.1.10 detail
+
+On R1 and R3:
+  show route 192.168.76.0/24 exact
+  show route 192.168.77.0/24 exact
+  show ospf route
+
+The routes from Area 3 should now be present as OSPF internal/inter-area routes,
+not external Type-5 routes. The virtual link connects R10 to the backbone's logical
+OSPF topology; this lets Area 3 summaries be propagated to Area 0 and the other areas.
+
+======================================================================
+8. END-TO-END TEST FROM LINUX SHELLS
+======================================================================
+
+This cRPD image may not offer a Junos operational `ping` command. Use the container
+Linux shell, and select the source IP (not the Junos interface name as `-I`).
+
+From the R1 Linux shell:
+  ping -c 3 -I 10.1.1.1 192.168.76.2
+  ping -c 3 -I 10.1.1.1 192.168.77.2
+
+From the R3 Linux shell:
+  ping -c 3 -I 10.1.1.3 192.168.76.2
+
+Use `docker exec -it clab-ospf006-r1 bash` or equivalent to enter the shell.
+If ping fails, first verify the Junos route exists; on this image `show route forwarding-table`
+is not available, so use `show route <prefix> exact`, `show ospf route`, and Linux `ip route get`.
+
+======================================================================
+9. LESSON AND CLEANUP
+======================================================================
+
+The virtual link is a logical OSPF adjacency that traverses a normal transit area.
+It allows a non-backbone-connected ABR to participate in backbone Area 0. It is a
+workaround, not a preferred permanent design, because it increases complexity and
+makes backbone operation depend on the transit area's connectivity.
+
+When finished:
+  ./destroy.sh
+
+The script destroys only LAB-006 containers and leaves the external br-univ bridge intact.

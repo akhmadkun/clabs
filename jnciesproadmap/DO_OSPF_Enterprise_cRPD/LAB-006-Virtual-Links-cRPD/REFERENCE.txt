@@ -1,0 +1,57 @@
+LAB-006 REFERENCES AND ADAPTATIONS
+
+PRIMARY SOURCE
+  Timothy Beaumont, Day One: Advanced OSPF in the Enterprise, Chapter 7,
+  "Virtual Links", printed pages 88-96 of the uploaded PDF.
+
+SOURCE-DERIVED POINTS
+  - The book's R2-R10 virtual link is configured at both endpoints under Area 0.
+  - The remote neighbor IDs are router IDs 10.1.1.10 and 10.1.1.2.
+  - Transit area is Area 2 (0.0.0.2).
+  - R2 is an ABR for Areas 0/2; R10 is an ABR for Areas 2/3; R4 is the transit
+    router in Area 2.
+  - Before the virtual link, the book shows Area 3 routes 192.168.76.0/24 and
+    192.168.77.0/24 are not installed at R2 as OSPF routes.
+  - After the virtual link reaches Full, the routes become visible across the
+    backbone and the virtual interface is shown as a point-to-point virtual link.
+  - The book explicitly calls virtual links a short-term workaround and recommends
+    eventually restoring a permanent connection to Area 0.
+
+ADAPTATIONS FOR THIS CONTAINERLAB SERIES
+  - Router names and the virtual-link endpoints follow the book's R1-R4/R10 design.
+  - All router eth1 parent ports attach to the existing external bridge br-univ;
+    VLAN subinterfaces model the logical OSPF links.
+  - VLAN 410 is used for the logical R4-R10 pair. Its IPv4 point-to-point subnet
+    is 10.0.41.0/30, with endpoint addresses .1 and .2; the IPv4 third octet cannot
+    represent VLAN ID 410.
+  - The book uses physical interfaces ge-0/0/x and fe-0/0/x. The lab uses cRPD
+    eth1/eth2/etc. according to official Containerlab cRPD interface mapping.
+  - Linux endpoint containers EP76 and EP77 provide real connected prefixes
+    192.168.76.0/24 and 192.168.77.0/24 for route verification and shell ping tests.
+  - The lab focuses on Area 0/1/2/3 and omits unrelated Internet/default-route and
+    RIP/redistribution exercises, so static/default routing does not mask the
+    virtual-link learning objective.
+  - All startup configs contain addressing and VLAN tags only; OSPF and virtual
+    link configuration are done manually.
+
+OFFICIAL CONTAINERLAB DOCUMENTATION
+  Bridge kind / external Linux bridge:
+    https://containerlab.dev/manual/kinds/bridge/
+  Juniper cRPD interface mapping and startup-config:
+    https://containerlab.dev/manual/kinds/crpd/
+  Node definitions and startup-config:
+    https://containerlab.dev/manual/nodes/
+
+OFFICIAL JUNIPER DOCUMENTATION
+  OSPF virtual-link statement, syntax and requirements:
+    https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/virtual-link-edit-protocols-ospf.html
+  Configuring OSPF areas and virtual links:
+    https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-areas.html
+
+VALIDATION NOTE
+  The package YAML and shell scripts are syntax-checked locally. Deployment,
+  OSPF adjacency, `commit check` on cRPD 25.2R1-S1.4, virtual-link convergence,
+  and end-to-end traffic have not been run in this build environment. If cRPD
+  rejects the virtual-link statement or it fails to reach Full, preserve the exact
+  error/output for compatibility troubleshooting. Do not replace the lesson
+  with static routes.

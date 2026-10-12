@@ -35,6 +35,6 @@ topology:
       kind: linux
       image: sys101-services:latest
       mgmt-ipv4: 172.31.1.100
-      binds:
-        - services/archive:/srv/ftp/archive
-        - evidence/services:/var/log/sys101
+      #binds:
+        #- services/archive:/srv/ftp/archive
+        #- evidence/services:/var/log/sys101
