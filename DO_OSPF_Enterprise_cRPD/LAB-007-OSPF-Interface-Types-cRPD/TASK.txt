@@ -1,0 +1,91 @@
+LAB-007 - OSPF INTERFACE TYPES & ADJACENCY
+TASK-ONLY WORKSHEET
+Source: Junos OS OSPF User Guide, Chapter 3; Chapter 4 DR election sections
+Default image: xzjt/crpd:25.2R1-S1.4; use vJunos-router if a required behavior is unsupported in cRPD.
+
+OBJECTIVE
+Understand OSPF broadcast and point-to-point interface behavior, DR/BDR election, and passive interfaces. The baseline should already have working OSPF; do not rebuild basic OSPF from scratch.
+
+BASELINE EXPECTATIONS
+- R1, R2, R3 have unique router IDs and working OSPF.
+- VLAN 12 is a shared broadcast segment with R1/R2/R3.
+- VLAN 13 is a separate R1-R3 link, initially configured point-to-point.
+- R3 loopback exists but is not yet configured as a passive OSPF interface for this exercise.
+- br-univ already exists and must not be created/deleted by the lab workflow.
+
+TASK 0 - CHECK BASELINE HEALTH
+1. Confirm addressing and interfaces against ADDRESS-PLAN.txt.
+2. On R1/R2/R3, run `show ospf neighbor`, `show ospf interface`, and `show route protocol ospf`.
+3. Record neighbor states and interface types.
+4. Identify the DR, BDR and DROther role(s) on VLAN 12.
+
+ACCEPTANCE CRITERIA
+- Router IDs are unique and expected interfaces are up.
+- VLAN 12 neighbor states are consistent with a three-router broadcast segment.
+- VLAN 13 R1-R3 adjacency is Full and configured point-to-point.
+- OSPF routes exist as expected; no static/default route is used to mask an OSPF failure.
+
+TASK 1 - OBSERVE BROADCAST NETWORK BEHAVIOR
+1. Inspect `show ospf interface eth1.12 detail` and `show ospf neighbor detail` on all routers.
+2. Identify the elected DR and BDR and the DROther router(s).
+3. Explain why two DROther routers can remain 2-Way with each other while forming Full adjacencies with DR/BDR.
+4. Inspect `show ospf database network` and correlate the Network LSA with the shared segment.
+
+ACCEPTANCE CRITERIA
+- DR/BDR are identified from operational output, not guessed from router ID alone.
+- 2-Way between DROther routers is correctly explained as expected behavior.
+- Network LSA behavior is identified where shown by the platform.
+
+TASK 2 - CONTROL DR/BDR ELECTION
+1. Set VLAN 12 priorities: R1 = 200, R2 = 100, R3 = 0.
+2. Commit and observe whether the existing DR/BDR changes immediately.
+3. Explain OSPF's non-preemptive DR election behavior.
+4. Cause a controlled fresh election using a maintenance-safe method in the lab. Do not reset or recreate br-univ.
+5. Verify DR/BDR and the effect of priority 0.
+
+ACCEPTANCE CRITERIA
+- R3 is ineligible for DR/BDR while its priority is 0.
+- After a fresh election, R1 should be DR and R2 eligible for BDR if both are operational.
+- The learner explains why changing priority alone may not replace the current DR/BDR.
+
+TASK 3 - COMPARE BROADCAST AND POINT-TO-POINT
+1. Verify VLAN 13 is point-to-point on both R1 and R3.
+2. Record interface and neighbor state.
+3. Change both ends of VLAN 13 to broadcast and commit.
+4. Observe adjacency and DR/BDR behavior on the two-router segment.
+5. Restore point-to-point on both ends and verify Full.
+
+ACCEPTANCE CRITERIA
+- Both ends use matching interface types during each test.
+- Point-to-point mode does not use DR/BDR election.
+- Broadcast mode exhibits broadcast-network behavior and election where applicable.
+- VLAN 13 is restored to point-to-point and adjacency returns to Full.
+
+TASK 4 - CONFIGURE A PASSIVE LOOPBACK
+1. On R3, add `lo0.0` to OSPF Area 1 and mark it passive.
+2. Verify the loopback prefix is advertised.
+3. Confirm no neighbor adjacency is formed on lo0.0 and no OSPF Hellos are generated there.
+4. On R1, inspect the installed route to 10.1.1.3/32.
+
+ACCEPTANCE CRITERIA
+- R1 learns 10.1.1.3/32 through OSPF.
+- R3's loopback is advertised but passive.
+- No adjacency is formed on lo0.0.
+
+TASK 5 - RECOVERY AND FINAL VERIFICATION
+1. Restore VLAN 12 to broadcast and VLAN 13 to point-to-point.
+2. Record final interface priority values.
+3. Verify neighbor state, interface type, LSDB and OSPF routes.
+4. Save configuration and evidence.
+
+ACCEPTANCE CRITERIA
+- Broadcast segment has expected DR/BDR behavior.
+- VLAN 13 is point-to-point and Full.
+- R3 loopback is advertised through OSPF and passive.
+- No test-only fault or interface type remains accidentally configured.
+
+FINAL ACCEPTANCE CRITERIA
+- Broadcast, point-to-point, DR/BDR and passive-interface behavior are demonstrated.
+- Expected adjacencies and routes are restored.
+- Verification uses operational output, not commit success alone.
+- br-univ remains untouched.

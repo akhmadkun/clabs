@@ -1,0 +1,8 @@
+LAB-007 PROFILE MAP
+
+configs/lab007-r1-baseline.set
+configs/lab007-r2-baseline.set
+configs/lab007-r3-baseline.set
+
+Junos set-format profiles for a clean LAB-007 context. They are not intended to be merged blindly into an unrelated active lab. Adapt to the universal lab's actual profile loading method and interface map.
+R1/R2/R3 must all join VLAN 12 to make a 3-router broadcast LAN. VLAN 13 must only join R1 and R3.
