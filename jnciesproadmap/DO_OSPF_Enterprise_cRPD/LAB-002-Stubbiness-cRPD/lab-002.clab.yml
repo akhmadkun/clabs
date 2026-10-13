@@ -11,56 +11,55 @@ topology:
     linux:
       network-mode: none
       image: ghcr.io/srl-labs/network-multitool:latest
+    juniper_crpd:
+      image: xzjt/crpd:25.2R1-S1.4
 
   nodes:
     r1:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r1/base.conf
       binds:
         - ./configs/r1:/lab-configs:rw
     r2:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r2/base.conf
       binds:
         - ./configs/r2:/lab-configs:rw
     r3:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r3/base.conf
       binds:
         - ./configs/r3:/lab-configs:rw
     r4:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r4/base.conf
       binds:
         - ./configs/r4:/lab-configs:rw
     r6:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r6/base.conf
       binds:
         - ./configs/r6:/lab-configs:rw
     r7:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r7/base.conf
       binds:
         - ./configs/r7:/lab-configs:rw
     r8:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r8/base.conf
       binds:
         - ./configs/r8:/lab-configs:rw
     r9:
       kind: juniper_crpd
-      image: xzjt/crpd:25.2R1-S1.4
       startup-config: ./configs/r9/base.conf
       binds:
         - ./configs/r9:/lab-configs:rw
+    r10:
+      kind: juniper_crpd
+      startup-config: ./configs/r10/base.conf
+      binds:
+        - ./configs/r10:/lab-configs:rw
     # This is an existing Linux bridge managed outside Containerlab.
     # Create/enable it on the host beforehand; this topology must not delete it.
     br-univ:
@@ -81,6 +80,17 @@ topology:
       exec:
         - ip addr add 192.168.18.2/23 dev eth1
         - ip route add default via 192.168.18.1
+    ep76:
+      kind: linux
+      exec:
+        - ip addr add 192.168.76.2/23 dev eth1
+        - ip route add default via 192.168.76.1
+    ep77:
+      kind: linux
+      exec:
+        - ip addr add 192.168.77.2/23 dev eth1
+        - ip route add default via 192.168.77.1
+
     ep91:
       kind: linux
       exec:
@@ -102,6 +112,7 @@ topology:
     - endpoints: ["r7:eth1", "br-univ:r7_eth1"]
     - endpoints: ["r8:eth1", "br-univ:r8_eth1"]
     - endpoints: ["r9:eth1", "br-univ:r9_eth1"]
+    - endpoints: ["r10:eth1", "br-univ:r10_eth1"]
 
     # AS 65001 endpoint LANs behind R4 (Area 2).
     - endpoints: ["r4:eth2", "ep16:eth1"]
@@ -111,3 +122,7 @@ topology:
     # AS 65002 endpoint LANs behind R9 (Area 1).
     - endpoints: ["r9:eth2", "ep91:eth1"]
     - endpoints: ["r9:eth3", "ep92:eth1"]
+
+    # Area 3 prefixes behind R10; used to prove virtual-link route propagation.
+    - endpoints: ["r10:eth2", "ep76:eth1"]
+    - endpoints: ["r10:eth3", "ep77:eth1"]
