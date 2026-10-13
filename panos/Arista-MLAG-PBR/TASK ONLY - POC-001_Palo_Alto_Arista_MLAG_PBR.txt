@@ -1,0 +1,217 @@
+POC-001 — TASK ONLY
+Palo Alto + Arista MLAG + LACP + Selective PBR
+
+LAB VERSION
+- Arista cEOS: 4.35.0F
+- Palo Alto VM-Series / PAN-OS: 11.2.5
+
+OBJECTIVES
+Build a redundant Arista MLAG pair and connect Palo Alto AE1 across both switches. Prove:
+1. MLAG and VARP gateway redundancy.
+2. LACP/AE1 operation across both Arista peers.
+3. Normal routing before PBR is enabled.
+4. Selective forward PBR and matching reverse PBR for one host pair.
+5. Palo Alto security-policy enforcement and traffic-log visibility.
+6. Recovery after one PA-facing MLAG member fails.
+
+IMPORTANT DESIGN NOTE
+Use the final tested design: VLAN 100 (INSIDE) and VLAN 200 (OUTSIDE) on Port-Channel20. The source guide also contains an earlier VLAN 20 / 172.20.20.x note that conflicts with the final configuration. Do not use that conflicting note for this lab.
+
+TOPOLOGY / INTERFACE MAPPING
+- ARISTA-01 Ethernet1 + Ethernet2: MLAG peer-link members, Port-Channel100
+- ARISTA-02 Ethernet1 + Ethernet2: MLAG peer-link members, Port-Channel100
+- ARISTA-01 Ethernet4 -> Palo Alto Ethernet1/1
+- ARISTA-02 Ethernet4 -> Palo Alto Ethernet1/2
+- Arista Port-Channel20 / MLAG ID 20 -> Palo Alto AE1
+- ARISTA-01 Ethernet5 -> mt-inside-pbr
+- ARISTA-01 Ethernet6 -> mt-inside-normal
+- ARISTA-02 Ethernet5 -> mt-outside
+- Ethernet3 between Aristas is unused; leave it unconfigured.
+
+ADDRESSING PLAN
+VLAN 100 — INSIDE
+- VARP gateway on both Aristas: 10.100.100.1/24
+- ARISTA-01 SVI: 10.100.100.2/24
+- ARISTA-02 SVI: 10.100.100.3/24
+- Palo Alto ae1.100: 10.100.100.254/24
+- mt-inside-pbr: 10.100.100.10/24
+- mt-inside-normal: 10.100.100.11/24
+
+VLAN 200 — OUTSIDE
+- VARP gateway on both Aristas: 10.200.200.1/24
+- ARISTA-01 SVI: 10.200.200.2/24
+- ARISTA-02 SVI: 10.200.200.3/24
+- Palo Alto ae1.200: 10.200.200.254/24
+- mt-outside: 10.200.200.10/24
+
+MLAG CONTROL
+- VLAN 4094 dedicated to MLAG peer control
+- ARISTA-01 Vlan4094: 172.31.254.1/30
+- ARISTA-02 Vlan4094: 172.31.254.2/30
+- Peer-link: Port-Channel100, built from Ethernet1 and Ethernet2 on each switch
+
+
+PBR REQUIREMENTS
+- Forward match: source 10.100.100.10, destination 10.200.200.10
+- Forward next hop: 10.100.100.254
+- Apply forward PBR inbound on VLAN 100 on both Aristas
+- Reverse match: source 10.200.200.10, destination 10.100.100.10
+- Reverse next hop: 10.200.200.254
+- Apply reverse PBR inbound on VLAN 200 on both Aristas
+- Do not redirect traffic from/to the .11 control client.
+
+TASK 1 — BUILD ARISTA BASELINE
+On both switches:
+- Enable IP routing.
+- Create VLANs 100 (INSIDE), 200 (OUTSIDE), and 4094 (MLAG-PEER).
+- Build Port-Channel100 from Ethernet1 and Ethernet2 in LACP active mode.
+- Configure Port-Channel100 as the MLAG peer link and carry the dedicated MLAG control VLAN.
+- Configure Vlan4094 with the address assigned above (172.31.254.0/30); disable STP for VLAN 4094 as required by the lab design.
+- Configure MLAG domain MLAG-PALO using Vlan4094 as the local interface, the peer's Vlan4094 IP as peer address, and Port-Channel100 as peer-link.
+- Configure Vlan100 and Vlan200 with each switch's real SVI IP, the shared VARP gateway IPs, and the shared virtual MAC.
+   - Shared VARP virtual MAC: 00:1c:73:00:99:99
+
+TASK 2 — VERIFY MLAG BEFORE CONNECTING PALO ALTO
+Run on both Aristas:
+- ping the peer's Vlan4094 IP
+- show mlag
+- show mlag config-sanity
+- show mlag interfaces
+- show port-channel dense
+
+Checkpoint:
+- MLAG peer state is Active/healthy.
+- Port-Channel100 is up.
+- MLAG config-sanity reports no relevant issue.
+- Port-Channel20 may still be down before the PA connection is configured.
+- Do not continue until the peer relationship is healthy.
+
+TASK 3 — BUILD CLIENT AND PA-FACING SWITCH PORTS
+- Configure ARISTA-01 Ethernet4 and ARISTA-02 Ethernet4 as members of Port-Channel20 in LACP active mode.
+- Configure Port-Channel20 as a trunk carrying VLANs 100 and 200 and assign MLAG ID 20 on both peers.
+- Configure ARISTA-01 Ethernet5 and Ethernet6 as access ports in VLAN 100.
+- Configure ARISTA-02 Ethernet5 as an access port in VLAN 200.
+- Verify VLAN membership, Port-Channel20, and MLAG ID 20.
+
+TASK 4 — CONFIGURE PALO ALTO AE1
+In PAN-OS:
+- Create virtual router VR-POC.
+- Create Layer 3 zones INSIDE and OUTSIDE.
+- Create AE1 as a Layer 3 Aggregate Ethernet interface.
+- Enable LACP in Active mode with Fast transmission rate.
+- Add Ethernet1/1 and Ethernet1/2 as AE1 members.
+- Create ae1.100 with tag 100, IP 10.100.100.254/24, VR-POC, zone INSIDE.
+- Create ae1.200 with tag 200, IP 10.200.200.254/24, VR-POC, zone OUTSIDE.
+- Commit the configuration.
+
+TASK 5 — VERIFY LACP AND INTERFACE REACHABILITY
+On Palo Alto:
+- show interface ae1
+- show lacp aggregate-ethernet ae1
+
+On both Aristas:
+- show port-channel summary
+- show lacp neighbor
+- show mlag interfaces
+
+Checkpoint:
+- AE1 is operational and both physical members participate in LACP.
+- Port-Channel20 is up and MLAG ID 20 is operational.
+- From mt-inside-pbr, ping 10.100.100.254.
+- From mt-outside, ping 10.200.200.254.
+
+TASK 6 — CREATE A BASIC SECURITY POLICY
+On Palo Alto, create and commit a lab-only allow rule:
+- Name: ALLOW-INSIDE-OUTSIDE
+- Source zones: INSIDE and OUTSIDE
+- Destination zones: INSIDE and OUTSIDE
+- Source/destination addresses: any
+- Application: any
+- Service: any
+- Action: Allow
+- Log at Session End: enabled
+- Do not configure NAT for this PoC.
+
+This rule is intentionally broad for lab verification only; it is not a production policy template.
+
+TASK 7 — PROVE NORMAL ROUTING BEFORE PBR
+Before creating any PBR policy, test:
+- From mt-inside-pbr (10.100.100.10): ping 10.200.200.10.
+- From mt-inside-normal (10.100.100.11): ping 10.200.200.10.
+
+Checkpoint:
+- Both tests succeed through normal Arista routing.
+- Record this as the baseline. Do not continue until both work.
+
+TASK 8 — CONFIGURE SELECTIVE FORWARD PBR
+On both Aristas:
+- Create an ACL that matches only 10.100.100.10 -> 10.200.200.10.
+- Create the PBR class-map and policy-map for that ACL.
+- Set next hop to 10.100.100.254.
+- Apply the policy inbound on Vlan100.
+- Verify the ACL, class-map, policy-map, and interface attachment.
+
+TASK 9 — CONFIGURE SELECTIVE REVERSE PBR
+On both Aristas:
+- Create an ACL that matches only 10.200.200.10 -> 10.100.100.10.
+- Create the PBR class-map and policy-map for that ACL.
+- Set next hop to 10.200.200.254.
+- Apply the policy inbound on Vlan200.
+- Verify the ACL, class-map, policy-map, and interface attachment.
+
+TASK 10 — VERIFY SELECTIVE PBR
+On both Aristas, verify:
+- show class-map type pbr
+- show policy-map type pbr
+- show ip access-lists PBR-FWD
+- show ip access-lists PBR-RETURN
+- show ip route 10.100.100.254
+- show ip route 10.200.200.254
+
+Run these tests:
+A. From mt-inside-pbr, ping 10.200.200.10.
+   Expected: succeeds, crosses Palo Alto, and the exact flow appears in Monitor > Traffic.
+B. From mt-inside-normal, ping 10.200.200.10.
+   Expected: succeeds using normal routing; no matching Palo Alto session for .11 -> .10.
+C. From mt-outside, ping 10.100.100.10.
+   Expected: succeeds through reverse PBR and Palo Alto.
+D. From mt-outside, ping 10.100.100.11.
+   Expected: succeeds through normal routing and is not matched by reverse PBR.
+
+Useful Palo Alto session checks:
+- show session all filter source 10.100.100.10 destination 10.200.200.10
+- show session all filter source 10.200.200.10 destination 10.100.100.10
+
+TASK 11 — TEST MLAG/LACP MEMBER FAILURE AND RECOVERY
+- Start a continuous ping from mt-inside-pbr to 10.200.200.10.
+- Shut down ARISTA-01 Ethernet4, which removes one PA AE1/MLAG member.
+- Observe convergence; a brief loss of ICMP packets is acceptable.
+- Verify traffic recovers using the remaining link and AE1 stays operational.
+- Check Port-Channel summary, LACP neighbors, and MLAG interfaces.
+- Re-enable ARISTA-01 Ethernet4 and confirm both members return to normal.
+
+TROUBLESHOOTING ORDER
+1. MLAG peer and Port-Channel100 health.
+2. LACP neighbor and Port-Channel20 state.
+3. VLANs and allowed VLANs on Port-Channel20.
+4. Palo Alto AE1 and its member interfaces.
+5. ae1.100 / ae1.200 tags, IPs, zones, and virtual router.
+6. PBR ACL match and policy-map next hop / interface attachment.
+7. Palo Alto security policy and Traffic log.
+
+FINAL ACCEPTANCE CRITERIA
+- MLAG is healthy and VARP gateways answer from the appropriate VLANs.
+- Palo Alto AE1 has both active LACP members during normal operation.
+- Both inside clients reach the outside client before PBR is configured.
+- Only the .10 <-> .10 flow pair is redirected through Palo Alto after PBR is configured.
+- The .11 control flows continue to use normal routing.
+- Palo Alto logs the selected flow and allows it through the lab security rule.
+- Traffic recovers after one PA-facing member is disabled and returns to normal after restoration.
+- No unrelated interfaces, bridges, or VLANs are modified.
+
+OFFICIAL DOCUMENTATION
+- Arista EOS Traffic Management / PBR: https://www.arista.com/en/um-eos/eos-traffic-management
+- Arista MLAG: https://www.arista.com/en/um-eos/eos-multi-chassis-link-aggregation
+- Arista VARP: https://www.arista.com/en/um-eos/eos-vrrp-and-varp
+- Palo Alto PAN-OS 11.2 Aggregate Ethernet: https://docs.paloaltonetworks.com/ngfw/help/11-2/network/network-interfaces/aggregate-ethernet-ae-interface
+- Palo Alto Basic Security Policy: https://docs.paloaltonetworks.com/ngfw/getting-started/initial-setup-configuration-ngfws/set-up-a-basic-security-policy
