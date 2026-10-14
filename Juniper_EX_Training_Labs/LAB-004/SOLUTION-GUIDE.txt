@@ -1,0 +1,623 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-004 — LAYER-2 TROUBLESHOOTING CHALLENGE
+SOLUTION GUIDE
+============================================================
+
+AUDIENCE
+--------
+Junior Network Engineers / Operations Engineers
+
+PURPOSE
+-------
+This is the troubleshooting-focused lab that follows:
+
+  LAB-001 = Junos CLI / Interface / VLAN / Access Port
+  LAB-002 = LACP / Aggregated Ethernet
+  LAB-003 = RSTP / Layer-2 Loop Prevention
+
+LAB-004 combines those skills into a realistic Layer-2 incident.
+
+Core workflow:
+
+  Problem
+     -> Observation
+     -> Hypothesis
+     -> Verification
+     -> Root Cause
+     -> Fix
+     -> End-to-End Verification
+
+
+============================================================
+LAB INFORMATION
+============================================================
+
+IMAGE
+-----
+vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+HOST IMAGE
+----------
+ghcr.io/srl-labs/network-multitool:latest
+
+DEVICES
+-------
+EX-TRAIN-SW1
+EX-TRAIN-SW2
+EX-TRAIN-SW3
+Host1
+Host2
+
+HOST ADDRESSING
+---------------
+Host1 = 10.10.10.11/24
+Host2 = 10.10.10.12/24
+
+VLAN
+----
+USERS = VLAN 10
+GUEST = VLAN 20 (exists only to create a realistic wrong-VLAN fault)
+
+INTENDED RSTP DESIGN
+--------------------
+SW1 bridge-priority = 4k
+SW2 bridge-priority = 8k
+SW3 bridge-priority = 12k
+
+Intended root bridge = SW1
+
+
+============================================================
+TOPOLOGY
+============================================================
+
+                    SW1
+                EX-TRAIN-SW1
+                 /       \
+                /         \
+              SW2---------SW3
+        EX-TRAIN-SW2   EX-TRAIN-SW3
+                           |
+                         Host2
+
+Host1 is connected to SW2 ge-0/0/10.
+Host2 is connected to SW3 ge-0/0/10.
+
+Links:
+  SW1 ge-0/0/1 <-> SW2 ge-0/0/1
+  SW2 ge-0/0/2 <-> SW3 ge-0/0/1
+  SW3 ge-0/0/2 <-> SW1 ge-0/0/2
+  Host1 eth1     <-> SW2 ge-0/0/10
+  Host2 eth1     <-> SW3 ge-0/0/10
+
+NOTE
+----
+Use operational output to determine the actual STP role/state.
+Do not rely on memorized interface numbering when troubleshooting.
+
+
+============================================================
+TASK 1 — ESTABLISH THE SYMPTOM
+============================================================
+
+COMMANDS
+--------
+
+From Host1:
+
+  docker exec host1 ping -c 4 10.10.10.12
+
+From Host2:
+
+  docker exec host2 ping -c 4 10.10.10.11
+
+EXPECTED RESULT
+---------------
+The ping tests fail.
+
+The important point is not the exact ICMP message. The important
+observation is that end-to-end Layer-2 connectivity is unavailable.
+
+JUNIOR ENGINEER TIP
+--------------------
+Do not immediately change STP or reload configurations.
+First establish whether the symptom is:
+
+  - host-side
+  - physical link
+  - VLAN membership
+  - loop-prevention state
+  - MAC learning
+
+
+============================================================
+TASK 2 — CHECK HOST-FACING PORTS
+============================================================
+
+SW1:
+
+  show interfaces terse | match "ge-0/0/10[.]0"
+  show configuration interfaces ge-0/0/10
+
+SW3:
+
+  show interfaces terse | match "ge-0/0/10[.]0"
+  show configuration interfaces ge-0/0/10
+
+Also:
+
+  show vlans
+
+EXPECTED OBSERVATIONS
+---------------------
+SW2 ge-0/0/10 is physically present, but its Layer-2 membership
+is not consistent with the intended USERS VLAN.
+
+SW3 ge-0/0/10 is administratively disabled.
+
+Therefore the host-facing side already contains more than one fault.
+
+
+============================================================
+FAULT #1 — WRONG ACCESS VLAN ON SW1
+============================================================
+
+BROKEN CONFIGURATION
+--------------------
+SW1 ge-0/0/10 is configured as an access port in VLAN GUEST rather
+than VLAN USERS.
+
+Relevant startup configuration:
+
+  ge-0/0/10 {
+      description HOST1-ACCESS;
+      unit 0 {
+          family ethernet-switching {
+              interface-mode access;
+              vlan {
+                  members GUEST;
+              }
+          }
+      }
+  }
+
+IMPACT
+------
+Host1 sends untagged Ethernet frames into VLAN 20 instead of VLAN 10.
+Host2 is intended to be in VLAN 10.
+
+This alone is sufficient to break the expected Host1 <-> Host2
+Layer-2 communication.
+
+HOW TO VERIFY
+-------------
+
+  show configuration interfaces ge-0/0/10
+  show vlans GUEST
+  show vlans USERS
+
+FIX
+---
+
+  configure
+
+  delete interfaces ge-0/0/10 unit 0 family ethernet-switching vlan members GUEST
+  set interfaces ge-0/0/10 unit 0 family ethernet-switching vlan members USERS
+
+  show | compare
+  commit
+
+EXPECTED RESULT
+---------------
+SW1 ge-0/0/10 is now an access port in VLAN USERS.
+
+
+============================================================
+FAULT #2 — INTER-SWITCH TRUNK ON SW1 DOES NOT CARRY VLAN USERS
+============================================================
+
+BROKEN CONFIGURATION
+--------------------
+SW1 ge-0/0/2 is configured as a trunk, but its VLAN membership is
+GUEST instead of USERS.
+
+Relevant startup configuration:
+
+  ge-0/0/2 {
+      description SW3-RSTP-LINK-1;
+      unit 0 {
+          family ethernet-switching {
+              interface-mode trunk;
+              vlan {
+                  members GUEST;
+              }
+          }
+      }
+  }
+
+SW3 ge-0/0/2 expects VLAN USERS.
+
+IMPACT
+------
+The physical inter-switch link can still be UP, and RSTP can still
+show a forwarding state, while VLAN 10 user traffic is not actually
+carried across the link.
+
+This is a critical troubleshooting lesson:
+
+  Physical link state != VLAN forwarding correctness
+
+and:
+
+  RSTP state != proof that every VLAN is forwarding end-to-end
+
+HOW TO VERIFY
+-------------
+
+On SW1:
+
+  show configuration interfaces ge-0/0/2
+  show vlans USERS
+
+On SW3:
+
+  show configuration interfaces ge-0/0/2
+  show vlans USERS
+
+FIX
+---
+
+  configure
+
+  delete interfaces ge-0/0/2 unit 0 family ethernet-switching vlan members GUEST
+  set interfaces ge-0/0/2 unit 0 family ethernet-switching vlan members USERS
+
+  show | compare
+  commit
+
+EXPECTED RESULT
+---------------
+The SW1 <-> SW3 inter-switch path now carries VLAN USERS.
+
+
+============================================================
+FAULT #3 — SW3 HOST PORT IS ADMINISTRATIVELY DISABLED
+============================================================
+
+BROKEN CONFIGURATION
+--------------------
+SW3 ge-0/0/10 contains:
+
+  disable;
+
+IMPACT
+------
+Even after VLAN 10 is correct on the upstream path, Host2 still
+cannot communicate because the switch port is intentionally shut.
+
+HOW TO VERIFY
+-------------
+
+  show configuration interfaces ge-0/0/10
+  show interfaces terse | match "ge-0/0/10[.]0"
+
+FIX
+---
+
+  configure
+
+  delete interfaces ge-0/0/10 disable
+
+  show | compare
+  commit
+
+EXPECTED RESULT
+---------------
+SW3 ge-0/0/10 returns to an operational state and Host2 is placed
+on VLAN USERS again.
+
+
+============================================================
+WHY ONE FAULT WAS NOT ENOUGH
+============================================================
+
+This lab intentionally uses multiple faults.
+
+After fixing only Fault #1, connectivity can still fail because
+Host2 is disabled and the inter-switch path may still not carry VLAN 10.
+
+After fixing Faults #1 and #2, connectivity can still fail because
+Host2's access port remains disabled.
+
+This forces the trainee to continue troubleshooting after the first
+obvious configuration error is fixed.
+
+
+============================================================
+TASK 3 — VERIFY THE INTER-SWITCH LINKS
+============================================================
+
+Commands:
+
+  show interfaces terse | match "ge-0/0/(1|2)[.]0"
+
+Then inspect the configuration on every inter-switch link:
+
+  show configuration interfaces ge-0/0/1
+  show configuration interfaces ge-0/0/2
+
+Verify VLAN USERS:
+
+  show vlans USERS
+
+EXPECTED RESULT
+---------------
+All required inter-switch links are physically operational and have
+VLAN USERS membership where the design requires it.
+
+
+============================================================
+TASK 4 — VERIFY RSTP
+============================================================
+
+COMMANDS
+--------
+
+  show spanning-tree bridge
+  show spanning-tree interface
+
+EXPECTED RESULT
+---------------
+
+1. SW1 should be the root bridge.
+2. The triangle should still have a loop-prevention state with one
+   redundant path not actively forwarding.
+3. The STP state should be stable after the Layer-2 faults are fixed.
+
+Do not expect every VLAN problem to appear as an STP problem.
+RSTP protects against Layer-2 loops; it does not validate that the
+correct VLAN membership exists on every trunk.
+
+JUNIOR ENGINEER TIP
+--------------------
+When looking at a blocked/alternate port, separate these concepts:
+
+  Root bridge election
+  Root path selection
+  Designated vs alternate role
+  VLAN membership
+
+A port can be healthy from the point of view of RSTP while user traffic
+is still broken for a particular VLAN.
+
+
+============================================================
+TASK 5 — VERIFY MAC LEARNING
+============================================================
+
+Generate traffic after each fix:
+
+  docker exec host1 ping -c 4 10.10.10.12
+
+Then inspect MAC learning:
+
+  show ethernet-switching table
+  show ethernet-switching table vlan-name USERS
+
+Identify host MAC addresses:
+
+  docker exec host1 ip link show eth1
+  docker exec host2 ip link show eth1
+
+EXPECTED RESULT
+---------------
+The host MAC addresses should be learned in VLAN USERS on the
+corresponding access ports.
+
+IMPORTANT
+---------
+Do not use the L3-oriented MAC/IP table command from a different lab
+as your only test here. This is an L2-only exercise, so use:
+
+  show ethernet-switching table
+
+and filter by VLAN or interface as needed.
+
+Examples:
+
+  show ethernet-switching table vlan-name USERS
+  show ethernet-switching table interface ge-0/0/10.0
+
+
+============================================================
+TASK 6 — END-TO-END VERIFICATION
+============================================================
+
+Run:
+
+  docker exec host1 ping -c 4 10.10.10.12
+  docker exec host2 ping -c 4 10.10.10.11
+
+Then use the helper script:
+
+  ./scripts/verify.sh
+
+Also manually verify:
+
+SW1:
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/2
+  show vlans USERS
+  show spanning-tree bridge
+  show spanning-tree interface
+  show ethernet-switching table vlan-name USERS
+
+SW3:
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/2
+  show vlans USERS
+  show spanning-tree bridge
+  show spanning-tree interface
+  show ethernet-switching table vlan-name USERS
+
+EXPECTED RESULT
+---------------
+Host1 <-> Host2 communication succeeds.
+
+The intended design is restored:
+
+  Host1 -- VLAN 10 -- SW1 -- VLAN 10 -- SW3 -- VLAN 10 -- Host2
+
+with RSTP still protecting the redundant triangle path.
+
+
+============================================================
+TROUBLESHOOTING COMMAND TOOLKIT
+============================================================
+
+PHYSICAL / INTERFACE
+--------------------
+
+  show interfaces terse
+  show interfaces terse | match "ge-0/0/(1|2|10)[.]0"
+  show interfaces ge-0/0/10 extensive
+
+CONFIGURATION
+-------------
+
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/2
+  show configuration vlans
+  show | compare
+
+VLAN / L2
+---------
+
+  show vlans USERS
+  show ethernet-switching table
+  show ethernet-switching table vlan-name USERS
+  show ethernet-switching table interface ge-0/0/10.0
+
+RSTP
+----
+
+  show spanning-tree bridge
+  show spanning-tree interface
+
+HOST SIDE
+---------
+
+  docker exec host1 ip link show eth1
+  docker exec host2 ip link show eth1
+  docker exec host1 ping -c 4 10.10.10.12
+  docker exec host2 ping -c 4 10.10.10.11
+
+
+============================================================
+SAFE CHANGE WORKFLOW
+============================================================
+
+Use one logical fix at a time.
+
+Example:
+
+  configure
+  ...change...
+  show | compare
+  commit
+
+If you need an extra safety net during training:
+
+  commit confirmed 5
+
+Then validate the service before allowing the commit to become
+permanent.
+
+If everything is correct:
+
+  commit
+
+If you deliberately want to cancel a pending confirmed commit:
+
+  rollback
+  commit
+
+
+============================================================
+ROLLBACK / RECOVERY
+============================================================
+
+OPTION 1 — Undo the individual change
+-------------------------------------
+Use delete commands that reverse the corresponding set commands.
+
+OPTION 2 — Return to the provided known-good configuration
+-----------------------------------------------------------
+The package contains:
+
+  configs/solution/sw1.conf
+  configs/solution/sw2.conf
+  configs/solution/sw3.conf
+
+From Junos configuration mode, one recovery method is:
+
+  load override configs/solution/sw1.conf
+  show | compare
+  commit
+
+Use the appropriate file for each switch.
+
+NOTE
+----
+The solution configuration files are intentionally outside the
+Containerlab startup-config path. They are there for recovery/reference,
+not for normal challenge operation.
+
+
+============================================================
+FINAL ROOT-CAUSE SUMMARY
+============================================================
+
+FAULT #1
+--------
+Device: SW1
+Interface: ge-0/0/10
+Problem: Host1 access port was in VLAN GUEST instead of VLAN USERS.
+Result: Host1 entered the wrong Layer-2 broadcast domain.
+
+FAULT #2
+--------
+Device: SW1
+Interface: ge-0/0/2
+Problem: Inter-switch trunk did not include VLAN USERS.
+Result: Physical/RSTP adjacency could remain healthy while VLAN 10
+traffic was not carried correctly across that link.
+
+FAULT #3
+--------
+Device: SW3
+Interface: ge-0/0/10
+Problem: Interface was administratively disabled.
+Result: Host2 was disconnected from the Layer-2 domain.
+
+
+============================================================
+JUNIOR-ENGINEER LESSONS
+============================================================
+
+1. A ping failure does not tell you which layer is broken.
+2. Always separate physical state from logical VLAN state.
+3. A trunk being UP does not prove the required VLAN is allowed.
+4. RSTP can be perfectly healthy while a VLAN is broken.
+5. Do not stop troubleshooting after finding the first fault.
+6. MAC learning is a powerful way to prove where traffic actually
+   enters and exits the switch.
+7. Make the smallest safe change, then verify again.
+8. End-to-end testing is the final authority for the user-facing
+   service.
+
+
+============================================================
+LAB-004 COMPLETE
+============================================================

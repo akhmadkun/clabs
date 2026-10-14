@@ -21,8 +21,8 @@ TOPOLOGY
 
 Inter-switch links:
   SW1 ge-0/0/1 <-> SW2 ge-0/0/1
-  SW2 ge-0/0/2 <-> SW3 ge-0/0/1
-  SW3 ge-0/0/2 <-> SW1 ge-0/0/2
+  SW2 ge-0/0/2 <-> SW3 ge-0/0/2
+  SW3 ge-0/0/1 <-> SW1 ge-0/0/2
 
 Host links:
   Host1 <-> SW1 ge-0/0/10
@@ -68,7 +68,7 @@ TASK 5 — Validate Loop Prevention
 
 TASK 6 — Simulate a Link Failure
 On SW1:
-  deactivate interfaces ge-0/0/2
+  set interfaces ge-0/0/2 disable
   commit
 
 Observe RSTP reconvergence and verify Host1 can still reach Host2.

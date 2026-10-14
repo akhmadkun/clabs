@@ -1,0 +1,28 @@
+name: juniper-ex-lab-005
+
+prefix: ""
+
+topology:
+  nodes:
+    sw1:
+      kind: juniper_vjunosswitch
+      image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+      startup-config: configs/sw1.conf
+
+    host1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.11/24 dev eth1
+        - ip link set eth1 up
+
+    host2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.12/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["host1:eth1", "sw1:ge-0/0/10"]
+    - endpoints: ["host2:eth1", "sw1:ge-0/0/11"]

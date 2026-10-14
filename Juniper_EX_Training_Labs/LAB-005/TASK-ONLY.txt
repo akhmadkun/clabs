@@ -1,0 +1,214 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-005 — EX SERIES DAY-2 OPERATIONS
+TASK-ONLY
+============================================================
+
+SCENARIO
+--------
+You are doing routine Day-2 operations on a Juniper EX-style switch.
+There is no pre-planted fault. Your job is to establish a baseline,
+make controlled changes, preserve a backup, and demonstrate safe
+configuration recovery.
+
+TOPOLOGY / ADDRESSING
+---------------------
+Switch: EX-TRAIN-SW1 (vJunos-switch)
+Host1: 10.10.10.11/24 on ge-0/0/10
+Host2: 10.10.10.12/24 on ge-0/0/11
+VLAN: USERS, VLAN ID 10
+
+RULES
+-----
+1. Do not skip the initial baseline.
+2. Use the candidate configuration workflow: inspect -> validate -> commit.
+3. Add a meaningful commit comment for each permanent change.
+4. Do not confirm the temporary commit in Task 7; it must auto-rollback.
+5. Do not use load override for the backup-restore exercise.
+6. Record command output and observations in your notes.
+
+============================================================
+TASK 1 — INITIAL HEALTH SNAPSHOT
+============================================================
+
+Collect and record:
+- Junos version and platform identity.
+- System uptime.
+- Chassis inventory reported by the virtual platform.
+- Active system and chassis alarms, if supported.
+- Recent system log messages.
+- Recent commit history.
+- Operational status of both host-facing ports.
+
+Useful commands:
+  show version
+  show system uptime
+  show chassis hardware
+  show system alarms
+  show chassis alarms
+  show log messages | last 20
+  show system commit
+  show interfaces terse
+
+Note: virtual hardware inventory and alarm output can differ from a
+physical EX switch. Record what the image reports; do not assume an
+empty alarm table is the only acceptable result.
+
+============================================================
+TASK 2 — VERIFY SERVICE BASELINE
+============================================================
+
+1. Verify Host1 can ping Host2 and vice versa.
+2. Verify ge-0/0/10 and ge-0/0/11 are operational.
+3. Verify VLAN USERS is VLAN 10.
+4. Check that both host MAC addresses are learned on the correct ports.
+
+Useful commands:
+  docker exec host1 ping -c 4 -W 1 10.10.10.12
+  docker exec host2 ping -c 4 -W 1 10.10.10.11
+  show interfaces terse | match "ge-0/0/(10|11)[.]0"
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/11
+  show vlans USERS
+  show ethernet-switching table vlan-name USERS
+
+============================================================
+TASK 3 — SAVE A KNOWN-GOOD CONFIGURATION SNAPSHOT
+============================================================
+
+From operational mode, save the committed configuration to a file on
+the switch. Confirm that the file exists and inspect enough of it to
+recognize the hostname, VLAN, and host-facing interface configuration.
+
+Your backup path must be:
+  /var/tmp/lab005-baseline.conf
+
+Useful commands:
+  show configuration | save /var/tmp/lab005-baseline.conf
+  file list /var/tmp/
+  file show /var/tmp/lab005-baseline.conf
+
+Explain the difference between a saved file and Junos rollback history.
+
+============================================================
+TASK 4 — MAKE A SMALL, AUDITABLE CHANGE
+============================================================
+
+Change the description on ge-0/0/10 to:
+  HOST1-ACCESS-MAINT-TEST
+
+Before committing:
+1. Display the candidate diff.
+2. Validate the candidate configuration.
+3. Commit with a meaningful comment.
+
+Required workflow:
+  configure
+  ...make the change...
+  show | compare
+  commit check
+  commit comment "..."
+
+Verify the committed description and inspect commit history.
+
+============================================================
+TASK 5 — EXERCISE CONFIGURATION HISTORY
+============================================================
+
+1. Change the ge-0/0/10 description to a temporary value of your choice.
+2. Commit that temporary description with a comment.
+3. Load the previous committed configuration into the candidate using
+   rollback 1.
+4. Inspect the diff before committing the rollback.
+5. Commit the rollback with a meaningful comment.
+6. Prove that the description is now the value from immediately before
+   the temporary change.
+
+Answer:
+- What does rollback 1 load?
+- Does rollback by itself activate the change, or is a commit required?
+
+============================================================
+TASK 6 — DISCARD UNCOMMITTED CHANGES
+============================================================
+
+1. Make a different description change on ge-0/0/11.
+2. Display the pending diff.
+3. Use rollback 0 to discard pending candidate changes.
+4. Display the diff again and verify that the uncommitted change is gone.
+5. Do not commit the discarded change.
+
+============================================================
+TASK 7 — SAFETY TEST: COMMIT CONFIRMED
+============================================================
+
+This is a controlled demonstration of automatic rollback. Host1 will
+briefly lose connectivity while its access port is disabled.
+
+1. Enter configuration mode.
+2. Disable ge-0/0/10 in the candidate.
+3. Review the diff.
+4. Apply the change using commit confirmed with a 1-minute timeout and
+   a meaningful comment.
+5. Verify the temporary impact and inspect show system commit.
+6. Do NOT issue commit or commit check to confirm the temporary change.
+7. Wait for the confirmation timer to expire.
+8. Verify that ge-0/0/10 returns to service and Host1 can ping Host2.
+
+Useful commands:
+  show | compare
+  commit confirmed 1 comment "LAB-005 temporary port-disable test"
+  run show system commit
+  run show interfaces terse | match "ge-0/0/10[.]0"
+
+While the confirmation timer is active, use operational commands only.
+Do not run commit or commit check: either can confirm the pending commit.
+
+============================================================
+TASK 8 — RESTORE FROM THE SAVED FILE
+============================================================
+
+The baseline snapshot from Task 3 contains the original interface
+description. Use load merge to restore the baseline values:
+
+  configure
+  load merge /var/tmp/lab005-baseline.conf
+  show | compare
+
+Inspect the diff, then commit with a clear comment. Verify that both
+host ports and VLAN USERS remain correct and that Host1/Host2 can ping.
+
+Do not use load override for this exercise.
+
+============================================================
+TASK 9 — FINAL VERIFICATION
+============================================================
+
+Run:
+  ./scripts/verify.sh
+
+Then on the switch:
+  show version
+  show system uptime
+  show system alarms
+  show system commit
+  show interfaces terse | match "ge-0/0/(10|11)[.]0"
+  show vlans USERS
+  show ethernet-switching table vlan-name USERS
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/11
+  show log messages | last 20
+
+SUCCESS CRITERIA
+----------------
+[ ] Baseline health and operations snapshot recorded.
+[ ] Bidirectional host connectivity passes.
+[ ] VLAN and MAC learning verified.
+[ ] Configuration backup saved and inspected.
+[ ] Candidate diff checked before changes are committed.
+[ ] A commit comment appears in commit history.
+[ ] rollback 1 restores the immediately previous committed version.
+[ ] rollback 0 discards pending uncommitted changes.
+[ ] commit confirmed is allowed to expire and the port auto-recovers.
+[ ] Saved baseline is merged back without replacing the full config.
+[ ] Final service and config state is verified.

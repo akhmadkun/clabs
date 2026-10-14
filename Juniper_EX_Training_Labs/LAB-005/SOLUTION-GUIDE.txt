@@ -1,0 +1,339 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-005 — EX SERIES DAY-2 OPERATIONS
+SOLUTION GUIDE
+============================================================
+
+1. PURPOSE AND LAB DESIGN
+-------------------------
+This is a Day-2 operations lab, not a fault-finding exercise. The initial
+configuration is healthy. It uses one vJunos-switch and two Linux hosts
+in VLAN USERS (VLAN 10), so the focus stays on operational verification,
+configuration change control, backups, and recovery.
+
+The lab intentionally excludes Virtual Chassis. The switch image is:
+  vrnetlab/juniper_vjunos-switch:25.4R1.12
+
+Topology:
+  Host1 10.10.10.11/24 -- ge-0/0/10 [EX-TRAIN-SW1] ge-0/0/11 -- Host2 10.10.10.12/24
+
+Both hosts are on the same Layer-2 VLAN/subnet. They do not need a default
+gateway to communicate with one another.
+
+2. DEPLOY AND WAIT FOR JUNOS
+----------------------------
+From the extracted LAB-005 directory:
+
+  containerlab deploy -t clab.yml
+  docker ps --format 'table {{.Names}}\t{{.Status}}'
+
+Wait for vJunos-switch to finish booting before opening the CLI.
+Typical access method in this lab environment:
+
+  docker exec -it sw1 cli
+
+If the container's CLI entry behavior differs in your local image, use
+the same access method you already use successfully for LAB-001–LAB-004.
+
+3. TASK 1 — BASELINE HEALTH SNAPSHOT
+------------------------------------
+Run these in operational mode (`>`):
+
+  show version
+  show system uptime
+  show chassis hardware
+  show system alarms
+  show chassis alarms
+  show log messages | last 20
+  show system commit
+  show interfaces terse
+
+What each command tells you:
+- show version: Junos version, model/platform information, and software build.
+- show system uptime: uptime, load averages, and process/system timing.
+- show chassis hardware: hardware or virtual hardware inventory exposed by vJunos.
+- show system alarms: active system/software alarms.
+- show chassis alarms: active chassis-related alarms, if exposed by this image.
+- show log messages | last 20: recent operational/system events.
+- show system commit: recent configuration commits and comments.
+- show interfaces terse: compact physical/logical interface and protocol state.
+
+Important: vJunos is a virtual platform. Its inventory, sensor, licensing,
+or alarm outputs may not match a physical EX switch. Record the actual
+output and distinguish platform limitations from a service-affecting fault.
+Do not claim that every alarm must be empty; interpret the alarm text.
+
+4. TASK 2 — SERVICE BASELINE
+----------------------------
+From the Linux host containers:
+
+  docker exec host1 ping -c 4 -W 1 10.10.10.12
+  docker exec host2 ping -c 4 -W 1 10.10.10.11
+
+Expected: both directions pass. The first ICMP packet can sometimes be
+lost while ARP is resolved; repeat the test if needed.
+
+On EX-TRAIN-SW1:
+
+  show interfaces terse | match "ge-0/0/(10|11)[.]0"
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/11
+  show vlans USERS
+  show ethernet-switching table vlan-name USERS
+
+Expected configuration characteristics:
+- ge-0/0/10 is an access port in VLAN USERS.
+- ge-0/0/11 is an access port in VLAN USERS.
+- VLAN USERS has VLAN ID 10.
+- After the hosts have generated traffic, both host MACs should be learned
+  in VLAN USERS on their respective switch-facing ports.
+
+The exact interface-state formatting can vary. Look for the physical and
+logical interface being operational, and correlate it with host ping.
+If MAC learning is empty, generate traffic again, then re-check the table.
+
+5. TASK 3 — SAVE A BASELINE CONFIGURATION
+-----------------------------------------
+Run from operational mode (`>`), before changing any configuration:
+
+  show configuration | save /var/tmp/lab005-baseline.conf
+  file list /var/tmp/
+  file show /var/tmp/lab005-baseline.conf
+
+Expected: the CLI reports that configuration output was written to the
+specified file, and file listing/show confirm the file exists.
+
+Concepts:
+- This is an explicit text snapshot stored in the switch filesystem.
+- Junos rollback history is separate and is created by committed changes.
+- A file backup can be copied off-device for operational use; this lab
+  keeps the exercise simple by saving it locally in /var/tmp.
+- The saved file contains the committed configuration at the time it was
+  captured, not a pending uncommitted candidate.
+
+6. TASK 4 — SMALL CHANGE WITH CHANGE CONTROL
+--------------------------------------------
+Enter configuration mode and change only the Host1 port description:
+
+  configure
+  set interfaces ge-0/0/10 description HOST1-ACCESS-MAINT-TEST
+  show | compare
+  commit check
+  commit comment "LAB-005 update Host1 access-port description"
+
+Then verify from operational mode:
+
+  run show configuration interfaces ge-0/0/10
+  run show system commit
+
+Expected:
+- `show | compare` displays only the intended description change.
+- `commit check` validates syntax without activating the candidate.
+- `commit comment` activates the change and stores a change-history note.
+
+Key principle: a commit activates the complete candidate configuration,
+not just the one command typed. Review `show | compare` before committing.
+
+7. TASK 5 — ROLLBACK 1 TO THE PREVIOUS COMMITTED VERSION
+-------------------------------------------------------
+At this point the current committed description is:
+  HOST1-ACCESS-MAINT-TEST
+
+Create and commit a temporary description:
+
+  set interfaces ge-0/0/10 description HOST1-ACCESS-TEMPORARY
+  show | compare
+  commit comment "LAB-005 temporary description for rollback practice"
+
+Now load the previous committed configuration into the candidate:
+
+  rollback 1
+  show | compare
+
+The diff should return the description from TEMPORARY to
+HOST1-ACCESS-MAINT-TEST. Activate the rollback:
+
+  commit comment "LAB-005 rollback to previous committed configuration"
+  run show configuration interfaces ge-0/0/10
+
+Expected description: HOST1-ACCESS-MAINT-TEST.
+
+Important distinctions:
+- `rollback 1` loads the previous committed configuration into the
+  candidate; it does not, by itself, activate that configuration.
+- The `commit` after rollback activates it.
+- `rollback 0` is different: it discards pending uncommitted changes and
+  resets the candidate to the currently committed configuration.
+
+8. TASK 6 — DISCARD PENDING CHANGES WITH ROLLBACK 0
+--------------------------------------------------
+While still in configuration mode:
+
+  set interfaces ge-0/0/11 description SHOULD-NOT-BE-COMMITTED
+  show | compare
+  rollback 0
+  show | compare
+
+Expected: after `rollback 0`, the pending description change disappears
+from the diff. Do not commit the discarded change.
+
+9. TASK 7 — COMMIT CONFIRMED AND AUTOMATIC ROLLBACK
+---------------------------------------------------
+Perform this exercise after the description/backup work. The target port
+is Host1's access port ge-0/0/10; Host2 remains connected to the switch.
+
+In configuration mode:
+
+  set interfaces ge-0/0/10 disable
+  show | compare
+  commit confirmed 1 comment "LAB-005 temporary port-disable test"
+
+The command activates the configuration temporarily and schedules an
+automatic rollback if the commit is not confirmed within one minute.
+Do NOT run `commit` or `commit check` during the timer window, because
+those commands can confirm the temporary commit.
+
+Immediately inspect the timer and port state:
+
+  run show system commit
+  run show interfaces terse | match "ge-0/0/10[.]0"
+
+In a separate terminal on the Linux host, test connectivity:
+
+  docker exec host1 ping -c 3 -W 1 10.10.10.12
+
+Expected during the maintenance test: Host1 connectivity fails because
+its access port is disabled. Host2 remains attached but cannot receive
+Host1 traffic over that port.
+
+Wait for at least 65 seconds without confirming the commit. Then run:
+
+  run show interfaces terse | match "ge-0/0/10[.]0"
+  run show system commit
+
+From the Linux host, retry:
+
+  docker exec host1 ping -c 4 -W 1 10.10.10.12
+
+Expected after timer expiry: the temporary `disable` statement is rolled
+back automatically, the port returns to service, and ping recovers.
+
+If the port does not recover:
+1. Check `show system commit` to see whether a confirmed commit is pending.
+2. Inspect the effective configuration with `show configuration interfaces ge-0/0/10`.
+3. If necessary, enter configuration mode, remove the disable statement,
+   inspect the diff, and commit:
+     configure
+     delete interfaces ge-0/0/10 disable
+     show | compare
+     commit comment "LAB-005 recovery after commit-confirmed exercise"
+
+Do not leave the exercise with the Host1 port disabled.
+
+
+10. TASK 8 — RESTORE VALUES FROM THE BACKUP FILE
+-----------------------------------------------
+Exit configuration mode if needed, then re-enter:
+
+  configure
+  load merge /var/tmp/lab005-baseline.conf
+  show | compare
+
+The baseline snapshot contains the original interface description
+HOST1-ACCESS. The diff should show the intended description being restored.
+Inspect it, then commit:
+
+  commit comment "LAB-005 restore baseline values from saved configuration"
+
+Verify:
+
+  run show configuration interfaces ge-0/0/10
+  run show configuration interfaces ge-0/0/11
+  run show vlans USERS
+  run show system commit
+
+Expected: original descriptions HOST1-ACCESS and HOST2-ACCESS; VLAN USERS
+still exists as VLAN 10; both access ports remain configured in USERS.
+
+Why use load merge here?
+- `load merge` combines statements from the backup with the candidate.
+- Incoming values can replace conflicting leaf statements such as a port
+  description, while unrelated configuration remains.
+- A merge does not delete every statement omitted from the file. If the
+  goal is to delete a configuration statement, use an explicit `delete` or
+  choose a suitable replacement method only after reviewing its scope.
+- `load override` replaces the candidate configuration with the supplied
+  configuration. It is deliberately not used in this selective recovery.
+
+11. TASK 9 — FINAL VERIFICATION
+-------------------------------
+Run from the lab directory:
+
+  chmod +x scripts/verify.sh
+  ./scripts/verify.sh
+
+On the switch:
+
+  show version
+  show system uptime
+  show system alarms
+  show system commit
+  show interfaces terse | match "ge-0/0/(10|11)[.]0"
+  show vlans USERS
+  show ethernet-switching table vlan-name USERS
+  show configuration interfaces ge-0/0/10
+  show configuration interfaces ge-0/0/11
+  show log messages | last 20
+
+Expected final state:
+- Host1 and Host2 can ping each other in both directions.
+- ge-0/0/10 and ge-0/0/11 are not administratively disabled.
+- Both ports are access members of VLAN USERS (VLAN 10).
+- Both host MAC addresses are learned after traffic has been generated.
+- The Host1 description is restored to HOST1-ACCESS.
+- The Host2 description remains HOST2-ACCESS.
+- Commit history records the operator's permanent changes and comments.
+
+12. COMMON PITFALLS AND JUNIOR-ENGINEER TIPS
+--------------------------------------------
+1. `show | compare` is available in configuration mode. It shows the
+   candidate changes relative to the active configuration.
+2. `commit check` validates; it does not normally activate a candidate.
+3. `commit` activates the whole candidate, so check the diff first.
+4. `rollback 1` means previous committed configuration. `rollback 0`
+   discards pending uncommitted changes.
+5. `commit confirmed` is especially useful before changes that could lock
+   out management access. Always inspect the timer and know how it will
+   be confirmed or allowed to expire.
+6. Avoid issuing `commit` or `commit check` during this lab's unconfirmed
+   window, or you will convert the temporary test into a permanent one.
+7. `load merge terminal` expects hierarchical Junos configuration from
+   the proper hierarchy; use `relative` if pasting relative to a nested
+   configuration hierarchy. A file containing `set` commands requires
+   the `load set` workflow.
+8. If the MAC table looks empty, send traffic first and query again.
+9. Compare operational symptoms with configuration state; one alone is
+   rarely sufficient for a real incident.
+10. Use meaningful commit comments that describe purpose and scope.
+
+13. REFERENCE DOCUMENTATION
+---------------------------
+Juniper — Commit the Configuration:
+https://www.juniper.net/documentation/us/en/software/junos/cli/topics/topic-map/junos-configuration-commit.html
+
+Juniper — Rollback:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/command/rollback.html
+
+Juniper — Loading Configuration Files:
+https://www.juniper.net/documentation/us/en/software/junos/cli/topics/topic-map/junos-config-files-loading.html
+
+These references cover Junos behavior. Platform-specific hardware output
+may vary in vJunos-switch compared with physical EX switches.
+
+14. CLEANUP
+------------
+From the lab directory:
+
+  containerlab destroy -t clab.yml
+
+END OF SOLUTION GUIDE

@@ -1,0 +1,210 @@
+============================================================
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-004 — LAYER-2 TROUBLESHOOTING CHALLENGE
+TASK-ONLY
+============================================================
+
+SCENARIO
+--------
+Users report that Host1 cannot communicate with Host2 after a
+recent switch change.
+
+You inherit the environment without a change record.
+The topology is an RSTP triangle using VLAN USERS (VLAN 10).
+
+Your mission is to restore service and explain the root causes.
+
+KNOWN INFORMATION
+-----------------
+Host1 = 10.10.10.11/24
+Host2 = 10.10.10.12/24
+
+Intended VLAN:
+  USERS = VLAN 10
+
+Intended design:
+  SW1 should be the RSTP root bridge.
+  Host1 and Host2 should use VLAN USERS.
+  Inter-switch links should carry VLAN USERS.
+
+IMPORTANT
+---------
+There are multiple faults.
+Do not assume the first abnormal output you find is the only problem.
+
+Do not rebuild the topology.
+Do not replace the complete configuration unless you are using it
+only as a recovery method after your troubleshooting is documented.
+
+============================================================
+TASK 1 — ESTABLISH THE SYMPTOM
+============================================================
+
+1. From Host1, test connectivity to Host2.
+2. From Host2, test connectivity to Host1.
+3. Record the exact symptom.
+
+Useful commands:
+
+  docker exec host1 ping -c 4 10.10.10.12
+  docker exec host2 ping -c 4 10.10.10.11
+
+============================================================
+TASK 2 — CHECK THE HOST-FACING PORTS
+============================================================
+
+On SW1 and SW3:
+
+1. Verify the physical and logical state of ge-0/0/10.
+2. Verify the switchport mode.
+3. Verify VLAN membership.
+4. Determine whether each host-facing port is actually attached
+to the intended VLAN.
+
+Useful commands:
+
+  show interfaces terse | match "ge-0/0/10[.]0"
+  show configuration interfaces ge-0/0/10
+  show vlans
+
+Do not change anything yet.
+
+============================================================
+TASK 3 — CHECK THE INTER-SWITCH PATH
+============================================================
+
+Verify all three inter-switch links.
+
+Useful commands:
+
+  show interfaces terse | match "ge-0/0/(1|2)[.]0"
+
+Check the Layer-2 configuration on the inter-switch links.
+
+  show configuration interfaces ge-0/0/1
+  show configuration interfaces ge-0/0/2
+
+Verify VLAN USERS on every switch.
+
+  show vlans USERS
+
+Question to answer:
+
+  Is VLAN USERS actually allowed across every Layer-2 segment that
+  must carry Host1 <-> Host2 traffic?
+
+============================================================
+TASK 4 — CHECK RSTP
+============================================================
+
+Determine:
+
+1. Which switch is the root bridge?
+2. Which ports are ROOT, DESIGNATED, or ALTERNATE?
+3. Which port is currently blocking?
+4. Is the RSTP state consistent with the physical topology?
+
+Useful commands:
+
+  show spanning-tree bridge
+  show spanning-tree interface
+
+Do not change STP yet.
+
+Remember:
+
+RSTP may correctly show FORWARDING even when user traffic still
+fails because of a VLAN configuration problem.
+
+============================================================
+TASK 5 — CHECK MAC LEARNING
+============================================================
+
+Generate traffic by pinging again, then inspect the Layer-2 MAC table.
+
+Useful commands:
+
+  show ethernet-switching table
+  show ethernet-switching table vlan-name USERS
+
+On the Linux hosts, identify their MAC addresses:
+
+  docker exec host1 ip link show eth1
+  docker exec host2 ip link show eth1
+
+Determine where each MAC is being learned.
+
+============================================================
+TASK 6 — BUILD A ROOT-CAUSE CHAIN
+============================================================
+
+Write down each abnormality using this format:
+
+Observation:
+Hypothesis:
+Verification:
+Root Cause:
+Impact:
+
+Do not stop after finding one fault.
+
+============================================================
+TASK 7 — APPLY MINIMAL FIXES
+============================================================
+
+Restore the intended design using the smallest safe changes.
+
+Requirements:
+
+1. Keep SW1 as the intended RSTP root.
+2. Keep the host IP addressing unchanged.
+3. Keep VLAN USERS as VLAN 10.
+4. Restore correct access-port membership.
+5. Restore required VLAN membership on inter-switch links.
+6. Restore any administratively disabled interface required for
+   end-to-end connectivity.
+
+Use candidate configuration and verify before committing.
+
+Recommended workflow:
+
+  configure
+  ...make one logical change...
+  show | compare
+  commit
+
+============================================================
+TASK 8 — END-TO-END VERIFICATION
+============================================================
+
+Prove the service is restored.
+
+Required:
+
+1. Host1 can ping Host2.
+2. Host2 can ping Host1.
+3. Host-facing ports are up/up.
+4. VLAN USERS is present and correctly attached.
+5. Inter-switch links carry VLAN USERS.
+6. RSTP has one root bridge and a sane redundant-path state.
+7. MAC learning shows the host MACs on the expected access ports.
+
+Run the helper script:
+
+  ./scripts/verify.sh
+
+============================================================
+SUCCESS CRITERIA
+============================================================
+
+The lab is complete when:
+
+[ ] You identified all faults.
+[ ] You can explain the symptom chain for each fault.
+[ ] Host1 <-> Host2 connectivity is restored.
+[ ] SW1 remains the intended RSTP root.
+[ ] VLAN USERS is correctly carried end-to-end.
+[ ] MAC learning is correct.
+[ ] You can explain why RSTP alone did not necessarily reveal a
+    VLAN membership fault.
+[ ] You documented the final verification commands and results.

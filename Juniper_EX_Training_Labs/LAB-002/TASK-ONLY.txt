@@ -16,10 +16,10 @@ TOPOLOGY
              SW1                         SW2
         +------------+              +------------+
         |            |              |            |
- HOST1--| ge-0/0/0  |              | ge-0/0/0 |--HOST2
+ HOST1--| ge-0/0/0   |              | ge-0/0/0   |--HOST2
         |            |              |            |
-        | ge-0/0/1  |==============| ge-0/0/1 |
-        | ge-0/0/2  |==============| ge-0/0/2 |
+        | ge-0/0/1   |==============| ge-0/0/1   |
+        | ge-0/0/2   |==============| ge-0/0/2   |
         +------------+              +------------+
 
 VLAN 10: USERS
@@ -45,7 +45,7 @@ On both switches:
 1. Configure ge-0/0/1 as a member of ae0.
 2. Configure ge-0/0/2 as a member of ae0.
 
-Use the Junos 802.3ad configuration method.
+Use 802.3ad configuration method.
 
 Do not configure LACP yet.
 
