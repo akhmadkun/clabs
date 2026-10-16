@@ -16,21 +16,7 @@ topology:
       mgmt-ipv4: 172.31.1.11
       startup-config: configs/R1.conf
       enforce-startup-config: true
-    r2:
-      kind: juniper_vjunosrouter
-      mgmt-ipv4: 172.31.1.12
-      startup-config: configs/R2.conf
-      enforce-startup-config: true
-    r3:
-      kind: juniper_vjunosrouter
-      mgmt-ipv4: 172.31.1.13
-      startup-config: configs/R3.conf
-      enforce-startup-config: true
-    r4:
-      kind: juniper_vjunosrouter
-      mgmt-ipv4: 172.31.1.14
-      startup-config: configs/R4.conf
-      enforce-startup-config: true
+
     s1:
       kind: linux
       image: sys101-services:latest

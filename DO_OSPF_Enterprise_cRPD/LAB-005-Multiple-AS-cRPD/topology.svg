@@ -1,135 +1,1120 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1260" viewBox="0 0 2200 1260">
-<defs><style>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="2200"
+   height="1260"
+   viewBox="0 0 2200 1260"
+   version="1.1"
+   id="svg96"
+   sodipodi:docname="topology.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview96"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.9126984"
+     inkscape:cx="1630.9419"
+     inkscape:cy="727.50622"
+     inkscape:window-width="2560"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg96" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
 .title{font:700 36px Arial,sans-serif;fill:#182b42}.subtitle{font:19px Arial,sans-serif;fill:#53677b}
 .asTitle{font:700 27px Arial,sans-serif;fill:#20354b}.section{font:700 19px Arial,sans-serif;text-anchor:middle}
 .card{fill:#fff;stroke:#7d9ab5;stroke-width:2.5}.cardHead{fill:#e9f3fb}.dev{font:700 23px Arial,sans-serif;fill:#173b5b;text-anchor:middle}.detail{font:16px Arial,sans-serif;fill:#324b63;text-anchor:middle}
 .host{fill:#fff;stroke:#73869a;stroke-width:2}.hostTitle{font:700 20px Arial,sans-serif;fill:#20354b;text-anchor:middle}.hostDetail{font:16px Arial,sans-serif;fill:#324b63;text-anchor:middle}
 .line{fill:none;stroke-width:5;stroke-linecap:round}.a0{stroke:#2b78bd}.a1{stroke:#29834f}.a2{stroke:#ce892b}.d2{stroke:#7652a6}.bgp{stroke:#c34e57;stroke-width:6;stroke-dasharray:14 10;fill:none;stroke-linecap:round}
 .label{font:18px Arial,sans-serif;fill:#233b52}.small{font:16px Arial,sans-serif;fill:#354d64}.pill{fill:#fff;stroke:#d3deea;stroke-width:2}.pillText{font:700 18px Arial,sans-serif;text-anchor:middle}
-</style></defs>
-<rect width="2200" height="1260" fill="#fff"/>
-<text x="48" y="55" class="title">LAB-005 — Multiple Autonomous Systems</text>
-<text x="48" y="88" class="subtitle">Logical topology reference • cRPD 25.2R1-S1.4 • all router eth1 parent ports attach to br-univ (bridge intentionally omitted)</text>
-<rect x="35" y="115" width="1295" height="1105" rx="22" fill="#f5f9fd" stroke="#9db6ce" stroke-width="3"/>
-<text x="70" y="157" class="asTitle">AS 65001 — Existing OSPF enterprise</text>
-<rect x="1370" y="115" width="795" height="1105" rx="22" fill="#fffaf1" stroke="#d7bd8a" stroke-width="3"/>
-<text x="1405" y="157" class="asTitle">AS 65002 — Separate OSPF network</text>
-
-<!-- light area bands -->
-<rect x="100" y="180" width="820" height="145" rx="16" fill="#eaf4ff" stroke="#c3dcf4" stroke-width="2"/>
-<text x="510" y="208" class="section" fill="#1e609e">Domain 1 · Area 0 · inet.0</text>
-<rect x="100" y="385" width="390" height="245" rx="16" fill="#eff9f1" stroke="#c9e6cf" stroke-width="2"/>
-
-<rect x="610" y="385" width="390" height="245" rx="16" fill="#fff5e4" stroke="#f0dbb3" stroke-width="2"/>
-
-<rect x="100" y="740" width="820" height="265" rx="16" fill="#f6f0fc" stroke="#d7c8eb" stroke-width="2"/>
-<text x="510" y="772" class="section" fill="#71499a">Routing instance domain2 · separate OSPF process</text>
-<rect x="1435" y="185" width="665" height="160" rx="16" fill="#eaf4ff" stroke="#c3dcf4" stroke-width="2"/>
-<text x="1767" y="215" class="section" fill="#1e609e">AS 65002 · OSPF Area 0</text>
-<rect x="1435" y="395" width="665" height="665" rx="16" fill="#eff9f1" stroke="#c9e6cf" stroke-width="2"/>
-<text x="1470" y="427" class="section" text-anchor="start" fill="#237449">OSPF Area 1</text>
-
-<!-- logical links -->
-<path d="M 445 255 L 685 255" class="line a0"/>
-<text x="565" y="238" class="label" text-anchor="middle">VLAN 12 · 10.0.12.0/24</text>
-<text x="565" y="287" class="small" text-anchor="middle">Area 0 broadcast · DR/BDR</text>
-<text x="452" y="311" class="small" text-anchor="middle">R1 eth1.12 · 10.0.12.1/24</text>
-<text x="677" y="311" class="small" text-anchor="middle">R2 eth1.12 · 10.0.12.2/24</text>
-
-<path d="M 350 300 L 350 460" class="line a1"/>
-<rect x="365" y="348" width="195" height="77" rx="10" class="pill"/>
-<text x="462" y="372" class="pillText" fill="#237449">VLAN 13 · Area 1</text>
-<text x="462" y="397" class="small" text-anchor="middle">10.0.13.0/30 · p2p</text>
-<text x="350" y="332" class="small" text-anchor="middle">eth1.13 · .1/30</text>
-<text x="350" y="449" class="small" text-anchor="middle">eth1.13 · .2/30</text>
-
-<path d="M 780 300 L 780 460" class="line a2"/>
-<rect x="800" y="348" width="185" height="77" rx="10" class="pill"/>
-<text x="892" y="372" class="pillText" fill="#9a640f">VLAN 24 · Area 2</text>
-<text x="892" y="397" class="small" text-anchor="middle">10.0.24.0/30 · p2p</text>
-<text x="780" y="332" class="small" text-anchor="middle">eth1.24 · .1/30</text>
-<text x="780" y="449" class="small" text-anchor="middle">eth1.24 · .2/30</text>
-
-<!-- domain2 link is routed outside the area-1 card -->
-<path d="M 270 295 C 150 385, 150 680, 265 835" class="line d2"/>
-<rect x="48" y="515" width="178" height="158" rx="12" class="pill"/>
-<text x="137" y="542" class="pillText" fill="#71499a">VLAN 16 · Area 0</text>
-<text x="137" y="568" class="small" text-anchor="middle">domain2 · p2p</text>
-<text x="137" y="591" class="small" text-anchor="middle">10.0.16.0/30</text>
-<text x="137" y="618" class="small" text-anchor="middle">R1 eth1.16</text>
-<text x="137" y="639" class="small" text-anchor="middle">10.0.16.1/30</text>
-<text x="137" y="660" class="small" text-anchor="middle">R6 eth1.16 .2/30</text>
-
-<path d="M 445 860 L 655 860" class="line d2"/>
-<rect x="446" y="777" width="206" height="72" rx="10" class="pill"/>
-<text x="549" y="800" class="pillText" fill="#71499a">VLAN 67 · Area 1</text>
-<text x="549" y="821" class="small" text-anchor="middle">10.0.67.0/30 · p2p</text>
-<text x="549" y="841" class="small" text-anchor="middle">R6 eth1.67 .1 · R7 .2</text>
-
-
-<!-- eBGP between the ASes -->
-<path d="M 875 255 L 1555 255" class="bgp"/>
-<rect x="1030" y="177" width="375" height="135" rx="12" fill="#fff" stroke="#e0a8ad" stroke-width="2"/>
-<text x="1217" y="202" class="pillText" fill="#a5313d">eBGP · VLAN 28</text>
-<text x="1217" y="225" class="small" text-anchor="middle">10.0.28.0/30 · AS 65001 ↔ AS 65002</text>
-<text x="1217" y="250" class="small" text-anchor="middle">R2 eth1.28 · 10.0.28.1/30</text>
-<text x="1217" y="274" class="small" text-anchor="middle">R8 eth1.28 · 10.0.28.2/30</text>
-<text x="1217" y="297" class="small" text-anchor="middle">eBGP only · no OSPF on this link</text>
-
-<!-- R8 - R9 OSPF -->
-<path d="M 1655 300 L 1655 510" class="line a1"/>
-<rect x="1680" y="362" width="190" height="86" rx="10" class="pill"/>
-<text x="1775" y="382" class="pillText" fill="#237449">VLAN 89 · Area 1</text>
-<text x="1775" y="405" class="small" text-anchor="middle">10.0.89.0/30 · p2p</text>
-<text x="1775" y="426" class="small" text-anchor="middle">R8 eth1.89 · .1/30</text>
-<text x="1775" y="445" class="small" text-anchor="middle">R9 eth1.89 · .2/30</text>
-
-<!-- R4 LAN links -->
-<path d="M 875 510 C 930 510, 945 462, 1010 462" class="line a2"/>
-<path d="M 875 520 L 1010 585" class="line a2"/>
-<path d="M 875 530 C 935 570, 950 708, 1010 708" class="line a2"/>
-<rect x="875" y="425" width="150" height="56" rx="8" class="pill"/>
-<text x="950" y="447" class="small" text-anchor="middle">R4 eth2.0 ↔ EP16</text>
-<text x="950" y="468" class="small" text-anchor="middle">192.168.16.0/30</text>
-<rect x="875" y="548" width="150" height="56" rx="8" class="pill"/>
-<text x="950" y="570" class="small" text-anchor="middle">R4 eth3.0 ↔ EP17</text>
-<text x="950" y="591" class="small" text-anchor="middle">192.168.17.0/24</text>
-<rect x="875" y="674" width="150" height="56" rx="8" class="pill"/>
-<text x="950" y="696" class="small" text-anchor="middle">R4 eth4.0 ↔ EP18</text>
-<text x="950" y="717" class="small" text-anchor="middle">192.168.18.0/23</text>
-
-<!-- R9 endpoint links -->
-<path d="M 1755 560 C 1810 560, 1830 650, 1885 650" class="line a1"/>
-<path d="M 1755 572 C 1815 640, 1835 830, 1885 830" class="line a1"/>
-<rect x="1758" y="592" width="145" height="55" rx="8" class="pill"/>
-<text x="1830" y="614" class="small" text-anchor="middle">R9 eth2.0 ↔ EP91</text>
-<text x="1830" y="635" class="small" text-anchor="middle">192.168.91.0/24</text>
-<rect x="1758" y="789" width="145" height="55" rx="8" class="pill"/>
-<text x="1830" y="811" class="small" text-anchor="middle">R9 eth3.0 ↔ EP92</text>
-<text x="1830" y="832" class="small" text-anchor="middle">192.168.92.0/24</text>
-
-<!-- Router cards -->
-<g transform="translate(350 255)"><rect x="-95" y="-45" width="190" height="90" rx="12" class="card"/><rect x="-95" y="-45" width="190" height="33" rx="12" class="cardHead"/><rect x="-95" y="-22" width="190" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R1</text><text x="0" y="8" class="detail">Lo0 10.1.1.1/32</text><text x="0" y="29" class="detail">ABR · ASBR</text></g>
-<g transform="translate(780 255)"><rect x="-95" y="-45" width="190" height="90" rx="12" class="card"/><rect x="-95" y="-45" width="190" height="33" rx="12" class="cardHead"/><rect x="-95" y="-22" width="190" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R2</text><text x="0" y="8" class="detail">Lo0 10.1.1.2/32</text><text x="0" y="29" class="detail">AS 65001 · ASBR</text></g>
-<g transform="translate(350 505)"><rect x="-95" y="-45" width="190" height="90" rx="12" class="card"/><rect x="-95" y="-45" width="190" height="33" rx="12" class="cardHead"/><rect x="-95" y="-22" width="190" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R3</text><text x="0" y="8" class="detail">Lo0 10.1.1.3/32</text><text x="0" y="29" class="detail">Area 1 internal</text></g>
-<g transform="translate(780 505)"><rect x="-95" y="-45" width="190" height="90" rx="12" class="card"/><rect x="-95" y="-45" width="190" height="33" rx="12" class="cardHead"/><rect x="-95" y="-22" width="190" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R4</text><text x="0" y="8" class="detail">Lo0 10.1.1.4/32</text><text x="0" y="29" class="detail">Area 2 internal</text></g>
-<g transform="translate(350 860)"><rect x="-95" y="-45" width="190" height="90" rx="12" class="card"/><rect x="-95" y="-45" width="190" height="33" rx="12" class="cardHead"/><rect x="-95" y="-22" width="190" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R6</text><text x="0" y="8" class="detail">Lo0 10.1.1.6/32</text><text x="0" y="29" class="detail">Domain2 ABR</text></g>
-<g transform="translate(750 860)"><rect x="-95" y="-45" width="190" height="90" rx="12" class="card"/><rect x="-95" y="-45" width="190" height="33" rx="12" class="cardHead"/><rect x="-95" y="-22" width="190" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R7</text><text x="0" y="8" class="detail">Lo0 10.1.1.7/32</text><text x="0" y="29" class="detail">172.19.21.1 · .22.1</text></g>
-<g transform="translate(1655 255)"><rect x="-100" y="-45" width="200" height="90" rx="12" class="card"/><rect x="-100" y="-45" width="200" height="33" rx="12" class="cardHead"/><rect x="-100" y="-22" width="200" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R8</text><text x="0" y="8" class="detail">Lo0 10.1.1.8/32</text><text x="0" y="29" class="detail">AS 65002 · ASBR</text></g>
-<g transform="translate(1655 555)"><rect x="-100" y="-45" width="200" height="90" rx="12" class="card"/><rect x="-100" y="-45" width="200" height="33" rx="12" class="cardHead"/><rect x="-100" y="-22" width="200" height="10" fill="#e9f3fb"/><text x="0" y="-21" class="dev">R9</text><text x="0" y="8" class="detail">Lo0 10.1.1.9/32</text><text x="0" y="29" class="detail">Area 1 internal</text></g>
-
-<!-- Hosts -->
-<g transform="translate(1115 462)"><rect x="-65" y="-38" width="150" height="78" rx="10" class="host"/><rect x="-28" y="-22" width="55" height="30" fill="#e3edf5" stroke="#526b82" stroke-width="2"/><path d="M0 8 v10 m-15 0 h30" stroke="#526b82" stroke-width="2"/><text x="10" y="61" class="hostTitle">EP16</text><text x="10" y="82" class="hostDetail">192.168.16.2/30</text></g>
-<g transform="translate(1115 585)"><rect x="-65" y="-38" width="150" height="78" rx="10" class="host"/><rect x="-28" y="-22" width="55" height="30" fill="#e3edf5" stroke="#526b82" stroke-width="2"/><path d="M0 8 v10 m-15 0 h30" stroke="#526b82" stroke-width="2"/><text x="10" y="61" class="hostTitle">EP17</text><text x="10" y="82" class="hostDetail">192.168.17.2/24</text></g>
-<g transform="translate(1115 708)"><rect x="-65" y="-38" width="150" height="78" rx="10" class="host"/><rect x="-28" y="-22" width="55" height="30" fill="#e3edf5" stroke="#526b82" stroke-width="2"/><path d="M0 8 v10 m-15 0 h30" stroke="#526b82" stroke-width="2"/><text x="10" y="61" class="hostTitle">EP18</text><text x="10" y="82" class="hostDetail">192.168.18.2/23</text></g>
-<g transform="translate(1975 650)"><rect x="-70" y="-38" width="160" height="78" rx="10" class="host"/><rect x="-28" y="-22" width="55" height="30" fill="#e3edf5" stroke="#526b82" stroke-width="2"/><path d="M0 8 v10 m-15 0 h30" stroke="#526b82" stroke-width="2"/><text x="10" y="61" class="hostTitle">EP91</text><text x="10" y="82" class="hostDetail">192.168.91.10/24</text></g>
-<g transform="translate(1975 830)"><rect x="-70" y="-38" width="160" height="78" rx="10" class="host"/><rect x="-28" y="-22" width="55" height="30" fill="#e3edf5" stroke="#526b82" stroke-width="2"/><path d="M0 8 v10 m-15 0 h30" stroke="#526b82" stroke-width="2"/><text x="10" y="61" class="hostTitle">EP92</text><text x="10" y="82" class="hostDetail">192.168.92.10/24</text></g>
-
-<!-- Clear legend/footer -->
-<rect x="70" y="1085" width="1200" height="85" rx="12" fill="#fff" stroke="#d5e0eb" stroke-width="2"/>
-<text x="95" y="1116" class="label">Route-exchange sequence</text>
-<text x="95" y="1144" class="small">OSPF AS 65001 → eBGP at R2/R8 → OSPF AS 65002. Reverse propagation needs BGP-to-OSPF export policy at each ASBR.</text>
-<rect x="1410" y="1085" width="700" height="85" rx="12" fill="#fff" stroke="#e4d5b7" stroke-width="2"/>
-<text x="1435" y="1116" class="label">Addressing conventions</text>
-<text x="1435" y="1144" class="small">p2p = /30 with .1/.2; VLAN IDs identify logical links.</text>
+</style>
+  </defs>
+  <rect
+     width="2200"
+     height="1260"
+     fill="#fff"
+     id="rect1" />
+  <text
+     x="48"
+     y="55"
+     class="title"
+     id="text1">LAB-005 — Multiple Autonomous Systems</text>
+  <text
+     x="48"
+     y="88"
+     class="subtitle"
+     id="text2">Logical topology reference • cRPD 25.2R1-S1.4 • all router eth1 parent ports attach to br-univ (bridge intentionally omitted)</text>
+  <rect
+     x="35"
+     y="115"
+     width="1295"
+     height="1105"
+     rx="22"
+     fill="#f5f9fd"
+     stroke="#9db6ce"
+     stroke-width="3"
+     id="rect2" />
+  <text
+     x="70"
+     y="157"
+     class="asTitle"
+     id="text3">AS 65001 — Existing OSPF enterprise</text>
+  <rect
+     x="1370"
+     y="115"
+     width="795"
+     height="1105"
+     rx="22"
+     fill="#fffaf1"
+     stroke="#d7bd8a"
+     stroke-width="3"
+     id="rect3" />
+  <text
+     x="1405"
+     y="157"
+     class="asTitle"
+     id="text4">AS 65002 — Separate OSPF network</text>
+  <!-- light area bands -->
+  <rect
+     x="100"
+     y="180"
+     width="820"
+     height="145"
+     rx="16"
+     fill="#eaf4ff"
+     stroke="#c3dcf4"
+     stroke-width="2"
+     id="rect4" />
+  <text
+     x="510"
+     y="208"
+     class="section"
+     fill="#1e609e"
+     id="text5">Domain 1 · Area 0 · inet.0</text>
+  <rect
+     x="100"
+     y="385"
+     width="390"
+     height="245"
+     rx="16"
+     fill="#eff9f1"
+     stroke="#c9e6cf"
+     stroke-width="2"
+     id="rect5" />
+  <rect
+     x="610"
+     y="385"
+     width="390"
+     height="245"
+     rx="16"
+     fill="#fff5e4"
+     stroke="#f0dbb3"
+     stroke-width="2"
+     id="rect6" />
+  <rect
+     x="100"
+     y="740"
+     width="820"
+     height="265"
+     rx="16"
+     fill="#f6f0fc"
+     stroke="#d7c8eb"
+     stroke-width="2"
+     id="rect7" />
+  <text
+     x="510"
+     y="772"
+     class="section"
+     fill="#71499a"
+     id="text7">Routing instance domain2 · separate OSPF process</text>
+  <rect
+     x="1435"
+     y="185"
+     width="665"
+     height="160"
+     rx="16"
+     fill="#eaf4ff"
+     stroke="#c3dcf4"
+     stroke-width="2"
+     id="rect8" />
+  <text
+     x="1767"
+     y="215"
+     class="section"
+     fill="#1e609e"
+     id="text8">AS 65002 · OSPF Area 0</text>
+  <rect
+     x="1435"
+     y="395"
+     width="665"
+     height="665"
+     rx="16"
+     fill="#eff9f1"
+     stroke="#c9e6cf"
+     stroke-width="2"
+     id="rect9" />
+  <text
+     x="1470"
+     y="427"
+     class="section"
+     text-anchor="start"
+     fill="#237449"
+     id="text9">OSPF Area 1</text>
+  <!-- logical links -->
+  <path
+     d="M 445 255 L 685 255"
+     class="line a0"
+     id="path9" />
+  <text
+     x="565"
+     y="238"
+     class="label"
+     text-anchor="middle"
+     id="text10">VLAN 12 · 10.0.12.0/24</text>
+  <text
+     x="565"
+     y="287"
+     class="small"
+     text-anchor="middle"
+     id="text11">Area 0 broadcast · DR/BDR</text>
+  <text
+     x="452"
+     y="311"
+     class="small"
+     text-anchor="middle"
+     id="text12">R1 eth1.12 · 10.0.12.1/24</text>
+  <text
+     x="677"
+     y="311"
+     class="small"
+     text-anchor="middle"
+     id="text13">R2 eth1.12 · 10.0.12.2/24</text>
+  <path
+     d="M 350 300 L 350 460"
+     class="line a1"
+     id="path13" />
+  <rect
+     x="365"
+     y="348"
+     width="195"
+     height="77"
+     rx="10"
+     class="pill"
+     id="rect13" />
+  <text
+     x="462"
+     y="372"
+     class="pillText"
+     fill="#237449"
+     id="text14">VLAN 13 · Area 1</text>
+  <text
+     x="462"
+     y="397"
+     class="small"
+     text-anchor="middle"
+     id="text15">10.0.13.0/30 · p2p</text>
+  <text
+     x="350"
+     y="332"
+     class="small"
+     text-anchor="middle"
+     id="text16">eth1.13 · .1/30</text>
+  <text
+     x="350"
+     y="449"
+     class="small"
+     text-anchor="middle"
+     id="text17">eth1.13 · .2/30</text>
+  <path
+     d="M 780 300 L 780 460"
+     class="line a2"
+     id="path17" />
+  <rect
+     x="800"
+     y="348"
+     width="185"
+     height="77"
+     rx="10"
+     class="pill"
+     id="rect17" />
+  <text
+     x="892"
+     y="372"
+     class="pillText"
+     fill="#9a640f"
+     id="text18">VLAN 24 · Area 2</text>
+  <text
+     x="892"
+     y="397"
+     class="small"
+     text-anchor="middle"
+     id="text19">10.0.24.0/30 · p2p</text>
+  <text
+     x="780"
+     y="332"
+     class="small"
+     text-anchor="middle"
+     id="text20">eth1.24 · .1/30</text>
+  <text
+     x="780"
+     y="449"
+     class="small"
+     text-anchor="middle"
+     id="text21">eth1.24 · .2/30</text>
+  <!-- domain2 link is routed outside the area-1 card -->
+  <path
+     d="M 270 295 C 150 385, 150 680, 265 835"
+     class="line d2"
+     id="path21" />
+  <rect
+     x="48"
+     y="515"
+     width="178"
+     height="158"
+     rx="12"
+     class="pill"
+     id="rect21" />
+  <text
+     x="137"
+     y="542"
+     class="pillText"
+     fill="#71499a"
+     id="text22">VLAN 16 · Area 0</text>
+  <text
+     x="137"
+     y="568"
+     class="small"
+     text-anchor="middle"
+     id="text23">domain2 · p2p</text>
+  <text
+     x="137"
+     y="591"
+     class="small"
+     text-anchor="middle"
+     id="text24">10.0.16.0/30</text>
+  <text
+     x="137"
+     y="618"
+     class="small"
+     text-anchor="middle"
+     id="text25">R1 eth1.16</text>
+  <text
+     x="137"
+     y="639"
+     class="small"
+     text-anchor="middle"
+     id="text26">10.0.16.1/30</text>
+  <text
+     x="137"
+     y="660"
+     class="small"
+     text-anchor="middle"
+     id="text27">R6 eth1.16 .2/30</text>
+  <path
+     d="M 445 860 L 655 860"
+     class="line d2"
+     id="path27" />
+  <rect
+     x="446"
+     y="777"
+     width="206"
+     height="72"
+     rx="10"
+     class="pill"
+     id="rect27" />
+  <text
+     x="549"
+     y="800"
+     class="pillText"
+     fill="#71499a"
+     id="text28">VLAN 67 · Area 1</text>
+  <text
+     x="549"
+     y="821"
+     class="small"
+     text-anchor="middle"
+     id="text29">10.0.67.0/30 · p2p</text>
+  <text
+     x="549"
+     y="841"
+     class="small"
+     text-anchor="middle"
+     id="text30">R6 eth1.67 .1 · R7 .2</text>
+  <!-- eBGP between the ASes -->
+  <path
+     d="M 875 255 L 1555 255"
+     class="bgp"
+     id="path30" />
+  <rect
+     x="1030"
+     y="177"
+     width="375"
+     height="135"
+     rx="12"
+     fill="#fff"
+     stroke="#e0a8ad"
+     stroke-width="2"
+     id="rect30" />
+  <text
+     x="1217"
+     y="202"
+     class="pillText"
+     fill="#a5313d"
+     id="text31">eBGP · VLAN 28</text>
+  <text
+     x="1217"
+     y="225"
+     class="small"
+     text-anchor="middle"
+     id="text32">10.0.28.0/30 · AS 65001 ↔ AS 65002</text>
+  <text
+     x="1217"
+     y="250"
+     class="small"
+     text-anchor="middle"
+     id="text33">R2 eth1.28 · 10.0.28.1/30</text>
+  <text
+     x="1217"
+     y="274"
+     class="small"
+     text-anchor="middle"
+     id="text34">R8 eth1.28 · 10.0.28.2/30</text>
+  <text
+     x="1217"
+     y="297"
+     class="small"
+     text-anchor="middle"
+     id="text35">eBGP only · no OSPF on this link</text>
+  <!-- R8 - R9 OSPF -->
+  <path
+     d="M 1655 300 L 1655 510"
+     class="line a1"
+     id="path35" />
+  <rect
+     x="1680"
+     y="362"
+     width="190"
+     height="86"
+     rx="10"
+     class="pill"
+     id="rect35" />
+  <text
+     x="1775"
+     y="382"
+     class="pillText"
+     fill="#237449"
+     id="text36">VLAN 89 · Area 1</text>
+  <text
+     x="1775"
+     y="405"
+     class="small"
+     text-anchor="middle"
+     id="text37">10.0.89.0/30 · p2p</text>
+  <text
+     x="1775"
+     y="426"
+     class="small"
+     text-anchor="middle"
+     id="text38">R8 eth1.89 · .1/30</text>
+  <text
+     x="1775"
+     y="445"
+     class="small"
+     text-anchor="middle"
+     id="text39">R9 eth1.89 · .2/30</text>
+  <!-- R4 LAN links -->
+  <path
+     d="M 875 510 C 930 510, 945 462, 1010 462"
+     class="line a2"
+     id="path39" />
+  <path
+     d="M 875 520 L 1010 585"
+     class="line a2"
+     id="path40" />
+  <path
+     d="M 875 530 C 935 570, 950 708, 1010 708"
+     class="line a2"
+     id="path41" />
+  <rect
+     x="875"
+     y="425"
+     width="150"
+     height="56"
+     rx="8"
+     class="pill"
+     id="rect41" />
+  <text
+     x="950"
+     y="447"
+     class="small"
+     text-anchor="middle"
+     id="text41">R4 eth2.0 ↔ EP16</text>
+  <text
+     x="950"
+     y="468"
+     class="small"
+     text-anchor="middle"
+     id="text42">192.168.16.0/30</text>
+  <rect
+     x="875"
+     y="548"
+     width="150"
+     height="56"
+     rx="8"
+     class="pill"
+     id="rect42" />
+  <text
+     x="950"
+     y="570"
+     class="small"
+     text-anchor="middle"
+     id="text43">R4 eth3.0 ↔ EP17</text>
+  <text
+     x="950"
+     y="591"
+     class="small"
+     text-anchor="middle"
+     id="text44">192.168.17.0/24</text>
+  <rect
+     x="875"
+     y="674"
+     width="150"
+     height="56"
+     rx="8"
+     class="pill"
+     id="rect44" />
+  <text
+     x="950"
+     y="696"
+     class="small"
+     text-anchor="middle"
+     id="text45">R4 eth4.0 ↔ EP18</text>
+  <text
+     x="950"
+     y="717"
+     class="small"
+     text-anchor="middle"
+     id="text46">192.168.18.0/23</text>
+  <!-- R9 endpoint links -->
+  <path
+     d="M 1755 560 C 1810 560, 1830 650, 1885 650"
+     class="line a1"
+     id="path46" />
+  <path
+     d="M 1755 572 C 1815 640, 1835 830, 1885 830"
+     class="line a1"
+     id="path47" />
+  <rect
+     x="1758"
+     y="592"
+     width="145"
+     height="55"
+     rx="8"
+     class="pill"
+     id="rect47" />
+  <text
+     x="1830"
+     y="614"
+     class="small"
+     text-anchor="middle"
+     id="text47">R9 eth2.0 ↔ EP91</text>
+  <text
+     x="1830"
+     y="635"
+     class="small"
+     text-anchor="middle"
+     id="text48">192.168.91.0/24</text>
+  <rect
+     x="1758"
+     y="789"
+     width="145"
+     height="55"
+     rx="8"
+     class="pill"
+     id="rect48" />
+  <text
+     x="1830"
+     y="811"
+     class="small"
+     text-anchor="middle"
+     id="text49">R9 eth3.0 ↔ EP92</text>
+  <text
+     x="1830"
+     y="832"
+     class="small"
+     text-anchor="middle"
+     id="text50">192.168.92.0/24</text>
+  <!-- Router cards -->
+  <g
+     transform="translate(350 255)"
+     id="g54">
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect50" />
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect51" />
+    <rect
+       x="-95"
+       y="-22"
+       width="190"
+       height="10"
+       fill="#e9f3fb"
+       id="rect52" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text52">R1</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text53">Lo0 10.1.1.1/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text54">ABR · ASBR</text>
+  </g>
+  <g
+     transform="translate(780 255)"
+     id="g58">
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect54" />
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect55" />
+    <rect
+       x="-95"
+       y="-22"
+       width="190"
+       height="10"
+       fill="#e9f3fb"
+       id="rect56" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text56">R2</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text57">Lo0 10.1.1.2/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text58">AS 65001 · ASBR</text>
+  </g>
+  <g
+     transform="translate(350 505)"
+     id="g62">
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect58" />
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect59" />
+    <rect
+       x="-95"
+       y="-22"
+       width="190"
+       height="10"
+       fill="#e9f3fb"
+       id="rect60" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text60">R3</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text61">Lo0 10.1.1.3/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text62">Area 1 internal</text>
+  </g>
+  <g
+     transform="translate(780 505)"
+     id="g66">
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect62" />
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect63" />
+    <rect
+       x="-95"
+       y="-22"
+       width="190"
+       height="10"
+       fill="#e9f3fb"
+       id="rect64" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text64">R4</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text65">Lo0 10.1.1.4/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text66">Area 2 internal</text>
+  </g>
+  <g
+     transform="translate(350 860)"
+     id="g70">
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect66" />
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect67" />
+    <rect
+       x="-95"
+       y="-22"
+       width="190"
+       height="10"
+       fill="#e9f3fb"
+       id="rect68" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text68">R6</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text69">Lo0 10.1.1.6/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text70">Domain2 ABR</text>
+  </g>
+  <g
+     transform="translate(750 860)"
+     id="g74">
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect70" />
+    <rect
+       x="-95"
+       y="-45"
+       width="190"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect71" />
+    <rect
+       x="-95"
+       y="-22"
+       width="190"
+       height="10"
+       fill="#e9f3fb"
+       id="rect72" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text72">R7</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text73">Lo0 10.1.1.7/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text74">172.19.21.1 · .22.1</text>
+  </g>
+  <g
+     transform="translate(1655 255)"
+     id="g78">
+    <rect
+       x="-100"
+       y="-45"
+       width="200"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect74" />
+    <rect
+       x="-100"
+       y="-45"
+       width="200"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect75" />
+    <rect
+       x="-100"
+       y="-22"
+       width="200"
+       height="10"
+       fill="#e9f3fb"
+       id="rect76" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text76">R8</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text77">Lo0 10.1.1.8/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text78">AS 65002 · ASBR</text>
+  </g>
+  <g
+     transform="translate(1655 555)"
+     id="g82">
+    <rect
+       x="-100"
+       y="-45"
+       width="200"
+       height="90"
+       rx="12"
+       class="card"
+       id="rect78" />
+    <rect
+       x="-100"
+       y="-45"
+       width="200"
+       height="33"
+       rx="12"
+       class="cardHead"
+       id="rect79" />
+    <rect
+       x="-100"
+       y="-22"
+       width="200"
+       height="10"
+       fill="#e9f3fb"
+       id="rect80" />
+    <text
+       x="0"
+       y="-21"
+       class="dev"
+       id="text80">R9</text>
+    <text
+       x="0"
+       y="8"
+       class="detail"
+       id="text81">Lo0 10.1.1.9/32</text>
+    <text
+       x="0"
+       y="29"
+       class="detail"
+       id="text82">Area 1 internal</text>
+  </g>
+  <!-- Hosts -->
+  <g
+     transform="translate(1115 462)"
+     id="g84">
+    <rect
+       x="-65"
+       y="-38"
+       width="150"
+       height="78"
+       rx="10"
+       class="host"
+       id="rect82" />
+    <rect
+       x="-28"
+       y="-22"
+       width="55"
+       height="30"
+       fill="#e3edf5"
+       stroke="#526b82"
+       stroke-width="2"
+       id="rect83" />
+    <path
+       d="M0 8 v10 m-15 0 h30"
+       stroke="#526b82"
+       stroke-width="2"
+       id="path83" />
+    <text
+       x="10"
+       y="61"
+       class="hostTitle"
+       id="text83">EP16</text>
+    <text
+       x="10"
+       y="82"
+       class="hostDetail"
+       id="text84">192.168.16.2/30</text>
+  </g>
+  <g
+     transform="translate(1115 585)"
+     id="g86">
+    <rect
+       x="-65"
+       y="-38"
+       width="150"
+       height="78"
+       rx="10"
+       class="host"
+       id="rect84" />
+    <rect
+       x="-28"
+       y="-22"
+       width="55"
+       height="30"
+       fill="#e3edf5"
+       stroke="#526b82"
+       stroke-width="2"
+       id="rect85" />
+    <path
+       d="M0 8 v10 m-15 0 h30"
+       stroke="#526b82"
+       stroke-width="2"
+       id="path85" />
+    <text
+       x="10"
+       y="61"
+       class="hostTitle"
+       id="text85">EP17</text>
+    <text
+       x="10"
+       y="82"
+       class="hostDetail"
+       id="text86">192.168.17.2/24</text>
+  </g>
+  <g
+     transform="translate(1115 708)"
+     id="g88">
+    <rect
+       x="-65"
+       y="-38"
+       width="150"
+       height="78"
+       rx="10"
+       class="host"
+       id="rect86" />
+    <rect
+       x="-28"
+       y="-22"
+       width="55"
+       height="30"
+       fill="#e3edf5"
+       stroke="#526b82"
+       stroke-width="2"
+       id="rect87" />
+    <path
+       d="M0 8 v10 m-15 0 h30"
+       stroke="#526b82"
+       stroke-width="2"
+       id="path87" />
+    <text
+       x="10"
+       y="61"
+       class="hostTitle"
+       id="text87">EP18</text>
+    <text
+       x="10"
+       y="82"
+       class="hostDetail"
+       id="text88">192.168.18.2/23</text>
+  </g>
+  <g
+     transform="translate(1975 650)"
+     id="g90">
+    <rect
+       x="-70"
+       y="-38"
+       width="160"
+       height="78"
+       rx="10"
+       class="host"
+       id="rect88" />
+    <rect
+       x="-28"
+       y="-22"
+       width="55"
+       height="30"
+       fill="#e3edf5"
+       stroke="#526b82"
+       stroke-width="2"
+       id="rect89" />
+    <path
+       d="M0 8 v10 m-15 0 h30"
+       stroke="#526b82"
+       stroke-width="2"
+       id="path89" />
+    <text
+       x="10"
+       y="61"
+       class="hostTitle"
+       id="text89">EP91</text>
+    <text
+       x="10"
+       y="82"
+       class="hostDetail"
+       id="text90"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">192.168.91.2/24</text>
+  </g>
+  <g
+     transform="translate(1975 830)"
+     id="g92">
+    <rect
+       x="-70"
+       y="-38"
+       width="160"
+       height="78"
+       rx="10"
+       class="host"
+       id="rect90" />
+    <rect
+       x="-28"
+       y="-22"
+       width="55"
+       height="30"
+       fill="#e3edf5"
+       stroke="#526b82"
+       stroke-width="2"
+       id="rect91" />
+    <path
+       d="M0 8 v10 m-15 0 h30"
+       stroke="#526b82"
+       stroke-width="2"
+       id="path91" />
+    <text
+       x="10"
+       y="61"
+       class="hostTitle"
+       id="text91">EP92</text>
+    <text
+       x="10"
+       y="82"
+       class="hostDetail"
+       id="text92"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">192.168.92.2/24</text>
+  </g>
+  <!-- Clear legend/footer -->
+  <rect
+     x="70"
+     y="1085"
+     width="1200"
+     height="85"
+     rx="12"
+     fill="#fff"
+     stroke="#d5e0eb"
+     stroke-width="2"
+     id="rect92" />
+  <text
+     x="95"
+     y="1116"
+     class="label"
+     id="text93">Route-exchange sequence</text>
+  <text
+     x="95"
+     y="1144"
+     class="small"
+     id="text94">OSPF AS 65001 → eBGP at R2/R8 → OSPF AS 65002. Reverse propagation needs BGP-to-OSPF export policy at each ASBR.</text>
+  <rect
+     x="1410"
+     y="1085"
+     width="700"
+     height="85"
+     rx="12"
+     fill="#fff"
+     stroke="#e4d5b7"
+     stroke-width="2"
+     id="rect94" />
+  <text
+     x="1435"
+     y="1116"
+     class="label"
+     id="text95">Addressing conventions</text>
+  <text
+     x="1435"
+     y="1144"
+     class="small"
+     id="text96">p2p = /30 with .1/.2; VLAN IDs identify logical links.</text>
 </svg>
