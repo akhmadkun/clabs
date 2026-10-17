@@ -1,0 +1,68 @@
+LAB-009 - OSPFv3 FUNDAMENTALS AND ADDRESS FAMILIES
+TASK-ONLY WORKSHEET
+
+SOURCE BASIS
+Juniper Junos OS OSPF User Guide, "Understanding Multiple Address Families for OSPFv3" and "Example: Configuring Multiple Address Families for OSPFv3," printed pages 41-47. Use the terminology `realm ipv4-unicast` and the documented `show ospf3 ... realm ipv4-unicast` verifications.
+
+OBJECTIVE
+Configure OSPFv3 for IPv6 unicast first. Then enable the IPv4-unicast realm of OSPFv3 on the same logical links. Prove remote IPv6 and IPv4 loopback routes are learned via OSPFv3 in inet6.0 and inet.0 respectively.
+
+BASELINE / TOPOLOGY
+- R1-R2: VLAN 12, eth1.12, Area 0.0.0.0.
+- R2-R3: VLAN 23, eth1.23, Area 0.0.0.0.
+- R1/R2/R3 already have IPv4 loopbacks 10.1.1.1/32, 10.1.1.2/32, 10.1.1.3/32 in the base configuration. Router IDs must be 10.1.1.1, .2, and .3 respectively.
+- The addressing profiles configure both family inet and family inet6 on each link, plus an IPv6 /128 on each lo0.0. Do not add routing protocol configuration through the profile; the OSPFv3 protocol work is the lab task.
+- Follow ADDRESS-PLAN.txt. All logical links are independent tagged VLANs through the existing br-univ.
+
+TASK 0 - CLEAN AND LOAD THE ADDRESSING BASELINE
+1. Follow CLEANUP-BEFORE-LAB009.txt. Do not modify the universal topology or br-univ.
+2. Load the matching addressing profile on R1, R2, and R3; run `commit check` and `commit`.
+3. Verify both IPv4 and IPv6 addresses are present on each subinterface and each IPv6 loopback is present.
+4. Confirm IPv6 is enabled on every OSPFv3 link; OSPFv3 uses IPv6 link-local addresses for Hello packets even when an IPv4 realm is also configured.
+
+ACCEPTANCE CRITERIA
+- VLAN 12 connects only R1 and R2 using 10.0.12.0/30 and 2001:db8:100:12::/64.
+- VLAN 23 connects only R2 and R3 using 10.0.23.0/30 and 2001:db8:100:23::/64.
+- Router IDs are unique and the inherited IPv4 loopbacks remain unchanged.
+- Each router has IPv6 loopback 2001:db8:ffff::N/128.
+
+TASK 1 - CONFIGURE OSPFv3 FOR IPV6 UNICAST
+1. Configure Area 0 OSPFv3 on R1's eth1.12 and passive lo0.0.
+2. Configure Area 0 OSPFv3 on R2's eth1.12, eth1.23, and passive lo0.0.
+3. Configure Area 0 OSPFv3 on R3's eth1.23 and passive lo0.0.
+4. Run `commit check` and `commit` on each router.
+5. Verify the R1-R2 and R2-R3 neighbor relationships and remote IPv6 loopback routes.
+
+ACCEPTANCE CRITERIA
+- OSPFv3 neighbors form on R1-R2 and R2-R3 in Area 0.
+- R1 learns 2001:db8:ffff::3/128 in inet6.0 through R2; R3 learns 2001:db8:ffff::1/128 through R2.
+- The route is learned through OSPFv3, not a static route.
+- `show ospf3 interface` shows the expected OSPFv3 interfaces.
+
+TASK 2 - ENABLE IPV4 UNICAST REALM IN OSPFV3
+1. On R1, add realm ipv4-unicast Area 0 interfaces for eth1.12 and passive lo0.0.
+2. On R2, add realm ipv4-unicast Area 0 interfaces for eth1.12, eth1.23, and passive lo0.0.
+3. On R3, add realm ipv4-unicast Area 0 interfaces for eth1.23 and passive lo0.0.
+4. Run `commit check` before committing each router.
+5. Verify IPv4-realm interface/LSDB state and routes in inet.0. Compare with the IPv6-unicast realm and inet6.0.
+
+ACCEPTANCE CRITERIA
+- The IPv4-unicast realm is present on both links and each router's passive loopback.
+- R1 learns 10.1.1.3/32 in inet.0 through R2; R3 learns 10.1.1.1/32 through R2.
+- The IPv4 routes are learned using OSPFv3's IPv4-unicast realm; they are not static and are not dependent on OSPFv2.
+- `show ospf3 database realm ipv4-unicast` displays the IPv4-unicast link-state database.
+- IPv6-unicast reachability remains operational after enabling the IPv4 realm.
+
+TASK 3 - EXPLAIN THE RESULT
+Document the following from actual outputs:
+1. Which addresses are used for OSPFv3 Hello packets on the links, and why family inet6 is enabled even when advertising IPv4 routes through the additional realm.
+2. The difference between the default IPv6-unicast realm and the `ipv4-unicast` realm.
+3. Which routing table holds each family: IPv6 unicast in inet6.0; IPv4 unicast in inet.0.
+4. Evidence that each realm has its own neighbor/LSDB state as described by the Juniper guide.
+
+FINAL ACCEPTANCE CRITERIA
+- R1-R2 and R2-R3 OSPFv3 IPv6-unicast adjacencies are operational.
+- IPv6 loopbacks are learned remotely in inet6.0.
+- If accepted by the running image, the IPv4-unicast realm is operational on both links and IPv4 loopbacks are learned in inet.0 using OSPFv3.
+- The learner captures the exact `commit check` error and platform limitation if the image rejects realm syntax; the IPv4 realm is not marked complete without route and LSDB evidence.
+- The universal topology YAML and br-univ remain unchanged.

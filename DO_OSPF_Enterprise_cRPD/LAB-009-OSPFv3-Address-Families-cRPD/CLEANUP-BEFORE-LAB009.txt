@@ -1,0 +1,46 @@
+LAB-009 CLEANUP / PREPARATION
+
+Use this when moving from LAB-007/LAB-008 and when no other OSPF exercise should remain active. Do not edit the Containerlab topology. These commands remove lab protocol state and prior lab VLAN units only; they preserve system, SSH/authentication, eth1 parent, and lo0.0 base address.
+
+On R1, R2, R3, and R4, run:
+  configure
+  delete protocols ospf
+  delete protocols ospf3
+  commit check
+  commit
+
+On R1, remove old lab units and prepare the new VLANs:
+  configure
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 1234
+  commit check
+  commit
+
+On R2:
+  configure
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 24
+  delete interfaces eth1 unit 1234
+  delete interfaces eth1 unit 23
+  commit check
+  commit
+
+On R3:
+  configure
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 34
+  delete interfaces eth1 unit 1234
+  delete interfaces eth1 unit 23
+  commit check
+  commit
+
+On R4, remove only old LAB-008/LAB-007 units if they remain:
+  configure
+  delete interfaces eth1 unit 24
+  delete interfaces eth1 unit 34
+  delete interfaces eth1 unit 1234
+  commit check
+  commit
+
+The LAB-009 profiles intentionally reuse the standard pair VLANs 12 and 23. Load the new addressing profiles only after reviewing and committing this cleanup on the participating routers. Then load the new addressing profiles on R1-R3. Do not delete or recreate br-univ, and do not touch eth1 itself. If your local topology has other deliberate services bound to these exact eth1 unit numbers, review the candidate config before committing instead of blindly applying cleanup.

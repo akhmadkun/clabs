@@ -1,0 +1,134 @@
+LAB-009 - OSPFv3 FUNDAMENTALS AND ADDRESS FAMILIES
+STEP-BY-STEP SOLUTION GUIDE
+
+PLATFORM NOTE
+The Juniper Junos OS OSPF User Guide documents the commands below. That does not guarantee that every feature is implemented in every container image. Use `commit check` and operational evidence on xzjt/crpd:25.2R1-S1.4. The IPv6-unicast task can be completed independently of the added IPv4-unicast realm.
+
+1. CLEAN UP PREVIOUS LAB CONFIGURATION
+Follow CLEANUP-BEFORE-LAB009.txt. This removes prior OSPF/OSPFv3 process stanzas and the listed old VLAN units while preserving the base lo0.0 IPv4 addresses, system, SSH, and the eth1 parent interface.
+
+Copy the profile files to each corresponding host-side configs/rN folder. On each router:
+  configure
+  load set /lab-configs/lab009-rN-addressing.set
+  commit check
+  commit
+
+R1/R2/R3 profiles configure both inet and inet6 on the link interfaces, add an IPv6 address on lo0.0, and set an explicit unique Router ID. They intentionally do not configure OSPFv3.
+
+Check addressing:
+  run show interfaces terse | match eth1
+  run show configuration interfaces eth1 | display set
+  run show configuration interfaces lo0 | display set
+
+Expected link-local addressing is automatically available on IPv6-enabled interfaces; OSPFv3 Hello packets use IPv6 link-local addresses. Do not remove family inet6 when adding the IPv4 realm.
+
+2. CONFIGURE THE DEFAULT OSPFv3 REALM (IPv6 UNICAST)
+
+On R1:
+  configure
+  set protocols ospf3 area 0.0.0.0 interface eth1.12
+  set protocols ospf3 area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+
+On R2:
+  configure
+  set protocols ospf3 area 0.0.0.0 interface eth1.12
+  set protocols ospf3 area 0.0.0.0 interface eth1.23
+  set protocols ospf3 area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+
+On R3:
+  configure
+  set protocols ospf3 area 0.0.0.0 interface eth1.23
+  set protocols ospf3 area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+
+Verify on R1/R2/R3:
+  run show ospf3 neighbor detail
+  run show ospf3 interface detail
+  run show ospf3 database
+
+Verify remote IPv6 loopbacks:
+On R1:
+  run show route table inet6.0 2001:db8:ffff::3/128 exact
+On R3:
+  run show route table inet6.0 2001:db8:ffff::1/128 exact
+
+The route should be learned through OSPFv3 across the two-hop R1-R2-R3 topology. Do not add a static route to satisfy this check.
+
+3. ADD THE IPv4-UNICAST REALM TO OSPFv3
+Juniper's example adds `realm ipv4-unicast` independently alongside the default area/interface statements. Apply on both ends of every link and on each router's passive loopback.
+
+On R1:
+  configure
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface eth1.12
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+
+On R2:
+  configure
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface eth1.12
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface eth1.23
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+
+On R3:
+  configure
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface eth1.23
+  set protocols ospf3 realm ipv4-unicast area 0.0.0.0 interface lo0.0 passive
+  commit check
+  commit
+
+Verify the IPv4 realm:
+  run show ospf3 interface realm ipv4-unicast
+  run show ospf3 database realm ipv4-unicast
+
+Verify the IPv4 loopbacks in inet.0:
+On R1:
+  run show route table inet.0 10.1.1.3/32 exact
+On R3:
+  run show route table inet.0 10.1.1.1/32 exact
+
+Expected: the IPv4 loopback route is OSPF-learned and reachable across R2. The default IPv6-unicast realm must remain active. Juniper documents that each realm keeps a separate neighbor set and LSDB, and maps IPv6 unicast to inet6.0 and IPv4 unicast to inet.0.
+
+4. WHAT TO RECORD
+Capture:
+- `show configuration protocols ospf3 | display set` from R1-R3.
+- `show ospf3 neighbor detail` and `show ospf3 interface detail` for the default IPv6-unicast realm.
+- `show ospf3 interface realm ipv4-unicast` and `show ospf3 database realm ipv4-unicast` for the IPv4 realm.
+- The four exact route lookups listed above.
+- The full commit-check text if either realm syntax is rejected.
+
+5. TROUBLESHOOTING
+A. `commit check` rejects the IPv6 OSPFv3 interface commands:
+- Capture the complete error text and inspect `show version` and `show configuration protocols ospf3 | display set`.
+- Do not claim the OSPFv3 feature succeeded until a neighbor and a learned IPv6 route are visible.
+
+B. IPv6 adjacency does not form:
+- Verify both ends have matching VLAN IDs, IPv6 addresses/prefixes, and Area 0 OSPFv3 interface configuration.
+- Verify the VLAN exists only between the intended endpoints and that both interfaces are up.
+- Confirm `family inet6` remains configured; OSPFv3 Hello source/next-hop handling depends on IPv6 link-local addresses.
+
+C. IPv6 routes work but IPv4 realm syntax is rejected:
+- Save the exact `commit check` error and mark only Task 1 as completed on this cRPD image.
+- Do not replace the realm with OSPFv2, because that would no longer test IPv4-unicast over OSPFv3.
+- Test Task 2 on vJunos-router/a supported Junos image, then retain the cRPD result as a feature-compatibility observation.
+
+D. IPv4 realm commits but the remote IPv4 loopback is absent:
+- Confirm IPv4 address family inet is configured on both link ends and the inherited IPv4 loopback exists on lo0.0.
+- Confirm `realm ipv4-unicast` is configured on both ends of both links and on each loopback as passive.
+- Inspect the IPv4 realm LSDB before troubleshooting the inet.0 routing table.
+
+6. OPTIONAL CLEANUP AFTER EVIDENCE COLLECTION
+On R1-R3, to remove only this lab's OSPFv3 protocol state:
+  configure
+  delete protocols ospf3
+  commit check
+  commit
+
+To remove the lab's new logical links and the IPv6 loopback addresses later, review the candidate configuration then delete eth1 units 12 and/or 23 on the relevant routers, and delete the exact `lo0.0 family inet6 address 2001:db8:ffff::N/128` line. Do not remove base IPv4 loopback addresses, system settings, or eth1 parent connectivity. Never delete/recreate br-univ.

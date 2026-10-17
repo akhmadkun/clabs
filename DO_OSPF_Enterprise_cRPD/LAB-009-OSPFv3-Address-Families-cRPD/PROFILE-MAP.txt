@@ -1,0 +1,22 @@
+LAB-009 PROFILE MAP
+
+Copy the following profiles to the corresponding host-side directories already bind-mounted by jun-ospf.clab.yml:
+
+configs/r1/lab009-r1-addressing.set -> <universal-topology>/configs/r1/
+configs/r2/lab009-r2-addressing.set -> <universal-topology>/configs/r2/
+configs/r3/lab009-r3-addressing.set -> <universal-topology>/configs/r3/
+
+Inside the routers they are available as:
+/lab-configs/lab009-r1-addressing.set
+/lab-configs/lab009-r2-addressing.set
+/lab-configs/lab009-r3-addressing.set
+
+On each router:
+  configure
+  load set /lab-configs/lab009-rN-addressing.set
+  commit check
+  commit
+
+Replace N with the router number.
+
+These profiles configure interface addressing and explicit router IDs only. They intentionally do not configure protocols ospf3; that is the learning task. They assume the existing base.conf contains IPv4 loopback address 10.1.1.N/32.

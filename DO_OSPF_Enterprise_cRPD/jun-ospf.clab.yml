@@ -12,7 +12,7 @@ topology:
       network-mode: none
       image: ghcr.io/srl-labs/network-multitool:latest
     juniper_crpd:
-      image: xzjt/crpd:25.2R1-S1.4
+      image: crpd:23.4R2-S5.6
     cisco_iol:
       image: arthurk99/cisco-iol:17.15.01
 

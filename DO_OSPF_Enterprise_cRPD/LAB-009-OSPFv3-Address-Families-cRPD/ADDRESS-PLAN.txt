@@ -1,0 +1,32 @@
+LAB-009 - ADDRESS PLAN
+
+Router IDs and loopbacks
+Router  RID / IPv4 loopback       IPv6 loopback
+R1      10.1.1.1 / 10.1.1.1/32    2001:db8:ffff::1/128
+R2      10.1.1.2 / 10.1.1.2/32    2001:db8:ffff::2/128
+R3      10.1.1.3 / 10.1.1.3/32    2001:db8:ffff::3/128
+
+Logical links
+Convention: point-to-point VLAN and Juniper unit equal the router-pair number (R1-R2 = 12, R2-R3 = 23). Addresses use endpoint .1 on the lower-numbered router and .2 on the higher-numbered router.
+
+VLAN 12 / eth1.12 / R1-R2 / Area 0
+R1 IPv4: 10.0.12.1/30
+R2 IPv4: 10.0.12.2/30
+IPv4 network: 10.0.12.0/30
+R1 IPv6: 2001:db8:100:12::1/64
+R2 IPv6: 2001:db8:100:12::2/64
+IPv6 prefix: 2001:db8:100:12::/64
+
+VLAN 23 / eth1.23 / R2-R3 / Area 0
+R2 IPv4: 10.0.23.1/30
+R3 IPv4: 10.0.23.2/30
+IPv4 network: 10.0.23.0/30
+R2 IPv6: 2001:db8:100:23::1/64
+R3 IPv6: 2001:db8:100:23::2/64
+IPv6 prefix: 2001:db8:100:23::/64
+
+Notes
+- IPv4 prefixes use documentation-only 10/8 space here and IPv6 prefixes use 2001:db8::/32 for documentation.
+- The base configuration is assumed to already define IPv4 lo0.0 addresses 10.1.1.1/32 through 10.1.1.3/32. The profile adds only IPv6 loopback addresses, not a second lo0 unit.
+- On Junos, the subinterface unit name does not itself set the VLAN; `vlan-id` does. In this lab the unit and VLAN numbers intentionally match.
+- Both `family inet` and `family inet6` are present on each link interface. Juniper states that OSPFv3 uses IPv6 link-local addresses for Hello packets and next-hop calculations, so IPv6 must be enabled even when an extra IPv4 realm is configured.
