@@ -13,6 +13,8 @@ topology:
       image: ghcr.io/srl-labs/network-multitool:latest
     juniper_crpd:
       image: xzjt/crpd:25.2R1-S1.4
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
 
   nodes:
     r1:
@@ -65,42 +67,16 @@ topology:
     br-univ:
       kind: bridge
 
-    ep16:
-      kind: linux
-      exec:
-        - ip addr add 192.168.16.2/30 dev eth1
-        - ip route add default via 192.168.16.1
-    ep17:
-      kind: linux
-      exec:
-        - ip addr add 192.168.17.2/24 dev eth1
-        - ip route add default via 192.168.17.1
-    ep18:
-      kind: linux
-      exec:
-        - ip addr add 192.168.18.2/23 dev eth1
-        - ip route add default via 192.168.18.1
-    ep76:
-      kind: linux
-      exec:
-        - ip addr add 192.168.76.2/23 dev eth1
-        - ip route add default via 192.168.76.1
-    ep77:
-      kind: linux
-      exec:
-        - ip addr add 192.168.77.2/23 dev eth1
-        - ip route add default via 192.168.77.1
-
-    ep91:
-      kind: linux
-      exec:
-        - ip addr add 192.168.91.2/24 dev eth1
-        - ip route add default via 192.168.91.1
-    ep92:
-      kind: linux
-      exec:
-        - ip addr add 192.168.92.2/24 dev eth1
-        - ip route add default via 192.168.92.1
+    epiol1:
+      kind: cisco_iol
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./configs/epiol1:/iol/labconfigs:rw
+    epiol2:
+      kind: cisco_iol
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./configs/epiol2:/iol/labconfigs:rw
 
   links:
     # Shared physical Layer-2 bridge; 802.1Q logical adjacencies are configured on cRPD.
@@ -114,15 +90,6 @@ topology:
     - endpoints: ["r9:eth1", "br-univ:r9_eth1"]
     - endpoints: ["r10:eth1", "br-univ:r10_eth1"]
 
-    # AS 65001 endpoint LANs behind R4 (Area 2).
-    - endpoints: ["r4:eth2", "ep16:eth1"]
-    - endpoints: ["r4:eth3", "ep17:eth1"]
-    - endpoints: ["r4:eth4", "ep18:eth1"]
-
-    # AS 65002 endpoint LANs behind R9 (Area 1).
-    - endpoints: ["r9:eth2", "ep91:eth1"]
-    - endpoints: ["r9:eth3", "ep92:eth1"]
-
-    # Area 3 prefixes behind R10; used to prove virtual-link route propagation.
-    - endpoints: ["r10:eth2", "ep76:eth1"]
-    - endpoints: ["r10:eth3", "ep77:eth1"]
+    # iol as endpoints for testing only
+    - endpoints: ["epiol1:eth1", "br-univ:epiol1_eth1"]
+    - endpoints: ["epiol2:eth1", "br-univ:epiol2_eth1"]

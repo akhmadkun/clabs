@@ -1,0 +1,98 @@
+name: juniper_ospf
+prefix: ""
+
+# LAB-002 keeps the LAB-001 physical topology.
+# All cRPD eth1 parent interfaces attach to the pre-existing host bridge br-univ.
+# Logical router-to-router connectivity is formed by 802.1Q VLAN subinterfaces:
+# VLAN 12 = Area 0, VLAN 13 = Area 1, VLAN 24 = Area 2.
+# Area assignments follow Day One: Advanced OSPF in the Enterprise, Chapter 3.
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+    juniper_crpd:
+      image: xzjt/crpd:25.2R1-S1.4
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      startup-config: ./configs/r1/base.conf
+      binds:
+        - ./configs/r1:/lab-configs:rw
+    r2:
+      kind: juniper_crpd
+      startup-config: ./configs/r2/base.conf
+      binds:
+        - ./configs/r2:/lab-configs:rw
+    r3:
+      kind: juniper_crpd
+      startup-config: ./configs/r3/base.conf
+      binds:
+        - ./configs/r3:/lab-configs:rw
+    r4:
+      kind: juniper_crpd
+      startup-config: ./configs/r4/base.conf
+      binds:
+        - ./configs/r4:/lab-configs:rw
+    r6:
+      kind: juniper_crpd
+      startup-config: ./configs/r6/base.conf
+      binds:
+        - ./configs/r6:/lab-configs:rw
+    r7:
+      kind: juniper_crpd
+      startup-config: ./configs/r7/base.conf
+      binds:
+        - ./configs/r7:/lab-configs:rw
+    r8:
+      kind: juniper_crpd
+      startup-config: ./configs/r8/base.conf
+      binds:
+        - ./configs/r8:/lab-configs:rw
+    r9:
+      kind: juniper_crpd
+      startup-config: ./configs/r9/base.conf
+      binds:
+        - ./configs/r9:/lab-configs:rw
+    r10:
+      kind: juniper_crpd
+      startup-config: ./configs/r10/base.conf
+      binds:
+        - ./configs/r10:/lab-configs:rw
+    # This is an existing Linux bridge managed outside Containerlab.
+    # Create/enable it on the host beforehand; this topology must not delete it.
+    br-univ:
+      kind: bridge
+    SW:
+      kind: ceos
+      image: ceos:4.35.0F
+      startup-config: configs/ceos-sw.cfg
+    epiol1:
+      kind: cisco_iol
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./configs/epiol1:/iol/labconfigs:rw
+    epiol2:
+      kind: cisco_iol
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./configs/epiol2:/iol/labconfigs:rw
+
+  links:
+    # Shared physical Layer-2 bridge; 802.1Q logical adjacencies are configured on cRPD.
+    - endpoints: ["r1:eth1","SW:eth1"]
+    - endpoints: ["r2:eth1","SW:eth2"]
+    - endpoints: ["r3:eth1","SW:eth3"]
+    - endpoints: ["r4:eth1","SW:eth4"]
+
+    - endpoints: ["r7:eth1","SW:eth7"]
+    - endpoints: ["r8:eth1","SW:eth8"]
+    - endpoints: ["r9:eth1","SW:eth9"]
+    - endpoints: ["r10:eth1","SW:eth10"]
+
+    # iol as endpoints for testing only
+    - endpoints: ["epiol1:eth1", "SW:eth11"]
+    - endpoints: ["epiol2:eth1", "SW:eth12"]
