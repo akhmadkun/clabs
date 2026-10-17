@@ -1,0 +1,67 @@
+LAB-008 - OSPF MULTI-AREA ADJACENCY
+TASK-ONLY WORKSHEET
+Source basis: Juniper Junos OS OSPF User Guide, "Understanding/Configuring Multiarea Adjacency for OSPF"; RFC 5185.
+Target image: xzjt/crpd:25.2R1-S1.4. Use vJunos-router for this exercise if the required `secondary` feature is not supported by the running cRPD image.
+
+OBJECTIVE
+Use one logical interface to create OSPF adjacencies in two areas. Confirm that the secondary adjacency is represented as a point-to-point unnumbered link in Area 1, and observe how it changes the preferred Area 1 path.
+
+BASELINE TOPOLOGY
+- R1-R2: VLAN 12, 10.0.12.0/30, primary OSPF Area 0 adjacency.
+- R1-R3: VLAN 13, 10.0.13.0/30, Area 1 path.
+- R3-R4: VLAN 34, 10.0.34.0/30, Area 1 path.
+- R4-R2: VLAN 24, 10.0.24.0/30, Area 1 path.
+- All router IDs are unique. Router loopback addresses 10.1.1.1/32 through 10.1.1.4/32 are preconfigured in each router's base.conf.
+- R1 and R2 are ABRs: they each have an Area 0 interface and Area 1 connectivity.
+- Before the task, the R1-R2 logical interface belongs only to Area 0. Area 1 has an alternate R1-R3-R4-R2 path.
+- Alternative Area 1 links have OSPF metric 10; the planned secondary adjacency should use metric 5.
+
+TASK 0 - LOAD AND VALIDATE BASELINE
+1. Stop other labs reusing these VLAN IDs/prefixes. Ensure LAB-007's OSPF config is not still active.
+2. Load the per-router baseline .set profile from the matching `/lab-configs/` directory, run `commit check`, then `commit`.
+3. Verify router IDs and all four baseline links.
+4. Verify R1-R2 is Full in Area 0, while R1-R3, R3-R4, and R4-R2 are Full in Area 1.
+5. On R2, inspect the route to R3's loopback `10.1.1.3/32`. Record the next hop and metric before enabling the multi-area adjacency.
+
+ACCEPTANCE CRITERIA
+- R1-R4 have unique router IDs 10.1.1.1, .2, .3, .4.
+- All four link interfaces are up with the exact addressing in ADDRESS-PLAN.txt.
+- Baseline adjacencies are Full on the expected primary areas.
+- R2's baseline route to 10.1.1.3/32 uses the longer Area 1 path through R4, not a static route.
+
+TASK 1 - CONFIGURE THE SECONDARY ADJACENCY
+1. On R1, configure `eth1.12` as a secondary interface in Area 1 and set its Area 1 metric to 5.
+2. Apply the matching configuration on R2.
+3. Run `commit check` on both routers before committing.
+4. Do not add a second IP address to VLAN 12. The secondary adjacency reuses the same logical interface and is an unnumbered point-to-point link in the secondary area.
+
+ACCEPTANCE CRITERIA
+- Both routers accept the secondary-interface configuration.
+- `show ospf interface detail` shows `eth1.12` in Area 0 as the primary interface and in Area 1 as secondary.
+- The secondary adjacency between R1 and R2 is Full in Area 1 as well as the existing Full adjacency in Area 0.
+- The other Area 1 adjacencies remain Full.
+
+TASK 2 - VERIFY THE ROUTING EFFECT
+1. On R2, inspect `show route 10.1.1.3/32 exact` and `show ospf route` again.
+2. Compare the selected Area 1 path and metric with the baseline recorded in Task 0.
+3. Verify the Area 1 link-state database and confirm that the R1-R2 secondary link is represented as a point-to-point unnumbered adjacency.
+4. Explain why the route preference can change even though no new physical/parent interface or IP subnet was added.
+
+ACCEPTANCE CRITERIA
+- R2's preferred intra-area path to R3's loopback moves from the R2-R4-R3 route to the lower-cost path through R1 using `eth1.12` (assuming cRPD implements the feature and the configured metrics are accepted).
+- The new Area 1 path is preferred because its cost is lower than the alternate route; do not infer this merely from a successful commit.
+- The primary Area 0 adjacency remains Full and keeps the same IP subnet.
+- No static route is added to force the preferred path.
+
+TASK 3 - RECOVERY / FINAL EVIDENCE
+1. Record `show configuration protocols ospf | display set` on R1 and R2.
+2. Record `show ospf interface detail`, `show ospf neighbor detail`, `show ospf database area 0.0.0.1`, `show ospf route`, and `show route 10.1.1.3/32 exact` on R2.
+3. Save outputs and note whether the exact secondary behavior is supported by this cRPD build.
+4. If the feature was only for testing, remove the Area 1 secondary and its metric from R1/R2 after collecting evidence, then commit. If retaining the lab state, label it clearly as LAB-008.
+
+FINAL ACCEPTANCE CRITERIA
+- Primary Area 0 and secondary Area 1 adjacencies over the same logical interface are demonstrated or a precise cRPD limitation/error is recorded.
+- Interface/neighbor details prove the secondary interface role; commit success alone is insufficient.
+- The effect on the Area 1 route is demonstrated using the route table/OSPF route output.
+- R1-R4 retain unique router IDs and all baseline adjacencies remain healthy.
+- br-univ and the universal topology YAML remain untouched.

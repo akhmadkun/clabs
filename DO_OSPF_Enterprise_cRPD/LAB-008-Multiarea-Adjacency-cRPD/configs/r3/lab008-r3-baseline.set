@@ -1,0 +1,10 @@
+set interfaces eth1 unit 13 vlan-id 13
+set interfaces eth1 unit 13 family inet address 10.0.13.2/30
+set interfaces eth1 unit 34 vlan-id 34
+set interfaces eth1 unit 34 family inet address 10.0.34.1/30
+set routing-options router-id 10.1.1.3
+set protocols ospf area 0.0.0.1 interface eth1.13 interface-type p2p
+set protocols ospf area 0.0.0.1 interface eth1.13 metric 10
+set protocols ospf area 0.0.0.1 interface eth1.34 interface-type p2p
+set protocols ospf area 0.0.0.1 interface eth1.34 metric 10
+set protocols ospf area 0.0.0.1 interface lo0.0 passive

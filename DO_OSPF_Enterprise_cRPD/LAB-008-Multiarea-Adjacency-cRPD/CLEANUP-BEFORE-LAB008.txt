@@ -1,0 +1,45 @@
+CLEANUP BEFORE LAB-008
+
+Use this only when moving from the latest LAB-007 run that used eth1.1234 / VLAN 100. Do not use it if other OSPF configuration must be preserved. These commands preserve system, login, SSH, and lo0.0 address configuration, but remove the previous OSPF stanza and only the link units used by LAB-007/LAB-008.
+
+R1:
+  configure
+  delete protocols ospf
+  delete routing-options router-id
+  delete interfaces eth1 unit 1234
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 13
+  commit check
+  commit
+
+R2:
+  configure
+  delete protocols ospf
+  delete routing-options router-id
+  delete interfaces eth1 unit 1234
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 24
+  commit check
+  commit
+
+R3:
+  configure
+  delete protocols ospf
+  delete routing-options router-id
+  delete interfaces eth1 unit 1234
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 34
+  commit check
+  commit
+
+R4:
+  configure
+  delete protocols ospf
+  delete routing-options router-id
+  delete interfaces eth1 unit 1234
+  delete interfaces eth1 unit 24
+  delete interfaces eth1 unit 34
+  commit check
+  commit
+
+Then load each LAB-008 baseline profile. Do not create, remove, or reconfigure br-univ. Check that the existing base.conf lo0.0 identity address remains configured on every router before proceeding.

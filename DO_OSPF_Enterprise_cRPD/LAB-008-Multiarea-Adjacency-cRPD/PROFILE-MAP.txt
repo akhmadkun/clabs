@@ -1,0 +1,12 @@
+LAB-008 PROFILE MAP
+
+Copy these files into the matching host-side folders already bind-mounted by jun-ospf.clab.yml:
+
+configs/r1/lab008-r1-baseline.set -> <universal-topology>/configs/r1/
+configs/r2/lab008-r2-baseline.set -> <universal-topology>/configs/r2/
+configs/r3/lab008-r3-baseline.set -> <universal-topology>/configs/r3/
+configs/r4/lab008-r4-baseline.set -> <universal-topology>/configs/r4/
+
+They become available inside each router at /lab-configs/lab008-rN-baseline.set. Load the relevant one with `load set /lab-configs/lab008-rN-baseline.set` from Junos configuration mode.
+
+The solution commands to add the secondary adjacency are intentionally not part of the baseline profiles; learners configure those in Task 1. No topology YAML edit is needed because the four cRPD parent interfaces already connect to the common external br-univ and the VLAN subinterfaces define logical links.

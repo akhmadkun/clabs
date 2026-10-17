@@ -1,0 +1,103 @@
+LAB-008 - OSPF MULTI-AREA ADJACENCY
+STEP-BY-STEP SOLUTION GUIDE
+
+PLATFORM NOTE
+Juniper documents multi-area adjacency using the interface option `secondary` under a second OSPF area. That documents Junos OS capability generally but does not prove the exact locally used image `xzjt/crpd:25.2R1-S1.4` implements it. Treat the running `commit check` and operational output as the feature probe. Do not label the lab successful unless the secondary adjacency is visible.
+
+1. START FROM A CLEAN LAB-008 CONTEXT
+- Keep the current universal topology YAML as-is; it already connects each router's eth1 parent to the existing br-univ.
+- Copy `configs/r1/lab008-r1-baseline.set` through `configs/r4/lab008-r4-baseline.set` to the matching host-side config directories.
+- On each router, load its profile:
+    configure
+    load set /lab-configs/lab008-rN-baseline.set
+    commit check
+    commit
+- The profile assumes the loopback IP from base.conf is already present and unique; it sets routing-options router-id explicitly.
+- If working from LAB-007, follow CLEANUP-BEFORE-LAB008.txt first. Do not leave VLAN 100 / eth1.1234 and the previous OSPF configuration active.
+
+2. VERIFY THE BASELINE
+On R1:
+  run show ospf neighbor
+  run show ospf interface eth1.12 detail
+  run show route 10.1.1.3/32 exact
+On R2:
+  run show ospf neighbor
+  run show route 10.1.1.3/32 exact
+On R3/R4:
+  run show ospf neighbor
+  run show ospf interface detail
+
+Expected baseline adjacencies:
+- R1 <-> R2 over eth1.12, primary Area 0, Full.
+- R1 <-> R3 over eth1.13, Area 1, Full.
+- R3 <-> R4 over eth1.34, Area 1, Full.
+- R4 <-> R2 over eth1.24, Area 1, Full.
+- R2's route to R3 loopback 10.1.1.3/32 should use the Area 1 path through R4 before adding the secondary adjacency. The two Area 1 links on the path have metric 10 each.
+
+3. CONFIGURE MULTI-AREA ADJACENCY
+On R1:
+  configure
+  set protocols ospf area 0.0.0.1 interface eth1.12 secondary
+  set protocols ospf area 0.0.0.1 interface eth1.12 metric 5
+  commit check
+  commit
+
+On R2, apply the same Area 1 statements:
+  configure
+  set protocols ospf area 0.0.0.1 interface eth1.12 secondary
+  set protocols ospf area 0.0.0.1 interface eth1.12 metric 5
+  commit check
+  commit
+
+The primary Area 0 configuration remains:
+  set protocols ospf area 0.0.0.0 interface eth1.12 interface-type p2p
+
+The interface is primary in Area 0 and secondary in Area 1. Do not configure a second IP address for the secondary adjacency. The secondary adjacency is announced as a point-to-point unnumbered link in the secondary area.
+
+4. VERIFY THE SECONDARY ROLE AND ADJACENCY
+On R1 and R2:
+  run show configuration protocols ospf | display set
+  run show ospf interface detail
+  run show ospf neighbor detail
+  run show ospf interface area 0.0.0.1 detail
+
+Expected evidence:
+- eth1.12 is listed under Area 0 as the primary interface.
+- eth1.12 is also listed in Area 1 with `Secondary` visible in detailed output.
+- A secondary Full neighbor adjacency exists between R1 and R2 for Area 1; the regular Area 0 adjacency remains Full.
+- Juniper documents `show ospf interface detail`, `show ospf interface area <area-id>`, and `show ospf neighbor detail` for this verification.
+
+5. PROVE THE ROUTE-CHOICE CHANGE
+On R2 before and after the secondary is added:
+  run show route 10.1.1.3/32 exact
+  run show ospf route
+  run show ospf database area 0.0.0.1
+
+Metric plan:
+- Alternate Area 1 path R2-R4-R3: 10 + 10 = 20.
+- Multi-area path R2-R1-R3: 5 + 10 = 15.
+- R2 should therefore select the path toward R3 via R1 on eth1.12, when the secondary adjacency is working and the configured metrics are applied as expected.
+- Do not require a literal next-hop field format; unnumbered OSPF secondary links can display differently. The decisive evidence is the installed route and metric/path in show outputs.
+
+6. TROUBLESHOOTING
+A. `commit check` rejects `secondary`:
+   - Save the full error text. The image does not accept the documented Junos syntax in this build/context. Do not replace it with a regular Area 1 adjacency on another VLAN; that would no longer test multi-area adjacency.
+   - Switch this feature test to vJunos-router/hybrid after adding that node kind to a separate topology revision.
+B. Commit succeeds but no secondary interface/adjacency appears:
+   - Check that both R1 and R2 are configured consistently.
+   - Confirm VLAN 12 only has the two routers R1/R2 participating.
+   - Confirm eth1.12 is up, router IDs are unique, and the primary Area 0 adjacency remains Full.
+   - Check `show ospf interface detail` and `show ospf neighbor detail`; do not conclude success based only on config presence.
+C. Route to 10.1.1.3/32 does not move through R1:
+   - Verify R2-R4 and R4-R3 metrics are 10 in Area 1.
+   - Verify the secondary metric is 5 on R1 and R2.
+   - Confirm R3's loopback is being advertised into Area 1 as a passive interface and the Area 1 LSDB has converged.
+   - Compare the actual OSPF route calculation, not only the routing-table line.
+
+7. CLEANUP
+To restore the baseline after evidence collection, on R1 and R2:
+  configure
+  delete protocols ospf area 0.0.0.1 interface eth1.12
+  commit check
+  commit
+This removes the Area 1 secondary entry without deleting the primary Area 0 interface config. Then verify the R1-R2 adjacency in Area 0 and the alternate Area 1 path through R4 are healthy.

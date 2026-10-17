@@ -1,0 +1,20 @@
+LAB-008 - REFERENCES AND LIMITATIONS
+
+PRIMARY JUNIPER DOCUMENTATION
+1. Junos OS OSPF User Guide, topic map: Configuring OSPF Areas — Understanding/Example: Configuring Multiarea Adjacency for OSPF.
+   https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-areas.html
+   Relevant guidance: one logical interface may be primary in one OSPF area and secondary in another; secondary adjacencies are advertised as point-to-point unnumbered links. Juniper warns that for secondary adjacencies on LAN interfaces, only two routing devices should participate on the relevant LAN/secondary area.
+
+2. Juniper CLI reference — interface (Protocols OSPF).
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/interface-edit-protocols-ospf.html
+   Defines the `secondary` option: configure an interface to belong to another OSPF area.
+
+3. Juniper CLI reference — show ospf/ospf3 interface.
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/command/show-ospf-ospf3-interface.html
+   The detailed output has a Secondary field to show whether an interface is secondary for an area.
+
+4. IETF RFC 5185 — OSPF Multi-Area Adjacency.
+   https://www.rfc-editor.org/rfc/rfc5185
+
+PLATFORM CAVEAT
+The Juniper documentation above establishes the Junos OS feature and configuration model. It is not a live validation of `xzjt/crpd:25.2R1-S1.4`. The exact cRPD build may accept or reject the option, and the operational adjacency must be verified. If unsupported, use vJunos-router for this specific objective. Do not silently replace the feature with two VLANs/interfaces: that would not be the same exercise.
