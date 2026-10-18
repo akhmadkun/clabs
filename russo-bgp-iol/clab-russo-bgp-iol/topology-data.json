@@ -1,0 +1,447 @@
+{
+  "name": "russo-bgp-iol",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "",
+      "mgmt": {
+        "network": "fixedips",
+        "bridge": "br-0a97727c66c1",
+        "ipv4-subnet": "10.200.255.0/24",
+        "ipv4-gw": "10.200.255.1",
+        "external-access": true,
+        "ipam": {
+          "provider": "containerlab"
+        }
+      }
+    }
+  },
+  "ssh-pub-keys": ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBh6zqTkm+wFWiIXb52GuCB8ocb61d62x+S7+OSg8oTu","ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC4YGzvGV33uy5UP7E0KKkOa78a4DDevQLl64FB4D/JfVqRHDUZ52sjCPDPfKg0SvicKOD8o/2lDndGvf/x9ZZXyCO2/uhG6wTHPlEZQaKR+bKlp3XGGl1vHjBofHSYp8hS/kwj3LCPtdTpLOGTZicTYn9807wzu5t6yb2dGDWgHMy5Ya9RwNeUeE/mES08bq+NH/yX8E9CBRWrTK1C6G/98lAdHOF9rfFEhu5YUQ6pno5mdf4Q6HCl/HFaQkOh+eVj+VnQl9iE4LhTEpooRg1aRvlI16db5bimAsgYb5emL36kK5GRUtCrNf6RiN7hlt+erBTPTokslOoPFFVnWyL+1Smk+AJHQCbtPA3ZuDabpl0ZBLNYZrUZYZeqlKg0JMcUTvE9xwXj/tb9K1odYUwthPubtYGvRRdCtJR0H2ai057CoJmCQZK5OJnNVzWvzsaHDaTIciPJBe3gQ5B2328CPd671Blf8YjZ38/AUSSmRdg9y7tb+oT5U0TlNBWeaDc="],
+  "nodes": {
+    "R1": {
+      "index": "0",
+      "shortname": "R1",
+      "longname": "R1",
+      "fqdn": "R1.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R1",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.2",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R1",
+        "clab-node-longname": "R1",
+        "clab-node-name": "R1",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R2": {
+      "index": "1",
+      "shortname": "R2",
+      "longname": "R2",
+      "fqdn": "R2.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R2",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.3",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R2",
+        "clab-node-longname": "R2",
+        "clab-node-name": "R2",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R3": {
+      "index": "2",
+      "shortname": "R3",
+      "longname": "R3",
+      "fqdn": "R3.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R3",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.4",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R3",
+        "clab-node-longname": "R3",
+        "clab-node-name": "R3",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R4": {
+      "index": "3",
+      "shortname": "R4",
+      "longname": "R4",
+      "fqdn": "R4.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R4",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.5",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R4",
+        "clab-node-longname": "R4",
+        "clab-node-name": "R4",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R5": {
+      "index": "4",
+      "shortname": "R5",
+      "longname": "R5",
+      "fqdn": "R5.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R5",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.6",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R5",
+        "clab-node-longname": "R5",
+        "clab-node-name": "R5",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R6": {
+      "index": "5",
+      "shortname": "R6",
+      "longname": "R6",
+      "fqdn": "R6.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R6",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.7",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R6",
+        "clab-node-longname": "R6",
+        "clab-node-name": "R6",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R7": {
+      "index": "6",
+      "shortname": "R7",
+      "longname": "R7",
+      "fqdn": "R7.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R7",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.8",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R7",
+        "clab-node-longname": "R7",
+        "clab-node-name": "R7",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R8": {
+      "index": "7",
+      "shortname": "R8",
+      "longname": "R8",
+      "fqdn": "R8.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R8",
+      "kind": "cisco_iol",
+      "image": "arthurk99/cisco-iol:17.15.01",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "10.200.255.9",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/R8",
+        "clab-node-longname": "R8",
+        "clab-node-name": "R8",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    },
+    "br-univ": {
+      "index": "8",
+      "shortname": "br-univ",
+      "longname": "br-univ",
+      "fqdn": "br-univ.russo-bgp-iol.io",
+      "group": "",
+      "labdir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/br-univ",
+      "kind": "bridge",
+      "image": "",
+      "mgmt-net": "fixedips",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "",
+      "mgmt-ipv4-prefix-length": 0,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-0a97727c66c1",
+        "clab-node-group": "",
+        "clab-node-kind": "bridge",
+        "clab-node-lab-dir": "/home/akhmad/clabs/russo-bgp-iol/clab-russo-bgp-iol/br-univ",
+        "clab-node-longname": "br-univ",
+        "clab-node-name": "br-univ",
+        "clab-node-type": "",
+        "clab-owner": "akhmad",
+        "clab-topo-file": "/home/akhmad/clabs/russo-bgp-iol/russo-bgp-iol.clab.yml",
+        "containerlab": "russo-bgp-iol"
+      },
+      "port-bindings": [
+      ]
+    }
+  },
+  "links": [
+    {
+      "endpoints": {
+        "a": {
+          "node": "R1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:97:10:71",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R2",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:7e:92:39",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R2",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:f0:54:53",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R3",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:55:3f:5f",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R3",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:6e:7e:8b",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R4",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:e9:0f:dd",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R3",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:ba:40:3a",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R5",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:aa:17:56",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R4",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:0f:b7:9e",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R6",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:b6:e5:ff",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R6",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:58:af:71",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R5",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:0b:93:20",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R3",
+          "interface": "eth4",
+          "mac": "aa:c1:ab:ed:3f:30",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:8e:d8:b4",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R7",
+          "interface": "eth4",
+          "mac": "aa:c1:ab:65:6b:43",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:22:ac:fc",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R8",
+          "interface": "eth4",
+          "mac": "aa:c1:ab:15:de:9e",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:e9:79:81",
+          "peer": "a"
+        }
+      }
+    }
+  ]
+}

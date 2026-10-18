@@ -1,0 +1,4 @@
+ip http client source-interface Ethernet0/0
+!
+line vty 0 4
+ exec-timeout 0 0
