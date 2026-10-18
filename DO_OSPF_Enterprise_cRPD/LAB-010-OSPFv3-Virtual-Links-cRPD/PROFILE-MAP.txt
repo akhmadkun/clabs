@@ -1,0 +1,13 @@
+LAB-010 PROFILE MAP
+Copy these files to the matching host bind-mount folders configs/rN/.
+
+R1  configs/r1/lab010-r1-addressing.set
+R2  configs/r2/lab010-r2-addressing.set
+R3  configs/r3/lab010-r3-addressing.set
+R4  configs/r4/lab010-r4-addressing.set
+R6  configs/r6/lab010-r6-addressing.set
+R10 configs/r10/lab010-r10-addressing.set
+
+The universal topology bind mount is ./configs/rN:/lab-configs:rw.
+Load manually with `configure` then `load set /lab-configs/lab010-rN-addressing.set`.
+Profiles configure only interface addressing, VLAN tagging and Router ID. They do not configure OSPFv3 or virtual links.

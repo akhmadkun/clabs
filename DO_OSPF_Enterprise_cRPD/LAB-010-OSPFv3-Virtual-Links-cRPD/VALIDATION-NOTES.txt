@@ -1,0 +1,5 @@
+LOCAL BUILD VALIDATION
+- The six profiles were checked for matching VLAN ID, interface unit, router pair, and unique router ID.
+- The topology SVG is editable; PNG is its rendered preview.
+- No Containerlab YAML is included for deployment, because this lab reuses the user's latest jun-ospf.clab.yml and existing br-univ.
+- No live cRPD commit or protocol convergence was performed during package authoring.

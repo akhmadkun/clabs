@@ -1,0 +1,31 @@
+LAB-010 REFERENCES AND ADAPTATIONS
+
+PRIMARY SOURCE
+Juniper Networks, Junos OS OSPF User Guide, published 2026-06-18:
+Chapter 4, “Example: Configuring OSPFv3 Virtual Links”, printed pages 159-174.
+
+SOURCE-DERIVED POINTS
+- A virtual link is required when an area lacks adjacency to Area 0; it establishes a virtual connection through a non-backbone area.
+- The transit area must have full routing information and cannot be a stub area.
+- Virtual-link configuration specifies the other endpoint's Router ID and the transit-area ID; Juniper's example applies virtual-link statements under Area 0 on both endpoints.
+- Juniper's illustrated OSPFv3 topology uses two virtual links: one to connect disconnected backbone sections and one to attach a remote area behind an ABR.
+- The guide's OSPFv3 verification commands include `show ospf3 interface`, `show ospf3 neighbor`, `show ospf3 database` and `show ospf3 route`.
+
+ADAPTATIONS FOR THIS CONTAINERLAB SERIES
+- Map guide Devices 0-5 to R1, R2, R3, R4, R6 and R10.
+- Use the provided external `br-univ`; no bridge/topology changes.
+- Map router-pair VLAN IDs and subinterface units consistently: 14, 23, 34, 36, 46, 610.
+- Use IPv6 loopbacks 2001:db8:ffff::N/128 for OSPFv3 verification and the existing unique IPv4 Router IDs.
+- Only IPv6-unicast OSPFv3 is used; the LAB-009 IPv4-unicast realm is not included.
+- The physical Area 1 triangle provides transit connectivity between R3/R4/R6, while two virtual links restore the intended logical backbone connectivity.
+
+OFFICIAL JUNIPER DOCUMENTATION
+Junos OS OSPF User Guide landing page:
+  https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/ospf-overview.html
+OSPF virtual-link configuration statement:
+  https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/virtual-link-edit-protocols-ospf.html
+OSPF areas configuration:
+  https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-areas.html
+
+VALIDATION NOTE
+Package contents, profile/interface pairs and text references were checked locally. OSPFv3 virtual-link commit behavior, adjacency formation, LSDB convergence, and route propagation were not executed against the user's cRPD image. A lab is only complete when the user verifies the command acceptance and expected protocol states on the running image.

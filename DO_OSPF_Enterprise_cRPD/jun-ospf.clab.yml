@@ -37,6 +37,11 @@ topology:
       startup-config: ./configs/r4/base.conf
       binds:
         - ./configs/r4:/lab-configs:rw
+    r5:
+      kind: juniper_crpd
+      startup-config: ./configs/r5/base.conf
+      binds:
+        - ./configs/r5:/lab-configs:rw
     r6:
       kind: juniper_crpd
       startup-config: ./configs/r6/base.conf
@@ -84,6 +89,7 @@ topology:
     - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
     - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
     - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r5:eth1", "br-univ:r5_eth1"]
     - endpoints: ["r6:eth1", "br-univ:r6_eth1"]
     - endpoints: ["r7:eth1", "br-univ:r7_eth1"]
     - endpoints: ["r8:eth1", "br-univ:r8_eth1"]

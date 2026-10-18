@@ -1,0 +1,4 @@
+set interfaces eth1 unit 14 vlan-id 14
+set interfaces eth1 unit 14 family inet6 address 2001:db8:10:14::1/64
+set interfaces lo0 unit 0 family inet6 address 2001:db8:ffff::1/128
+set routing-options router-id 10.1.1.1

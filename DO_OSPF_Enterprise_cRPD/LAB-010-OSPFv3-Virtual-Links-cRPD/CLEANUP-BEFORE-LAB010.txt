@@ -1,0 +1,39 @@
+LAB-010 CLEANUP / PREPARATION
+
+WARNING
+These labs reuse the same physical eth1 and external br-univ. Do not run another OSPF lab that reuses these VLANs at the same time. Do not remove or recreate br-univ. Inspect the candidate configuration if these routers host any non-lab service.
+
+1. Remove previous OSPF protocol configuration on participating routers only
+On R1, R2, R3, R4, R6 and R10:
+  configure
+  delete protocols ospf
+  delete protocols ospf3
+  commit check
+  commit
+If one of the protocol hierarchies does not exist, omit that delete line and proceed with the existing hierarchy.
+
+2. Remove stale lab unit configuration before loading profiles
+Delete only listed units if they exist, then commit check/commit. Keep eth1 itself, eth0 management, lo0.0 base IPv4 address, system/authentication/SSH and any unrelated interface units.
+
+R1:  eth1 units 12, 13, 14, 1234
+R2:  eth1 units 12, 23, 24, 1234
+R3:  eth1 units 12, 13, 23, 34, 36, 1234
+R4:  eth1 units 13, 14, 24, 34, 46, 1234
+R6:  eth1 units 16, 36, 46, 67, 610
+R10: eth1 units 24, 410, 610
+
+Do not issue a delete for a unit that belongs to unrelated live configuration. If you know that a listed unit is absent, skip it rather than forcing unrelated changes. Some unit numbers (23, 34, 36, 46, 610) are reused by this lab; clearing stale configurations prevents duplicate IPv6 addresses/family stanzas from previous labs.
+
+3. Load the matching profiles
+Copy profiles from configs/rN/ in this package to the host's configs/rN/ bind-mounted directory. On each router:
+  configure
+  load set /lab-configs/lab010-rN-addressing.set
+  commit check
+  commit
+Replace N with r1, r2, r3, r4, r6 or r10 as appropriate.
+
+4. Verify before adding protocols
+  run show interfaces terse | match "eth1\.|lo0.0"
+  run show configuration interfaces eth1 | display set
+  run show configuration routing-options router-id
+Confirm the subinterfaces have the correct VLAN IDs, IPv6 addresses, and unique Router IDs before configuring OSPFv3.

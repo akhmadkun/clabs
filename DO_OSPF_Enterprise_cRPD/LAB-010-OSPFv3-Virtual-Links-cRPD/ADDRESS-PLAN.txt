@@ -1,0 +1,37 @@
+LAB-010 ADDRESS PLAN AND LOGICAL VLAN MAPPING
+All links are IPv6-unicast OSPFv3. IPv6 documentation prefixes are used. All parent eth1 links are already attached to the external br-univ by jun-ospf.clab.yml.
+
+ROUTER IDS / OSPFV3 LOOPBACKS
+R1  Router ID 10.1.1.1   lo0.0 IPv6 2001:db8:ffff::1/128
+R2  Router ID 10.1.1.2   lo0.0 IPv6 2001:db8:ffff::2/128
+R3  Router ID 10.1.1.3   lo0.0 IPv6 2001:db8:ffff::3/128
+R4  Router ID 10.1.1.4   lo0.0 IPv6 2001:db8:ffff::4/128
+R6  Router ID 10.1.1.6   lo0.0 IPv6 2001:db8:ffff::6/128
+R10 Router ID 10.1.1.10  lo0.0 IPv6 2001:db8:ffff::10/128
+
+PHYSICAL LOGICAL LINKS
+Area 0 - disconnected component A:
+  VLAN 14 / R1 eth1.14 2001:db8:10:14::1/64 <-> R4 eth1.14 2001:db8:10:14::2/64
+
+Area 0 - disconnected component B:
+  VLAN 23 / R2 eth1.23 2001:db8:10:23::1/64 <-> R3 eth1.23 2001:db8:10:23::2/64
+
+Area 1 - normal transit-area triangle:
+  VLAN 34 / R3 eth1.34 2001:db8:11:34::1/64 <-> R4 eth1.34 2001:db8:11:34::2/64
+  VLAN 36 / R3 eth1.36 2001:db8:11:36::1/64 <-> R6 eth1.36 2001:db8:11:36::2/64
+  VLAN 46 / R4 eth1.46 2001:db8:11:46::1/64 <-> R6 eth1.46 2001:db8:11:46::2/64
+
+Area 2:
+  VLAN 610 / R6 eth1.610 2001:db8:12:610::1/64 <-> R10 eth1.610 2001:db8:12:610::2/64
+
+VIRTUAL LINKS - CONFIGURED UNDER OSPFv3 AREA 0
+  R3 (RID 10.1.1.3) <-> R4 (RID 10.1.1.4), transit area 0.0.0.1
+  R4 (RID 10.1.1.4) <-> R6 (RID 10.1.1.6), transit area 0.0.0.1
+
+LOOPBACK AREA ASSIGNMENTS
+  R1, R2: Area 0
+  R3, R4, R6: Area 1
+  R10: Area 2
+
+VLAN CONVENTION
+The VLAN ID matches the router pair: 14, 23, 34, 36, 46, 610. Endpoint with lower router number uses ::1, higher router number uses ::2. Interface unit number equals VLAN ID. Any future exception must be documented rather than assigning an arbitrary VLAN.
