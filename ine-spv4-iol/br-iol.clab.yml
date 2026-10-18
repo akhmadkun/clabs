@@ -84,6 +84,5 @@ topology:
     - endpoints: ["R4:eth1","br-univ:R4_eth1"]
     - endpoints: ["R5:eth1","br-univ:R5_eth1"]
     - endpoints: ["R6:eth1","br-univ:R6_eth1"]
-    - endpoints: ["crpd:eth1","br-univ:crpd_eth1"]
     - endpoints: ["XR1:Gi0-0-0-0","br-univ:XR1_eth1"]
     - endpoints: ["XR2:Gi0-0-0-0","br-univ:XR2_eth1"]
