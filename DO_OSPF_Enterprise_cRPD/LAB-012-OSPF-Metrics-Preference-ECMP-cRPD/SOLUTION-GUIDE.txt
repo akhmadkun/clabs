@@ -1,0 +1,87 @@
+LAB-012 — SOLUTION GUIDE
+
+Always load the baseline and confirm OSPF adjacencies first. The profiles do not configure the tasks below.
+
+TASK 1 — BASELINE ECMP
+On R1:
+  run show ospf neighbor
+  run show ospf interface detail
+  run show route 10.1.1.4/32 exact detail
+Expected: R1 has two equal-cost next-hops to R4's loopback, via 10.0.12.2 (eth1.12) and 10.0.13.2 (eth1.13). Each link has OSPF cost 1; each path's total metric is 2. The exact syntax/details of multipath presentation can vary with Junos release; inspect the full route output if formatting differs.
+
+TASK 2 — METRIC PREFERENCE
+On R1:
+  configure
+  set protocols ospf area 0.0.0.0 interface eth1.12 metric 20
+  commit check
+  commit
+Verify:
+  run show ospf interface eth1.12 detail
+  run show route 10.1.1.4/32 exact detail
+Expected: R1 path through R2 costs 20 + 1 = 21; path through R3 costs 1 + 1 = 2. R1 should select the path via R3.
+
+TASK 3 — RESTORE ECMP
+On R1:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.12 metric
+  commit check
+  commit
+Verify the route returns to two equal-cost next-hops through R2 and R3.
+
+TASK 4 — INTERNAL ROUTE PREFERENCE
+On R1:
+  configure
+  set routing-options static route 10.1.1.4/32 next-hop 10.0.12.2 preference 20
+  commit check
+  commit
+The OSPF internal route with preference 10 should remain selected over the static route preference 20. Next:
+  set protocols ospf preference 30
+  commit check
+  commit
+The static route preference 20 should now win. Route preference is a protocol route-selection property; it is not the same as the OSPF metric used by SPF.
+
+Restore:
+  delete routing-options static route 10.1.1.4/32
+  delete protocols ospf preference
+  commit check
+  commit
+Verify OSPF ECMP is restored.
+
+TASK 5 — OPTIONAL EXTERNAL ROUTE PREFERENCE
+On R4:
+  configure
+  set routing-options static route 198.51.100.4/32 discard
+  set policy-options policy-statement LAB012-STATIC-EXPORT term TEST from protocol static
+  set policy-options policy-statement LAB012-STATIC-EXPORT term TEST from route-filter 198.51.100.4/32 exact
+  set policy-options policy-statement LAB012-STATIC-EXPORT term TEST then accept
+  set protocols ospf export LAB012-STATIC-EXPORT
+  commit check
+  commit
+On R1, verify the external route is learned. Then add a static competitor with higher numeric preference:
+  configure
+  set routing-options static route 198.51.100.4/32 next-hop 10.0.12.2 preference 200
+  commit check
+  commit
+The external OSPF route (default external preference 150) should win. Then:
+  set protocols ospf external-preference 250
+  commit check
+  commit
+Now the static route preference 200 should win.
+
+Restore R1:
+  delete routing-options static route 198.51.100.4/32
+  delete protocols ospf external-preference
+  commit check
+  commit
+Restore R4:
+  delete protocols ospf export LAB012-STATIC-EXPORT
+  delete policy-options policy-statement LAB012-STATIC-EXPORT
+  delete routing-options static route 198.51.100.4/32
+  commit check
+  commit
+Confirm 198.51.100.4/32 is withdrawn from R1.
+
+KEY DISTINCTIONS
+- OSPF metric: cost to reach a destination through OSPF. Lowest total path cost wins.
+- Route preference: Junos' comparison across routing-protocol route candidates for the same prefix. The lowest preference value wins.
+- ECMP: equal total OSPF metrics can produce multiple equal-cost next-hops in the route. This lab proves the routing-table candidate paths; it does not prove per-flow/per-packet forwarding distribution from cRPD.

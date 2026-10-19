@@ -1,0 +1,10 @@
+LAB-013 VALIDATION NOTES / LIMITATIONS
+
+1. The universal topology YAML is intentionally not included for redeployment. This package assumes the user's current topology with cRPD image `crpd:23.4R2-S5.6`, per-router bind directories, and pre-existing external `br-univ`.
+2. Configurations are baseline profile files. They do not overwrite `base.conf`.
+3. Core syntax and expected behavior are based on the uploaded Juniper Junos OS OSPF User Guide pages referenced in REFERENCE.txt. They have not been executed against the live cRPD instance.
+4. Expected control-plane behavior: R2 overload raises its advertised transit-link metrics to 65535 in its Router-LSA; R1 should route to R4's loopback via R3, while R2's own loopback remains reachable.
+5. Expected SPF configuration behavior: `show ospf overview` should report the configured SPF delay/rapid-runs/holddown. A manual CLI flap is not a deterministic performance benchmark.
+6. Expected flooding observation: after R1 eth1.13 metric changes, R4 should learn an updated R1 Router-LSA; compare the details and path to R1's loopback before/after/restore.
+7. Optional `flood-reduction` behavior can vary by image/CLI output. Do not claim DoNotAge runtime proof if only the configuration is shown or the output does not expose the flag. Capture a rejected commit or inconclusive output and use the documented vJunos-router fallback if needed.
+8. No data-plane packet-forwarding test is required or implied. cRPD is used for routing/control-plane behavior.

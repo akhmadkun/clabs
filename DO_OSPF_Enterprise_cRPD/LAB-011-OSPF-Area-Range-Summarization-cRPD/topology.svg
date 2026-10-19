@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="850" viewBox="0 0 1480 850">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.10"/></filter>
+</defs>
+<rect width="1480" height="850" fill="#f8fafc"/>
+<text x="56" y="58" font-family="Inter,Arial,sans-serif" font-size="28" font-weight="750" fill="#0f172a">LAB-011 — OSPF Area-Range Summarization</text>
+<text x="58" y="90" font-family="Inter,Arial,sans-serif" font-size="15" fill="#475569">IPv4 / OSPFv2 • cRPD 23.4R2-S5.6 • Area 1 prefixes summarized into Area 0 by R1</text>
+<!-- areas -->
+<rect x="55" y="132" width="455" height="520" rx="22" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="2"/>
+<text x="82" y="170" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="700" fill="#075985">Area 0 — Backbone</text>
+<rect x="475" y="132" width="950" height="520" rx="22" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+<text x="505" y="170" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="700" fill="#166534">Area 1 — Source prefixes</text>
+<!-- links behind nodes -->
+<line x1="250" y1="338" x2="410" y2="338" stroke="#64748b" stroke-width="4"/>
+<line x1="532" y1="338" x2="690" y2="338" stroke="#64748b" stroke-width="4"/>
+<line x1="810" y1="338" x2="985" y2="338" stroke="#64748b" stroke-width="4"/>
+<line x1="1105" y1="338" x2="1250" y2="338" stroke="#64748b" stroke-width="4"/>
+<!-- link labels -->
+<g font-family="Inter,Arial,sans-serif" text-anchor="middle" fill="#334155">
+ <rect x="265" y="222" width="170" height="68" rx="10" fill="#fff" stroke="#cbd5e1"/>
+ <text x="350" y="244" font-size="14" font-weight="700">VLAN 12 · eth1.12</text><text x="350" y="264" font-size="13">10.0.12.0/30</text><text x="350" y="280" font-size="12" fill="#0369a1">Area 0</text>
+ <rect x="531" y="388" width="162" height="64" rx="10" fill="#fff" stroke="#cbd5e1"/>
+ <text x="612" y="409" font-size="14" font-weight="700">VLAN 13 · eth1.13</text><text x="612" y="429" font-size="13">10.0.13.0/30</text><text x="612" y="444" font-size="12" fill="#15803d">Area 1</text>
+ <rect x="812" y="222" width="170" height="68" rx="10" fill="#fff" stroke="#cbd5e1"/>
+ <text x="897" y="244" font-size="14" font-weight="700">VLAN 34 · eth1.34</text><text x="897" y="264" font-size="13">10.0.34.0/30</text><text x="897" y="280" font-size="12" fill="#15803d">Area 1</text>
+ <rect x="1107" y="388" width="141" height="64" rx="10" fill="#fff" stroke="#cbd5e1"/>
+ <text x="1177" y="409" font-size="14" font-weight="700">VLAN 45 · eth1.45</text><text x="1177" y="429" font-size="13">10.0.45.0/30</text><text x="1177" y="444" font-size="12" fill="#15803d">Area 1</text>
+</g>
+<!-- routers -->
+<g font-family="Inter,Arial,sans-serif" text-anchor="middle">
+ <rect x="130" y="300" width="120" height="78" rx="17" fill="#fff" stroke="#38bdf8" stroke-width="2"/><text x="190" y="331" font-size="20" font-weight="750" fill="#0f172a">R2</text><text x="190" y="354" font-size="13" fill="#475569">RID .2</text>
+ <rect x="410" y="300" width="122" height="78" rx="17" fill="#fff7ed" stroke="#f97316" stroke-width="3"/><text x="471" y="331" font-size="20" font-weight="750" fill="#9a3412">R1</text><text x="471" y="354" font-size="13" fill="#9a3412">ABR · RID .1</text>
+ <rect x="690" y="300" width="120" height="78" rx="17" fill="#fff" stroke="#22c55e" stroke-width="2"/><text x="750" y="331" font-size="20" font-weight="750" fill="#0f172a">R3</text><text x="750" y="354" font-size="13" fill="#475569">RID .3</text>
+ <rect x="985" y="300" width="120" height="78" rx="17" fill="#fff" stroke="#22c55e" stroke-width="2"/><text x="1045" y="331" font-size="20" font-weight="750" fill="#0f172a">R4</text><text x="1045" y="354" font-size="13" fill="#475569">RID .4</text>
+ <rect x="1250" y="300" width="120" height="78" rx="17" fill="#fff" stroke="#22c55e" stroke-width="2"/><text x="1310" y="331" font-size="20" font-weight="750" fill="#0f172a">R5</text><text x="1310" y="354" font-size="13" fill="#475569">RID .5</text>
+</g>
+<!-- service loopbacks -->
+<g font-family="Inter,Arial,sans-serif" text-anchor="middle">
+ <rect x="656" y="455" width="188" height="64" rx="10" fill="#dcfce7" stroke="#86efac"/><text x="750" y="480" font-size="13" font-weight="700" fill="#166534">Service loopback</text><text x="750" y="502" font-size="15" fill="#166534">192.168.11.3/32</text>
+ <rect x="951" y="455" width="188" height="64" rx="10" fill="#dcfce7" stroke="#86efac"/><text x="1045" y="480" font-size="13" font-weight="700" fill="#166534">Service loopback</text><text x="1045" y="502" font-size="15" fill="#166534">192.168.11.4/32</text>
+ <rect x="1216" y="455" width="188" height="64" rx="10" fill="#dcfce7" stroke="#86efac"/><text x="1310" y="480" font-size="13" font-weight="700" fill="#166534">Service loopback</text><text x="1310" y="502" font-size="15" fill="#166534">192.168.11.5/32</text>
+ <path d="M750 378 L750 455 M1045 378 L1045 455 M1310 378 L1310 455" stroke="#16a34a" stroke-width="2" stroke-dasharray="5 5" fill="none"/>
+</g>
+<!-- summary callout -->
+<path d="M471 380 L471 565" stroke="#f97316" stroke-width="2.5" stroke-dasharray="7 5" fill="none"/>
+<g font-family="Inter,Arial,sans-serif">
+ <rect x="80" y="555" width="450" height="70" rx="12" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+ <text x="100" y="581" font-size="14" font-weight="700" fill="#9a3412">On R1 · Area 1 range</text>
+ <text x="100" y="606" font-size="19" font-weight="750" fill="#9a3412">192.168.11.0/24</text>
+</g>
+<!-- outcome strip -->
+<rect x="55" y="690" width="1370" height="102" rx="17" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="82" y="723" font-family="Inter,Arial,sans-serif" font-size="16" font-weight="750" fill="#0f172a">Expected at R2 (Area 0)</text>
+<text x="82" y="752" font-family="Inter,Arial,sans-serif" font-size="15" fill="#166534">Before: .3/32 + .4/32 + .5/32</text>
+<text x="82" y="775" font-family="Inter,Arial,sans-serif" font-size="15" fill="#9a3412">After: one summary route 192.168.11.0/24; matching /32 specifics suppressed across the ABR.</text>
+<text x="1422" y="829" font-family="Inter,Arial,sans-serif" font-size="11" text-anchor="end" fill="#64748b">Editable SVG · Logical links only · br-univ omitted</text>
+</svg>

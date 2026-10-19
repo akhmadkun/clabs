@@ -1,0 +1,54 @@
+CLEANUP BEFORE LAB-011
+
+IMPORTANT
+- Stop other OSPF labs before using this address/VLAN space.
+- Do not modify, destroy, or recreate `br-univ`.
+- These commands remove the earlier LAB-010 OSPFv3 control-plane configuration and the relevant eth1 logical units from the routers participating in or adjacent to LAB-010. Do this only when you have finished with the previous lab and are ready to switch contexts.
+- Do not remove `lo0.0` or the base startup-config.
+
+On each listed router, enter `configure`, apply its cleanup lines, then `commit check` and `commit`.
+
+R1:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 14
+
+R2:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 23
+
+R3:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 23
+  delete interfaces eth1 unit 34
+  delete interfaces eth1 unit 36
+
+R4:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 14
+  delete interfaces eth1 unit 34
+  delete interfaces eth1 unit 46
+
+R5:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 45
+  delete interfaces eth1 unit 56
+
+R6 (cleanup LAB-010 OSPFv3 remnants so it does not participate in that prior topology):
+  delete protocols ospf3
+  delete interfaces eth1 unit 36
+  delete interfaces eth1 unit 46
+  delete interfaces eth1 unit 56
+  delete interfaces eth1 unit 610
+
+After this cleanup, copy/load the LAB-011 profiles. They recreate the target link units and OSPFv2 baseline on R1–R5.
+
+If you have intentionally reused one of these units for another active lab or site-specific configuration, inspect `show configuration interfaces eth1 | display set` and adapt before deleting. Keep unrelated system/base settings unchanged.

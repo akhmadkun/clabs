@@ -1,0 +1,100 @@
+LAB-012 — OSPF METRICS, ROUTE PREFERENCE & ECMP
+
+SCENARIO
+R1 reaches R4 through a diamond: R1–R2–R4 or R1–R3–R4. All four routers run OSPFv2 in Area 0. Interface costs initially match, so R1 should learn R4's loopback using two equal-cost next-hops. You must show how changing OSPF cost changes the preferred path, how Junos route preference selects between competing protocols, and how restoring equal costs restores ECMP.
+
+PRE-REQUISITES
+- Use image `crpd:23.4R2-S5.6` on the latest universal topology.
+- Read CLEANUP-BEFORE-LAB012.txt and load profiles from PROFILE-MAP.txt.
+- Run no other lab that uses the same VLAN/IP space concurrently.
+- Do not change the universal YAML or the externally managed `br-univ` bridge.
+
+BASELINE TOPOLOGY
+- R1–R2: VLAN 12 / eth1.12 / 10.0.12.0/30
+- R1–R3: VLAN 13 / eth1.13 / 10.0.13.0/30
+- R2–R4: VLAN 24 / eth1.24 / 10.0.24.0/30
+- R3–R4: VLAN 34 / eth1.34 / 10.0.34.0/30
+- All links are OSPF point-to-point in Area 0. Router IDs/loopbacks: R1 10.1.1.1/32, R2 10.1.1.2/32, R3 10.1.1.3/32, R4 10.1.1.4/32.
+
+TASK 1 — VALIDATE BASELINE AND ECMP
+1. Confirm all six OSPF adjacencies are Full. Each router has two directly connected neighbors in this diamond.
+2. On R1, inspect the route to 10.1.1.4/32.
+3. Record both next-hops and the total OSPF metric. The equal-cost paths are expected to have total metric 2 with default per-link cost 1.
+4. Use `show ospf interface detail` to confirm link costs and `show route 10.1.1.4/32 exact detail` to inspect the route.
+
+TASK 2 — CHANGE THE COST OF ONE PATH
+On R1 only, set the OSPF metric on eth1.12 to 20:
+  set protocols ospf area 0.0.0.0 interface eth1.12 metric 20
+Run `commit check` and `commit`.
+
+Verify on R1:
+- The cost of eth1.12 is now 20.
+- Route 10.1.1.4/32 uses the path through R3 (next-hop 10.0.13.2 via eth1.13), because the cost via R2 is now higher.
+- The route is no longer ECMP; the alternate path through R2 should not be an equal-cost active next-hop.
+
+TASK 3 — RESTORE EQUAL COSTS
+On R1, remove the manual metric:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 metric
+Run `commit check` and `commit`.
+Verify that the cost returns to the default value (expected 1 in this lab) and the route to 10.1.1.4/32 again has equal-cost next-hops via R2 and R3.
+
+TASK 4 — DEMONSTRATE INTERNAL OSPF ROUTE PREFERENCE
+Junos selects the route with the lowest preference value; preference is different from OSPF metric. Lower preference is more preferred. Default internal OSPF preference is 10.
+
+1. On R1, add a temporary static route for the exact same target prefix with a less-preferred preference of 20, via reachable next-hop R2:
+  set routing-options static route 10.1.1.4/32 next-hop 10.0.12.2 preference 20
+2. Commit and inspect `show route 10.1.1.4/32 exact detail`. OSPF preference 10 should remain active, and the OSPF ECMP route remains selected because 10 is lower than 20.
+3. Change internal OSPF preference on R1 to 30:
+  set protocols ospf preference 30
+4. Commit and verify the static route with preference 20 becomes active via 10.0.12.2. This demonstrates protocol route preference, not an OSPF metric change.
+5. Restore the lab baseline by deleting the temporary static route and deleting the explicit OSPF preference override:
+  delete routing-options static route 10.1.1.4/32
+  delete protocols ospf preference
+6. Commit and verify the OSPF route is active again with the ECMP next-hops restored.
+
+TASK 5 — OPTIONAL EXTENSION: EXTERNAL OSPF ROUTE PREFERENCE
+This extension demonstrates `external-preference` separately. Do not perform it if you want the shortest path through the core lab.
+
+A. On R4, originate a test static route and export only that exact static prefix to OSPF:
+  set routing-options static route 198.51.100.4/32 discard
+  set policy-options policy-statement LAB012-STATIC-EXPORT term TEST from protocol static
+  set policy-options policy-statement LAB012-STATIC-EXPORT term TEST from route-filter 198.51.100.4/32 exact
+  set policy-options policy-statement LAB012-STATIC-EXPORT term TEST then accept
+  set protocols ospf export LAB012-STATIC-EXPORT
+Commit check and commit. On R1, verify 198.51.100.4/32 appears as an OSPF external route (default external preference is 150).
+
+B. On R1, configure a competing static route to the same prefix, via R2, with preference 200:
+  set routing-options static route 198.51.100.4/32 next-hop 10.0.12.2 preference 200
+Commit and verify the OSPF external route is active because 150 is lower than 200.
+
+C. On R1, change the OSPF external route preference to 250:
+  set protocols ospf external-preference 250
+Commit and verify the static route with preference 200 becomes active.
+
+D. Restore clean state on R1 and R4, then verify the external test prefix is withdrawn and the OSPF baseline/ECMP route to 10.1.1.4/32 remains intact:
+R1:
+  delete routing-options static route 198.51.100.4/32
+  delete protocols ospf external-preference
+R4:
+  delete protocols ospf export LAB012-STATIC-EXPORT
+  delete policy-options policy-statement LAB012-STATIC-EXPORT
+  delete routing-options static route 198.51.100.4/32
+Commit check and commit on each router.
+
+ACCEPTANCE CRITERIA — FINAL STATE
+[ ] Baseline OSPF neighbors are Full and router IDs are unique.
+[ ] R1 initially learns 10.1.1.4/32 through two equal-cost next-hops, via R2 and R3.
+[ ] Raising R1's eth1.12 metric to 20 makes the path via R3 preferred.
+[ ] Removing the manual metric restores default cost and ECMP in R1's routing table.
+[ ] With a static route preference of 20 and OSPF preference 10, the OSPF route stays active.
+[ ] With OSPF preference 30 and static preference 20, the static route becomes active.
+[ ] All temporary route-preference changes are removed; baseline ECMP is restored.
+[ ] If Task 5 was run, its temporary static/export policy is removed and the external test prefix is withdrawn.
+
+EVIDENCE TO SAVE
+- On R1: `show ospf neighbor`
+- On R1: `show ospf interface detail`
+- On R1: `show route 10.1.1.4/32 exact detail` at baseline, changed metric, restored metric, and route-preference stages
+- On R1: `show configuration protocols ospf | display set`
+- Optional Task 5: `show route 198.51.100.4/32 exact detail` before and after changing external-preference
+- Optional Task 5: `show ospf database external`

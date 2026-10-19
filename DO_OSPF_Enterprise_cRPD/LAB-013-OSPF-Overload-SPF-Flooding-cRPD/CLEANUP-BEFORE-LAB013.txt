@@ -1,0 +1,42 @@
+CLEANUP BEFORE LAB-013
+
+IMPORTANT
+- Stop any other OSPF lab using the same shared VLAN/IP namespace first.
+- Do not modify, destroy, or recreate `br-univ`.
+- These commands clean the previous LAB-012 profile and its temporary experiments from R1-R4. Run only if you are done with LAB-012 and ready to switch to LAB-013.
+- Preserve `lo0.0`, the base startup-config, management access, and unrelated interface units.
+- Inspect `show configuration interfaces eth1 | display set` first if you intentionally reused these VLAN units for something else.
+
+R1:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 13
+  delete routing-options static route 10.1.1.4/32
+  delete routing-options static route 198.51.100.4/32
+  delete protocols ospf preference
+  delete protocols ospf external-preference
+
+R2:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 24
+
+R3:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 34
+
+R4:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 24
+  delete interfaces eth1 unit 34
+  delete policy-options policy-statement LAB012-STATIC-EXPORT
+  delete routing-options static route 198.51.100.4/32
+
+On each router above, run `commit check` then `commit`. Some delete commands may report that a statement does not exist; that is acceptable only if you confirm the relevant configuration is already absent. After cleanup, load the LAB-013 profiles.
+
+Do not delete or reset global router IDs unless your own baseline requires it. The matching LAB-013 profile explicitly sets the router ID used for the exercise.

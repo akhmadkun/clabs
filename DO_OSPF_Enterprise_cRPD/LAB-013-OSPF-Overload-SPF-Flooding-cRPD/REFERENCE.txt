@@ -1,0 +1,24 @@
+LAB-013 REFERENCE NOTES
+
+Primary basis: uploaded Juniper Networks, *Junos OS OSPF User Guide* (ospf.pdf), Chapter 5, “Configure OSPF Route Control”.
+
+Relevant sections / printed page numbers in the uploaded PDF:
+- “Understanding OSPF Overload Function”, pp. 238–240. Describes overload as the router advertising transit links at maximum metric (0xFFFF / 65535) to discourage transit use, while stub links retain their actual cost.
+- “Example: Configuring OSPF to Make Routing Devices Appear Overloaded”, pp. 240–245. Example config is `set protocols ospf overload` (optional timeout is documented as 60–1800 seconds); verification includes `show ospf overview`, detailed Router-LSA output, and `show route`.
+- “Understanding the SPF Algorithm Options for OSPF”, pp. 245–246; “Example: Configuring SPF Algorithm Options for OSPF”, pp. 246–250. Documents delay, rapid-runs, holddown, their ranges and referenced defaults.
+- “Configuring OSPF Refresh and Flooding Reduction in Stable Topologies”, pp. 250–251. Describes interface-level `flood-reduction`, DoNotAge behavior, and flooding LSAs when LSA content changes.
+
+Command scope used by this lab:
+- `set protocols ospf overload`
+- `set protocols ospf spf-options delay <milliseconds>`
+- `set protocols ospf spf-options rapid-runs <count>`
+- `set protocols ospf spf-options holddown <milliseconds>`
+- `set protocols ospf area <area-id> interface <interface> metric <metric>`
+- Optional: `set protocols ospf area <area-id> interface <interface> flood-reduction`
+
+Interpretation cautions:
+- The value 65535 refers to advertised transit-link metrics in the overloaded router's Router-LSA, not to every route or stub network originated by that router.
+- OSPF interface metric and Junos route preference are different controls. LAB-013 uses metric only as a way to provoke and observe a Router-LSA change; route preference is not modified here.
+- A sequence/checksum change is expected to be dynamic; do not hard-code sequence numbers in acceptance checks.
+- Configuration commit alone is not evidence that runtime behavior worked. Check the LSDB, adjacency state, and active routes.
+- These materials were prepared from the uploaded guide and checked for internal consistency; this package has not been deployed on the user's running cRPD image.

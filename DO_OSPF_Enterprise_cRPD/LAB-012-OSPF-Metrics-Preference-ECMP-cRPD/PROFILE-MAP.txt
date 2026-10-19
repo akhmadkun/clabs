@@ -1,0 +1,17 @@
+LAB-012 PROFILE MAP
+
+Copy each file to the corresponding host-side bind directory `./configs/rN/` in the universal topology. Do not replace `base.conf`.
+
+Router  Profile filename               Logical interfaces
+R1      lab012-r1-baseline.set         eth1.12 + eth1.13; OSPF Area 0
+R2      lab012-r2-baseline.set         eth1.12 + eth1.24; OSPF Area 0
+R3      lab012-r3-baseline.set         eth1.13 + eth1.34; OSPF Area 0
+R4      lab012-r4-baseline.set         eth1.24 + eth1.34; OSPF Area 0
+
+Example on R1:
+  configure
+  load set /lab-configs/lab012-r1-baseline.set
+  commit check
+  commit
+
+Load only the matching profile on each router. The profiles configure VLAN tags, IPv4 link addressing, unique router IDs, OSPFv2 Area 0 adjacencies, point-to-point interface type, and passive lo0.0. They deliberately do not configure manual interface metrics, static test routes, or route-preference overrides.

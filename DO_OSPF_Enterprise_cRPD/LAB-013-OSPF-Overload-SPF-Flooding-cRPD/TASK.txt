@@ -1,0 +1,155 @@
+LAB-013 — OSPF OVERLOAD BIT, SPF SCHEDULING & LSA FLOODING
+
+SCENARIO
+A four-router Area 0 diamond provides two transit paths between R1 and R4:
+R1–R2–R4 and R1–R3–R4. You are preparing R2 for maintenance and need to keep it in OSPF while steering transit traffic away from it. You must then inspect SPF scheduling and prove that a link metric change is reflected in a Router-LSA at a remote router.
+
+BASELINE ADDRESSING
+- R1–R2: VLAN 12 / eth1.12 / 10.0.12.0/30 (R1 .1, R2 .2)
+- R1–R3: VLAN 13 / eth1.13 / 10.0.13.0/30 (R1 .1, R3 .2)
+- R2–R4: VLAN 24 / eth1.24 / 10.0.24.0/30 (R2 .1, R4 .2)
+- R3–R4: VLAN 34 / eth1.34 / 10.0.34.0/30 (R3 .1, R4 .2)
+- Loopbacks / router IDs: R1 10.1.1.1/32; R2 10.1.1.2/32; R3 10.1.1.3/32; R4 10.1.1.4/32.
+- Baseline link costs should be the default 1; do not set explicit metrics in the baseline profiles.
+
+TASK 1 — PROVE BASELINE
+On all routers:
+  run show ospf neighbor
+On R1:
+  run show route 10.1.1.4/32 exact detail
+  run show ospf database router detail advertising-router 10.1.1.2
+On R4:
+  run show ospf database router detail advertising-router 10.1.1.1
+
+Record:
+- All four expected P2P OSPF adjacencies are Full.
+- R1's route to 10.1.1.4/32 has equal-cost next-hops via R2 and R3 (baseline metric 2 expected with per-link cost 1).
+- R1's view of R2's Router-LSA does not show transit links advertised at 65535.
+- R4 has an LSDB copy of R1's Router-LSA. Record the current sequence number/checksum if shown in this release.
+
+TASK 2 — MAINTENANCE DRAIN USING OSPF OVERLOAD
+On R2:
+  configure
+  set protocols ospf overload
+  commit check
+  commit
+
+Verify on R2:
+  run show ospf overview
+  run show configuration protocols ospf | display set
+
+Verify from R1:
+  run show ospf database router detail advertising-router 10.1.1.2
+  run show route 10.1.1.4/32 exact detail
+  run show route 10.1.1.2/32 exact detail
+  run show ospf neighbor
+
+Expected behavior:
+- R2 remains an OSPF participant and its adjacencies stay Full.
+- The transit links in R2's Router-LSA are advertised with maximum metric 65535 while overload is active.
+- R1 avoids R2 as a transit path to R4's loopback and selects the path via R3.
+- R2's own loopback / stub reachability remains available; overload is not the same as shutting down OSPF or withdrawing every route originated by R2.
+
+Save the outputs before cleanup. If the RIB does not move away from R2, do not continue as though the test passed: capture the R2 Router-LSA detail and route detail, then compare them with the expected behavior in the guide.
+
+TASK 3 — SPF SCHEDULING KNOBS
+On R1, configure deliberately non-default lab values:
+  configure
+  set protocols ospf spf-options delay 600
+  set protocols ospf spf-options rapid-runs 2
+  set protocols ospf spf-options holddown 8000
+  commit check
+  commit
+
+Verify:
+  run show configuration protocols ospf spf-options | display set
+  run show ospf overview
+
+Record the active SPF delay, rapid-runs, and holddown values shown by the operational command. Explain in your notes:
+- `delay` is the time between detecting a topology change and running SPF.
+- `rapid-runs` controls the number of successive SPF calculations before the hold-down behavior applies.
+- `holddown` is the hold-down period before a later SPF can run once the rapid-run threshold has been hit.
+
+Optional controlled observation (not a timed acceptance test): while watching `show ospf overview` and the relevant routes/LSDB, briefly deactivate and reactivate only R1's OSPF interface stanza (not the physical parent), using separate commits:
+  deactivate protocols ospf area 0.0.0.0 interface eth1.12
+  commit check
+  commit
+  activate protocols ospf area 0.0.0.0 interface eth1.12
+  commit check
+  commit
+Observe adjacency and route changes. Do not claim a precise convergence benchmark based only on manual CLI timing. Do not deactivate the physical parent interface or touch `br-univ`.
+
+TASK 4 — CHANGE A LINK METRIC AND PROVE LSA FLOODING
+This folds the basic metric concept into an actual LSDB/flooding exercise.
+
+A. Baseline snapshot on R4:
+  run show ospf database router detail advertising-router 10.1.1.1
+  run show route 10.1.1.1/32 exact detail
+Record R1's Router-LSA sequence/checksum and the path/cost to R1's loopback.
+
+B. On R1, change the cost of the R1–R3 link:
+  configure
+  set protocols ospf area 0.0.0.0 interface eth1.13 metric 7
+  commit check
+  commit
+
+C. On R4, inspect the LSDB copy of R1's Router-LSA; on R1, inspect its route to R4:
+On R4:
+  run show ospf database router detail advertising-router 10.1.1.1
+On R1:
+  run show route 10.1.1.4/32 exact detail
+
+Expected behavior:
+- R4 receives an updated copy of R1's Router-LSA (the sequence/checksum or advertised link metric should reflect an update).
+- R1's path to R4's loopback should prefer the R2 path instead of R3 because R1's cost toward R3 is now 7. Do not infer the reverse-direction path from this local metric change: OSPF link metrics are directional.
+- This demonstrates that a locally changed OSPF interface metric changes the originating router's LSA, the update propagates through the Area 0 flooding domain, and the originating router's route calculation changes.
+
+D. Restore R1's link metric:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 metric
+  commit check
+  commit
+
+E. On R4, verify another Router-LSA update arrived. On R1, verify that the route to 10.1.1.4/32 returns to equal-cost next-hops via R2 and R3. Note that sequence/checksum values are dynamic; compare relative changes, not a hard-coded expected sequence number.
+
+TASK 5 — OPTIONAL FEATURE PROBE: FLOOD REDUCTION / DoNotAge
+This is an extension, not required for the core acceptance criteria. The uploaded guide describes `flood-reduction` as an interface-level control that marks self-originated LSAs with DoNotAge so that stable LSAs do not need periodic refresh, while topology changes can still trigger flooding.
+
+On R1 and R3, configure it on the matching R1–R3 P2P interface:
+  set protocols ospf area 0.0.0.0 interface eth1.13 flood-reduction
+
+Run `commit check` then `commit` on both routers. If accepted, verify:
+  run show configuration protocols ospf area 0.0.0.0 interface eth1.13 | display set
+  run show ospf neighbor
+  run show ospf database router detail advertising-router 10.1.1.1
+
+Look for DoNotAge indication in LSDB detail if this cRPD build exposes it. Do not wait 50 minutes just to prove configuration. If DoNotAge is not rendered, record that the CLI output is inconclusive; do not claim runtime proof merely from configuration presence. Then change and restore the eth1.13 metric once more to confirm that an actual topology change still updates the relevant LSA. If `commit check` rejects `flood-reduction`, capture the exact error and mark this optional feature as unsupported by the installed cRPD build; use vJunos-router for a repeat test if required.
+
+CLEAN RESTORE — REQUIRED
+On R2:
+  delete protocols ospf overload
+On R1:
+  delete protocols ospf spf-options
+  delete protocols ospf area 0.0.0.0 interface eth1.13 metric
+  delete protocols ospf area 0.0.0.0 interface eth1.13 flood-reduction
+On R3:
+  delete protocols ospf area 0.0.0.0 interface eth1.13 flood-reduction
+
+Commit check and commit on R1–R3 as applicable. Verify all OSPF adjacencies are Full, all temporary options are removed, R1 again has the equal-cost route to 10.1.1.4/32, and R4 sees the restored R1 Router-LSA.
+
+ACCEPTANCE CRITERIA — CORE LAB
+[ ] Baseline four P2P adjacencies are Full and R1 has equal-cost paths to R4's loopback.
+[ ] With overload enabled on R2, R2 remains in OSPF, its transit Router-LSA links use metric 65535, and R1 avoids R2 to reach R4.
+[ ] R2's own loopback remains reachable while overload is active.
+[ ] `show ospf overview` reflects the SPF scheduling values configured on R1.
+[ ] A metric change on R1 eth1.13 is visible in the Router-LSA learned by R4; R4 changes its path to R1's loopback accordingly.
+[ ] Restoring the metric causes another LSA update and restores baseline path selection.
+[ ] All temporary configuration is removed and the baseline OSPF adjacency state is recovered.
+[ ] If Task 5 is attempted, its support/status and evidence are recorded accurately, and the temporary flood-reduction setting is removed.
+
+EVIDENCE TO SAVE
+- Baseline: `show ospf neighbor`, R1 `show route 10.1.1.4/32 exact detail`, and R1/R4 Router-LSA detail.
+- During overload: R2 `show ospf overview`, R1 `show ospf database router detail advertising-router 10.1.1.2`, R1 routes to 10.1.1.4/32 and 10.1.1.2/32.
+- SPF scheduling: R1 `show ospf overview` and `show configuration protocols ospf spf-options | display set`.
+- LSA flooding: R4's R1 Router-LSA detail before metric change, after metric change, and after restoration, plus route to 10.1.1.1/32.
+- Final: neighbor table, route to 10.1.1.4/32 on R1, and relevant protocol config showing no temporary settings remain.

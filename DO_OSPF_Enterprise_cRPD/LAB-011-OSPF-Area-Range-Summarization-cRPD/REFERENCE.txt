@@ -1,0 +1,23 @@
+LAB-011 SOURCE REFERENCES
+
+PRIMARY SOURCE
+Junos OS OSPF User Guide (uploaded by the user; publication date 2026-06-18).
+Chapter 5, “Configure OSPF Route Control”:
+- “Understanding OSPF Route Summarization”, printed page 195.
+- “Example: Summarizing Ranges of Routes in OSPF Link-State Advertisements Sent into the Backbone Area”, printed pages 196–204.
+- “Example: Limiting the Number of Prefixes Exported to OSPF”, printed pages 205–208 (not part of this lab's task; reserved for separate resource-protection exercise if desired).
+
+SOURCE-DERIVED PRINCIPLES
+- ABRs can aggregate a range of IP addresses to reduce the number of summary advertisements flooded into another area.
+- For a normal OSPF area, an area range summarizes intra-area prefixes. Matching routes are filtered at the area boundary and the summary is advertised in their place.
+- For an NSSA, area-range functionality relates to NSSA external Type 7 LSAs before translation to AS-external Type 5 LSAs; this lab does not configure an NSSA.
+- Juniper's separate `prefix-export-limit` option limits the number of prefixes exported into OSPF. This is not the same feature as area-range summarization and is outside this lab's scope.
+
+OFFICIAL JUNIPER DOCUMENTATION
+OSPF Route Control (summarization, prefix limit, and related topics):
+https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-route-control.html
+`area-range` statement syntax and `restrict` behavior:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/area-range-edit-protocols-ospf.html
+
+VALIDATION NOTE
+The design is adapted to the user's cRPD universal topology. No live deployment or CLI commit check was performed during package generation; the learner must validate on the target image.

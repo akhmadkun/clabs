@@ -1,0 +1,62 @@
+LAB-013 — SOLUTION GUIDE
+
+READ THIS AFTER ATTEMPTING TASK.TXT
+This guide gives the intended change sequence and expected protocol behavior. It does not replace verification on the installed cRPD release.
+
+1. BASELINE
+Expected link units and OSPF area:
+- R1: eth1.12 + eth1.13, both in Area 0.
+- R2: eth1.12 + eth1.24, both in Area 0.
+- R3: eth1.13 + eth1.34, both in Area 0.
+- R4: eth1.24 + eth1.34, both in Area 0.
+Each link is P2P /30 and has default OSPF cost 1. All four adjacencies should be Full. R1-to-R4 loopback cost should be 2 with two equal-cost next-hops.
+
+2. OVERLOAD ON R2
+Commands on R2:
+  set protocols ospf overload
+
+The OSPF overload bit makes the router appear unsuitable for transit traffic. Juniper's guide states that transit links (except stub links) are advertised with metric 0xFFFF / 65535. This is not the same as shutting down the routing protocol: adjacencies can remain Full and R2's own stub/loopback can remain reachable. Given the diamond, R1 should use the route via R3 to reach 10.1.1.4/32.
+
+Check on R1:
+  show ospf database router detail advertising-router 10.1.1.2
+  show route 10.1.1.4/32 exact detail
+  show route 10.1.1.2/32 exact detail
+
+Disable overload after recording evidence:
+  delete protocols ospf overload
+
+3. SPF OPTIONS ON R1
+Commands:
+  set protocols ospf spf-options delay 600
+  set protocols ospf spf-options rapid-runs 2
+  set protocols ospf spf-options holddown 8000
+
+The uploaded Junos guide describes defaults as delay 200 ms, rapid-runs 3, and holddown 5000 ms for the referenced OSPF implementation. This lab deliberately uses different values so the operational output is easy to compare. `delay` is not a guaranteed end-to-end convergence timer; it governs the wait before an SPF run after a topology change. `rapid-runs` and `holddown` control repeated SPF calculations during churn. Restore with `delete protocols ospf spf-options`.
+
+4. ROUTER-LSA FLOODING TEST
+Snapshot on R4:
+  show ospf database router detail advertising-router 10.1.1.1
+  show route 10.1.1.1/32 exact detail
+
+Change R1 eth1.13:
+  set protocols ospf area 0.0.0.0 interface eth1.13 metric 7
+
+R4 should receive an updated copy of R1's Router-LSA. The LSA sequence/checksum may change and the advertised metric on the relevant R1-to-R3 link should show the changed value. R1's route to R4's loopback should prefer the R2 path, as R1's local cost toward R3 is now higher. This is a directional test: do not expect a metric set on R1's eth1.13 to directly change R4's route calculation toward R1. Delete the explicit metric and repeat the check; do not assume fixed sequence numbers.
+
+5. OPTIONAL FLOOD REDUCTION
+Commands on R1 and R3:
+  set protocols ospf area 0.0.0.0 interface eth1.13 flood-reduction
+
+The guide explains the DoNotAge behavior. Feature support/output can vary by image and release. `commit check` acceptance alone proves parser/config support, not that runtime LSAs show DoNotAge. Inspect LSDB detail if the CLI exposes the bit. If not, record it as inconclusive unless another direct behavior proves it. A subsequent actual topology change should still update LSA state. If unsupported, keep the core lab complete and repeat this optional item with vJunos-router if needed.
+
+6. FINAL RESTORE
+R1:
+  delete protocols ospf spf-options
+  delete protocols ospf area 0.0.0.0 interface eth1.13 metric
+  delete protocols ospf area 0.0.0.0 interface eth1.13 flood-reduction
+R2:
+  delete protocols ospf overload
+R3:
+  delete protocols ospf area 0.0.0.0 interface eth1.13 flood-reduction
+
+Commit check and commit on changed routers. Verify the four adjacencies are Full and the R1 route to 10.1.1.4/32 is back to equal cost through R2 and R3. Do not delete the external `br-univ` bridge or alter the universal Containerlab YAML.

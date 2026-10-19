@@ -1,0 +1,18 @@
+LAB-011 PROFILE MAP
+
+Copy each profile into the matching host-side bind-mount folder `./configs/rN/` in the universal topology. Do not overwrite `base.conf`.
+
+Router  Profile filename                               Interfaces / role
+R1      lab011-r1-baseline.set                         eth1.12 + eth1.13; ABR; OSPF Area 0/1
+R2      lab011-r2-baseline.set                         eth1.12; Area 0
+R3      lab011-r3-baseline.set                         eth1.13 + eth1.34; Area 1; service loopback .3
+R4      lab011-r4-baseline.set                         eth1.34 + eth1.45; Area 1; service loopback .4
+R5      lab011-r5-baseline.set                         eth1.45; Area 1; service loopback .5
+
+On each router, enter configuration mode and load only its own profile, for example on R1:
+  configure
+  load set /lab-configs/lab011-r1-baseline.set
+  commit check
+  commit
+
+The profiles are a feature-lab baseline: they configure IPv4 addressing, VLAN IDs, unique router IDs, OSPFv2 areas, P2P interface types, and passive loopbacks. They deliberately do NOT configure `area-range` so the core objective remains a task for the learner.

@@ -1,0 +1,50 @@
+CLEANUP BEFORE LAB-012
+
+IMPORTANT
+- Stop other OSPF labs that reuse these VLANs/address ranges.
+- Never delete or recreate the external `br-univ` bridge.
+- These commands remove OSPF configuration from the prior LAB-011 OSPFv2 exercise, LAB-010 OSPFv3 remnants, and the units this lab reuses. Inspect current config first if you have deliberately kept custom configuration.
+- Do not remove `lo0.0` or the base startup-config.
+
+R1:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 14
+R2:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 23
+  delete interfaces eth1 unit 24
+R3:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 23
+  delete interfaces eth1 unit 34
+  delete interfaces eth1 unit 36
+R4:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 14
+  delete interfaces eth1 unit 24
+  delete interfaces eth1 unit 34
+  delete interfaces eth1 unit 45
+  delete interfaces eth1 unit 46
+R5 (clean previous LAB-011 / LAB-010 config; not used in this lab):
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 45
+  delete interfaces eth1 unit 56
+R6 (clean previous LAB-010 remnants; not used in this lab):
+  delete protocols ospf3
+  delete interfaces eth1 unit 36
+  delete interfaces eth1 unit 46
+  delete interfaces eth1 unit 56
+  delete interfaces eth1 unit 610
+
+On each listed router, run `commit check` before `commit`. R5/R6 cleanup is for the lab profiles/configs previously documented; inspect before deleting if you have since repurposed those units.
+
+After cleanup, load LAB-012 profiles on R1–R4. The profiles rebuild only the lab's target links and OSPFv2 baseline.

@@ -1,0 +1,8 @@
+VALIDATION NOTES
+- Package is targeted at the user's latest cRPD image `crpd:23.4R2-S5.6`.
+- Lab reuses the universal topology; no custom clab YAML or bridge lifecycle is included.
+- Logical link IDs are conventional: 12, 13, 34, 45; interface unit number matches the VLAN ID.
+- R5 uses eth1 as its parent interface, per the user's corrected universal YAML.
+- Area-range syntax used in the task: `set protocols ospf area 0.0.0.1 area-range 192.168.11.0/24`.
+- Baseline adjacency behavior and summarization results have not been live-tested in this environment. Use `commit check`, `show ospf neighbor`, `show route`, and `show ospf database` to prove actual behavior.
+- If the feature is unsupported by cRPD or the expected behavior does not occur after checking config and LSDB, rebuild this lab on vJunos-router under the user's agreed fallback rule. Do not redefine the learning objective based only on image limitations.

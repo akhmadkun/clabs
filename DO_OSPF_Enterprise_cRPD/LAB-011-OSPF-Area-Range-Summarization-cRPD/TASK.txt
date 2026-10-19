@@ -1,0 +1,66 @@
+LAB-011 — OSPF AREA-RANGE SUMMARIZATION & PREFIX SUPPRESSION
+
+SCENARIO
+You maintain an OSPF network with Area 0 and Area 1. R1 is the ABR. R3, R4, and R5 each advertise one service loopback from Area 1. Before summarization, the backbone router R2 learns each /32 individually. Configure R1 to advertise a single summary prefix toward Area 0 while suppressing the matching more-specific routes at the area boundary.
+
+PRE-REQUISITES
+- Use `crpd:23.4R2-S5.6` on the latest universal topology.
+- Only this lab may use the listed VLAN/IP space while testing.
+- Follow CLEANUP-BEFORE-LAB011.txt, then load the appropriate `lab011-rN-baseline.set` profiles from PROFILE-MAP.txt.
+- Confirm `commit check` succeeds before committing each profile.
+
+BASELINE TOPOLOGY
+- Area 0: R1–R2 over VLAN 12.
+- Area 1: R1–R3 over VLAN 13; R3–R4 over VLAN 34; R4–R5 over VLAN 45.
+- R1 is the only ABR between Area 1 and Area 0.
+- Service loopbacks in Area 1:
+  - R3: 192.168.11.3/32
+  - R4: 192.168.11.4/32
+  - R5: 192.168.11.5/32
+
+TASK 1 — VALIDATE THE BASELINE
+1. Verify all four logical links are up/up.
+2. Verify OSPFv2 adjacencies are Full on R1–R2, R1–R3, R3–R4, and R4–R5.
+3. On R2, inspect the OSPF routes for 192.168.11.3/32, 192.168.11.4/32, and 192.168.11.5/32.
+4. Confirm the individual /32 prefixes are learned before summarization and that 192.168.11.0/24 is not yet advertised as the summary.
+
+TASK 2 — CONFIGURE AN AREA RANGE
+On R1, configure the Area 1 area range so the three service loopbacks are summarized into 192.168.11.0/24 when routes cross into Area 0.
+
+Requirements:
+- Apply the range under the source area (Area 1) on R1.
+- Do not configure the same range on R2, R3, R4, or R5.
+- Run `commit check` before `commit`.
+
+TASK 3 — VERIFY PREFIX SUPPRESSION AND SUMMARY ADVERTISEMENT
+On R2, verify:
+- 192.168.11.0/24 is present as an OSPF-learned route.
+- The specific routes 192.168.11.3/32, 192.168.11.4/32, and 192.168.11.5/32 are no longer learned individually in Area 0.
+- The OSPF database for Area 0 contains the summary advertisement for 192.168.11.0/24.
+- Routes outside the summary range, including the router-ID loopbacks 10.1.1.3/32, 10.1.1.4/32, and 10.1.1.5/32, remain independently reachable.
+
+TASK 4 — COMPARE SUMMARY VS. FILTER-ONLY MODE (EXTENSION)
+1. On R1, modify the range to add the `restrict` option: `set protocols ospf area 0.0.0.1 area-range 192.168.11.0/24 restrict` (if the CLI requires replacing rather than extending the statement, delete the existing area-range line first, then set it with `restrict`).
+2. Commit and verify on R2 that neither the individual /32 routes nor the 192.168.11.0/24 summary are advertised. This is filter-only behavior.
+3. Restore summarization mode by deleting the `restrict` form and configuring `set protocols ospf area 0.0.0.1 area-range 192.168.11.0/24`; commit and confirm Task 3 results return.
+
+TASK 5 — DEMONSTRATE REVERSIBILITY
+Temporarily remove the area range from R1 and verify that the individual /32 service prefixes reappear on R2. Reapply the non-restrict area range and commit so the final state meets Task 3.
+
+ACCEPTANCE CRITERIA — FINAL STATE
+[ ] All intended OSPFv2 neighbors are Full.
+[ ] R1 is an ABR with interfaces in Area 0 and Area 1.
+[ ] R2 learns 192.168.11.0/24 as an OSPF route.
+[ ] R2 does not learn 192.168.11.3/32, 192.168.11.4/32, or 192.168.11.5/32 individually through OSPF after summarization.
+[ ] The Area 0 LSDB shows the summary prefix advertisement.
+[ ] Other routes outside the range still work.
+[ ] The area range is left enabled on R1 at the end.
+
+EVIDENCE TO SAVE
+- R1: `show configuration protocols ospf | display set`
+- R1: `show ospf interface`
+- R2: `show ospf neighbor`
+- R2: `show route protocol ospf`
+- R2: `show route 192.168.11.0/24`
+- R2: `show route 192.168.11.3/32` (repeat for .4/32 and .5/32)
+- R2: `show ospf database area 0.0.0.0`

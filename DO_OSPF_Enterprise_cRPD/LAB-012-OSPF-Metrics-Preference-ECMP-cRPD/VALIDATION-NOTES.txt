@@ -1,0 +1,12 @@
+VALIDATION NOTES — LAB-012
+
+- Target: local image `crpd:23.4R2-S5.6` on the latest universal Containerlab topology.
+- Node scope: R1–R4 only; all target links use the existing parent eth1 attached to `br-univ`.
+- Pair-to-VLAN convention: R1–R2 / VLAN 12 / eth1.12; R1–R3 / 13 / eth1.13; R2–R4 / 24 / eth1.24; R3–R4 / 34 / eth1.34.
+- All link endpoints use consistent /30 subnetting and `.1` on the lower-numbered router, `.2` on the higher-numbered router.
+- Expected baseline path metric to R4 loopback from R1: 2 over each diamond path when per-link cost is 1.
+- With R1 eth1.12 metric 20, path via R2 is expected to cost 21, while via R3 is expected to cost 2.
+- No generated Containerlab YAML is included; this package reuses the user's universal topology.
+- Config/route behavior has not been live-tested on cRPD. Confirm with `commit check`, neighbor state, interface costs and route details.
+- cRPD route-table ECMP and data-plane forwarding distribution are distinct; only RIB ECMP is mandatory.
+- If `external-preference` or the optional export policy does not work as expected on this image, preserve exact output and use vJunos-router for that advanced portion if necessary.

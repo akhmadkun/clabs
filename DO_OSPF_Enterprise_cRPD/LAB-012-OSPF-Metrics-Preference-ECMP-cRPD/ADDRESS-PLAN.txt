@@ -1,0 +1,39 @@
+LAB-012 ADDRESS PLAN — OSPF METRICS, ROUTE PREFERENCE & ECMP
+
+ROUTER IDs / LOOPBACKS
+R1 10.1.1.1/32
+R2 10.1.1.2/32
+R3 10.1.1.3/32
+R4 10.1.1.4/32 (primary verification target)
+
+LOGICAL LINKS — VLAN ID = ROUTER-PAIR ID; SUBINTERFACE UNIT = VLAN ID
+Pair   VLAN  Subinterfaces              Subnet          Endpoint IPs    Area
+R1-R2  12    R1/R2 eth1.12             10.0.12.0/30    R1 .1, R2 .2   0
+R1-R3  13    R1/R3 eth1.13             10.0.13.0/30    R1 .1, R3 .2   0
+R2-R4  24    R2/R4 eth1.24             10.0.24.0/30    R2 .1, R4 .2   0
+R3-R4  34    R3/R4 eth1.34             10.0.34.0/30    R3 .1, R4 .2   0
+
+ECMP EXPECTATION ON R1
+Route: 10.1.1.4/32
+Path A: R1 -> R2 -> R4, total OSPF metric 1 + 1 = 2, first next-hop 10.0.12.2
+Path B: R1 -> R3 -> R4, total OSPF metric 1 + 1 = 2, first next-hop 10.0.13.2
+When R1 eth1.12 metric is set to 20, Path A metric becomes 20 + 1 = 21; Path B remains 1 + 1 = 2.
+
+ROUTE PREFERENCE TEST — INTERNAL ROUTE
+OSPF internal default preference: 10
+Temporary static route preference: 20
+Changed OSPF internal preference: 30
+Lower preference is more preferred. These values are administrative preferences, not OSPF path metrics.
+
+OPTIONAL EXTERNAL PREFERENCE TEST
+R4 test route: 198.51.100.4/32 via static discard, exported as OSPF external.
+OSPF external default preference: 150
+R1 competing static route preference: 200
+Test override on R1: OSPF external preference 250
+All external-test config must be removed before finishing the lab.
+
+CONVENTIONS
+- P2P links use /30 and .1/.2 based on router number order.
+- Router IDs are unique.
+- Each parent eth1 is attached to the existing host bridge br-univ; 802.1Q tags are configured on eth1.<VLAN> logical units.
+- No extra loopback units are added; use lo0.0 for router-ID /32 addresses.

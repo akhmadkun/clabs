@@ -1,0 +1,24 @@
+LAB-012 REFERENCES AND SOURCE ALIGNMENT
+
+PRIMARY SOURCE
+Juniper Networks, Junos OS OSPF User Guide, published 2026-06-18 (uploaded by user).
+- Chapter 5, “Configure OSPF Route Control”.
+- Printed pages 208–216: OSPF traffic control and manual interface costs.
+- Printed pages 210 and 218–229: ECMP and weighted ECMP discussion.
+- Printed pages 235–238: controlling internal and external OSPF route preferences.
+
+SOURCE-DERIVED POINTS
+- OSPF selects paths using the sum of link costs and SPF. Lower total metric wins.
+- When equal-cost paths exist, OSPF can build an ECMP route set.
+- Junos route preference chooses between routes from different protocols for the same destination; lower numeric preference is preferred.
+- The guide identifies default route preferences of 10 for internal OSPF routes and 150 for external OSPF routes.
+- The guide explains that multiple next hops in the forwarding table require an appropriate load-balancing policy; this lab's mandatory criterion is RIB/route-table ECMP, not traffic distribution.
+
+ADAPTATIONS FOR THIS CONTAINERLAB SERIES
+- Use R1–R4 and the existing external `br-univ` bridge.
+- VLAN and Juniper unit numbers follow the router-pair convention: 12, 13, 24, 34.
+- OSPF area is Area 0 on all links to create a simple diamond with two equal-cost paths.
+- The core route-preference demonstration uses a temporary static route competing with an OSPF internal route. Optional Task 5 separately checks OSPF external-preference using a specifically exported static prefix.
+
+VALIDATION NOTE
+Package structure, addressing, profile references and expected metric arithmetic were checked locally. No live `commit check`, cRPD deployment, or route behavior test was performed while building the package. The actual lab must satisfy the acceptance criteria on the user's image. Use the agreed fallback: if cRPD cannot support the required behavior, rebuild/test with vJunos-router rather than dropping the learning objective.

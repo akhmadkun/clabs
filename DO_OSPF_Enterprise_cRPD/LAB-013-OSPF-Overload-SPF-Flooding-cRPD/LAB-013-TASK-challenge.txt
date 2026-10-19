@@ -1,0 +1,105 @@
+LAB-013 — OSPF OVERLOAD, SPF SCHEDULING & LSA FLOODING
+
+CHALLENGE SHEET — DO NOT TREAT THIS AS A COMMAND RECIPE
+
+SCENARIO
+R2 must be prepared for maintenance without removing it from the OSPF domain entirely. You need to drain transit traffic away from R2, investigate the router's SPF scheduling controls, and then prove that a link-cost change is reflected in an updated Router-LSA at a remote router. This is an operational verification lab: success is based on protocol evidence, not just accepted configuration.
+
+LAB ENVIRONMENT
+- Platform: Juniper cRPD `crpd:23.4R2-S5.6`.
+- Use R1–R4 only on the existing universal Containerlab topology.
+- All links are OSPFv2 point-to-point links in Area 0.
+- R1–R2: VLAN 12 / eth1.12 / 10.0.12.0/30; R1 .1, R2 .2.
+- R1–R3: VLAN 13 / eth1.13 / 10.0.13.0/30; R1 .1, R3 .2.
+- R2–R4: VLAN 24 / eth1.24 / 10.0.24.0/30; R2 .1, R4 .2.
+- R3–R4: VLAN 34 / eth1.34 / 10.0.34.0/30; R3 .1, R4 .2.
+- Router IDs and loopbacks: R1 10.1.1.1/32, R2 10.1.1.2/32, R3 10.1.1.3/32, R4 10.1.1.4/32.
+- Baseline OSPF interface cost is expected to be the default 1 on every link. The baseline profiles must not contain explicit interface metrics.
+
+PREPARATION AND SAFETY
+1. Complete `CLEANUP-BEFORE-LAB013.txt` and apply the matching profiles described by `PROFILE-MAP.txt`.
+2. Establish a healthy baseline before changing protocol behavior.
+3. Do not edit or redeploy the universal Containerlab YAML for this exercise.
+4. Do not create, delete, or recreate `br-univ`. Do not shut down physical parent interfaces to simulate an OSPF event.
+5. Save before/after evidence. If observed behavior differs from the acceptance criteria, stop and troubleshoot; do not record the task as passed merely because a commit succeeded.
+6. This cRPD exercise verifies routing/control-plane behavior. It does not prove data-plane packet forwarding or traffic load distribution.
+
+TASK 1 — ESTABLISH THE BASELINE
+Validate the lab before making changes.
+
+Your evidence must establish that:
+- The four expected P2P adjacencies are Full.
+- R1 reaches R4's loopback through two equal-cost paths, one via R2 and one via R3; the expected OSPF metric is 2.
+- R2's Router-LSA does not advertise its transit links with the maximum metric.
+- R4 has a copy of R1's Router-LSA. Record sequence/checksum information if exposed by this release.
+
+Do not proceed until you have captured the baseline route and LSDB state. If the expected equal-cost paths are absent, find the cause before starting the experiment.
+
+TASK 2 — DRAIN R2 FOR MAINTENANCE, WITHOUT REMOVING IT FROM OSPF
+Configure R2 so that OSPF considers it unsuitable for transit traffic while keeping the router and its adjacencies participating in OSPF.
+
+Prove all of the following from operational state:
+- R2's OSPF adjacencies remain Full.
+- R2's Router-LSA advertises its transit links with the maximum OSPF metric while the drain is active.
+- R1 selects the path via R3 to reach R4's loopback rather than transiting R2.
+- R2's own loopback remains reachable from R1.
+
+Capture the relevant evidence before removing the drain setting. A failed route change is not a pass: inspect the advertised Router-LSA and RIB to explain the discrepancy before continuing.
+
+TASK 3 — INVESTIGATE SPF SCHEDULING
+On R1, configure non-default SPF scheduling values so that the active values are easy to distinguish from defaults:
+- `delay`: 600 ms
+- `rapid-runs`: 2
+- `holddown`: 8000 ms
+
+Demonstrate both the configured values and the values reported by the operational OSPF view. In your notes, explain the role of each control and distinguish SPF scheduling from an end-to-end convergence measurement.
+
+OPTIONAL OBSERVATION
+If you want to observe a topology-change event, briefly bring down and restore only the OSPF adjacency on R1–R2 using the OSPF interface configuration. Make each state change independently and monitor the adjacency, route, and OSPF overview. Do not claim a precise convergence benchmark based on manual CLI timing. Do not disable the physical interface or alter `br-univ`.
+
+TASK 4 — CAUSE AND PROVE A REMOTE ROUTER-LSA UPDATE
+Use a local link-cost change to make the effect of LSA origination and flooding observable.
+
+A. Capture R4's current copy of R1's Router-LSA and R4's route to R1's loopback. Record sequence/checksum and path/cost details if available.
+
+B. Change the OSPF cost on R1's `eth1.13` link to 7. Do not change the cost on R3's end of the link.
+
+C. Prove that:
+- R1 originates an updated Router-LSA.
+- R4 receives the updated LSA; compare the advertised link metric and sequence/checksum with the baseline rather than expecting a fixed sequence number.
+- R1 now prefers the path via R2 to reach R4's loopback because the local cost toward R3 has increased.
+
+Remember that OSPF interface metrics are directional. A cost change configured at R1 does not, by itself, change R4's metric in the reverse direction.
+
+D. Restore R1's `eth1.13` cost to the original default. Prove that R4 receives a further LSA update and that R1's route to R4's loopback returns to equal-cost paths via R2 and R3.
+
+TASK 5 — OPTIONAL FEATURE PROBE: OSPF FLOOD REDUCTION
+Investigate whether this cRPD build supports OSPF flood reduction on both ends of the R1–R3 P2P link.
+
+If supported, determine whether the LSDB operational output exposes the DoNotAge state, then trigger a real topology update and verify that the changed information is still propagated. Do not wait for a full LSA refresh interval just to finish the lab. If configuration is accepted but the DoNotAge indication is not exposed, classify the runtime result as inconclusive rather than proven. If the image rejects the feature or cannot provide sufficient evidence, save the exact output and defer this extension to the agreed vJunos-router fallback.
+
+CLEAN RESTORE — REQUIRED
+Return every temporary change made during this lab to baseline:
+- Remove the OSPF overload state from R2.
+- Remove the SPF scheduling overrides from R1.
+- Restore default OSPF cost on R1's `eth1.13`.
+- Remove any flood-reduction setting used on R1/R3.
+
+Confirm that all four adjacencies are Full, R1 again has equal-cost paths to R4's loopback, no temporary settings remain, and the LSDB is back to a stable baseline. Preserve the universal topology and external `br-univ` bridge.
+
+ACCEPTANCE CRITERIA
+[ ] Baseline: all four P2P adjacencies Full; R1 has two equal-cost paths to R4's loopback.
+[ ] Overload: R2 remains an OSPF participant, transit links are advertised with maximum metric, and R1 avoids R2 for transit to R4.
+[ ] R2's own loopback remains reachable while overload is active.
+[ ] SPF scheduling: the configured and operational values agree with the requested non-default values.
+[ ] LSA propagation: the `eth1.13` metric change is visible in R1's Router-LSA as learned by R4, and route selection on R1 changes as predicted.
+[ ] Restoration: reverting the metric produces another LSA update and restores equal-cost route selection.
+[ ] Cleanup: temporary settings are removed and baseline adjacency/routing behavior is recovered.
+[ ] Optional flood-reduction result is accurately classified as proven, unsupported, or inconclusive, with evidence saved.
+
+EVIDENCE TO SAVE
+- Baseline neighbor state, R1's route to 10.1.1.4/32, R1's view of R2's Router-LSA, and R4's view of R1's Router-LSA.
+- During overload: R2's OSPF operational/configuration state, R1's view of R2's Router-LSA, R1's routes to 10.1.1.4/32 and 10.1.1.2/32, and neighbor state.
+- SPF scheduling: configured and operational SPF values on R1; optional observation notes if performed.
+- LSA flooding: R4's copy of R1's Router-LSA before the metric change, after the change, and after restoration; route evidence from R1 for each state.
+- Final state: neighbor table, R1's route to R4's loopback, and proof that temporary configuration was removed.

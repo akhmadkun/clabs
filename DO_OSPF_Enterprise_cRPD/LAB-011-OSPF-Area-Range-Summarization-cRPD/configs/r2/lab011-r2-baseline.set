@@ -1,0 +1,7 @@
+# LAB-011 baseline R2 — Area 0 only. Router ID is unique.
+set interfaces eth1 unit 12 vlan-id 12
+set interfaces eth1 unit 12 family inet address 10.0.12.2/30
+set interfaces lo0 unit 0 family inet address 10.1.1.2/32
+set routing-options router-id 10.1.1.2
+set protocols ospf area 0.0.0.0 interface eth1.12 interface-type p2p
+set protocols ospf area 0.0.0.0 interface lo0.0 passive
