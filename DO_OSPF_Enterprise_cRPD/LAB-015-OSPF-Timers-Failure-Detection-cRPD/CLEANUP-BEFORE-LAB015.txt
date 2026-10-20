@@ -1,0 +1,32 @@
+LAB-015 — CLEANUP BEFORE START
+
+Read first. These are manual examples for removing residue from prior labs. Do not paste blindly if you have unrelated OSPF work in progress. Inspect the candidate configuration and delete only lab-specific settings.
+
+1. On R1-R4, remove LAB-014 OSPF authentication from the four P2P links if present:
+- R1: eth1.12, eth1.13
+- R2: eth1.12, eth1.24
+- R3: eth1.13, eth1.34
+- R4: eth1.24, eth1.34
+
+Example per interface:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 authentication
+
+2. Remove timer overrides from these links if present:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 hello-interval
+  delete protocols ospf area 0.0.0.0 interface eth1.12 dead-interval
+  delete protocols ospf area 0.0.0.0 interface eth1.12 retransmit-interval
+
+Repeat for each of eth1.13, eth1.24, and eth1.34 only on routers where that logical interface exists.
+
+3. If prior LAB-013 changes remain, inspect and remove lab residue only:
+- On R2, remove `protocols ospf overload` if configured by LAB-013.
+- On R1, remove `protocols ospf spf-options` if it was used by LAB-013.
+- On R1 eth1.13, remove `flood-reduction` if enabled for LAB-013.
+
+4. Ensure no OSPF area, interface, IP, router ID, or metric configuration is unintentionally changed. Preserve `lo0.0`, interface VLAN and inet address statements, parent eth1, and base startup config.
+
+5. For each router changed, run `commit check`, inspect `show | compare`, then commit. Verify the four OSPF neighbors become Full and R1 has two next-hops to 10.1.1.4/32 with metric 2.
+
+6. Only after cleanup and baseline verification, load the LAB-015 profiles from PROFILE-MAP.txt. The incident-start profile is intentionally selected on R3 for the opening task.
+
+NEVER create, delete, or recreate `br-univ`. NEVER shut down parent eth1 for this lab.

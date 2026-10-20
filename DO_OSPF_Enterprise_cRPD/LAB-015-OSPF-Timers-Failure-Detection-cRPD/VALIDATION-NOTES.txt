@@ -1,0 +1,20 @@
+LAB-015 VALIDATION NOTES
+
+PACKAGE / CONFIG INTENT
+- Four-router Area 0 point-to-point diamond, with router IDs equal to loopbacks.
+- Baseline profile contains no explicit OSPF timer configuration. Junos defaults should show Hello 10 / Dead 40 / ReXmit 5 on these P2P links.
+- Incident-start R3 profile adds a Hello interval override only on eth1.13. It deliberately conflicts with R1's default Hello interval.
+- Target profile for the controlled fast-failure change is Hello 2 / Dead 8 on both endpoints of R1-R3 only; unaffected links stay at defaults.
+- Optional retransmit extension uses 8 seconds on R1 eth1.13 only while R3 remains at default 5 seconds. This is a local LSA retransmission interval, not a neighbor-liveness timer.
+
+EXPECTED PROTOCOL BEHAVIOR
+- Juniper's OSPF timer guide says Hello and Dead intervals must match on devices on the same shared network; otherwise OSPF cannot establish the expected adjacency.
+- After repair, four adjacencies should be Full and R1 should show equal-cost next-hops for R4's loopback, total metric 2.
+- Operational timer output (`show ospf interface detail`) should expose Hello, Dead, and ReXmit fields on supported builds.
+- The optional retransmit timer's configured value can be observed operationally, but actual retransmission events are not proven by the timer field alone.
+
+NOT LIVE-TESTED
+The packaged profiles and expected results are reasoned from Juniper documentation and the supplied universal topology conventions. This package has not been loaded onto the user's running cRPD instance, so CLI acceptance and behavior must be verified there. Do not represent the package as a live lab validation.
+
+SAFETY
+No instruction in this package requires modification of the universal Containerlab YAML, `br-univ`, or physical parent eth1. No transit-delay changes are required or recommended for this lab.

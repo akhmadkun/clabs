@@ -1,0 +1,92 @@
+LAB-014 — OSPF AUTHENTICATION, FAILURE ISOLATION & KEY ROTATION
+CHALLENGE SHEET — OUTCOME-BASED, NOT A COMMAND RECIPE
+
+SCENARIO
+A change window requires OSPFv2 adjacencies in the R1-R4 Area 0 domain to use MD5 authentication. After deployment, a neighbor on one link fails to establish/maintain adjacency even though the shared key text is believed to be correct. You must secure the domain, reproduce a controlled fault, diagnose it from protocol evidence, and recover without modifying the shared physical topology.
+
+ENVIRONMENT
+- Juniper cRPD image: `crpd:23.4R2-S5.6`
+- Routers: R1-R4, OSPFv2 Area 0, all router-to-router links point-to-point.
+- Link mapping, router IDs, and addresses are in `ADDRESS-PLAN.txt`.
+- Use the synthetic per-link IDs and keys in `AUTH-KEY-MATRIX.txt`.
+- Clean profile starts with OSPF authentication disabled.
+
+SAFETY / CHANGE CONTROL
+- Read `CLEANUP-BEFORE-LAB014.txt` and load the matching baseline profiles first.
+- Do not edit or redeploy the universal Containerlab YAML.
+- Do not create, delete, or recreate `br-univ`; do not shut down physical parent interfaces.
+- Apply authentication in a controlled sequence, link by link. Save baseline and after-change evidence.
+- Do not count a successful `commit` as proof. If an adjacency fails, stop and investigate before changing another link.
+- Do not publish real secrets. The supplied keys are synthetic and must not be reused.
+
+TASK 1 — ESTABLISH BASELINE
+Build evidence that:
+- All four expected point-to-point adjacencies are Full.
+- R1 reaches `10.1.1.4/32` with equal-cost paths through R2 and R3; default cost 1 per link should produce total OSPF metric 2.
+- OSPF authentication is currently disabled on the lab links.
+Save neighbor, interface, and route output before changing anything.
+
+TASK 2 — SECURE THE DOMAIN
+Apply OSPFv2 MD5 authentication to all four P2P links using the supplied credential matrix.
+Requirements:
+- The two ends of each link use the same authentication type, key ID, and shared key.
+- Each link uses its own key; do not reuse one key across every link.
+- Router IDs, IP addressing, OSPF area, interface type, and metrics must remain unchanged.
+- All four adjacencies return to Full, and reachability to the loopbacks is preserved.
+- Operational interface output shows MD5 and the expected active key ID where this cRPD build exposes those fields.
+- Compare configured state with operational state; store evidence from all four routers.
+
+TASK 3 — CONTROLLED AUTHENTICATION FAILURE
+After Task 2 passes, simulate a failed key migration on the R1-R3 adjacency:
+- Change only the key ID at one end of R1-R3 to a different ID.
+- Keep the shared key text unchanged. Do not alter any other link.
+- Capture the resulting neighbor/interface/log state before remediation.
+Prove that:
+- The R1-R3 adjacency does not remain Full when the peer's authentication ID does not match.
+- The other three adjacencies remain healthy.
+- R1 can still reach R4's loopback through R2, but the direct R1-R3 equal-cost path is no longer available.
+- Your diagnosis is supported by configuration/operational evidence, not just by observing that the neighbor is missing.
+
+TASK 4 — REMEDIATE AND PROVE RECOVERY
+Restore the matching R1-R3 authentication ID and key at both ends.
+Prove that:
+- R1-R3 returns to Full.
+- The original four adjacencies are all Full again.
+- R1 again has two equal-cost paths to `10.1.1.4/32` with metric 2.
+- No IP, area, router ID, or metric changes were required to fix the authentication problem.
+Explain why matching key text alone is insufficient when the MD5 key IDs differ.
+
+TASK 5 — OPTIONAL EXTENSION: PLANNED MD5 KEY ROLLOVER
+On the R1-R2 link only, test an overlap-based key transition:
+- Add a second MD5 key with a new key ID and a future start-time while retaining the old key.
+- Use exactly the same new key ID, secret, and transition time at both endpoints.
+- Ensure router clocks are aligned, and choose a start time far enough in the future to configure both ends.
+- Prove that the neighbor remains Full before, during, and after the transition and that the active key ID changes when the feature exposes it.
+- Remove the old key only after the new key is confirmed active at both ends.
+If the CLI rejects the feature or active-key behavior cannot be verified, save the exact output and classify the result as unsupported/inconclusive. Do not remove the old key just to force completion.
+
+CLEAN RESTORE — REQUIRED
+Remove temporary OSPF authentication configuration from the lab interfaces, including any extra key used by the optional extension. Return to the baseline no-auth state.
+Confirm:
+- all four OSPF adjacencies are Full;
+- R1 again has equal-cost paths through R2 and R3 to `10.1.1.4/32`;
+- no MD5 authentication entries remain under the lab's OSPF interfaces;
+- the universal topology and `br-univ` remain untouched.
+
+ACCEPTANCE CRITERIA
+[ ] Baseline four adjacencies Full; R1 has the expected dual paths to R4 loopback.
+[ ] MD5 authentication is configured on both endpoints of all four links with matching per-link key ID and key.
+[ ] After stabilization, all four adjacencies are Full and routing remains healthy.
+[ ] Controlled key-ID mismatch produces a reproducible adjacency failure on R1-R3 only.
+[ ] R1 retains reachability to R4 through R2 during the R1-R3 failure, and loses the dual-path state.
+[ ] Repairing the ID restores all adjacencies and dual-path route selection.
+[ ] Optional key rollover is either proven with evidence or accurately classified as unsupported/inconclusive.
+[ ] Final cleanup removes all temporary authentication entries and restores baseline behavior.
+
+EVIDENCE TO SAVE
+- Baseline: all router neighbor output; R1 route to R4 loopback; interface auth type before changes.
+- Secured state: `show ospf interface ... detail`, neighbor state, configuration with `display set` (never publish real passwords), and route state.
+- Fault state: affected interface/neighbor, relevant messages if available, peer key IDs, R1 route to R4 loopback, and health of the other three adjacencies.
+- Recovery: all four neighbors Full, R1 route with both next-hops, matching authentication configuration.
+- Optional rollover: clock state, configured key/start-time (redact secrets), interface active-key ID before/after, adjacency state at each observation.
+- Final cleanup: no auth stanzas, all neighbors Full, dual paths restored.

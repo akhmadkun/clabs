@@ -1,0 +1,24 @@
+LAB-015 PROFILE MAP
+
+CLEAN BASELINE FILES
+R1: `/lab-configs/lab015-r1-baseline.set`
+R2: `/lab-configs/lab015-r2-baseline.set`
+R3: `/lab-configs/lab015-r3-baseline.set`
+R4: `/lab-configs/lab015-r4-baseline.set`
+
+INCIDENT START PROFILE
+Use baseline profiles on R1, R2, and R4. On R3, use `/lab-configs/lab015-r3-incident-start.set` instead of the R3 baseline. This complete R3 profile has the deliberate timer fault on eth1.13. Do not load the R3 baseline afterward until you intend to replace/clear the incident profile; configuration loads merge candidate configuration unless previous state is deleted.
+
+LOAD FROM JUNOS CONFIGURATION MODE
+Example on R1 after the cleanup steps are complete:
+  configure
+  load set /lab-configs/lab015-r1-baseline.set
+  show | compare
+  commit check
+  commit
+
+Repeat per router with its matching profile. On R3, use the incident-start filename at the beginning. Confirm actual configuration and operational output after loading; these profiles are not automatically applied by Containerlab.
+
+IMPORTANT
+- `load set` can merge into candidate config. Run CLEANUP-BEFORE-LAB015.txt first and inspect `show | compare` before committing.
+- Do not change universal YAML, startup-config files, parent eth1 interfaces, or the external `br-univ` bridge.

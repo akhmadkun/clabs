@@ -1,0 +1,18 @@
+LAB-015 REFERENCES
+
+Primary vendor documentation (public Juniper documentation):
+1. Configuring OSPF Timers — defaults, Hello/Dead matching requirements, retransmit interval semantics, and recommendation to use a minimum LSA retransmit interval of 3 seconds:
+   https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-timers.html
+
+2. show (ospf | ospf3) interface — details for operational interface state including Hello, Dead, and ReXmit fields:
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/command/show-ospf-ospf3-interface.html
+
+Key facts used:
+- Default Hello interval: 10 seconds for broadcast and point-to-point links.
+- Default Dead interval: 40 seconds for broadcast and point-to-point links; generally four times the default Hello interval.
+- Default LSA retransmission interval: 5 seconds.
+- Hello and Dead intervals must match across routers on the same shared network to establish the expected adjacencies.
+- LSA retransmission timer controls waiting for an acknowledgement before retransmitting a link-state advertisement. Juniper says use a value >= 3 seconds to avoid retransmit traps related to delayed acknowledgments.
+- Transit delay defaults to 1 second; Juniper says it should rarely need to be modified.
+
+These general Junos references are not a claim that every behavior has been tested live on cRPD 23.4R2-S5.6. Verify command support and observed output on the lab instance.

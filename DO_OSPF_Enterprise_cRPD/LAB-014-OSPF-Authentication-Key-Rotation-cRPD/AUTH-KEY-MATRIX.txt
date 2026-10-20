@@ -1,0 +1,15 @@
+LAB-014 — SYNTHETIC OSPFv2 MD5 CREDENTIAL MATRIX
+
+These are disposable training credentials, not secrets for production. Do not reuse them outside this lab or publish output containing real credentials.
+
+Link    Endpoint 1                  Endpoint 2                  Key ID       Synthetic key
+R1-R2   R1 eth1.12                  R2 eth1.12                  12           R12PairAuth7
+R1-R3   R1 eth1.13                  R3 eth1.13                  13           R13PairAuth7
+R2-R4   R2 eth1.24                  R4 eth1.24                  24           R24PairAuth7
+R3-R4   R3 eth1.34                  R4 eth1.34                  34           R34PairAuth7
+
+Policy:
+- Both endpoints of a given P2P link must use MD5, the listed key ID, and the same key string.
+- Use the listed link-specific value; don't apply one link's key to a different link.
+- Key ID must match as well as key string.
+- For the optional R1-R2 rotation only, use new key ID 112 and synthetic new key `R12NextAuth8` on R1 eth1.12 and R2 eth1.12. Set the same future start-time at both ends while the old ID 12/key remains configured.

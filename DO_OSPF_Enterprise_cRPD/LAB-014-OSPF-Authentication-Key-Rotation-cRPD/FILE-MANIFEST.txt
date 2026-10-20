@@ -1,0 +1,15 @@
+LAB-014 PACKAGE MANIFEST
+
+Core text:
+- README.txt: orientation, lab intent, safety boundaries.
+- TASK.txt: challenge-only worksheet, no command recipe.
+- SOLUTION-GUIDE.txt: command-level procedure and expected outcomes.
+- ADDRESS-PLAN.txt: topology/address convention.
+- AUTH-KEY-MATRIX.txt: synthetic per-link lab credentials.
+- PROFILE-MAP.txt: applying clean profile files to existing bind dirs.
+- CLEANUP-BEFORE-LAB014.txt: clears LAB-013 test profile before setup.
+- VALIDATION-NOTES.txt: assumptions and test limitations.
+- REFERENCE.txt: official Juniper source URLs.
+- topology.svg: editable vector diagram.
+- topology.png: preview.
+- configs/r1..r4/lab014-rN-baseline.set: per-router baseline profiles, no auth configured.

@@ -1,0 +1,107 @@
+LAB-014 — SOLUTION GUIDE
+READ AFTER ATTEMPTING TASK.TXT
+
+Platform assumption: `crpd:23.4R2-S5.6`. The command syntax below follows Juniper's OSPFv2 authentication documentation. The package has not been executed on your live cRPD instance; confirm command acceptance and operational display on your build.
+
+1. BASELINE
+On all routers:
+  run show ospf neighbor
+  run show ospf interface detail
+
+On R1:
+  run show route 10.1.1.4/32 exact detail
+
+Expect the four point-to-point adjacencies Full and R1's route to R4's loopback to show two equal-cost next-hops via R2 and R3, metric 2. Before authentication is applied, the interface output should indicate no authentication (for example `Auth type: None`).
+
+2. APPLY MD5 AUTHENTICATION — PER LINK
+Use the exact synthetic values from `AUTH-KEY-MATRIX.txt`. Configure each P2P endpoint with MD5, the matching link-specific key ID, and key. Apply one link at a time, configuring both ends in quick succession. Each router needs `commit check` then `commit` after its own change.
+
+R1:
+  set protocols ospf area 0.0.0.0 interface eth1.12 authentication md5 12 key R12PairAuth7
+  set protocols ospf area 0.0.0.0 interface eth1.13 authentication md5 13 key R13PairAuth7
+
+R2:
+  set protocols ospf area 0.0.0.0 interface eth1.12 authentication md5 12 key R12PairAuth7
+  set protocols ospf area 0.0.0.0 interface eth1.24 authentication md5 24 key R24PairAuth7
+
+R3:
+  set protocols ospf area 0.0.0.0 interface eth1.13 authentication md5 13 key R13PairAuth7
+  set protocols ospf area 0.0.0.0 interface eth1.34 authentication md5 34 key R34PairAuth7
+
+R4:
+  set protocols ospf area 0.0.0.0 interface eth1.24 authentication md5 24 key R24PairAuth7
+  set protocols ospf area 0.0.0.0 interface eth1.34 authentication md5 34 key R34PairAuth7
+
+Suggested link order: R1-R2, R1-R3, R2-R4, then R3-R4. Do not configure every endpoint on one router and walk away before matching the peer; an authentication mismatch can disrupt a neighbor. If a link is stuck down, stop and compare both endpoints before continuing.
+
+3. VERIFY SECURED STATE
+On all four routers:
+  run show ospf neighbor
+  run show ospf interface detail
+  run show ospf overview
+  run show configuration protocols ospf | display set
+
+Operational output on Juniper can show `Auth type: MD5` and an active key ID; labels vary by release. The password is normally obscured/encoded in the displayed configuration. Confirm all four adjacencies are Full and loopback routes remain present. On R1, check `show route 10.1.1.4/32 exact detail`; it should retain two next-hops and metric 2.
+
+4. CONTROLLED FAULT — KEY ID MISMATCH ON R1-R3
+On R3, replace key ID 13 on eth1.13 with ID 113, keeping the same key string:
+  delete protocols ospf area 0.0.0.0 interface eth1.13 authentication md5 13
+  set protocols ospf area 0.0.0.0 interface eth1.13 authentication md5 113 key R13PairAuth7
+  commit check
+  commit
+
+Do not change R1. Capture evidence promptly. Useful observations:
+- On R3: `run show ospf interface eth1.13 detail` and `run show configuration protocols ospf area 0.0.0.0 interface eth1.13 | display set`.
+- On R1/R3: `run show ospf neighbor` and relevant interface detail.
+- On both ends if useful: `run show log messages | match "OSPF|ospf|auth"`. Log text may vary; don't require a specific literal message.
+- On R1: `run show route 10.1.1.4/32 exact detail`.
+
+Expected: R1-R3 adjacency cannot stay Full because peers are sending different MD5 key IDs. The shared key text is not sufficient when the ID differs. Other three adjacencies remain Full. R1 keeps reachability to R4 through R2, but the next-hop through R3 disappears, so the route is no longer ECMP. If these results differ, compare active key IDs and interface state on both endpoints; do not claim a pass from the configuration alone.
+
+5. REPAIR R1-R3
+On R3:
+  delete protocols ospf area 0.0.0.0 interface eth1.13 authentication md5 113
+  set protocols ospf area 0.0.0.0 interface eth1.13 authentication md5 13 key R13PairAuth7
+  commit check
+  commit
+
+Verify all four neighbors return to Full. R1's route to `10.1.1.4/32` should again have equal-cost next-hops via `10.0.12.2` and `10.0.13.2`, metric 2. No IP, OSPF area, router ID, or metric change is needed.
+
+6. OPTIONAL — MD5 KEY ROLLOVER ON R1-R2
+This optional test is based on Juniper's documented multi-key MD5 mechanism. System clock correctness matters. Run `show system uptime` on R1 and R2 and make sure displayed times are aligned. Choose a transition time at least 5 minutes in the future using the router clock format `YYYY-MM-DD.hh:mm`. Use the exact SAME time, new ID 112, and key `R12NextAuth8` on both R1 eth1.12 and R2 eth1.12; retain current ID 12 while waiting.
+
+R1 and R2 (use your chosen future timestamp in place of `<YYYY-MM-DD.hh:mm>`):
+  set protocols ospf area 0.0.0.0 interface eth1.12 authentication md5 112 key R12NextAuth8 start-time <YYYY-MM-DD.hh:mm>
+  commit check
+  commit
+
+After configuring both endpoints, confirm the R1-R2 adjacency is Full before the transition. At/after the agreed time, inspect `run show ospf interface eth1.12 detail`, `run show ospf overview`, and `run show ospf neighbor`. If the active key ID is shown as 112 on both peers and the neighbor remains Full, the transition is observed. Only then remove the old key ID 12 from R1 and R2:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 authentication md5 12
+  commit check
+  commit
+
+Do not remove ID 12 if ID 112 has not been confirmed active. If the `start-time` syntax or behavior is not supported/exposed by this cRPD build, capture the exact output and call the extension unsupported or inconclusive; continue with final cleanup. Do not use a static timestamp from this guide.
+
+7. FINAL CLEANUP — RETURN TO NO-AUTH BASELINE
+Remove the authentication subtree from each lab P2P interface. If the optional rollover was attempted, removing the subtree removes both key IDs on the R1-R2 link.
+
+R1:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 authentication
+  delete protocols ospf area 0.0.0.0 interface eth1.13 authentication
+R2:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 authentication
+  delete protocols ospf area 0.0.0.0 interface eth1.24 authentication
+R3:
+  delete protocols ospf area 0.0.0.0 interface eth1.13 authentication
+  delete protocols ospf area 0.0.0.0 interface eth1.34 authentication
+R4:
+  delete protocols ospf area 0.0.0.0 interface eth1.24 authentication
+  delete protocols ospf area 0.0.0.0 interface eth1.34 authentication
+
+On each changed router, run `commit check` then `commit`. Verify all four adjacencies are Full, R1 has equal-cost paths via R2/R3, and no authentication configuration remains on the lab interfaces. Preserve `lo0.0`, the base startup-config, parent `eth1`, universal YAML, and external `br-univ`.
+
+TECHNICAL NOTES
+- MD5 authentication authenticates OSPFv2 packets; it does not encrypt them.
+- Both the shared key and MD5 key ID must match for a peer to accept the packet.
+- The lab profile uses per-link secrets over separate P2P interfaces. This is intentional; credentials must match at the two ends of each link.
+- A route in cRPD's RIB proves control-plane route selection, not actual data-plane packet forwarding.

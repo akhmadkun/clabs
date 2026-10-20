@@ -1,0 +1,69 @@
+LAB-015 — OSPF TIMER MISMATCH, FAILURE DETECTION & RETRANSMISSION
+CHALLENGE SHEET — OUTCOME-BASED, NOT A COMMAND RECIPE
+
+SCENARIO
+After a change intended to improve failure-detection behavior, the R1-R3 OSPF adjacency is missing. The other side of the diamond remains available. You have a clean profile and an incident-start profile for R3; one profile includes the state left by the problematic change. Diagnose the fault from protocol evidence, repair it, then execute a controlled timer change for the R1-R3 link.
+
+ENVIRONMENT
+- Platform: Juniper cRPD `crpd:23.4R2-S5.6`.
+- R1-R4 form an Area 0 P2P diamond: R1-R2, R1-R3, R2-R4, and R3-R4.
+- Default interface timers are expected unless explicitly changed: Hello 10 seconds, Dead 40 seconds, LSA retransmission 5 seconds.
+- Use ADDRESS-PLAN.txt and PROFILE-MAP.txt. Do not alter IP addresses, router IDs, areas, VLANs, interface types, or interface metrics.
+
+SAFETY / CHANGE CONTROL
+- Prepare a change window; timer changes on only one endpoint can interrupt an adjacency until both ends agree.
+- Never touch the physical parent eth1 or `br-univ`. Modify only the OSPF timer settings on the relevant logical interface.
+- Capture baseline and fault evidence before correcting the issue.
+- Do not claim a precise convergence benchmark based only on a human-operated CLI stopwatch.
+- Do not change transit-delay as part of this exercise.
+
+TASK 1 — DIAGNOSE THE INCIDENT
+Use the R3 incident-start profile and the other routers' baseline profiles. Determine why the R1-R3 adjacency fails to reach Full, using evidence from both endpoints rather than guessing from the missing neighbor alone.
+
+Required proof:
+- Compare operational OSPF interface timer values at both ends of R1-R3.
+- Identify the exact incompatible timer value(s), and explain why the resulting mismatch prevents a valid adjacency.
+- Show that R1 can still reach `10.1.1.4/32` through R2 while the R1-R3 path is unavailable.
+- Demonstrate that the remaining three expected adjacencies are healthy.
+
+TASK 2 — REPAIR WITHOUT CHANGING THE DESIGN
+Restore the R1-R3 adjacency using a minimal configuration change. Do not change the IP plan, OSPF area, router IDs, interface type, authentication, metrics, or any other link.
+
+Acceptance:
+- All four P2P adjacencies return to Full.
+- R1's route to `10.1.1.4/32` has next-hops through both R2 and R3 at the baseline total metric 2.
+- The relevant interface output and configuration agree that the timer mismatch is gone.
+- Your notes identify the smallest corrective change and explain why changing only one peer's timer was invalid.
+
+TASK 3 — IMPLEMENT A PLANNED FAST-FAILURE PROFILE
+Change only the R1-R3 link to the approved profile: Hello 2 seconds and Dead 8 seconds at both ends. Leave R1-R2, R2-R4, and R3-R4 at the platform defaults. Maintain the original Area 0 P2P diamond and route metrics.
+
+Acceptance:
+- R1-R3 returns to Full after the coordinated change.
+- Both endpoints show matching Hello 2 / Dead 8 timer values.
+- Other three links remain at Hello 10 / Dead 40.
+- R1 again sees both equal-cost next-hops to `10.1.1.4/32` with total metric 2.
+- Explain the operational trade-off of shorter detection timers and why timer configuration alone is not proof of an exact measured convergence time.
+
+TASK 4 — TIMER SEMANTICS REVIEW
+Using evidence from the interface operational output, compare Hello, Dead, and ReXmit. Explain which values must match across the two endpoints of the same network and which control a different local behavior. Do not assume all OSPF timers are peer-negotiated or must have identical values.
+
+OPTIONAL EXTENSION — LSA RETRANSMISSION INTERVAL
+Change the LSA retransmission interval on R1's `eth1.13` only, while leaving R3's setting at its default. Choose a documented-safe value of at least 3 seconds. Prove from operational output that the retransmit values differ while the R1-R3 adjacency remains Full. Explain what this setting controls and why it is not the Hello/Dead failure detector. If the cRPD build does not accept or expose the setting as expected, capture the exact result and mark the extension unsupported/inconclusive rather than assuming success.
+
+CLEAN RESTORE — REQUIRED
+Remove all explicit timer overrides introduced by this lab, including the seeded incident timer and optional retransmission override. Return all four links to default Hello 10 / Dead 40 / ReXmit 5. Remove timer/authentication/overload/flood-reduction/SPF-options residue from prior labs where applicable, while preserving the base interface and loopback configuration.
+
+Final proof:
+- All four adjacencies are Full.
+- R1 reaches R4 loopback through R2 and R3 with two next-hops, metric 2.
+- Operational timer output shows default Hello 10 / Dead 40 / ReXmit 5 on all four lab links.
+- No temporary timer overrides remain.
+- No parent interface or `br-univ` changes were made.
+
+EVIDENCE TO SAVE
+- Incident: `show ospf neighbor` from all routers; `show ospf interface eth1.13 detail` on R1 and R3; R1 route detail to R4 loopback; and the effective configuration at both endpoints.
+- Recovery: all four neighbor states; timer output for all four links; R1 route detail to `10.1.1.4/32`.
+- Planned profile: interface detail on R1 and R3 for R1-R3 and on each endpoint of at least one unaffected link.
+- Optional extension: R1 and R3 ReXmit values and adjacency status.
+- Cleanup: final timer output, neighbor state, route detail, and no explicit timer entries in configuration.

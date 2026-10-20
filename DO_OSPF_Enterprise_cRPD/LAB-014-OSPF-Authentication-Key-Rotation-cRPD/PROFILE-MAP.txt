@@ -1,0 +1,17 @@
+LAB-014 PROFILE MAP
+
+Copy each profile file into the matching host-side universal topology bind directory `./configs/rN/`. Do not overwrite `base.conf`.
+
+Router  Profile filename                Logical interfaces
+R1      lab014-r1-baseline.set          eth1.12 + eth1.13; OSPF Area 0
+R2      lab014-r2-baseline.set          eth1.12 + eth1.24; OSPF Area 0
+R3      lab014-r3-baseline.set          eth1.13 + eth1.34; OSPF Area 0
+R4      lab014-r4-baseline.set          eth1.24 + eth1.34; OSPF Area 0
+
+Example on R1:
+  configure
+  load set /lab-configs/lab014-r1-baseline.set
+  commit check
+  commit
+
+Load only the file matching that router. These baseline files define link VLANs/addresses, loopback, router ID, Area 0 OSPF P2P interfaces, and passive lo0.0. They deliberately DO NOT configure OSPF authentication, so Task 1 starts from an unprotected but working baseline.

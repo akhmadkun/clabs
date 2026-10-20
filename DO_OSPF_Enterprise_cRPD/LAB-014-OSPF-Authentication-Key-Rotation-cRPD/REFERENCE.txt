@@ -1,0 +1,15 @@
+LAB-014 REFERENCES
+
+1. Juniper Networks, “Configuring OSPF Authentication,” Junos OS OSPF User Guide.
+   https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-authentication.html
+   Relevant topics: OSPFv2 authentication types; MD5 key IDs; configuration and verification using `show ospf interface` / `show ospf overview`; configuring transition of MD5 keys with `start-time`.
+
+2. Juniper Networks, “authentication (Protocols OSPF),” Junos OS CLI Reference.
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/authentication-edit-protocols-ospf.html
+   Relevant syntax: `authentication { md5 key-identifier { key key-value; start-time ...; } }` and key ID/key value ranges.
+
+3. Juniper Networks, Junos OS OSPF User Guide PDF.
+   https://www.juniper.net/documentation/us/en/software/junos/ospf/ospf.pdf
+
+SOURCE / VALIDATION DISTINCTION
+The command patterns and expected OSPFv2 MD5 behavior are sourced from the Juniper documentation above. Compatibility of each command, operational output, and rollover behavior with `crpd:23.4R2-S5.6` must be confirmed on the installed image; the package has not been executed on the user's live lab.

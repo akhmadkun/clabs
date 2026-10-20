@@ -1,0 +1,38 @@
+CLEANUP BEFORE LAB-014
+
+IMPORTANT
+- Do this only after finishing LAB-013 and stopping any other lab using VLANs 12, 13, 24, 34 or the 10.0.x/30 links.
+- The cleanup removes LAB-013 protocol settings, including overload, SPF overrides, metric overrides, and flood reduction, by removing the OSPF protocol subtree. It removes only the lab logical interface units and preserves parent `eth1`, `lo0.0`, base startup configuration, management settings, and `br-univ`.
+- Inspect `show configuration interfaces eth1 | display set` if these logical units have been intentionally reused.
+
+R1:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 13
+  delete routing-options static route 10.1.1.4/32
+  delete routing-options static route 198.51.100.4/32
+
+R2:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 12
+  delete interfaces eth1 unit 24
+
+R3:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 13
+  delete interfaces eth1 unit 34
+
+R4:
+  delete protocols ospf
+  delete protocols ospf3
+  delete interfaces eth1 unit 24
+  delete interfaces eth1 unit 34
+  delete policy-options policy-statement LAB012-STATIC-EXPORT
+  delete routing-options static route 198.51.100.4/32
+
+For each router: `commit check` then `commit`. A delete statement that is absent can be skipped only after confirming the target is already absent. Preserve `lo0.0` and management configuration. Then copy and load the matching `lab014-rN-baseline.set` profile from `PROFILE-MAP.txt`.
+
+DO NOT create/delete/recreate `br-univ`, edit the universal YAML, or disable the physical parent interface.

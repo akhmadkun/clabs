@@ -1,0 +1,10 @@
+LAB-014 VALIDATION NOTES / LIMITATIONS
+
+1. Intended platform is the user's cRPD image `crpd:23.4R2-S5.6` and existing universal Containerlab topology. The package does not include a replacement YAML.
+2. Baseline profiles re-use the R1-R4 Area 0 diamond, /30 addressing convention, loopback router IDs, and external `br-univ` arrangement.
+3. Juniper documents OSPFv2 MD5 authentication under `protocols ospf area ... interface ... authentication md5 <key-id> key <key>`. The interface operational view is the primary verification for authentication type/key ID; exact field labels vary by release.
+4. Juniper's documentation states that OSPFv2 MD5 peers must use a matching key ID and shared key. A key-ID mismatch is deliberately used as the main controlled fault.
+5. The optional rollover uses a second MD5 key with `start-time`. Juniper documentation describes multiple key support and says start-time controls when the key begins being transmitted; clock synchronization and same transition time are therefore prerequisites. This has NOT been tested against the user's live cRPD build.
+6. Baseline profiles, task, and solution guide have been package-checked but not live-deployed. Do not represent the artifacts as tested against the current lab session until the user verifies them.
+7. No claim of packet forwarding or data-plane traffic continuity is made. The environment is cRPD control-plane focused.
+8. Synthetic credentials only; do not reuse outside this lab. MD5 is included for OSPFv2 interoperability/learning, not as a statement that MD5 is a modern security best practice.

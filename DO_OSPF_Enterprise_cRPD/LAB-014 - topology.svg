@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#eaf0f6"/></linearGradient>
+  <linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f8fb"/></linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#17364d" flood-opacity=".12"/></filter>
+  <style>
+   .title{font:700 32px 'Inter','DejaVu Sans',sans-serif;fill:#142f43}
+   .subtitle{font:400 16px 'Inter','DejaVu Sans',sans-serif;fill:#526a7c}
+   .router{font:700 24px 'Inter','DejaVu Sans',sans-serif;fill:#16364c}
+   .rid{font:500 14px 'Inter','DejaVu Sans',sans-serif;fill:#526a7c}
+   .loop{font:600 13px 'Inter','DejaVu Sans',sans-serif;fill:#1c6a72}
+   .link{stroke:#537b91;stroke-width:5;fill:none;stroke-linecap:round}
+   .label{font:700 15px 'Inter','DejaVu Sans',sans-serif;fill:#173c55}
+   .ip{font:500 13px 'Inter','DejaVu Sans',sans-serif;fill:#4e687b}
+   .panelhead{font:700 17px 'Inter','DejaVu Sans',sans-serif;fill:#173b53}
+   .body{font:500 14px 'Inter','DejaVu Sans',sans-serif;fill:#3f5a6e}
+   .tag{font:700 12px 'Inter','DejaVu Sans',sans-serif;fill:#ffffff}
+  </style>
+</defs>
+<rect width="1400" height="900" rx="26" fill="url(#bg)"/>
+<rect x="24" y="24" width="1352" height="852" rx="24" fill="#ffffff" stroke="#d8e3eb" stroke-width="1.5"/>
+<text x="64" y="77" class="title">LAB-014 · OSPF Authentication &amp; Key Rotation</text>
+<text x="66" y="109" class="subtitle">Juniper cRPD · OSPFv2 · Area 0 · Controlled authentication fault and recovery</text>
+<rect x="1130" y="52" width="190" height="38" rx="19" fill="#214d68"/>
+<text x="1225" y="76" class="tag" text-anchor="middle">SECURITY LAB</text>
+
+<!-- The diamond links -->
+<path d="M330 324 L515 208" class="link"/>
+<path d="M330 370 L515 520" class="link"/>
+<path d="M760 208 L950 324" class="link"/>
+<path d="M760 520 L950 370" class="link"/>
+
+<!-- Auth labels -->
+<g><rect x="349" y="227" width="150" height="58" rx="11" fill="#eef6f9" stroke="#c9dce5"/>
+<text x="424" y="248" class="label" text-anchor="middle">VLAN 12 · eth1.12</text><text x="424" y="268" class="ip" text-anchor="middle">10.0.12.0/30</text></g>
+<g><rect x="348" y="411" width="150" height="58" rx="11" fill="#fff5e9" stroke="#efcfaa"/>
+<text x="423" y="432" class="label" text-anchor="middle">VLAN 13 · eth1.13</text><text x="423" y="452" class="ip" text-anchor="middle">10.0.13.0/30</text></g>
+<g><rect x="776" y="227" width="150" height="58" rx="11" fill="#eef6f9" stroke="#c9dce5"/>
+<text x="851" y="248" class="label" text-anchor="middle">VLAN 24 · eth1.24</text><text x="851" y="268" class="ip" text-anchor="middle">10.0.24.0/30</text></g>
+<g><rect x="777" y="411" width="150" height="58" rx="11" fill="#eef6f9" stroke="#c9dce5"/>
+<text x="852" y="432" class="label" text-anchor="middle">VLAN 34 · eth1.34</text><text x="852" y="452" class="ip" text-anchor="middle">10.0.34.0/30</text></g>
+
+<!-- Routers -->
+<g filter="url(#shadow)">
+ <rect x="95" y="288" width="235" height="125" rx="20" fill="url(#card)" stroke="#9db8c9" stroke-width="2"/>
+ <rect x="515" y="145" width="245" height="125" rx="20" fill="url(#card)" stroke="#9db8c9" stroke-width="2"/>
+ <rect x="515" y="457" width="245" height="125" rx="20" fill="url(#card)" stroke="#9db8c9" stroke-width="2"/>
+ <rect x="950" y="288" width="235" height="125" rx="20" fill="url(#card)" stroke="#9db8c9" stroke-width="2"/>
+</g>
+<g>
+ <circle cx="126" cy="321" r="11" fill="#2d7794"/><text x="154" y="329" class="router">R1</text><text x="116" y="363" class="rid">RID 10.1.1.1</text><text x="116" y="389" class="loop">Loopback 10.1.1.1/32</text>
+ <circle cx="548" cy="178" r="11" fill="#2d7794"/><text x="576" y="186" class="router">R2</text><text x="536" y="220" class="rid">RID 10.1.1.2</text><text x="536" y="246" class="loop">Loopback 10.1.1.2/32</text>
+ <circle cx="548" cy="490" r="11" fill="#2d7794"/><text x="576" y="498" class="router">R3</text><text x="536" y="532" class="rid">RID 10.1.1.3</text><text x="536" y="558" class="loop">Loopback 10.1.1.3/32</text>
+ <circle cx="982" cy="321" r="11" fill="#2d7794"/><text x="1010" y="329" class="router">R4</text><text x="971" y="363" class="rid">RID 10.1.1.4</text><text x="971" y="389" class="loop">Loopback 10.1.1.4/32</text>
+</g>
+
+<!-- Policy panel -->
+<rect x="96" y="630" width="1205" height="192" rx="19" fill="#f7fafc" stroke="#d6e3ec" stroke-width="1.5"/>
+<text x="128" y="669" class="panelhead">Authentication design</text>
+<rect x="128" y="691" width="235" height="36" rx="18" fill="#e5f2f6" stroke="#c5dfe7"/><text x="245" y="714" class="label" text-anchor="middle">OSPFv2 MD5</text>
+<rect x="385" y="691" width="255" height="36" rx="18" fill="#e5f2f6" stroke="#c5dfe7"/><text x="512" y="714" class="label" text-anchor="middle">Per-link key + key ID</text>
+<rect x="662" y="691" width="263" height="36" rx="18" fill="#e5f2f6" stroke="#c5dfe7"/><text x="794" y="714" class="label" text-anchor="middle">Both endpoints must match</text>
+<rect x="947" y="691" width="317" height="36" rx="18" fill="#fff0dc" stroke="#eed1a9"/><text x="1105" y="714" class="label" text-anchor="middle">Fault injection: R1–R3 key ID</text>
+<text x="129" y="761" class="body">Core objective: secure all four links, create one controlled authentication mismatch, prove route impact, repair it, and restore baseline.</text>
+<text x="129" y="788" class="body">Optional extension: planned MD5 key rollover on R1–R2 · cRPD control-plane lab · no changes to br-univ / universal YAML</text>
+</svg>

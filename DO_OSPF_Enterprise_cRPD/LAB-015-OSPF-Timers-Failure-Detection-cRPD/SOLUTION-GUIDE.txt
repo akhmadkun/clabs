@@ -1,0 +1,100 @@
+LAB-015 — SOLUTION GUIDE
+READ AFTER ATTEMPTING TASK.TXT
+
+Platform assumption: Juniper cRPD `crpd:23.4R2-S5.6`. Timer syntax and operational expectations follow Juniper's OSPF timer documentation. The package is not live-tested on your cRPD instance; validate command acceptance and output on the running image.
+
+1. START / BASELINE EXPECTATIONS
+Use R1/R2/R4 baseline profiles and the incident-start profile on R3. Confirm the link map and do not touch parent eth1.
+
+Useful operational commands on all routers:
+  run show ospf neighbor
+  run show ospf interface detail
+
+On R1:
+  run show route 10.1.1.4/32 exact detail
+
+For timer and configuration details at the affected endpoint:
+  run show ospf interface eth1.13 detail
+  run show configuration protocols ospf area 0.0.0.0 interface eth1.13 | display set
+
+Expected incident: R3's `eth1.13` is configured with a Hello timer that differs from R1. A Hello interval mismatch prevents the appropriate adjacency from forming. The other three point-to-point links should be Full. R1 should still reach `10.1.1.4/32` through R2, with one next-hop and metric 2.
+
+2. REPAIR THE SEEDED MISMATCH
+On R3, remove the timer override from `eth1.13` so the interface returns to default values, then validate and commit:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 hello-interval
+  commit check
+  commit
+
+Check R1 and R3 neighbor state and timer output. R1-R3 should return to Full after stable Hellos. At R1, `show route 10.1.1.4/32 exact detail` should again show next-hops via `10.0.12.2` and `10.0.13.2`, total OSPF metric 2. Verify no unrelated values changed.
+
+If the adjacency does not recover, compare both endpoints' effective Hello/Dead values, interface types, authentication state, and Area 0 configuration. Do not proceed to Task 3 until the baseline four adjacencies are healthy.
+
+3. APPLY THE COORDINATED FAST-FAILURE PROFILE
+Desired R1-R3 values are Hello 2 seconds and Dead 8 seconds at both ends. Configure and commit each endpoint in close succession; an interim timer mismatch may temporarily drop the adjacency, so do this in a change window.
+
+On R1:
+  configure
+  set protocols ospf area 0.0.0.0 interface eth1.13 hello-interval 2
+  set protocols ospf area 0.0.0.0 interface eth1.13 dead-interval 8
+  commit check
+  commit
+
+On R3:
+  configure
+  set protocols ospf area 0.0.0.0 interface eth1.13 hello-interval 2
+  set protocols ospf area 0.0.0.0 interface eth1.13 dead-interval 8
+  commit check
+  commit
+
+Verify:
+  run show ospf interface eth1.13 detail
+  run show ospf neighbor
+
+On R1 and R3, the operational output for eth1.13 should show `Hello: 2, Dead: 8`. Unaffected links should remain `Hello: 10, Dead: 40`. Verify ReXmit remains 5 unless the optional extension was performed. All four adjacencies should be Full, and R1 should have two next-hops to R4 loopback, metric 2.
+
+Do not claim the routes will converge in exactly eight seconds. The dead interval governs when a neighbor is declared unavailable after missed Hellos; full control-plane reconvergence also depends on scheduling and subsequent SPF/RIB processing. This topology is running in cRPD and the lab does not measure forwarding-plane traffic convergence.
+
+4. OPTIONAL LSA RETRANSMISSION EXTENSION
+The LSA retransmission timer is distinct from Hello/Dead. It controls how long a router waits for an LSA acknowledgment before retransmitting. Juniper documents a default of 5 seconds and recommends setting the interval to at least 3 seconds to avoid retransmit traps associated with acknowledgement delays.
+
+On R1 only:
+  configure
+  set protocols ospf area 0.0.0.0 interface eth1.13 retransmit-interval 8
+  commit check
+  commit
+
+Verify on R1 and R3:
+  run show ospf interface eth1.13 detail
+  run show ospf neighbor
+
+Expected: R1's `ReXmit` displays 8 and R3's `ReXmit` remains 5; the adjacency remains Full because the configured retransmit values do not replace the Hello/Dead pair. Do not try to infer retransmissions occurred just from the displayed timer; a controlled packet-loss or protocol capture experiment would be needed to observe actual retransmission behavior. If the CLI rejects or does not expose this feature, save the exact output and record an inconclusive/unsupported extension.
+
+5. FINAL CLEANUP — RESTORE ALL DEFAULT OSPF TIMERS
+On R1 remove explicit timer overrides from `eth1.13`:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 hello-interval
+  delete protocols ospf area 0.0.0.0 interface eth1.13 dead-interval
+  delete protocols ospf area 0.0.0.0 interface eth1.13 retransmit-interval
+  commit check
+  commit
+
+On R3 remove explicit overrides from `eth1.13`:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 hello-interval
+  delete protocols ospf area 0.0.0.0 interface eth1.13 dead-interval
+  delete protocols ospf area 0.0.0.0 interface eth1.13 retransmit-interval
+  commit check
+  commit
+
+Confirm R1 eth1.13 and R3 eth1.13 show Hello 10 / Dead 40 / ReXmit 5. Check all four neighbor adjacencies are Full, and check R1's route to R4 loopback contains both next-hops and metric 2.
+
+6. CONFIGURATION RESIDUE CHECK
+Do not leave LAB-014 authentication or LAB-013 flood-reduction, overload, or SPF tuning behind. The task's CLEANUP-BEFORE-LAB015.txt lists recommended prior-lab cleanup. Inspect configuration before deleting any existing state. Only delete entries identified as lab residue; never delete interface addresses, loopbacks, base routing-options, parent eth1, or touch `br-univ`.
+
+TECHNICAL NOTES
+- Juniper documents default Hello 10s and Dead 40s for P2P/broadcast interfaces, and a default LSA retransmission interval of 5s.
+- Hello and Dead intervals must match across endpoints on the same shared network. The selected link is P2P, so that means both endpoints of R1-R3.
+- Juniper's timer guide recommends LSA retransmission interval >= 3s because OSPF acknowledgments can be delayed up to 2s.
+- Transit-delay is 1s by default and should rarely need to be modified; it is intentionally outside this lab.
+- A RIB route confirms control-plane next-hop selection, not packet forwarding in a data plane.
