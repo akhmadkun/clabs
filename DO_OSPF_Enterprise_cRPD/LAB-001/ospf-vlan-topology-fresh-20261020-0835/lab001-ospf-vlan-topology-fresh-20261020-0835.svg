@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1469.8756"
+   height="864.71698"
+   viewBox="0 0 1469.8755 864.71698"
+   version="1.1"
+   id="svg81"
+   sodipodi:docname="ospf-vlan-topology-fresh-20261020-0835.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview81"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.3946759"
+     inkscape:cx="1141.1253"
+     inkscape:cy="368.9029"
+     inkscape:window-width="3440"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg81">
+    <inkscape:page
+       x="0"
+       y="3.6188176e-08"
+       width="1469.8755"
+       height="864.71698"
+       id="page81"
+       margin="0 0 0 0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <title
+     id="title1">OSPF VLAN Network Topology</title>
+  <desc
+     id="desc1">Editable vector recreation of the supplied topology image, including R1-R4, OSPF areas, VLAN links, loopbacks and endpoint networks.</desc>
+  <defs
+     id="defs13">
+    <linearGradient
+       id="routerBody"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#168fc8"
+         id="stop1" />
+      <stop
+         offset="0.6"
+         stop-color="#0876b0"
+         id="stop2" />
+      <stop
+         offset="1"
+         stop-color="#045781"
+         id="stop3" />
+    </linearGradient>
+    <linearGradient
+       id="routerTop"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#32a9e3"
+         id="stop4" />
+      <stop
+         offset="1"
+         stop-color="#087bb6"
+         id="stop5" />
+    </linearGradient>
+    <linearGradient
+       id="pcScreen"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#f4fbff"
+         id="stop6" />
+      <stop
+         offset="1"
+         stop-color="#90aabd"
+         id="stop7" />
+    </linearGradient>
+    <filter
+       id="shadow"
+       x="-0.018518519"
+       y="-0.016129032"
+       width="1.037037"
+       height="1.0195972">
+      <feDropShadow
+         dx="0"
+         dy="2"
+         stdDeviation="2"
+         flood-color="#142b3c"
+         flood-opacity="0.16" />
+    </filter>
+    <marker
+       id="linkDot"
+       markerWidth="8"
+       markerHeight="8"
+       refX="4"
+       refY="4">
+      <circle
+         cx="4"
+         cy="4"
+         r="3"
+         fill="#126da1"
+         id="circle7" />
+    </marker>
+    <g
+       id="router">
+      <ellipse
+         cx="0"
+         cy="25"
+         rx="69"
+         ry="25"
+         fill="#045781"
+         opacity="0.95"
+         id="ellipse7" />
+      <path
+         d="m -69,-3 c 0,-24 30,-38 69,-38 39,0 69,14 69,38 V 25 C 69,47 38,62 0,62 -38,62 -69,47 -69,25 Z"
+         fill="url(#routerBody)"
+         id="path7" />
+      <ellipse
+         cx="0"
+         cy="-3"
+         rx="69"
+         ry="41"
+         fill="url(#routerTop)"
+         stroke="#ffffff"
+         stroke-width="2.1"
+         id="ellipse8" />
+      <g
+         fill="#ffffff"
+         stroke="#ffffff"
+         stroke-linejoin="round"
+         stroke-width="1.1"
+         id="g11">
+        <!-- Four clear directional arrows around the router center -->
+        <path
+           d="m -43,-21 18,3 -6,6 18,10 -4,5 -18,-11 -5,6 z"
+           id="path8" />
+        <path
+           d="m 43,-21 -18,3 6,6 -18,10 4,5 18,-11 5,6 z"
+           id="path9" />
+        <path
+           d="m -43,21 18,-3 -6,-6 18,-10 -4,-5 -18,11 -5,-6 z"
+           id="path10" />
+        <path
+           d="M 43,21 25,18 31,12 13,2 17,-3 35,8 40,2 Z"
+           id="path11" />
+      </g>
+    </g>
+    <g
+       id="pc">
+      <rect
+         x="0"
+         y="0"
+         width="54"
+         height="48"
+         rx="5"
+         fill="#172a38"
+         stroke="#0b1e2b"
+         stroke-width="2"
+         id="rect11" />
+      <rect
+         x="5"
+         y="5"
+         width="44"
+         height="35"
+         rx="2"
+         fill="url(#pcScreen)"
+         stroke="#91a8b7"
+         stroke-width="1.2"
+         id="rect12" />
+      <path
+         d="m 20,48 -3,7 h 20 l -3,-7 z"
+         fill="#172a38"
+         id="path12" />
+      <path
+         d="m 13,58 h 28 l 4,4 H 9 Z"
+         fill="#172a38"
+         id="path13" />
+    </g>
+    <style
+       id="style13">
+      text { font-family: Arial, Helvetica, sans-serif; fill: #090f15; }
+      .router-name { font-size: 32px; font-weight: 700; }
+      .loop-label { font-size: 22px; }
+      .if-label { font-size: 22px; font-weight: 500; }
+      .network-title { font-size: 24px; font-weight: 700; }
+      .network-sub { font-size: 22px; }
+      .area-label { font-size: 23px; font-weight: 700; }
+      .ep-name { font-size: 23px; font-weight: 700; }
+      .ep-ip { font-size: 20px; }
+      .pill { stroke-width: 2.4; }
+    </style>
+  </defs>
+  <!-- Background -->
+  <rect
+     width="1728"
+     height="864"
+     fill="#ffffff"
+     id="rect13"
+     x="0"
+     y="0.71701294" />
+  <!-- Network-area backplates -->
+  <rect
+     x="330"
+     y="36.71701"
+     width="730"
+     height="148"
+     rx="20"
+     fill="#dceffc"
+     opacity="0.82"
+     id="rect14" />
+  <rect
+     x="163"
+     y="195.71703"
+     width="333"
+     height="302"
+     rx="20"
+     fill="#e8f8df"
+     opacity="0.82"
+     id="rect15" />
+  <rect
+     x="948"
+     y="195.71703"
+     width="326"
+     height="302"
+     rx="20"
+     fill="#fff1d1"
+     opacity="0.86"
+     id="rect16" />
+  <!-- Physical/logical links -->
+  <path
+     d="m 364,136.71701 h 658"
+     fill="none"
+     stroke="#126da1"
+     stroke-width="5"
+     stroke-linecap="round"
+     id="path16" />
+  <path
+     d="m 292,175.71701 v 329"
+     fill="none"
+     stroke="#14762a"
+     stroke-width="5"
+     stroke-linecap="round"
+     id="path17" />
+  <path
+     d="m 1090,175.71701 v 329"
+     fill="none"
+     stroke="#ee7209"
+     stroke-width="5"
+     stroke-linecap="round"
+     id="path18" />
+  <!-- Endpoint links from R4 -->
+  <path
+     d="m 1158,535.71701 c 20,0 12,-26 35,-26 h 314"
+     fill="none"
+     stroke="#ed6b72"
+     stroke-width="4.5"
+     stroke-linecap="round"
+     id="path19" />
+  <path
+     d="m 1158,576.71701 c 14,0 12,60 36,60 h 313"
+     fill="none"
+     stroke="#7651b5"
+     stroke-width="4.5"
+     stroke-linecap="round"
+     id="path20" />
+  <path
+     d="m 1158,578.71701 c 12,15 16,185 37,185 h 312"
+     fill="none"
+     stroke="#17b6aa"
+     stroke-width="4.5"
+     stroke-linecap="round"
+     id="path21" />
+  <!-- Router endpoint dots -->
+  <circle
+     cx="364"
+     cy="136.71703"
+     r="5"
+     fill="#126da1"
+     id="circle21" />
+  <circle
+     cx="1022"
+     cy="136.71703"
+     r="5"
+     fill="#126da1"
+     id="circle22" />
+  <circle
+     cx="292"
+     cy="175.71703"
+     r="5"
+     fill="#14762a"
+     id="circle23" />
+  <circle
+     cx="292"
+     cy="504.71698"
+     r="5"
+     fill="#14762a"
+     id="circle24" />
+  <circle
+     cx="1090"
+     cy="175.71703"
+     r="5"
+     fill="#ee7209"
+     id="circle25" />
+  <circle
+     cx="1090"
+     cy="504.71698"
+     r="5"
+     fill="#ee7209"
+     id="circle26" />
+  <circle
+     cx="1158"
+     cy="535.71698"
+     r="5"
+     fill="#ed6b72"
+     id="circle27" />
+  <circle
+     cx="1158"
+     cy="576.71698"
+     r="5"
+     fill="#7651b5"
+     id="circle28" />
+  <circle
+     cx="1158"
+     cy="578.71698"
+     r="5"
+     fill="#17b6aa"
+     id="circle29" />
+  <!-- Area / VLAN tags -->
+  <g
+     filter="url(#shadow)"
+     id="g31"
+     transform="translate(0,0.7170128)">
+    <rect
+       x="592"
+       y="50"
+       width="212"
+       height="103"
+       rx="17"
+       fill="#eaf5ff"
+       stroke="#9ec8ed"
+       class="pill"
+       id="rect29" />
+    <rect
+       x="195"
+       y="294"
+       width="205"
+       height="101"
+       rx="16"
+       fill="#f4fff0"
+       stroke="#98c78d"
+       class="pill"
+       id="rect30" />
+    <rect
+       x="991"
+       y="295"
+       width="205"
+       height="101"
+       rx="16"
+       fill="#fff9ed"
+       stroke="#f6b861"
+       class="pill"
+       id="rect31" />
+  </g>
+  <text
+     x="698"
+     y="81.71701"
+     text-anchor="middle"
+     class="network-title"
+     fill="#15518b"
+     id="text31">VLAN 12</text>
+  <text
+     x="698"
+     y="109.71701"
+     text-anchor="middle"
+     class="network-sub"
+     id="text32">10.0.12.0/24</text>
+  <text
+     x="698"
+     y="138.71703"
+     text-anchor="middle"
+     class="area-label"
+     fill="#15518b"
+     id="text33">Area 0 (Backbone)</text>
+  <text
+     x="297"
+     y="325.71701"
+     text-anchor="middle"
+     class="network-title"
+     fill="#1e5b24"
+     id="text34">VLAN 13</text>
+  <text
+     x="297"
+     y="354.71701"
+     text-anchor="middle"
+     class="network-sub"
+     id="text35">10.0.13.0/24</text>
+  <text
+     x="297"
+     y="383.71701"
+     text-anchor="middle"
+     class="area-label"
+     fill="#1e5b24"
+     id="text36">Area 1</text>
+  <text
+     x="1093"
+     y="326.71701"
+     text-anchor="middle"
+     class="network-title"
+     fill="#b65000"
+     id="text37">VLAN 24</text>
+  <text
+     x="1093"
+     y="355.71701"
+     text-anchor="middle"
+     class="network-sub"
+     fill="#8d3500"
+     id="text38">10.0.24.0/24</text>
+  <text
+     x="1093"
+     y="384.71701"
+     text-anchor="middle"
+     class="area-label"
+     fill="#b65000"
+     id="text39">Area 2</text>
+  <!-- Routers -->
+  <g
+     transform="translate(295,113.71701)"
+     filter="url(#shadow)"
+     id="g39">
+    <use
+       xlink:href="#router"
+       id="use39" />
+  </g>
+  <g
+     transform="translate(1090,113.71701)"
+     filter="url(#shadow)"
+     id="g40">
+    <use
+       xlink:href="#router"
+       id="use40" />
+  </g>
+  <g
+     transform="translate(297,543.71701)"
+     filter="url(#shadow)"
+     id="g41">
+    <use
+       xlink:href="#router"
+       id="use41" />
+  </g>
+  <g
+     transform="translate(1090,543.71701)"
+     filter="url(#shadow)"
+     id="g42">
+    <use
+       xlink:href="#router"
+       id="use42" />
+  </g>
+  <!-- Router names -->
+  <text
+     x="296"
+     y="63.71701"
+     text-anchor="middle"
+     class="router-name"
+     id="text42">R1</text>
+  <text
+     x="1090"
+     y="63.71701"
+     text-anchor="middle"
+     class="router-name"
+     id="text43">R2</text>
+  <text
+     x="297"
+     y="638.71698"
+     text-anchor="middle"
+     class="router-name"
+     id="text44">R3</text>
+  <text
+     x="1090"
+     y="638.71698"
+     text-anchor="middle"
+     class="router-name"
+     id="text45">R4</text>
+  <!-- Loopback cards -->
+  <g
+     filter="url(#shadow)"
+     id="g48"
+     transform="translate(0,0.7170128)">
+    <rect
+       x="114"
+       y="111"
+       width="120"
+       height="72"
+       rx="10"
+       fill="#ffffff"
+       stroke="#707b83"
+       stroke-width="2.8"
+       id="rect45" />
+    <rect
+       x="1168"
+       y="108"
+       width="181"
+       height="48"
+       rx="10"
+       fill="#ffffff"
+       stroke="#707b83"
+       stroke-width="2.8"
+       id="rect46" />
+    <rect
+       x="215"
+       y="649"
+       width="185"
+       height="48"
+       rx="10"
+       fill="#ffffff"
+       stroke="#707b83"
+       stroke-width="2.8"
+       id="rect47" />
+    <rect
+       x="972"
+       y="649"
+       width="188"
+       height="48"
+       rx="10"
+       fill="#ffffff"
+       stroke="#707b83"
+       stroke-width="2.8"
+       id="rect48" />
+  </g>
+  <text
+     x="126"
+     y="141.71703"
+     class="loop-label"
+     id="text48">Lo0:</text>
+  <text
+     x="126"
+     y="168.71703"
+     class="loop-label"
+     id="text49">10.1.1.1/32</text>
+  <text
+     x="1180"
+     y="138.71703"
+     class="loop-label"
+     id="text50">Lo0: 10.1.1.2/32</text>
+  <text
+     x="229"
+     y="680.71698"
+     class="loop-label"
+     id="text51">Lo0: 10.1.1.3/32</text>
+  <text
+     x="988"
+     y="680.71698"
+     class="loop-label"
+     id="text52">Lo0: 10.1.1.4/32</text>
+  <!-- Interface labels on inter-router links -->
+  <text
+     x="378"
+     y="91.71701"
+     class="if-label"
+     id="text53">eth1.12</text>
+  <text
+     x="378"
+     y="120.71702"
+     class="if-label"
+     id="text54">10.0.12.1/24</text>
+  <text
+     x="1006"
+     y="91.71701"
+     text-anchor="end"
+     class="if-label"
+     id="text55">eth1.12</text>
+  <text
+     x="1006"
+     y="120.71702"
+     text-anchor="end"
+     class="if-label"
+     id="text56">10.0.12.2/24</text>
+  <text
+     x="313"
+     y="220.71703"
+     class="if-label"
+     id="text57">eth1.13</text>
+  <text
+     x="313"
+     y="248.71703"
+     class="if-label"
+     id="text58">10.0.13.1/24</text>
+  <text
+     x="313"
+     y="452.71701"
+     class="if-label"
+     id="text59">eth1.13</text>
+  <text
+     x="313"
+     y="480.71701"
+     class="if-label"
+     id="text60">10.0.13.3/24</text>
+  <text
+     x="1111"
+     y="220.71703"
+     class="if-label"
+     id="text61">eth1.24</text>
+  <text
+     x="1111"
+     y="248.71703"
+     class="if-label"
+     id="text62">10.0.24.2/24</text>
+  <text
+     x="1111"
+     y="452.71701"
+     class="if-label"
+     id="text63">eth1.24</text>
+  <text
+     x="1111"
+     y="480.71701"
+     class="if-label"
+     id="text64">10.0.24.4/24</text>
+  <!-- Endpoint network labels -->
+  <g
+     filter="url(#shadow)"
+     id="g66"
+     transform="translate(0,0.7170128)">
+    <rect
+       x="1301"
+       y="460"
+       width="177"
+       height="45"
+       rx="14"
+       fill="#ffe9eb"
+       stroke="#f5c8cc"
+       stroke-width="2"
+       id="rect64" />
+    <rect
+       x="1301"
+       y="588"
+       width="177"
+       height="45"
+       rx="14"
+       fill="#efe8fc"
+       stroke="#d5c5f5"
+       stroke-width="2"
+       id="rect65" />
+    <rect
+       x="1301"
+       y="716"
+       width="177"
+       height="45"
+       rx="14"
+       fill="#e0f8ef"
+       stroke="#a9e7d2"
+       stroke-width="2"
+       id="rect66" />
+  </g>
+  <text
+     x="1389"
+     y="489.71701"
+     text-anchor="middle"
+     font-size="20px"
+     id="text66">192.168.16.0/30</text>
+  <text
+     x="1389"
+     y="617.71698"
+     text-anchor="middle"
+     font-size="20px"
+     id="text67">192.168.17.0/24</text>
+  <text
+     x="1389"
+     y="745.71698"
+     text-anchor="middle"
+     font-size="20px"
+     id="text68">192.168.18.0/23</text>
+  <!-- Host interface and IP labels -->
+  <text
+     x="1200"
+     y="535.71698"
+     class="if-label"
+     id="text69">Lo0</text>
+  <text
+     x="1200"
+     y="559.71698"
+     font-size="19px"
+     id="text70">192.168.16.1/30</text>
+  <text
+     x="1200"
+     y="644.71698"
+     class="if-label"
+     id="text71">Lo0</text>
+  <text
+     x="1200"
+     y="669.71698"
+     font-size="19px"
+     id="text72">192.168.17.1/24</text>
+  <text
+     x="1200"
+     y="773.71698"
+     class="if-label"
+     id="text73">Lo0</text>
+  <text
+     x="1200"
+     y="797.71698"
+     font-size="19px"
+     id="text74">192.168.18.1/23</text>
+  <!-- End hosts -->
+  <g
+     transform="translate(1508,475.71701)"
+     filter="url(#shadow)"
+     id="g74">
+    <use
+       xlink:href="#pc"
+       id="use74" />
+  </g>
+  <g
+     transform="translate(1508,602.71701)"
+     filter="url(#shadow)"
+     id="g75">
+    <use
+       xlink:href="#pc"
+       id="use75" />
+  </g>
+  <g
+     transform="translate(1508,735.71701)"
+     filter="url(#shadow)"
+     id="g76">
+    <use
+       xlink:href="#pc"
+       id="use76" />
+  </g>
+  <text
+     x="1578"
+     y="497.71701"
+     class="ep-name"
+     id="text76">EP16</text>
+  <text
+     x="1578"
+     y="524.71698"
+     class="ep-ip"
+     id="text77">192.168.16.2/30</text>
+  <text
+     x="1578"
+     y="625.71698"
+     class="ep-name"
+     id="text78">EP17</text>
+  <text
+     x="1578"
+     y="652.71698"
+     class="ep-ip"
+     id="text79">192.168.17.2/24</text>
+  <text
+     x="1578"
+     y="758.71698"
+     class="ep-name"
+     id="text80">EP18</text>
+  <text
+     x="1578"
+     y="785.71698"
+     class="ep-ip"
+     id="text81">192.168.18.2/23</text>
+</svg>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1263.0533"
+   height="904.22498"
+   viewBox="0 0 1263.0533 904.22497"
+   version="1.1"
+   id="svg32"
+   sodipodi:docname="topology.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview32"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.8934748"
+     inkscape:cx="712.71082"
+     inkscape:cy="413.7895"
+     inkscape:window-width="1720"
+     inkscape:window-height="1380"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg32">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="1263.0533"
+       height="904.22498"
+       id="page32"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+.title{font:700 34px 'DejaVu Sans',sans-serif;fill:#102a43}
+.sub{font:18px 'DejaVu Sans',sans-serif;fill:#486581}
+.area{font:700 18px 'DejaVu Sans',sans-serif;fill:#334e68;text-anchor:middle}
+.node{fill:#ffffff;stroke:#243b53;stroke-width:3}
+.router{font:700 22px 'DejaVu Sans',sans-serif;fill:#102a43;text-anchor:middle}
+.rid{font:14px 'DejaVu Sans',sans-serif;fill:#486581;text-anchor:middle}
+.link{stroke:#334e68;stroke-width:4;fill:none}
+.vlink{stroke:#b45309;stroke-width:4;stroke-dasharray:12 8;fill:none}
+.lab{font:600 16px 'DejaVu Sans',sans-serif;fill:#243b53;text-anchor:middle}
+.small{font:14px 'DejaVu Sans',sans-serif;fill:#486581;text-anchor:middle}
+.legend{font:16px 'DejaVu Sans',sans-serif;fill:#334e68}
+</style>
+  </defs>
+  <rect
+     width="1600"
+     height="900"
+     fill="#f7fafc"
+     id="rect1"
+     x="3.1104901e-06"
+     y="-4.5091429e-07"
+     style="stroke-width:1" />
+  <text
+     x="60"
+     y="60"
+     class="title"
+     id="text1"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:34px;line-height:normal;font-family:'DejaVu Sans', sans-serif">LAB-010 | OSPFv3 Virtual Links</text>
+  <text
+     x="60"
+     y="96"
+     class="sub"
+     id="text2"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18px;line-height:normal;font-family:'DejaVu Sans', sans-serif">IPv6 unicast · Disconnected Area 0 · Area 1 transit · Remote Area 2</text>
+  <!-- Area role labels -->
+  <rect
+     x="50.659203"
+     y="132.65919"
+     width="345.38058"
+     height="246.04593"
+     rx="5.9420309"
+     fill="#dbeafe"
+     stroke="#93c5fd"
+     id="rect2"
+     style="stroke-width:2.31842" />
+  <text
+     x="218.62445"
+     y="164.56259"
+     class="area"
+     id="text3"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:18px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Area 0 · Segment A (R1–R4)</text>
+  <rect
+     x="845.26837"
+     y="121.08542"
+     width="359.02179"
+     height="255.46213"
+     rx="6.1767192"
+     fill="#dbeafe"
+     stroke="#93c5fd"
+     id="rect3"
+     style="stroke-width:2.40856" />
+  <text
+     x="1007.9072"
+     y="180.40648"
+     class="area"
+     id="text4"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:18px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Area 0 · Segment B (R3–R2)</text>
+  <rect
+     x="413.02008"
+     y="115.3842"
+     width="423.39725"
+     height="396.16956"
+     rx="7.2067623"
+     fill="#dcfce7"
+     stroke="#86efac"
+     id="rect4"
+     style="stroke-width:3.23986" />
+  <text
+     x="636.33759"
+     y="146.82687"
+     class="area"
+     id="text5"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:18px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Area 1 · Normal area (not stub)</text>
+  <rect
+     x="692.96893"
+     y="517.02979"
+     width="521.22754"
+     height="194.18622"
+     rx="13.451033"
+     fill="#fef3c7"
+     stroke="#fcd34d"
+     id="rect5"
+     transform="matrix(0.99993628,0.0112888,-9.7829924e-4,0.99999952,0,0)"
+     style="stroke-width:3.09886" />
+  <text
+     x="912.78326"
+     y="673.19409"
+     class="area"
+     id="text6"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:18px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Area 2 · Remote area</text>
+  <!-- physical Area 0 links -->
+  <line
+     x1="225"
+     y1="249.99998"
+     x2="365"
+     y2="249.99998"
+     class="link"
+     id="line6" />
+  <rect
+     x="218"
+     y="304"
+     width="154"
+     height="25"
+     rx="6"
+     fill="#ffffff"
+     id="rect6" />
+  <text
+     x="295"
+     y="322"
+     class="lab"
+     id="text7"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">VLAN 14 · eth1.14</text>
+  <rect
+     x="218"
+     y="331"
+     width="154"
+     height="22"
+     rx="5"
+     fill="#ffffff"
+     id="rect7" />
+  <text
+     x="295"
+     y="347"
+     class="small"
+     id="text8"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">2001:db8:10:14::/64</text>
+  <line
+     x1="875"
+     y1="249.99998"
+     x2="1015.0001"
+     y2="249.99998"
+     class="link"
+     id="line8" />
+  <rect
+     x="869"
+     y="304"
+     width="154"
+     height="25"
+     rx="6"
+     fill="#ffffff"
+     id="rect8" />
+  <text
+     x="946"
+     y="322"
+     class="lab"
+     id="text9"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">VLAN 23 · eth1.23</text>
+  <rect
+     x="869"
+     y="331"
+     width="154"
+     height="22"
+     rx="5"
+     fill="#ffffff"
+     id="rect9" />
+  <text
+     x="946"
+     y="347"
+     class="small"
+     id="text10"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">2001:db8:10:23::/64</text>
+  <!-- physical Area 1 links -->
+  <path
+     d="m 430,300 q 195,75 390,0"
+     class="link"
+     id="path10" />
+  <rect
+     x="550"
+     y="350"
+     width="150"
+     height="25"
+     rx="6"
+     fill="#ffffff"
+     id="rect10" />
+  <text
+     x="625"
+     y="368"
+     class="lab"
+     id="text11"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">VLAN 34 · eth1.34</text>
+  <line
+     x1="445"
+     y1="300"
+     x2="575"
+     y2="500"
+     class="link"
+     id="line11" />
+  <g
+     id="g1"
+     transform="translate(28.381743,-2.9875519)">
+    <rect
+       x="418.93814"
+       y="411.54993"
+       width="165"
+       height="25"
+       rx="6"
+       fill="#ffffff"
+       id="rect11" />
+    <text
+       x="500.93817"
+       y="429.54993"
+       class="lab"
+       id="text12"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">VLAN 46 · eth1.46</text>
+  </g>
+  <line
+     x1="805"
+     y1="300"
+     x2="665"
+     y2="500"
+     class="link"
+     id="line12" />
+  <rect
+     x="649.58649"
+     y="423.16876"
+     width="165"
+     height="25"
+     rx="6"
+     fill="#ffffff"
+     id="rect12" />
+  <text
+     x="731.58649"
+     y="441.16876"
+     class="lab"
+     id="text13"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">VLAN 36 · eth1.36</text>
+  <!-- remote Area 2 link -->
+  <line
+     x1="690"
+     y1="545"
+     x2="1060"
+     y2="650"
+     class="link"
+     id="line13" />
+  <rect
+     x="825"
+     y="579"
+     width="174"
+     height="25"
+     rx="6"
+     fill="#ffffff"
+     id="rect13" />
+  <text
+     x="912"
+     y="597"
+     class="lab"
+     id="text14"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">VLAN 56 · eth1.56</text>
+  <rect
+     x="825"
+     y="605"
+     width="174"
+     height="22"
+     rx="5"
+     fill="#ffffff"
+     id="rect14" />
+  <text
+     x="912"
+     y="621"
+     class="small"
+     id="text15"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">2001:db8:12:56::/64</text>
+  <!-- Virtual Link A between R3 and R4; distinct dashed logical adjacency over the Area 1 path -->
+  <path
+     d="M 805,210 Q 625,112 445,210"
+     class="vlink"
+     id="path15" />
+  <!-- Virtual Link B between R4 and R6, dashed curve parallel to physical Area 1 link -->
+  <path
+     d="m 468,300 q 32,90 137,200"
+     class="vlink"
+     id="path16" />
+  <!-- unique nodes: each router occurs once -->
+  <g
+     id="g17">
+    <rect
+       x="95"
+       y="205"
+       width="130"
+       height="90"
+       rx="16"
+       class="node"
+       id="rect16" />
+    <text
+       x="160"
+       y="240"
+       class="router"
+       id="text16"
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:22px;line-height:normal;font-family:'DejaVu Sans', sans-serif">R1</text>
+    <text
+       x="160"
+       y="266"
+       class="rid"
+       id="text17"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">RID 10.1.1.1</text>
+  </g>
+  <g
+     id="g19">
+    <rect
+       x="365"
+       y="205"
+       width="130"
+       height="90"
+       rx="16"
+       class="node"
+       id="rect17" />
+    <text
+       x="430"
+       y="240"
+       class="router"
+       id="text18"
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:22px;line-height:normal;font-family:'DejaVu Sans', sans-serif">R4</text>
+    <text
+       x="430"
+       y="266"
+       class="rid"
+       id="text19"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">RID 10.1.1.4</text>
+  </g>
+  <g
+     id="g21">
+    <rect
+       x="805"
+       y="205"
+       width="130"
+       height="90"
+       rx="16"
+       class="node"
+       id="rect19" />
+    <text
+       x="870"
+       y="240"
+       class="router"
+       id="text20"
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:22px;line-height:normal;font-family:'DejaVu Sans', sans-serif">R3</text>
+    <text
+       x="870"
+       y="266"
+       class="rid"
+       id="text21"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">RID 10.1.1.3</text>
+  </g>
+  <g
+     id="g23">
+    <rect
+       x="1015"
+       y="205"
+       width="130"
+       height="90"
+       rx="16"
+       class="node"
+       id="rect21" />
+    <text
+       x="1080"
+       y="240"
+       class="router"
+       id="text22"
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:22px;line-height:normal;font-family:'DejaVu Sans', sans-serif">R2</text>
+    <text
+       x="1080"
+       y="266"
+       class="rid"
+       id="text23"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">RID 10.1.1.2</text>
+  </g>
+  <g
+     id="g25">
+    <rect
+       x="545"
+       y="500"
+       width="145"
+       height="90"
+       rx="16"
+       class="node"
+       id="rect23" />
+    <text
+       x="617"
+       y="535"
+       class="router"
+       id="text24"
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:22px;line-height:normal;font-family:'DejaVu Sans', sans-serif">R6</text>
+    <text
+       x="617"
+       y="561"
+       class="rid"
+       id="text25"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">RID 10.1.1.6</text>
+  </g>
+  <g
+     id="g27">
+    <rect
+       x="1060"
+       y="605"
+       width="145"
+       height="90"
+       rx="16"
+       class="node"
+       id="rect25" />
+    <text
+       x="1132"
+       y="640"
+       class="router"
+       id="text26"
+       style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:22px;line-height:normal;font-family:'DejaVu Sans', sans-serif">R5</text>
+    <text
+       x="1132"
+       y="666"
+       class="rid"
+       id="text27"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif">RID 10.1.1.5</text>
+  </g>
+  <!-- virtual link labels in a separate legend to avoid covering links -->
+  <line
+     x1="60"
+     y1="735"
+     x2="120"
+     y2="735"
+     class="link"
+     id="line27" />
+  <text
+     x="135"
+     y="741"
+     class="legend"
+     id="text28"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Physical 802.1Q logical link</text>
+  <line
+     x1="470"
+     y1="735"
+     x2="530"
+     y2="735"
+     class="vlink"
+     id="line28" />
+  <text
+     x="545"
+     y="741"
+     class="legend"
+     id="text29"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Virtual links (dashed)</text>
+  <text
+     x="60"
+     y="788"
+     class="legend"
+     id="text30"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Virtual Link A: R3 ↔ R4 under Area 0; transit Area 1 (joins the two Area 0 segments).</text>
+  <text
+     x="60"
+     y="818"
+     class="legend"
+     id="text31"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:'DejaVu Sans', sans-serif">Virtual Link B: R4 ↔ R6 under Area 0; transit Area 1 (connects Area 2 to the backbone).</text>
+  <text
+     x="60"
+     y="862"
+     class="small"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', sans-serif;text-anchor:start"
+     id="text32">Router loopbacks: R1/R2 Area 0 · R3/R4/R6 Area 1 · R5 Area 2. Logical view only; br-univ is intentionally omitted.</text>
+</svg>
