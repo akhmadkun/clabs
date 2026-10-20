@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1600"
+   height="900"
+   viewBox="0 0 1600 900"
+   role="img"
+   aria-labelledby="svg-title svg-desc"
+   version="1.1"
+   id="svg48"
+   sodipodi:docname="topology.russo-bgp-ucmp.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview48"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.3388889"
+     inkscape:cx="703.19502"
+     inkscape:cy="550.82988"
+     inkscape:window-width="3440"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg48" />
+  <title
+     id="svg-title">BGP Lab Topology — IOL interfaces</title>
+  <desc
+     id="svg-desc">Provider AS 65000 with routers R2, R3, R4, R5, R7 and R8, connected to customer AS 65001 through R1 and AS 65006 through R6. All router-facing links use the requested Eth0/1 interface naming.</desc>
+  <defs
+     id="defs5">
+    <linearGradient
+       id="linearGradient48"
+       inkscape:swatch="gradient">
+      <stop
+         style="stop-color:#123136;stop-opacity:1;"
+         offset="0"
+         id="stop48" />
+      <stop
+         style="stop-color:#123136;stop-opacity:0;"
+         offset="1"
+         id="stop49" />
+    </linearGradient>
+    <marker
+       id="router-arrow"
+       markerWidth="8"
+       markerHeight="8"
+       refX="6.5"
+       refY="4"
+       orient="auto"
+       markerUnits="userSpaceOnUse">
+      <path
+         d="M0,0 L8,4 L0,8 Z"
+         fill="#0f587a"
+         id="path1" />
+    </marker>
+    <style
+       id="style1">
+      .area-label { font-family: Inter, Arial, sans-serif; font-weight: 750; fill: #111827; }
+      .node-label { font-family: Inter, Arial, sans-serif; font-weight: 700; font-size: 20px; fill: #132b3b; }
+      .interface-label { font-family: Inter, Arial, sans-serif; font-weight: 650; font-size: 18px; fill: #122536; }
+      .ip-label { font-family: Inter, Arial, sans-serif; font-size: 17px; font-weight: 650; fill: #1474d4; text-anchor: middle; }
+      .external-ip { font-family: Inter, Arial, sans-serif; font-size: 17px; font-weight: 650; fill: #18212b; text-anchor: middle; }
+      .legend { font-family: Inter, Arial, sans-serif; font-size: 17px; font-weight: 650; fill: #152233; }
+      .link { stroke: #28343c; stroke-width: 2.2; fill: none; stroke-linecap: round; }
+      .junction { fill: #28343c; stroke: #ffffff; stroke-width: 1.5; }
+    </style>
+    <g
+       id="iol-router-icon">
+      <circle
+         r="31"
+         fill="#ffffff"
+         stroke="#2386b4"
+         stroke-width="2"
+         id="circle1" />
+      <g
+         stroke="#0f587a"
+         stroke-width="3.4"
+         stroke-linecap="round"
+         fill="none"
+         marker-end="url(#router-arrow)"
+         id="g5">
+        <path
+           d="M -5,-5 L -18,-18"
+           id="path2" />
+        <path
+           d="M 5,-5 L 18,-18"
+           id="path3" />
+        <path
+           d="M -5,5 L -18,18"
+           id="path4" />
+        <path
+           d="M 5,5 L 18,18"
+           id="path5" />
+      </g>
+    </g>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient48"
+       id="linearGradient50"
+       gradientUnits="userSpaceOnUse"
+       x1="1201.1282"
+       y1="368.26895"
+       x2="1260.8674"
+       y2="368.26895" />
+  </defs>
+  <!-- Canvas -->
+  <rect
+     id="canvas"
+     x="0"
+     y="0"
+     width="1600"
+     height="900"
+     fill="#ffffff" />
+  <!-- Provider and customer AS regions -->
+  <rect
+     id="as65000-area"
+     x="86"
+     y="128"
+     width="1082"
+     height="706"
+     rx="76"
+     fill="#fff2c9"
+     stroke="#e5b52e"
+     stroke-width="1.6" />
+  <rect
+     id="as65001-area"
+     x="96"
+     y="514"
+     width="300"
+     height="305"
+     rx="33"
+     fill="#f8d0d0"
+     stroke="#e55555"
+     stroke-width="1.6" />
+  <rect
+     id="as65006-area"
+     x="1300"
+     y="210"
+     width="265"
+     height="368"
+     rx="35"
+     fill="#f8d0d0"
+     stroke="#e55555"
+     stroke-width="1.6" />
+  <!-- Region labels -->
+  <text
+     class="area-label"
+     x="620"
+     y="168"
+     text-anchor="middle"
+     font-size="37"
+     id="text5">ASN 65000</text>
+  <text
+     class="area-label"
+     x="246"
+     y="772"
+     text-anchor="middle"
+     font-size="36"
+     id="text6">ASN 65001</text>
+  <text
+     class="area-label"
+     x="1432"
+     y="526"
+     text-anchor="middle"
+     font-size="36"
+     id="text7">ASN 65006</text>
+  <!-- Addressing legend -->
+  <g
+     id="addressing-legend"
+     text-anchor="middle">
+    <text
+       class="legend"
+       x="1360"
+       y="34"
+       id="text8">All point-to-point links:</text>
+    <text
+       class="legend"
+       x="1360"
+       y="59"
+       id="text9">10.X.Y.0/24</text>
+    <text
+       class="legend"
+       x="1360"
+       y="83"
+       id="text10">fc00:10:X:Y::/64</text>
+    <text
+       class="legend"
+       x="1360"
+       y="117"
+       id="text11">All provider loopbacks:</text>
+    <text
+       class="legend"
+       x="1360"
+       y="142"
+       id="text12">10.0.0.X/32</text>
+    <text
+       class="legend"
+       x="1360"
+       y="166"
+       id="text13">fc00::X/128</text>
+  </g>
+  <!-- Links, drawn behind nodes -->
+  <g
+     id="topology-links"
+     class="link">
+    <path
+       id="link-r1-r2"
+       d="M220,382 L220,589" />
+    <path
+       id="link-r2-r3"
+       d="M253,350 L577,350" />
+    <path
+       id="link-r3-r4"
+       d="M643,350 L947,350" />
+    <path
+       id="link-r4-r6"
+       d="M1013,350 L1397,350" />
+    <path
+       id="link-r3-r5"
+       d="M636,374 L1004,651" />
+    <path
+       id="link-r5-r6"
+       d="M1056,651 L1406,376" />
+    <!-- Shared Ethernet segment Eth0/1.378: R3, R7 and R8 -->
+    <path
+       id="link-r3-shared-segment"
+       d="M610,382 L610,560" />
+    <path
+       id="shared-segment-bus"
+       d="M432,560 L790,560" />
+    <path
+       id="link-shared-segment-r7"
+       d="M490,560 L490,669" />
+    <path
+       id="link-shared-segment-r8"
+       d="M755,560 L755,669" />
+  </g>
+  <g
+     id="shared-segment-junctions">
+    <circle
+       class="junction"
+       cx="490"
+       cy="560"
+       r="5"
+       id="circle13" />
+    <circle
+       class="junction"
+       cx="755"
+       cy="560"
+       r="5"
+       id="circle14" />
+  </g>
+  <!-- Link interface labels -->
+  <g
+     id="interface-labels">
+    <text
+       class="interface-label"
+       x="247"
+       y="500"
+       id="text14">Eth0/1.12</text>
+    <text
+       class="interface-label"
+       x="414"
+       y="326"
+       text-anchor="middle"
+       id="text15">Eth0/1.23</text>
+    <text
+       class="interface-label"
+       x="795"
+       y="326"
+       text-anchor="middle"
+       id="text16">Eth0/1.34</text>
+    <text
+       class="interface-label"
+       x="1195"
+       y="326"
+       text-anchor="middle"
+       id="text17">Eth0/1.46</text>
+    <text
+       class="interface-label"
+       x="1230.8132"
+       y="373.06778"
+       text-anchor="middle"
+       id="text17-6"
+       style="font-weight:650;font-size:18px;font-family:Inter, Arial, sans-serif;fill:#d30606;fill-opacity:1"
+       inkscape:label="Bandwidth 2G">2 Gbps</text>
+    <text
+       class="interface-label"
+       x="523.974"
+       y="1247.3557"
+       text-anchor="middle"
+       id="text17-6-5"
+       style="font-weight:650;font-size:18px;font-family:Inter, Arial, sans-serif;fill:#2807ec;fill-opacity:1"
+       inkscape:label="Bandwidth 1G"
+       transform="rotate(-43.87083)">1 Gbps</text>
+    <text
+       class="interface-label"
+       x="814"
+       y="496"
+       text-anchor="middle"
+       transform="rotate(37 814 496)"
+       id="text18">Eth0/1.35</text>
+    <text
+       class="interface-label"
+       x="1225"
+       y="501"
+       text-anchor="middle"
+       transform="rotate(-38 1225 501)"
+       id="text19">Eth0/1.56</text>
+    <text
+       class="interface-label"
+       x="631"
+       y="474"
+       id="text20">Eth0/1.378</text>
+    <text
+       class="interface-label"
+       x="449"
+       y="623"
+       text-anchor="middle"
+       transform="rotate(-90 449 623)"
+       id="text21">Eth0/1.378</text>
+    <text
+       class="interface-label"
+       x="798"
+       y="623"
+       text-anchor="middle"
+       transform="rotate(-90 798 623)"
+       id="text22">Eth0/1.378</text>
+  </g>
+  <!-- Link subnet annotation for R1-R2 -->
+  <g
+     id="r1-r2-addressing"
+     text-anchor="end">
+    <text
+       class="external-ip"
+       x="195"
+       y="454"
+       id="text23">10.1.2.0/24</text>
+    <text
+       class="external-ip"
+       x="195"
+       y="478"
+       id="text24">fc00:10:1:2::/64</text>
+  </g>
+  <!-- Provider loopback addresses -->
+  <g
+     id="provider-loopbacks">
+    <text
+       class="ip-label"
+       x="220"
+       y="208"
+       id="text25">10.0.0.2/32</text>
+    <text
+       class="ip-label"
+       x="220"
+       y="232"
+       id="text26">fc00::2/128</text>
+    <text
+       class="ip-label"
+       x="610"
+       y="208"
+       id="text27">10.0.0.3/32</text>
+    <text
+       class="ip-label"
+       x="610"
+       y="232"
+       id="text28">fc00::3/128</text>
+    <text
+       class="ip-label"
+       x="980"
+       y="208"
+       id="text29">10.0.0.4/32</text>
+    <text
+       class="ip-label"
+       x="980"
+       y="232"
+       id="text30">fc00::4/128</text>
+    <text
+       class="ip-label"
+       x="490"
+       y="786"
+       id="text31">10.0.0.7/32</text>
+    <text
+       class="ip-label"
+       x="490"
+       y="810"
+       id="text32">fc00::7/128</text>
+    <text
+       class="ip-label"
+       x="755"
+       y="786"
+       id="text33">10.0.0.8/32</text>
+    <text
+       class="ip-label"
+       x="755"
+       y="810"
+       id="text34">fc00::8/128</text>
+    <text
+       class="ip-label"
+       x="1030"
+       y="786"
+       id="text35">10.0.0.5/32</text>
+    <text
+       class="ip-label"
+       x="1030"
+       y="810"
+       id="text36">fc00::5/128</text>
+  </g>
+  <!-- External endpoint addressing -->
+  <g
+     id="external-endpoint-addresses">
+    <text
+       class="external-ip"
+       x="246"
+       y="679"
+       id="text37">192.0.2.1/32</text>
+    <text
+       class="external-ip"
+       x="246"
+       y="704"
+       id="text38">2001:db8::1/128</text>
+    <text
+       class="external-ip"
+       x="1432"
+       y="418"
+       id="text39">192.0.2.6/32</text>
+    <text
+       class="external-ip"
+       x="1432"
+       y="443"
+       id="text40">2001:db8::6/128</text>
+  </g>
+  <!-- Router icons and labels -->
+  <g
+     id="router-r1">
+    <text
+       class="node-label"
+       x="220"
+       y="579"
+       text-anchor="middle"
+       id="text41">R1</text>
+    <use
+       xlink:href="#iol-router-icon"
+       x="220"
+       y="622"
+       id="use41" />
+  </g>
+  <g
+     id="router-r2">
+    <text
+       class="node-label"
+       x="220"
+       y="300"
+       text-anchor="middle"
+       id="text42">R2</text>
+    <use
+       xlink:href="#iol-router-icon"
+       x="220"
+       y="350"
+       id="use42" />
+  </g>
+  <g
+     id="router-r3">
+    <text
+       class="node-label"
+       x="610"
+       y="300"
+       text-anchor="middle"
+       id="text43">R3</text>
+    <use
+       xlink:href="#iol-router-icon"
+       x="610"
+       y="350"
+       id="use43" />
+  </g>
+  <g
+     id="router-r4">
+    <text
+       class="node-label"
+       x="980"
+       y="300"
+       text-anchor="middle"
+       id="text44">R4</text>
+    <use
+       xlink:href="#iol-router-icon"
+       x="980"
+       y="350"
+       id="use44" />
+  </g>
+  <g
+     id="router-r5">
+    <use
+       xlink:href="#iol-router-icon"
+       x="1030"
+       y="672"
+       id="use45" />
+    <text
+       class="node-label"
+       x="1030"
+       y="730"
+       text-anchor="middle"
+       id="text45">R5</text>
+  </g>
+  <g
+     id="router-r6">
+    <text
+       class="node-label"
+       x="1432"
+       y="300"
+       text-anchor="middle"
+       id="text46">R6</text>
+    <use
+       xlink:href="#iol-router-icon"
+       x="1432"
+       y="350"
+       id="use46" />
+  </g>
+  <g
+     id="router-r7">
+    <use
+       xlink:href="#iol-router-icon"
+       x="490"
+       y="700"
+       id="use47" />
+    <text
+       class="node-label"
+       x="490"
+       y="754"
+       text-anchor="middle"
+       id="text47">R7</text>
+  </g>
+  <g
+     id="router-r8">
+    <use
+       xlink:href="#iol-router-icon"
+       x="755"
+       y="700"
+       id="use48" />
+    <text
+       class="node-label"
+       x="755"
+       y="754"
+       text-anchor="middle"
+       id="text48">R8</text>
+  </g>
+</svg>

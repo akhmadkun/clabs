@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1279.5" height="1002" viewBox="0 0 853 668">
+  <title>IS-IS Multi-Area Topology with Backdoor Link — IOL Eth0/1 Interfaces</title>
+  <desc>Editable vector topology. Interface labels on R1 through R6 use Eth0/1 with the original sub-interface numbers preserved. IOS XR interface labels remain unchanged.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#fcfcfc"/></linearGradient>
+    <linearGradient id="blueArea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f7f5"/><stop offset="1" stop-color="#f1f3f1"/></linearGradient>
+    <linearGradient id="greenArea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0f0dc"/><stop offset="1" stop-color="#d0e7ce"/></linearGradient>
+    <linearGradient id="purpleArea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6d9eb"/><stop offset="1" stop-color="#d9c8e2"/></linearGradient>
+    <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#111111"/></marker>
+    <style>
+      .area-title { font-family: Arial, Helvetica, sans-serif; font-size: 25px; font-weight: 700; fill: #111; text-anchor: middle; }
+      .node-label { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; fill: #111; text-anchor: middle; }
+      .if-label { font-family: Arial, Helvetica, sans-serif; font-size: 12.5px; font-weight: 700; fill: #111; }
+      .link { stroke: #262626; stroke-width: 1.25; fill: none; }
+      .backdoor { stroke: #1d1d1d; stroke-width: 2.5; fill: none; }
+      .area { stroke-width: 1; }
+      .blue-router { fill: #fff; stroke: #7ca9bb; stroke-width: 1.1; }
+      .orange-router { fill: #fff3d9; stroke: #e7ad48; stroke-width: 1.1; }
+      .blue-arrow { stroke: #0c587b; stroke-width: 3.3; stroke-linecap: square; fill: none; }
+      .orange-arrow { stroke: #d99a0c; stroke-width: 3.3; stroke-linecap: square; fill: none; }
+    </style>
+    <g id="router-blue">
+      <circle class="blue-router" r="21.5"/>
+      <g class="blue-arrow">
+        <path d="M-8,-8 L-14,-14 M-14,-14 L-7,-13 M-14,-14 L-13,-7"/>
+        <path d="M8,-8 L14,-14 M14,-14 L7,-13 M14,-14 L13,-7"/>
+        <path d="M-8,8 L-14,14 M-14,14 L-7,13 M-14,14 L-13,7"/>
+        <path d="M8,8 L14,14 M14,14 L7,13 M14,14 L13,7"/>
+      </g>
+    </g>
+    <g id="router-orange">
+      <circle class="orange-router" r="21.5"/>
+      <g class="orange-arrow">
+        <path d="M-8,-8 L-14,-14 M-14,-14 L-7,-13 M-14,-14 L-13,-7"/>
+        <path d="M8,-8 L14,-14 M14,-14 L7,-13 M14,-14 L13,-7"/>
+        <path d="M-8,8 L-14,14 M-14,14 L-7,13 M-14,14 L-13,7"/>
+        <path d="M8,8 L14,14 M14,14 L7,13 M14,14 L13,7"/>
+      </g>
+    </g>
+  </defs>
+  <rect width="853" height="668" fill="url(#bg)"/>
+
+  <!-- Area boundaries -->
+  <rect class="area" x="14.5" y="45" width="352" height="601" rx="39" fill="url(#blueArea)" stroke="#858985"/>
+  <rect class="area" x="455.5" y="233" width="185.5" height="417" rx="28" fill="url(#greenArea)" stroke="#9cc597"/>
+  <rect class="area" x="654" y="13.5" width="185" height="385" rx="28" fill="url(#purpleArea)" stroke="#ad8bbc"/>
+
+  <!-- Area labels -->
+  <text class="area-title" x="279" y="191">AREA</text>
+  <text class="area-title" x="279" y="220">49.1234</text>
+  <text class="area-title" x="548" y="288">AREA</text>
+  <text class="area-title" x="548" y="317">49.0056</text>
+  <text class="area-title" x="746.5" y="48">AREA</text>
+  <text class="area-title" x="746.5" y="78">49.1920</text>
+
+  <!-- Links behind router icons -->
+  <path class="link" d="M132,151.5 L132,279"/>
+  <path class="link" d="M151,309 L287.5,389"/>
+  <path class="link" d="M143,315 L291,537"/>
+  <path class="link" d="M306,421.5 L306,530"/>
+  <path class="link" d="M328,395 L542,395"/>
+  <path class="link" d="M324,545 L545,406"/>
+  <path class="link" d="M328,552.5 L542,552.5"/>
+  <path class="link" d="M560,417 L560,530"/>
+  <path class="link" d="M579,384 L730,307"/>
+  <path class="link" d="M580,539 L733,309"/>
+  <path class="link" d="M749.5,153 L749.5,273"/>
+
+  <!-- Backdoor R1 - XR2 -->
+  <path class="backdoor" d="M153.5,131 L727.5,131"/>
+  <path d="M451.5,61 L467,124" stroke="#111" stroke-width="0.9" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="422" y="61" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-weight="700" fill="#111">New Link</text>
+  <text class="if-label" x="157" y="121">Eth0/1.120</text>
+  <text class="if-label" x="642" y="126">Gi0/0/0.120</text>
+
+  <!-- Link labels: IOL R1-R6 interfaces changed from Gi2 to Eth0/1; suffixes preserved -->
+  <text class="if-label" x="141" y="213">Eth0/1.12</text>
+  <text class="if-label" transform="translate(211 345) rotate(31)" x="0" y="0">Eth0/1.23</text>
+  <text class="if-label" transform="translate(207 403) rotate(56)" x="0" y="0">Eth0/1.24</text>
+  <text class="if-label" transform="translate(302 493) rotate(-90)" x="0" y="0">Eth0/1.34</text>
+  <text class="if-label" x="410" y="389">Eth0/1.36</text>
+  <text class="if-label" transform="translate(416 476) rotate(-32)" x="0" y="0">Eth0/1.46</text>
+  <text class="if-label" x="410" y="564">Eth0/1.45</text>
+  <text class="if-label" transform="translate(554 494) rotate(-90)" x="0" y="0">Eth0/1.56</text>
+  <text class="if-label" transform="translate(662 347) rotate(-27)" x="0" y="0">Gi0/0/0.619</text>
+  <text class="if-label" transform="translate(667 402) rotate(-55)" x="0" y="0">Gi0/0/0.519</text>
+  <text class="if-label" x="657" y="213">Gi0/0/0.1920</text>
+
+  <!-- Router icons and names -->
+  <g transform="translate(132 131)"><use xlink:href="#router-blue"/></g>
+  <text class="node-label" x="132" y="102">R1</text>
+  <g transform="translate(132 301)"><use xlink:href="#router-blue"/></g>
+  <text class="node-label" x="101" y="300">R2</text>
+  <g transform="translate(306 395)"><use xlink:href="#router-blue"/></g>
+  <text class="node-label" x="306" y="371">R3</text>
+  <g transform="translate(306 553)"><use xlink:href="#router-blue"/></g>
+  <text class="node-label" x="306" y="591">R4</text>
+  <g transform="translate(560 553)"><use xlink:href="#router-blue"/></g>
+  <text class="node-label" x="560" y="591">R5</text>
+  <g transform="translate(560 395)"><use xlink:href="#router-blue"/></g>
+  <text class="node-label" x="560" y="371">R6</text>
+  <g transform="translate(749 131)"><use xlink:href="#router-orange"/></g>
+  <text class="node-label" x="749" y="102">XR2</text>
+  <g transform="translate(749 296)"><use xlink:href="#router-orange"/></g>
+  <text class="node-label" x="793" y="302">XR1</text>
+</svg>
