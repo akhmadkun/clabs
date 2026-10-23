@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="title desc">
+<title id="title">LAB-015 OSPF Timer Mismatch, Failure Detection and Retransmission</title>
+<desc id="desc">Editable four-router OSPFv2 Area 0 point-to-point diamond. R1-R3 seeded incident uses a mismatched Hello timer; after repair the planned profile is Hello 2 Dead 8 on both ends. Other links retain defaults.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#eef4fb"/></linearGradient>
+  <linearGradient id="router" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e9f2ff"/></linearGradient>
+  <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#0f172a" flood-opacity="0.14"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#64748b"/></marker>
+</defs>
+<rect width="1600" height="1050" fill="url(#bg)"/>
+<g id="header" font-family="Inter,Arial,sans-serif">
+  <text x="800" y="58" text-anchor="middle" font-size="31" font-weight="800" fill="#0f172a">LAB-015 | OSPF Timer Mismatch &amp; Failure Detection</text>
+  <text x="800" y="92" text-anchor="middle" font-size="17" fill="#475569">cRPD 23.4R2-S5.6 · OSPFv2 · Area 0.0.0.0 · Four-router P2P diamond</text>
+</g>
+<g id="area" font-family="Inter,Arial,sans-serif">
+  <rect x="90" y="130" width="1420" height="590" rx="28" fill="#ffffff" fill-opacity=".68" stroke="#93c5fd" stroke-width="2.2" stroke-dasharray="10 8"/>
+  <rect x="112" y="146" width="152" height="35" rx="17" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="188" y="169" text-anchor="middle" font-size="16" font-weight="800" fill="#1d4ed8">AREA 0</text>
+</g>
+<!-- Links: draw behind nodes -->
+<g id="links" fill="none" stroke-linecap="round" font-family="Inter,Arial,sans-serif">
+  <path id="wire-r1-r2" d="M435 320 L1165 320" stroke="#64748b" stroke-width="4"/>
+  <path id="wire-r1-r3" d="M435 320 L435 645" stroke="#64748b" stroke-width="4"/>
+  <path id="wire-r2-r4" d="M1165 320 L1165 645" stroke="#64748b" stroke-width="4"/>
+  <path id="wire-r3-r4" d="M435 645 L1165 645" stroke="#64748b" stroke-width="4"/>
+  <!-- link labels -->
+  <g id="link-r1-r2" transform="translate(800 294)">
+    <rect x="-142" y="-33" width="284" height="60" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="0" y="-10" text-anchor="middle" font-size="16" font-weight="800" fill="#334155">R1–R2 · VLAN 12</text>
+    <text x="0" y="12" text-anchor="middle" font-size="13" fill="#475569">eth1.12 ↔ eth1.12 · 10.0.12.0/30</text>
+  </g>
+  <g id="link-r1-r3" transform="translate(265 475)">
+    <rect x="-132" y="-30" width="264" height="60" rx="12" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="0" y="-7" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">R1–R3 · VLAN 13</text>
+    <text x="0" y="15" text-anchor="middle" font-size="11.5" fill="#9a3412">eth1.13 ↔ eth1.13</text>
+    <text x="0" y="30" text-anchor="middle" font-size="11.5" fill="#9a3412">10.0.13.0/30</text>
+  </g>
+  <g id="link-r2-r4" transform="translate(1335 475)">
+    <rect x="-132" y="-30" width="264" height="60" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="0" y="-7" text-anchor="middle" font-size="15" font-weight="800" fill="#334155">R2–R4 · VLAN 24</text>
+    <text x="0" y="15" text-anchor="middle" font-size="11.5" fill="#475569">eth1.24 ↔ eth1.24</text>
+    <text x="0" y="30" text-anchor="middle" font-size="11.5" fill="#475569">10.0.24.0/30</text>
+  </g>
+  <g id="link-r3-r4" transform="translate(800 645)">
+    <rect x="-170" y="-29" width="340" height="58" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="0" y="-6" text-anchor="middle" font-size="16" font-weight="800" fill="#334155">R3–R4 · VLAN 34</text>
+    <text x="0" y="15" text-anchor="middle" font-size="13" fill="#475569">eth1.34 ↔ eth1.34 · 10.0.34.0/30</text>
+  </g>
+</g>
+<!-- Router nodes -->
+<g id="router-nodes" font-family="Inter,Arial,sans-serif" filter="url(#shadow)">
+  <g id="R1" transform="translate(255 220)">
+    <rect width="360" height="190" rx="22" fill="url(#router)" stroke="#3b82f6" stroke-width="2.5"/>
+    <rect width="360" height="45" rx="22" fill="#1d4ed8"/>
+    <rect y="24" width="360" height="21" fill="#1d4ed8"/>
+    <text x="24" y="30" font-size="21" font-weight="800" fill="#fff">R1</text>
+    <text x="335" y="29" text-anchor="end" font-size="14" font-weight="700" fill="#dbeafe">Router ID 10.1.1.1</text>
+    <text x="24" y="76" font-size="16" font-weight="700" fill="#0f172a">Loopback</text>
+    <text x="24" y="99" font-size="16" fill="#334155">10.1.1.1/32</text>
+    <line x1="24" y1="115" x2="336" y2="115" stroke="#bfdbfe" stroke-width="1.5"/>
+    <text x="24" y="140" font-size="14" fill="#334155">eth1.12 → R2 · default timers</text>
+    <text x="24" y="164" font-size="14" font-weight="800" fill="#9a3412">eth1.13 → R3 · incident link</text>
+  </g>
+  <g id="R2" transform="translate(985 220)">
+    <rect width="360" height="190" rx="22" fill="url(#router)" stroke="#3b82f6" stroke-width="2.5"/>
+    <rect width="360" height="45" rx="22" fill="#1d4ed8"/>
+    <rect y="24" width="360" height="21" fill="#1d4ed8"/>
+    <text x="24" y="30" font-size="21" font-weight="800" fill="#fff">R2</text>
+    <text x="335" y="29" text-anchor="end" font-size="14" font-weight="700" fill="#dbeafe">Router ID 10.1.1.2</text>
+    <text x="24" y="76" font-size="16" font-weight="700" fill="#0f172a">Loopback</text>
+    <text x="24" y="99" font-size="16" fill="#334155">10.1.1.2/32</text>
+    <line x1="24" y1="115" x2="336" y2="115" stroke="#bfdbfe" stroke-width="1.5"/>
+    <text x="24" y="140" font-size="14" fill="#334155">eth1.12 → R1 · default timers</text>
+    <text x="24" y="164" font-size="14" fill="#334155">eth1.24 → R4 · default timers</text>
+  </g>
+  <g id="R3" transform="translate(255 555)">
+    <rect width="360" height="145" rx="22" fill="#fff7ed" stroke="#f97316" stroke-width="2.5"/>
+    <rect width="360" height="45" rx="22" fill="#c2410c"/>
+    <rect y="24" width="360" height="21" fill="#c2410c"/>
+    <text x="24" y="30" font-size="21" font-weight="800" fill="#fff">R3</text>
+    <text x="335" y="29" text-anchor="end" font-size="14" font-weight="700" fill="#ffedd5">Router ID 10.1.1.3</text>
+    <text x="24" y="76" font-size="15" font-weight="700" fill="#7c2d12">SEED TIMER FAULT</text>
+    <text x="24" y="99" font-size="14" fill="#9a3412">eth1.13 has a mismatched Hello</text>
+    <text x="24" y="122" font-size="14" fill="#9a3412">eth1.34 remains at defaults</text>
+  </g>
+  <g id="R4" transform="translate(985 555)">
+    <rect width="360" height="145" rx="22" fill="url(#router)" stroke="#3b82f6" stroke-width="2.5"/>
+    <rect width="360" height="45" rx="22" fill="#1d4ed8"/>
+    <rect y="24" width="360" height="21" fill="#1d4ed8"/>
+    <text x="24" y="30" font-size="21" font-weight="800" fill="#fff">R4</text>
+    <text x="335" y="29" text-anchor="end" font-size="14" font-weight="700" fill="#dbeafe">Router ID 10.1.1.4</text>
+    <text x="24" y="76" font-size="15" font-weight="700" fill="#0f172a">Loopback</text>
+    <text x="24" y="99" font-size="15" fill="#334155">10.1.1.4/32</text>
+    <text x="24" y="122" font-size="14" fill="#334155">eth1.24 / eth1.34 · defaults</text>
+  </g>
+</g>
+<!-- timer policy cards -->
+<g id="timer-cards" font-family="Inter,Arial,sans-serif">
+  <rect x="90" y="755" width="690" height="205" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="122" y="795" font-size="22" font-weight="800" fill="#0f172a">Target profile after remediation</text>
+  <rect x="122" y="818" width="292" height="102" rx="14" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="144" y="846" font-size="15" font-weight="800" fill="#1d4ed8">R1–R3 (both endpoints)</text>
+  <text x="144" y="873" font-size="17" font-weight="700" fill="#0f172a">Hello 2s · Dead 8s</text>
+  <text x="144" y="898" font-size="14" fill="#475569">ReXmit default 5s</text>
+  <rect x="432" y="818" width="316" height="102" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="454" y="846" font-size="15" font-weight="800" fill="#334155">Other three links</text>
+  <text x="454" y="873" font-size="17" font-weight="700" fill="#0f172a">Hello 10s · Dead 40s</text>
+  <text x="454" y="898" font-size="14" fill="#475569">ReXmit default 5s</text>
+  <rect x="810" y="755" width="700" height="205" rx="22" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="842" y="795" font-size="22" font-weight="800" fill="#0f172a">Operational requirements</text>
+  <circle cx="850" cy="830" r="5" fill="#2563eb"/><text x="866" y="836" font-size="15" fill="#334155">Hello and Dead must match across the same P2P adjacency.</text>
+  <circle cx="850" cy="861" r="5" fill="#2563eb"/><text x="866" y="867" font-size="15" fill="#334155">ReXmit is local LSA retransmission behavior; it is distinct.</text>
+  <circle cx="850" cy="892" r="5" fill="#2563eb"/><text x="866" y="898" font-size="15" fill="#334155">Control-plane test only; no exact convergence benchmark implied.</text>
+  <text x="800" y="1010" text-anchor="middle" font-size="14" fill="#64748b">All links are logical 802.1Q subinterfaces over existing eth1 / br-univ. Do not modify the parent interface.</text>
+</g>
+</svg>
