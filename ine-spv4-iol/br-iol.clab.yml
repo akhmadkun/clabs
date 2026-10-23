@@ -58,6 +58,14 @@ topology:
       binds:
         - ./lab_configs_iol/R6:/iol/labconfigs:rw
       #startup-delay: 300
+    
+    R7:
+      kind: cisco_iol
+      mgmt-ipv4: 10.200.255.8
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./lab_configs_iol/R6:/iol/labconfigs:rw
+      #startup-delay: 300
 
     XR1:
       kind: cisco_xrd
@@ -84,5 +92,6 @@ topology:
     - endpoints: ["R4:eth1","br-univ:R4_eth1"]
     - endpoints: ["R5:eth1","br-univ:R5_eth1"]
     - endpoints: ["R6:eth1","br-univ:R6_eth1"]
+    - endpoints: ["R7:eth1","br-univ:R7_eth1"]
     - endpoints: ["XR1:Gi0-0-0-0","br-univ:XR1_eth1"]
     - endpoints: ["XR2:Gi0-0-0-0","br-univ:XR2_eth1"]
