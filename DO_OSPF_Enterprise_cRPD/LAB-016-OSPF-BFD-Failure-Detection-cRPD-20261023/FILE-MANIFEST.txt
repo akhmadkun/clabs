@@ -1,0 +1,19 @@
+LAB-016 FILE MANIFEST
+
+- README.txt
+- TASK.txt
+- SOLUTION-GUIDE.txt
+- ADDRESS-PLAN.txt
+- PROFILE-MAP.txt
+- CLEANUP-BEFORE-LAB016.txt
+- VALIDATION-NOTES.txt
+- REFERENCE.txt
+- configs/r1/lab016-r1-baseline.set
+- configs/r1/lab016-r1-bfd-target.set
+- configs/r2/lab016-r2-baseline.set
+- configs/r3/lab016-r3-baseline.set
+- configs/r3/lab016-r3-incident-start.set
+- configs/r3/lab016-r3-bfd-target.set
+- configs/r4/lab016-r4-baseline.set
+- topology.svg (editable vector source)
+- topology.png (preview rendered from SVG)

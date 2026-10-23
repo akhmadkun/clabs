@@ -1,0 +1,19 @@
+LAB-016 REFERENCES
+
+1. Juniper Networks — Configuring OSPF Fault Detection Using BFD
+   https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-ospf-fault-detection-using-bfd.html
+   Used for OSPF BFD concepts, minimum interval, multiplier, full-neighbors-only, session verification, timer adaptation, and recommended intervals.
+
+2. Juniper Networks — bfd-liveness-detection (Protocols OSPF), CLI Reference
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/bfd-liveness-detection-edit-protocols-ospf.html
+   Used for OSPF hierarchy and statement options.
+
+3. Juniper Networks — show bfd session, CLI Reference
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/command/show-bfd-session.html
+   Used for operational output fields and session state interpretation.
+
+4. Juniper Networks — What Is Containerized RPD? / cRPD Deployment Guide
+   https://www.juniper.net/documentation/us/en/software/crpd/crpd-deployment/topics/concept/understanding-crpd.html
+   Used to confirm BFD is listed among supported cRPD features.
+
+These references describe Junos/cRPD general behavior. The lab must be validated on the exact local image; no live cRPD execution was performed while creating this package.

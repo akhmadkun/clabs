@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1100"
+   height="520"
+   viewBox="0 0 1100 520"
+   role="img"
+   aria-labelledby="title desc"
+   version="1.1"
+   id="svg47"
+   sodipodi:docname="topology.russo-bgp-ucmp-b.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview47"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.3596154"
+     inkscape:cx="549.87775"
+     inkscape:cy="260"
+     inkscape:window-width="3440"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg47" />
+  <title
+     id="title">BGP full-mesh topology</title>
+  <desc
+     id="desc">BGP AS 65000 with PE R2, P R3, PE R4 and R5; CE R1 in AS 65001; CE R6 in AS 65006. R4 to R6 is labeled 2 Gbps and R5 to R6 1 Gbps.</desc>
+  <defs
+     id="defs6">
+    <linearGradient
+       id="routerTop"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#fff"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#d8dde2"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="routerBody"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#f4f5f6"
+         id="stop3" />
+      <stop
+         offset="1"
+         stop-color="#bfc5cb"
+         id="stop4" />
+    </linearGradient>
+    <g
+       id="router">
+      <path
+         d="M-46,-1 L-46,24 C-46,40 -22,50 0,50 C22,50 46,40 46,24 L46,-1 Z"
+         fill="url(#routerBody)"
+         stroke="#343a40"
+         stroke-width="2.5"
+         id="path4" />
+      <ellipse
+         cx="0"
+         cy="-1"
+         rx="46"
+         ry="28"
+         fill="url(#routerTop)"
+         stroke="#343a40"
+         stroke-width="2.5"
+         id="ellipse4" />
+      <path
+         d="M-27,-6 L-5,-16 L-13,-6 L9,-1 L-12,10 L-8,1 Z"
+         fill="#d42d32"
+         stroke="#292f35"
+         stroke-width="1.5"
+         stroke-linejoin="round"
+         id="path5" />
+      <path
+         d="M27,6 L5,16 L13,6 L-9,1 L12,-10 L8,-1 Z"
+         fill="#d42d32"
+         stroke="#292f35"
+         stroke-width="1.5"
+         stroke-linejoin="round"
+         id="path6" />
+    </g>
+  </defs>
+  <rect
+     width="1100"
+     height="520"
+     fill="#fff"
+     id="rect6" />
+  <!-- AS regions -->
+  <rect
+     x="17.819063"
+     y="16"
+     width="778.18091"
+     height="488"
+     rx="6.441895"
+     fill="#fff0e4"
+     id="rect8"
+     style="stroke-width:1.13507" />
+  <rect
+     x="18"
+     y="226.20375"
+     width="174"
+     height="277.79626"
+     rx="5"
+     fill="#eaf2dc"
+     id="rect7"
+     style="stroke-width:0.75449" />
+  <rect
+     x="900"
+     y="16"
+     width="184"
+     height="290"
+     rx="5"
+     fill="#f0d9d8"
+     id="rect9" />
+  <!-- Links -->
+  <g
+     fill="none"
+     stroke="#15191d"
+     stroke-width="4"
+     stroke-linecap="round"
+     id="g14">
+    <path
+       d="M155 125 H370"
+       id="path9" />
+    <path
+       d="M462 125 H653"
+       id="path10" />
+    <path
+       d="M745 125 H940"
+       stroke-width="6"
+       id="path11" />
+    <path
+       d="M108 153 V248"
+       id="path12" />
+    <path
+       d="M415 153 L653 345"
+       id="path13" />
+    <path
+       d="M940 153 L697 345"
+       stroke-width="1.3"
+       id="path14" />
+  </g>
+  <!-- iBGP full mesh dashed paths -->
+  <g
+     fill="none"
+     stroke="#32afca"
+     stroke-width="3"
+     stroke-dasharray="13 9"
+     stroke-linecap="round"
+     id="g21">
+    <path
+       d="M150 98 C260 24 360 24 370 100"
+       id="path15" />
+    <path
+       d="M150 88 C340 -5 560 -5 653 92"
+       id="path16" />
+    <path
+       d="M150 80 C430 -18 740 10 653 96"
+       id="path17" />
+    <path
+       d="M462 96 C530 55 595 56 653 98"
+       id="path18" />
+    <path
+       d="M155 143 C310 272 480 300 653 345"
+       id="path19" />
+    <path
+       d="M450 150 C500 230 565 294 653 345"
+       id="path20" />
+    <path
+       d="M695 153 C712 215 700 280 681 321"
+       id="path21" />
+  </g>
+  <!-- AS labels -->
+  <g
+     font-family="Inter, Arial, sans-serif"
+     text-anchor="middle"
+     id="g26">
+    <text
+       x="105"
+       y="390"
+       font-size="28"
+       fill="#6d8053"
+       id="text21">BGP ASN</text>
+    <text
+       x="105"
+       y="425"
+       font-size="28"
+       fill="#6d8053"
+       id="text22">65001</text>
+    <text
+       x="490"
+       y="355"
+       font-size="28"
+       fill="#c58a52"
+       id="text23">BGP ASN</text>
+    <text
+       x="490"
+       y="389"
+       font-size="28"
+       fill="#c58a52"
+       id="text24">65000</text>
+    <text
+       x="992"
+       y="207"
+       font-size="28"
+       fill="#98615e"
+       id="text25">BGP ASN</text>
+    <text
+       x="992"
+       y="242"
+       font-size="28"
+       fill="#98615e"
+       id="text26">65006</text>
+  </g>
+  <!-- iBGP label -->
+  <g
+     font-family="Inter, Arial, sans-serif"
+     fill="#32afca"
+     text-anchor="middle"
+     id="g28">
+    <text
+       x="330"
+       y="190"
+       font-size="28"
+       id="text27">iBGP</text>
+    <text
+       x="330"
+       y="225"
+       font-size="28"
+       id="text28">Full Mesh</text>
+  </g>
+  <!-- Bandwidth labels -->
+  <g
+     font-family="Inter, Arial, sans-serif"
+     font-size="23"
+     fill="#202326"
+     id="g30">
+    <text
+       x="820"
+       y="99"
+       id="text29">2 Gbps</text>
+    <text
+       x="820"
+       y="284"
+       id="text30">1 Gbps</text>
+  </g>
+  <!-- Routers -->
+  <g
+     transform="translate(108 125)"
+     id="g31">
+    <use
+       href="#router"
+       id="use30" />
+  </g>
+  <g
+     transform="translate(108 275)"
+     id="g32">
+    <use
+       href="#router"
+       id="use31" />
+  </g>
+  <g
+     transform="translate(415 125)"
+     id="g33">
+    <use
+       href="#router"
+       id="use32" />
+  </g>
+  <g
+     transform="translate(699 125)"
+     id="g34">
+    <use
+       href="#router"
+       id="use33" />
+  </g>
+  <g
+     transform="translate(699 371)"
+     id="g35">
+    <use
+       href="#router"
+       id="use34" />
+  </g>
+  <g
+     transform="translate(986 125)"
+     id="g36">
+    <use
+       href="#router"
+       id="use35" />
+  </g>
+  <!-- Router role / IDs -->
+  <g
+     font-family="Inter, Arial, sans-serif"
+     text-anchor="middle"
+     fill="#34748d"
+     id="g47">
+    <text
+       x="108"
+       y="63"
+       font-size="24"
+       id="text36">PE</text>
+    <text
+       x="106.72861"
+       y="169.63243"
+       font-size="22px"
+       fill="#20262b"
+       id="text37">R2</text>
+    <text
+       x="107.1524"
+       y="353.03748"
+       font-size="24px"
+       id="text38">CE</text>
+    <text
+       x="108.8476"
+       y="321.29422"
+       font-size="22px"
+       fill="#20262b"
+       id="text39">R1</text>
+    <text
+       x="415"
+       y="63"
+       font-size="24"
+       id="text40">P</text>
+    <text
+       x="417.11899"
+       y="170.05623"
+       font-size="22px"
+       fill="#20262b"
+       id="text41">R3</text>
+    <text
+       x="699"
+       y="63"
+       font-size="24"
+       id="text42">PE</text>
+    <text
+       x="703.23798"
+       y="170.05623"
+       font-size="22px"
+       fill="#20262b"
+       id="text43">R4</text>
+    <text
+       x="703.6618"
+       y="445.50937"
+       font-size="24px"
+       id="text44">PE</text>
+    <text
+       x="701.54279"
+       y="419.02283"
+       font-size="22px"
+       fill="#20262b"
+       id="text45">R5</text>
+    <text
+       x="986"
+       y="63"
+       font-size="24"
+       id="text46">CE</text>
+    <text
+       x="987.69519"
+       y="170.90382"
+       font-size="22px"
+       fill="#20262b"
+       id="text47">R6</text>
+  </g>
+</svg>

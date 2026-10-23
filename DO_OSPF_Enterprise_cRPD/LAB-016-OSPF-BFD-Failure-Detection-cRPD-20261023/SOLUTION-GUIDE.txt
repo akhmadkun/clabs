@@ -1,0 +1,95 @@
+LAB-016 — SOLUTION GUIDE
+READ AFTER ATTEMPTING TASK.TXT
+
+PLATFORM / SUPPORT NOTE
+Juniper's cRPD Deployment Guide lists BFD among supported cRPD features. The OSPF-specific configuration syntax below is documented for Junos OS. The package is not live-tested on your particular `crpd:23.4R2-S5.6` instance, so verify command acceptance and operational behavior locally before reporting success.
+
+1. START THE SCENARIO
+Use the profiles in PROFILE-MAP.txt. Apply R1 target profile, R3 incident-start profile, and R2/R4 baseline profiles. The files are available under `/lab-configs` by the existing topology mount. Use Junos configuration mode and the load operation supported by the running shell/CLI; then run `commit check` before `commit`. The profile files are manual full lab profiles and do not run automatically.
+
+Before repair, collect:
+  run show ospf neighbor
+  run show bfd session detail
+  run show configuration protocols ospf area 0.0.0.0 interface eth1.13 | display set
+  run show ospf interface eth1.13 detail
+  run show route 10.1.1.4/32 exact detail
+
+Repeat BFD / OSPF interface/config checks on R3. If `show bfd session detail` is empty or a session is not Up, inspect exact configuration, session diagnostics, system log messages, and image-specific command acceptance.
+
+2. INTERPRET THE INCIDENT
+R1 is configured with `minimum-interval 300`, while R3 requests `minimum-interval 600`. Different BFD interval preferences are not inherently a protocol mismatch that must force the session Down. BFD negotiates operational transmit/receive behavior using each peer's desired transmit and required receive values. With both sides using symmetric minimum-interval at each endpoint, the larger 600 ms preference can drive the transmit interval in both directions, and multiplier 3 nominally implies about 1.8 s detection. This is the intended problem: BFD can be Up without meeting the ticket's approximately 0.9 s nominal target.
+
+Do not treat 1.8 s as a guaranteed display. Read the actual session output. Timer adaptation, implementation behavior and scheduling can affect the operational values.
+
+3. ALIGN R3 TO THE APPROVED TARGET
+On R3, in configuration mode:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection minimum-interval
+  set protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection minimum-interval 300
+  set protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection multiplier 3
+  set protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection full-neighbors-only
+  commit check
+  commit
+
+R1 should already carry the target values from its start profile. Confirm before modifying; avoid an unnecessary second change.
+
+Verify on both R1 and R3:
+  run show configuration protocols ospf area 0.0.0.0 interface eth1.13 | display set
+  run show bfd session detail
+  run show ospf interface eth1.13 detail
+  run show ospf neighbor
+
+Verify routing on R1:
+  run show route 10.1.1.4/32 exact detail
+
+Expected: BFD Up for the R1-R3 peer with OSPF as client. Configured minimum interval 300 ms and multiplier 3 at both ends. A stable, non-adapting session nominally transmits around 300 ms and calculates about 900 ms detection, but record real values and never force the output to match a target by disabling adaptation or flapping the session. OSPF Hello/Dead stays 10/40; all adjacencies remain Full; route metric 2 has next-hops through 10.0.12.2 and 10.0.13.2.
+
+4. OPTIONAL COVERAGE EXTENSION: BFD ON R2-R4
+On R2 and R4, apply to their respective `eth1.24` interfaces the same configuration:
+  set protocols ospf area 0.0.0.0 interface eth1.24 bfd-liveness-detection minimum-interval 300
+  set protocols ospf area 0.0.0.0 interface eth1.24 bfd-liveness-detection multiplier 3
+  set protocols ospf area 0.0.0.0 interface eth1.24 bfd-liveness-detection full-neighbors-only
+  commit check
+  commit
+
+Check `show bfd session detail` on R2/R4 and routing/neighbor state. This extension is optional and must be undone during cleanup.
+
+5. CLEANUP — REMOVE LAB BFD STATE
+On R1:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection
+  commit check
+  commit
+
+On R3:
+  configure
+  delete protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection
+  commit check
+  commit
+
+If optional R2-R4 coverage was used, remove it from both R2 and R4:
+  delete protocols ospf area 0.0.0.0 interface eth1.24 bfd-liveness-detection
+
+Then verify on all routers:
+  run show ospf neighbor
+  run show bfd session detail
+  run show ospf interface detail
+
+On R1:
+  run show route 10.1.1.4/32 exact detail
+
+Final state: 4/4 OSPF adjacencies Full; no BFD sessions configured by this lab; default OSPF timers; R1 to R4 loopback with both ECMP next-hops and metric 2.
+
+TROUBLESHOOTING IF BFD DOES NOT COME UP
+- Verify `eth1.13` OSPF adjacency is Full before waiting for BFD, since `full-neighbors-only` limits BFD sessions to full OSPF peers.
+- Compare both endpoints' effective BFD config, remote address, interface and multiplier.
+- Inspect `run show bfd session extensive` and the system log if available; save the exact output.
+- Avoid very low intervals for this CPU-scheduled lab; use 300 ms and multiplier 3 for the planned target.
+- If the CLI rejects BFD or a session cannot come up despite healthy OSPF and matching config, mark the feature unverified on this cRPD build. Do not report a pass. Per our roadmap convention, test the same scenario on vJunos-router if needed.
+
+TECHNICAL NOTES
+- Juniper documents 300 ms with multiplier 3 as the recommendation for centralized BFD in applicable scenarios; use it here as a conservative lab target, not as an absolute platform guarantee.
+- `minimum-interval` configures the local minimum transmit and receive intervals; effective interval is negotiated with the peer.
+- BFD adaptation is enabled by default. Repeated session flaps may cause operational timers to back off.
+- BFD detection time and end-to-end control-plane/forwarding convergence are distinct metrics.
+- cRPD is a routing-control-plane container. The RIB proves route selection; it does not by itself prove data-plane packet balancing or application convergence.

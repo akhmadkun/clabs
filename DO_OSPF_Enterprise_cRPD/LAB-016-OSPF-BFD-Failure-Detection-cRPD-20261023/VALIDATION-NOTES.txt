@@ -1,0 +1,20 @@
+LAB-016 VALIDATION NOTES
+
+Expected design
+- Four-router OSPFv2 P2P diamond, Area 0, per-link metric default 1.
+- R1 to 10.1.1.4/32: two equal-cost paths, total metric 2.
+- Core task uses BFD only on R1-R3, and only when the OSPF neighbor is full.
+- OSPF Hello/Dead timers remain default 10/40 seconds on every link.
+
+BFD interval interpretation
+- Configured minimum-interval is a request/local minimum, not a promise that the operational interval is exactly the same under all peer values and adaptation conditions.
+- Incident profiles R1=300 ms, R3=600 ms are intentionally asymmetric. With the symmetric min-tx/min-rx knob at each endpoint, the 600 ms peer preference can result in approximately 600 ms negotiated transmission and nominal ~1.8 s detection with multiplier 3.
+- After alignment at 300 ms on both ends, stable, non-adapting intervals nominally give approximately 300 ms transmission and ~900 ms detection. Record the actual output; this is not a timed pass/fail based solely on those nominal values.
+- OSPF route convergence includes protocol notification and route/SPF/RIB processing; BFD detect time is not a full route convergence measurement.
+
+cRPD limitation
+- Juniper's cRPD Deployment Guide lists BFD as a supported feature. This is not proof that the specific installed image, runtime resources, and local config accept every option. Package content has not been live-tested on the user's instance.
+- If BFD config is rejected or the session does not come Up, save `commit check`, session extensive, neighbor, config and log evidence. Classify as unsupported/inconclusive and test on vJunos-router according to the roadmap convention.
+
+No dataplane claim
+- RIB next-hops prove routing control-plane selection only. No claim is made about traffic distribution, forwarding-plane performance, or a measured end-to-end application failure interval.

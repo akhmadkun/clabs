@@ -1,0 +1,14 @@
+LAB-016 PRE-FLIGHT / CLEANUP CHECKLIST
+
+1. Confirm that no other running lab is using VLANs 12, 13, 24, 34 or loopbacks 10.1.1.1/32-10.1.1.4/32.
+2. Preserve parent interface eth1 and the externally managed br-univ bridge. Do not create/delete/recreate br-univ or shut down parent eth1.
+3. Inspect effective config before applying profiles. Prior labs may have left temporary settings such as:
+   - LAB-014 OSPF authentication
+   - LAB-013 overload, flood-reduction or SPF tuning
+   - LAB-015 Hello/Dead/retransmit timer overrides
+   - any prior BFD liveness-detection settings
+4. Remove only known lab residue after inspecting `show configuration protocols ospf | display set`. Preserve base interface units/IP addresses, loopbacks, routing-options router-id and OSPF interfaces/type.
+5. Snapshot baseline from all routers before applying LAB-016.
+6. Apply initial profiles as mapped in PROFILE-MAP.txt; verify routing before reading the challenge solution.
+7. Do not apply `lab016-r3-incident-start.set` after the fix; it deliberately restores the 600 ms incident value.
+8. Final restore is mandatory: remove LAB-016 BFD stanzas from R1 eth1.13 and R3 eth1.13, plus R2/R4 eth1.24 only if optional extension was used. Verify no BFD sessions remain from the lab.

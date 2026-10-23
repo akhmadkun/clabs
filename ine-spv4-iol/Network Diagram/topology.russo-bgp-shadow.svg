@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="540" viewBox="0 0 1100 540" role="img" aria-labelledby="title desc">
+  <title id="title">BGP topology with shadow session and route reflector</title>
+  <desc id="desc">Topology with CE R1 in AS 65001, PE R2, P R3, PE R4 and R5, route reflector R7 in AS 65000, and CE R6 in AS 65006.</desc>
+  <defs>
+    <linearGradient id="routerTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d8dde2"/>
+    </linearGradient>
+    <linearGradient id="routerBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f5f6"/>
+      <stop offset="1" stop-color="#bfc5cb"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0,0 L6,3.5 L0,7 Z" fill="#303942"/>
+    </marker>
+    <g id="router">
+      <path d="M-47,-2 L-47,25 C-47,41 -22,51 0,51 C22,51 47,41 47,25 L47,-2 Z" fill="url(#routerBody)" stroke="#343a40" stroke-width="2.5"/>
+      <ellipse cx="0" cy="-2" rx="47" ry="29" fill="url(#routerTop)" stroke="#343a40" stroke-width="2.5"/>
+      <path d="M-27,-7 L-5,-17 L-13,-7 L9,-2 L-12,9 L-8,0 Z" fill="#d42d32" stroke="#292f35" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M27,5 L5,15 L13,5 L-9,0 L12,-11 L8,-2 Z" fill="#d42d32" stroke="#292f35" stroke-width="1.5" stroke-linejoin="round"/>
+    </g>
+  </defs>
+
+  <rect width="1100" height="540" fill="#ffffff"/>
+  <!-- Autonomous-system regions -->
+  <rect x="16" y="18" width="176" height="504" rx="5" fill="#eaf2dc"/>
+  <rect x="192" y="18" width="592" height="504" rx="5" fill="#fff0e4"/>
+  <rect x="894" y="18" width="190" height="504" rx="5" fill="#f0d9d8"/>
+
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <text x="104" y="448" font-size="29" fill="#6d8053">BGP ASN</text>
+    <text x="104" y="483" font-size="29" fill="#6d8053">65001</text>
+    <text x="487" y="190" font-size="29" fill="#c58a52">BGP ASN</text>
+    <text x="487" y="225" font-size="29" fill="#c58a52">65000</text>
+    <text x="989" y="226" font-size="29" fill="#98615e">BGP ASN</text>
+    <text x="989" y="261" font-size="29" fill="#98615e">65006</text>
+  </g>
+
+  <!-- Physical / logical links -->
+  <g fill="none" stroke="#15191d" stroke-width="4" stroke-linecap="round">
+    <path d="M151 120 H370"/>
+    <path d="M464 120 H600"/>
+    <path d="M694 120 H905"/>
+    <path d="M104 149 V248"/>
+    <path d="M417 149 V294"/>
+    <path d="M464 145 L680 342"/>
+    <path d="M952 145 L725 342"/>
+    <path d="M250 294 V274"/>
+    <path d="M250 274 H520"/>
+  </g>
+
+  <!-- Shadow-session paths -->
+  <g fill="none" stroke-width="3" stroke-dasharray="12 9" stroke-linecap="round" opacity="0.92">
+    <path d="M140 133 C210 190 218 270 250 337" stroke="#27a8ca"/>
+    <path d="M386 145 C335 190 287 270 250 337" stroke="#b84b57"/>
+    <path d="M432 146 C392 205 315 265 250 337" stroke="#27a8ca"/>
+    <path d="M454 143 C422 214 347 282 250 337" stroke="#27a8ca"/>
+    <path d="M452 143 C520 202 565 267 680 350" stroke="#27a8ca"/>
+    <path d="M295 338 C390 278 526 282 680 350" stroke="#27a8ca"/>
+  </g>
+
+  <!-- Route-reflector / iBGP annotation -->
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="250" y="165" font-size="28" fill="#ad3434">Shadow</text>
+    <text x="250" y="199" font-size="28" fill="#ad3434">Session</text>
+    <text x="462" y="356" font-size="29" fill="#37a9c7">iBGP</text>
+  </g>
+
+  <!-- Routers -->
+  <g transform="translate(104 120)"><use href="#router"/></g>
+  <g transform="translate(104 278)"><use href="#router"/></g>
+  <g transform="translate(417 120)"><use href="#router"/></g>
+  <g transform="translate(647 120)"><use href="#router"/></g>
+  <g transform="translate(694 370)"><use href="#router"/></g>
+  <g transform="translate(952 120)"><use href="#router"/></g>
+  <g transform="translate(250 370)"><use href="#router"/></g>
+
+  <!-- Router IDs and roles -->
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#3d718d">
+    <text x="104" y="52" font-size="24">PE</text>
+    <text x="104" y="132" font-size="22" fill="#1f252a">R2</text>
+    <text x="104" y="333" font-size="24">CE</text>
+    <text x="104" y="290" font-size="22" fill="#1f252a">R1</text>
+    <text x="417" y="52" font-size="24">P</text>
+    <text x="417" y="132" font-size="22" fill="#1f252a">R3</text>
+    <text x="647" y="52" font-size="24">PE</text>
+    <text x="647" y="132" font-size="22" fill="#1f252a">R4</text>
+    <text x="694" y="430" font-size="24">PE</text>
+    <text x="694" y="382" font-size="22" fill="#1f252a">R5</text>
+    <text x="952" y="52" font-size="24">CE</text>
+    <text x="952" y="132" font-size="22" fill="#1f252a">R6</text>
+    <text x="250" y="430" font-size="24">RR</text>
+    <text x="250" y="382" font-size="22" fill="#1f252a">R7</text>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+# LAB-016 clean baseline. BFD stanza intentionally absent.
+set interfaces eth1 unit 24 vlan-id 24
+set interfaces eth1 unit 24 family inet address 10.0.24.2/30
+set interfaces eth1 unit 34 vlan-id 34
+set interfaces eth1 unit 34 family inet address 10.0.34.2/30
+set interfaces lo0 unit 0 family inet address 10.1.1.4/32
+set routing-options router-id 10.1.1.4
+set protocols ospf area 0.0.0.0 interface eth1.24 interface-type p2p
+set protocols ospf area 0.0.0.0 interface eth1.34 interface-type p2p
+set protocols ospf area 0.0.0.0 interface lo0.0 passive

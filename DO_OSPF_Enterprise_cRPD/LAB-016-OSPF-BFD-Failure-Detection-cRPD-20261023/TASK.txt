@@ -1,0 +1,68 @@
+LAB-016 — OSPF BFD: DETECTION BUDGET & NEGOTIATED TIMERS
+CHALLENGE SHEET — OUTCOME-BASED, NOT A COMMAND RECIPE
+
+SCENARIO
+A change ticket requires a faster fault-detection profile on the R1-R3 OSPF adjacency, without lowering OSPF Hello/Dead timers throughout the area. The expected BFD profile is a minimum interval of 300 ms with multiplier 3 at both ends. An audit reports that BFD is Up, yet the operational timing shown by the peers is slower than the target. Diagnose the difference and correct it with the minimum required change.
+
+ENVIRONMENT
+- Platform target: Juniper cRPD `crpd:23.4R2-S5.6`.
+- R1-R4 form an Area 0 P2P diamond over VLANs 12, 13, 24, 34.
+- Baseline OSPF timers: Hello 10 s, Dead 40 s, ReXmit 5 s.
+- Start profiles intentionally use BFD on R1-R3 only: R1 target profile 300 ms / multiplier 3; R3 incident profile 600 ms / multiplier 3. R2 and R4 start without BFD.
+- Approved target for the R1-R3 link: 300 ms minimum interval, multiplier 3, `full-neighbors-only` at both ends. Leave BFD adaptation at its default; do not disable it just to make a number look exact.
+
+SAFETY / CHANGE CONTROL
+- Capture incident evidence before correcting anything.
+- Never change IPs, router IDs, areas, OSPF metrics, interface type, or OSPF Hello/Dead values to solve a BFD target issue.
+- Never touch physical parent `eth1` or `br-univ`.
+- Do not claim packet forwarding or a precise end-to-end convergence time from `show bfd session` alone.
+
+TASK 1 — ESTABLISH THE ROUTING BASELINE AND CAPTURE INCIDENT STATE
+Prove the four expected P2P OSPF adjacencies are Full. On R1, inspect `10.1.1.4/32` and verify equal-cost next-hops through R2 and R3 with total OSPF metric 2. Inspect the BFD sessions and effective OSPF/BFD configuration on R1 and R3.
+
+Required evidence:
+- Four OSPF adjacencies are Full.
+- R1 reaches R4 loopback via `10.0.12.2` and `10.0.13.2`, metric 2.
+- BFD is associated with the OSPF client on R1-R3 and its state is recorded on both endpoints.
+- Record the configured minimum interval at each end and the operational TX/RX or Transmit Interval / Detect Time / Multiplier values actually shown.
+- Verify OSPF Hello/Dead timers have not been changed: the R1-R3 link remains 10/40 during the incident.
+
+TASK 2 — DIAGNOSE THE DETECTION-BUDGET GAP
+Determine whether the BFD session is down, up-but-slower-than-target, or not visible on this image. Use configuration and session operational data rather than inferring session health from configuration alone.
+
+Explain in your notes:
+- Why different configured BFD minimum intervals do not necessarily prevent a BFD session from becoming Up.
+- How the peer's desired transmit interval, the local required receive interval, and the detection multiplier affect negotiated operational timers.
+- Whether the R3 incident setting makes the target achievable, based on observed output.
+
+If `bfd-liveness-detection` is rejected, or a session never establishes despite correct addressing and healthy OSPF, save the exact CLI/configuration error and classify the feature as unverified on the installed cRPD build. Do not continue as though BFD passed.
+
+TASK 3 — REMEDIATE TO THE APPROVED PROFILE
+Make the minimum change required to bring R3 into alignment with the approved 300 ms / multiplier 3 profile. Keep BFD scoped to the R1-R3 link and retain `full-neighbors-only` at both ends.
+
+Acceptance criteria:
+- BFD session on R1-R3 is `Up` on both peers and identifies OSPF as the client where that field is available.
+- Both ends have the intended minimum interval 300 ms, multiplier 3, and full-neighbors-only setting.
+- Record operational TX/RX or transmit/detect timing at each endpoint. Approximately 300 ms transmit and 900 ms detection is the nominal target when stable and not adapted; use actual output as the evidence, not a hard-coded expected display. If adaptation raises the observed timer, record it and investigate rather than claiming an exact 900 ms result.
+- OSPF adjacency remains Full at both ends.
+- R1's route to `10.1.1.4/32` remains metric 2 with next-hops via both R2 and R3.
+- Unaffected links retain Hello 10 / Dead 40 / ReXmit 5 and have no BFD sessions created by this core task.
+
+TASK 4 — SEPARATE BFD FROM OSPF HELLO/DEAD TIMERS
+Using operational output, explain the difference between:
+- OSPF Hello/Dead (the OSPF neighbor discovery/failure timer pair), and
+- BFD negotiated interval/multiplier (the independent fast liveness signal that OSPF can consume).
+
+Show that enabling BFD on one OSPF link did not require changing OSPF Hello/Dead timers on that link or on the whole area. Explain why the displayed BFD detection parameter is not the same as a measured full control-plane route-convergence time.
+
+OPTIONAL EXTENSION — EXPAND BFD COVERAGE
+Add the same approved BFD profile to both ends of R2-R4 only. Verify an additional BFD session on R2 and R4, all OSPF adjacencies remain Full, and R1's ECMP route to R4 loopback is unchanged. Do not add BFD to R1-R2 or R3-R4 unless you deliberately extend the exercise and document why.
+
+CLEAN RESTORE — REQUIRED
+Remove every BFD liveness-detection stanza added by this lab, including the incident minimum interval and optional extension if used. Preserve base addresses, loopbacks, router IDs, interface types and the shared bridge. Restore the OSPF diamond to baseline with all four adjacencies Full, Hello 10 / Dead 40 / ReXmit 5, R1-to-R4 loopback metric 2 and two next-hops. Confirm no BFD sessions remain from this lab.
+
+EVIDENCE TO SAVE
+- Incident: OSPF neighbors on all routers; BFD session detail on R1/R3; BFD and OSPF config for R1/R3; R1 route detail to R4 loopback.
+- Recovery: BFD detail on both endpoints, OSPF interface detail, all four adjacency states, R1 route detail, and effective BFD config.
+- Optional extension: new session state on R2/R4 and unchanged route/OSPF evidence.
+- Cleanup: no BFD liveness-detection stanzas, no BFD sessions from the lab, four OSPF adjacencies Full, and R1 ECMP route metric 2.

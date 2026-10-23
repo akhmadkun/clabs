@@ -1,0 +1,20 @@
+LAB-016 MANUAL PROFILE MAP
+
+Load the files using the mounted path `/lab-configs/...` available inside each cRPD container. All files are Junos `set` format. Follow local CLI load semantics; run `show | compare`, `commit check`, and `commit` before proceeding. Profiles are not applied automatically.
+
+At scenario start:
+- R1: `/lab-configs/lab016-r1-bfd-target.set` (full profile, BFD 300 ms on eth1.13)
+- R2: `/lab-configs/lab016-r2-baseline.set` (full baseline profile, no BFD)
+- R3: `/lab-configs/lab016-r3-incident-start.set` (full profile, BFD 600 ms on eth1.13)
+- R4: `/lab-configs/lab016-r4-baseline.set` (full baseline profile, no BFD)
+
+Clean baseline / restore profiles without BFD:
+- R1: `/lab-configs/lab016-r1-baseline.set`
+- R2: `/lab-configs/lab016-r2-baseline.set`
+- R3: `/lab-configs/lab016-r3-baseline.set`
+- R4: `/lab-configs/lab016-r4-baseline.set`
+
+Remediation reference profile:
+- R3: `/lab-configs/lab016-r3-bfd-target.set` (full profile, BFD 300 ms on eth1.13)
+
+Important: if a profile is loaded additively into a router carrying old lab residue, a `set` file does not automatically delete settings it omits. Inspect effective config and clean prior lab-only OSPF/authentication/SPF/overload/flood-reduction/timer entries deliberately before applying. Do not blindly delete unknown configuration.
