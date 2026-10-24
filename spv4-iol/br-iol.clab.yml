@@ -64,7 +64,7 @@ topology:
       mgmt-ipv4: 10.200.255.8
       #startup-config: ./lab_configs/csr_startup_config.cfg
       binds:
-        - ./lab_configs_iol/R6:/iol/labconfigs:rw
+        - ./lab_configs_iol/R7:/iol/labconfigs:rw
       #startup-delay: 300
 
     XR1:
