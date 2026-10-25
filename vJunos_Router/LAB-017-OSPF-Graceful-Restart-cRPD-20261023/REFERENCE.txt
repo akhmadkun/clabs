@@ -1,0 +1,19 @@
+REFERENCE — OFFICIAL DOCUMENTATION
+
+1. Juniper, Configuring Graceful Restart for OSPF
+https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-graceful-restart-for-ospf.html
+Notes used: OSPF Graceful Restart is disabled by default; it can be enabled specifically under protocols ospf; helper mode is enabled by default; verify with show ospf overview and logs; `restart routing` is documented as a way to simulate a routing-process restart; warning that BFD and OSPF GR may not work as expected together.
+
+2. Juniper, Configuring Graceful Restart
+https://www.juniper.net/documentation/us/en/software/junos/high-availability/topics/topic-map/graceful-restart-configuring.html
+Notes used: operational verification commands and trace option guidance for GR/helper events.
+
+3. Juniper, cRPD Troubleshooting — Fault Handling
+https://www.juniper.net/documentation/us/en/software/crpd/crpd-deployment/topics/topic-map/troubleshooting-crpd.html
+Notes used: `restart routing` restarts the rpd in cRPD; this is distinct from restarting/stopping the container.
+
+4. RFC 3623 — Graceful OSPF Restart
+https://www.rfc-editor.org/rfc/rfc3623.html
+Notes used: Grace-LSA and helper-mode behavior; helping routers preserve the restarting router's LSAs as fully adjacent when topology remains stable, and stop helping if grace expires or topology changes.
+
+External documentation describes Junos generally; acceptance on the exact cRPD image still requires live verification.

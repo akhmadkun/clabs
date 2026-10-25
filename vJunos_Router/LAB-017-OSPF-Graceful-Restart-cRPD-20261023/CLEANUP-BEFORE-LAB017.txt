@@ -1,0 +1,23 @@
+CLEANUP BEFORE LAB-017
+
+Purpose: begin from a stable LAB-016-free OSPF diamond. OSPF GR can behave unexpectedly when BFD is configured.
+
+1. Check current state on R1-R4:
+   run show ospf neighbor
+   run show bfd session detail
+   run show configuration protocols ospf | display set | match bfd
+
+2. Remove BFD config left by LAB-016 only where present. Standard LAB-016 link was R1-R3:
+   R1: delete protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection
+   R3: delete protocols ospf area 0.0.0.0 interface eth1.13 bfd-liveness-detection
+
+If the optional LAB-016 extension added BFD to R2-R4, also remove the exact existing BFD stanza on R2's eth1.24 and R4's eth1.24. Inspect the active config before deleting anything. Commit changes on each router where config was removed.
+
+3. Verify:
+   - `show bfd session detail` reports no LAB-016 sessions.
+   - All four OSPF adjacencies are Full.
+   - R1 reaches 10.1.1.4/32 with two next-hops via 10.0.12.2 and 10.0.13.2, metric 2.
+
+4. If a previous interrupted attempt at LAB-017 left `protocols ospf graceful-restart` or `protocols ospf traceoptions` config, inspect it and remove only LAB-017 changes before beginning. Do not delete unrelated pre-existing global settings blindly.
+
+5. Do not recreate/delete br-univ, stop the containers, or modify the universal Containerlab YAML.

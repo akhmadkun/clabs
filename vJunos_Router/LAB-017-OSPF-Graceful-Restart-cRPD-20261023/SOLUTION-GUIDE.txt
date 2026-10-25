@@ -1,0 +1,140 @@
+LAB-017 — SOLUTION GUIDE
+OSPF Graceful Restart: Planned RPD Restart & Helper Mode
+
+Use this only after attempting TASK.txt. All commands below assume Junos operational/configuration CLI syntax. If a command is rejected by the actual cRPD build, save the exact error rather than substituting an unverified command.
+
+1. ESTABLISH A BASELINE
+On every router:
+  run show ospf neighbor
+  run show ospf overview
+
+On R1:
+  run show route 10.1.1.2/32 exact detail
+  run show route 10.1.1.4/32 exact detail
+  run show ospf database router detail advertising-router 10.1.1.2
+
+On R4:
+  run show ospf database router detail advertising-router 10.1.1.2
+  run show route 10.1.1.2/32 exact detail
+
+Expected baseline: all four P2P adjacencies Full; R1's route to 10.1.1.4/32 contains both next-hops via 10.0.12.2 and 10.0.13.2, metric 2. The Router-LSA sequence/checksum may vary; record actual values, not predetermined sequence numbers.
+
+Before continuing, verify no BFD is configured or active. Juniper notes that OSPF GR may not work as expected when BFD is configured. Remove only BFD stanzas that belong to earlier labs after inspecting the active config.
+
+2. ENABLE OSPF GR ON R2 ONLY
+On R2:
+  configure
+  set protocols ospf graceful-restart restart-duration 180
+  commit check
+  commit
+  run show ospf overview
+  run show configuration protocols ospf graceful-restart | display set
+
+The protocol-specific `graceful-restart` statement enables GR for OSPF on the restarting router. Do not configure global `routing-options graceful-restart` unless intentionally changing GR behavior for all routing protocols.
+
+On R1 and R4, run:
+  run show ospf overview
+  run show configuration protocols ospf graceful-restart | display set
+
+Junos documents OSPFv2 standard and restart-signaling helper modes as enabled by default. If an explicit `helper-disable` exists from a previous experiment, investigate and remove that lab-specific disable for the core task. Do not disable helper mode for the core run.
+
+3. OPTIONAL BUT RECOMMENDED: ENABLE TEMPORARY GR TRACE
+Graceful Restart/helper events can be brief. Before restarting R2, configure trace options on R1, R2, and R4. Check existing OSPF trace options first so you do not overwrite another lab's trace file.
+
+On R1, R2, and R4 (each router):
+  configure
+  set protocols ospf traceoptions file lab017-ospf-gr size 1m files 2
+  set protocols ospf traceoptions flag graceful-restart
+  commit check
+  commit
+
+If the flag/file syntax is rejected on the installed image, retain the exact error and continue using operational snapshots only if they are sufficient to prove the event. Do not mark GR proven if the evidence cannot distinguish it from ordinary recovery.
+
+4. PRE-RESTART SNAPSHOT
+On R1 and R4, save:
+  run show ospf neighbor detail
+  run show route 10.1.1.2/32 exact detail
+  run show route 10.1.1.4/32 exact detail
+  run show ospf database router detail advertising-router 10.1.1.2
+
+On R2, save:
+  run show ospf neighbor detail
+  run show ospf overview
+  run show route 10.1.1.4/32 exact detail
+
+Keep separate CLI sessions open on R1 and R4. The active helper window may be short; do not rely on a single late snapshot.
+
+5. RESTART R2 ROUTING PROCESS
+On R2, from operational mode (not configuration mode), execute:
+  restart routing
+
+This restarts the routing protocol daemon (rpd), not the entire container. Keep observing from R1 and R4 while R2's routing process restarts. Avoid `docker restart`, `docker stop`, disabling interfaces, or touching br-univ for this test.
+
+During and after the event, collect on R1/R4 as quickly as practical:
+  run show ospf neighbor detail
+  run show route 10.1.1.2/32 exact detail
+  run show route 10.1.1.4/32 exact detail
+  run show ospf database router detail advertising-router 10.1.1.2
+  run show ospf overview
+
+After R2's CLI is available again, collect:
+  run show ospf neighbor detail
+  run show ospf overview
+  run show route 10.1.1.4/32 exact detail
+  run show ospf database router detail advertising-router 10.1.1.1
+  run show ospf database router detail advertising-router 10.1.1.3
+
+For temporary trace files, inspect on R1, R2, and R4:
+  run show log lab017-ospf-gr | match "grace|Grace|restart|Restart|helper|Helper"
+
+If `show log` does not expose the file on this cRPD build, inspect available log names with `run show log` and/or `run file list /var/log detail`. Record exact output. Do not fabricate helper-state transitions.
+
+EXPECTED INTERPRETATION
+- GR enabled in `show ospf overview` proves configuration/capability, not successful operation by itself.
+- The strongest evidence is a GR-related trace/log event on R2 plus helper event evidence on R1/R4, paired with R1/R4 LSDB/RIB snapshots during the restart.
+- In a successful stable-topology GR event, helpers continue advertising the restarting router as fully adjacent and retain its pre-restart LSA view during the grace interval; then the restarting router re-synchronizes and the grace period completes.
+- R1 should ideally retain its route to 10.1.1.2/32 and the two ECMP paths to 10.1.1.4/32 during the helper window. If they withdraw, inspect the logs, Grace-LSA processing, helper-mode settings, topology changes, and cRPD feature support. Record the actual result; do not mark pass automatically.
+- Because cRPD is a routing/control-plane implementation without a hardware PFE, this experiment does not establish actual packet-forwarding continuity or packet loss during the restart.
+
+6. OPTIONAL NEGATIVE CONTROL: HELPER MODE DISABLED
+Only perform after a successful core run and after saving all evidence.
+
+On BOTH R1 and R4:
+  configure
+  set protocols ospf graceful-restart helper-disable both
+  commit check
+  commit
+  run show ospf overview
+
+Repeat the controlled `restart routing` on R2 and compare R1's route to 10.1.1.2/32 and its route to 10.1.1.4/32. With helper mode disabled on both direct neighbors, R2's previous topology state should not be retained through helper mode; R1 should still have the alternative path to R4 via R3 once SPF updates. Save outputs, then restore helpers immediately on BOTH R1 and R4:
+  configure
+  delete protocols ospf graceful-restart helper-disable
+  commit check
+  commit
+  run show ospf overview
+
+If the negative control behaves differently on cRPD, record the precise output; do not generalize beyond observed behavior.
+
+7. CLEANUP
+On R2, remove only the protocol-specific GR setting added by this lab:
+  configure
+  delete protocols ospf graceful-restart
+  commit check
+  commit
+
+On R1/R2/R4, if LAB-017 added the trace options and no pre-existing OSPF trace configuration existed, remove the lab's trace options:
+  configure
+  delete protocols ospf traceoptions flag graceful-restart
+  delete protocols ospf traceoptions file lab017-ospf-gr
+  commit check
+  commit
+
+If the optional negative control was used, confirm the `helper-disable` statement is absent on R1 and R4. Remove only this lab's changes; preserve any pre-existing unrelated trace configuration. Ensure no LAB-016 BFD stanzas were reintroduced.
+
+FINAL VERIFICATION
+- `run show ospf neighbor`: four adjacencies Full.
+- R1 `run show route 10.1.1.4/32 exact detail`: metric 2 with next-hops via 10.0.12.2 and 10.0.13.2.
+- R2 no longer has the temporary OSPF `graceful-restart` statement, unless you deliberately choose to retain it outside the lab.
+- Temporary `lab017-ospf-gr` trace configuration removed if created.
+- No BFD sessions/config from LAB-016.
+- No changes to the universal YAML, physical parent eth1, or br-univ.

@@ -1,0 +1,12 @@
+LAB-017 CONFIG MAP — SIMPLE MODE
+
+Exactly one baseline set file per router; there are no alternate target/incident config files.
+
+R1: configs/r1/LAB-017-base.set
+R2: configs/r2/LAB-017-base.set
+R3: configs/r3/LAB-017-base.set
+R4: configs/r4/LAB-017-base.set
+
+These files contain the topology/addressing/OSPF baseline only. They intentionally do NOT enable Graceful Restart or BFD. The TASK requires you to enable OSPF GR on R2 as a change during the exercise.
+
+Use these files only if baseline repair is needed. The universal lab may already have the equivalent interface/OSPF configuration. The files are `set` commands: paste/merge into Junos configuration mode, then `commit check` and `commit`; do not use `load override` or replace the full `startup-config`.

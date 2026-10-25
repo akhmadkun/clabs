@@ -1,0 +1,87 @@
+LAB-017 — OSPF GRACEFUL RESTART: PLANNED RPD RESTART & HELPER MODE
+CHALLENGE SHEET — OUTCOME-BASED, NOT A COMMAND RECIPE
+
+SCENARIO
+A maintenance window requires restarting R2's routing process. R2 is a transit router in an OSPF Area 0 diamond. The change should allow neighboring routers to retain a valid view of R2 while the routing process restarts, provided the topology remains stable. You must demonstrate whether OSPF Graceful Restart is actually negotiated/used, not merely configured.
+
+ENVIRONMENT
+- Use R1–R4 only on the existing universal Containerlab topology.
+- R1-R2: VLAN 12 / eth1.12 / 10.0.12.0/30 (R1 .1, R2 .2).
+- R1-R3: VLAN 13 / eth1.13 / 10.0.13.0/30 (R1 .1, R3 .2).
+- R2-R4: VLAN 24 / eth1.24 / 10.0.24.0/30 (R2 .1, R4 .2).
+- R3-R4: VLAN 34 / eth1.34 / 10.0.34.0/30 (R3 .1, R4 .2).
+- Router IDs/loopbacks: R1 10.1.1.1/32; R2 10.1.1.2/32; R3 10.1.1.3/32; R4 10.1.1.4/32.
+- All four links are OSPFv2 P2P in Area 0, with implicit link metric 1.
+- BFD must be absent from this exercise because it can interfere with OSPF GR behavior.
+
+PREPARATION AND SAFETY
+1. Complete CLEANUP-BEFORE-LAB017.txt and establish the baseline.
+2. Do not change addresses, router IDs, areas, metrics, interface types, OSPF Hello/Dead timers, or link VLAN IDs to solve this challenge.
+3. Do not change or redeploy the universal Containerlab YAML. Do not shut down physical parent eth1 or alter br-univ.
+4. Use separate CLI sessions on R1 and R4 to observe the helper routers while R2's routing process restarts.
+5. The scope is routing/control-plane evidence, not a data-plane continuity benchmark.
+
+TASK 1 — PROVE THE BASELINE
+Establish the healthy state before enabling Graceful Restart.
+
+Your evidence must prove:
+- The four expected OSPF adjacencies are Full.
+- R1 reaches 10.1.1.4/32 by two equal-cost next-hops: via 10.0.12.2 and 10.0.13.2, total OSPF metric 2.
+- R1 can resolve 10.1.1.2/32 through R2.
+- R1 and R4 have LSDB copies of R2's Router-LSA.
+- There is no active BFD session and no leftover LAB-016 BFD configuration on R1/R3 or the optional R2/R4 link.
+- Record each router's Graceful Restart and helper-mode capability as shown by its OSPF operational overview before the change.
+
+TASK 2 — PREPARE R2 FOR GRACEFUL RESTART
+Configure OSPF Graceful Restart for the router that will restart. Keep the other routers as helper candidates using their supported/default helper behavior. Do not disable strict LSA checking or disable helper capabilities for the core exercise.
+
+Acceptance evidence:
+- R2's OSPF overview indicates Graceful Restart is enabled.
+- R1 and R4 report the appropriate OSPFv2 helper-mode capabilities enabled, or the exact deviation is documented.
+- All four OSPF adjacencies remain Full before the restart.
+- R1's ECMP route and LSDB baseline are recorded immediately before the restart.
+
+TASK 3 — EXECUTE AND OBSERVE THE CONTROLLED RESTART
+Restart the routing protocol process on R2 only. Do not restart/stop the whole container, and do not flap links. Observe from R1 and R4 while R2's process is restarting, then inspect R2 after it returns.
+
+Prove or disprove the following expected behavior with operational output/logs:
+- R1 and R4 recognize/support R2's graceful restart and preserve their pre-restart view of R2 while the topology remains unchanged.
+- R1 continues to show the route to 10.1.1.2/32 during the helper window when the implementation behaves as expected.
+- R1's route to 10.1.1.4/32 retains both equal-cost paths via R2 and R3 during the GR window, if helper behavior on this image preserves that RIB state.
+- R2's OSPF adjacencies return to Full and its routing/LSDB state resynchronizes after the process restart.
+- The GR operation completes rather than remaining indefinitely pending or ending due to a topology/LSA change.
+
+Do not regard `show ospf overview` showing GR enabled as proof that a restart was successfully graceful. Capture the observed restart/helper events and route/LSDB state. If the helper window is too brief to catch with manual commands, use OSPF Graceful Restart trace options as described in the solution guide.
+
+TASK 4 — ANALYZE THE RESULT
+Explain the evidence from both the restarting router and the helper routers. Distinguish:
+- GR capability/configuration from an actual GR event;
+- helper-mode operation from an ordinary adjacency flap;
+- preservation of routing/control-plane state from actual packet-forwarding continuity;
+- expected pre/post route state from any transient state your cRPD image actually displays.
+
+OPTIONAL EXTENSION — NEGATIVE CONTROL FOR HELPER MODE
+Only after the core task passes and evidence is saved, disable both OSPFv2 helper modes on R1 and R4, repeat the R2 routing-process restart, and compare the LSDB/RIB behavior with the successful run. Restore helper mode immediately afterward. The topology has an alternate R1-R3-R4 path, so reachability to R4 may remain even when the R2 path is withdrawn. Do not interpret alternate-path reachability alone as proof that helper mode worked.
+
+CLEAN RESTORE — REQUIRED
+- Remove the temporary GR configuration added to R2 for this lab.
+- Remove temporary OSPF trace options created for this lab.
+- If the optional negative control was performed, restore helper mode on R1 and R4.
+- Ensure no BFD configuration has been introduced by LAB-017.
+- Prove that all four adjacencies are Full, R1 again has the ECMP route to 10.1.1.4/32 with metric 2, and the lab has not changed the shared bridge or universal topology.
+
+ACCEPTANCE CRITERIA
+[ ] Baseline is healthy: four Full adjacencies and R1 ECMP metric 2.
+[ ] No BFD session/config remains from LAB-016.
+[ ] R2's OSPF GR config is active and helper capability is visible on R1/R4.
+[ ] Controlled `rpd` restart on R2 is attempted with pre-restart snapshots saved.
+[ ] Helper behavior during restart is proven from trace/log/LSDB/RIB evidence, or an evidence-based unsupported/inconclusive result is recorded.
+[ ] After restart, R2's adjacencies are Full and baseline routes/ECMP are restored.
+[ ] Optional negative control (if run) is compared and fully restored.
+[ ] Cleanup removes temporary GR/trace/helper-disable config and restores the intended baseline.
+
+EVIDENCE TO SAVE
+- Baseline: `show ospf neighbor`, `show ospf overview`, R1 routes to 10.1.1.2/32 and 10.1.1.4/32, and R1/R4 view of R2's Router-LSA.
+- Before restart: R2's `show ospf overview`, effective GR config, and current routes/adjacencies.
+- During/after restart: R1/R4 neighbor and route outputs, R1/R4/R2 GR trace/log entries if available, R1/R4 copies of R2's Router-LSA, and post-restart OSPF neighbor state on all routers.
+- Cleanup: helper mode restored if changed, no LAB-017 GR/trace statements remain, no BFD active, four adjacencies Full, R1 ECMP metric 2.

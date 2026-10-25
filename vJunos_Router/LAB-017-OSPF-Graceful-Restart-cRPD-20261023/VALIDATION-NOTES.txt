@@ -1,0 +1,15 @@
+VALIDATION NOTES
+
+Package validation performed:
+- All four per-router configuration files are present; exactly one `.set` file per router.
+- Addressing, router IDs, VLAN subinterfaces, OSPF areas and point-to-point interface types are consistent with the R1-R4 diamond.
+- No BFD or GR is included in baseline files; GR is enabled on R2 during TASK.
+- SVG parses as XML and preview was rendered from it.
+- ZIP integrity check passed after package creation.
+
+Not validated:
+- This package has not been deployed or executed on the user's live cRPD instance.
+- Graceful Restart support and exact trace/log output must be verified on the installed image. If configuration is rejected or runtime evidence is unavailable, capture the exact output and treat the behavior as unverified. vJunos-router is the agreed fallback candidate for feature-specific follow-up.
+- cRPD testing here verifies control-plane/LSDB/RIB behavior; it does not prove PFE/dataplane continuity.
+
+Important Juniper caveat: the Juniper GR configuration guide warns that if BFD and OSPF Graceful Restart are both configured, GR might not work as expected. Remove prior LAB-016 BFD config before this lab.

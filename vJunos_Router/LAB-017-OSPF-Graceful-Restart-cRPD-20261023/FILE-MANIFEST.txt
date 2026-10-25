@@ -1,0 +1,19 @@
+LAB-017 package file manifest
+
+README.txt
+TASK.txt
+SOLUTION-GUIDE.txt
+ADDRESS-PLAN.txt
+CLEANUP-BEFORE-LAB017.txt
+CONFIG-MAP.txt
+VALIDATION-NOTES.txt
+REFERENCE.txt
+FILE-MANIFEST.txt
+topology.svg
+topology.png
+configs/r1/LAB-017-base.set
+configs/r2/LAB-017-base.set
+configs/r3/LAB-017-base.set
+configs/r4/LAB-017-base.set
+
+Exactly four `.set` configs: one each for R1, R2, R3, and R4.
