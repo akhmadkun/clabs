@@ -1,0 +1,15 @@
+LAB-018 REFERENCE
+
+1. Juniper Networks, “Configuring Loop-Free Alternate Routes for OSPF”
+https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-loop-free-alternate-routes-for-ospf.html
+Useful items: LFA overview; link-protection and node-link-protection statements; backup coverage, backup neighbor and backup SPF commands; the caveat that forwarding-plane local repair is separate from SPF calculation.
+
+2. Juniper Networks, “link-protection (Protocols OSPF)”
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/link-protection-edit-protocols-ospf.html
+Useful item: exact interface-level configuration hierarchy and purpose of link protection.
+
+3. Juniper Networks, “backup-spf-options (Protocols OSPF)”
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/backup-spf-options-edit-protocols-ospf.html
+Useful item: backup SPF behavior and options.
+
+All cRPD-specific support remains subject to live verification on the installed image. The Junos OS product documentation is not by itself proof that every forwarding-plane behavior is available in cRPD.

@@ -1,0 +1,15 @@
+LAB-018 VALIDATION NOTES
+
+Offline checks performed:
+- One base.conf per router: R1-R4 (no duplicate profile configs).
+- Router IDs and four P2P /30 links are unique and pair-consistent.
+- SVG parsed as XML and PNG rendered from that SVG.
+- Documentation explicitly separates backup-SPF/coverage evidence from PFE fast-reroute claims.
+- ZIP archive integrity checked after packaging.
+
+Not performed:
+- No live cRPD deployment or `commit check` was executed in the user's environment.
+- `link-protection`, `show ospf backup coverage`, `show ospf backup neighbor`, and `show ospf backup spf detail` support/behavior remain to be confirmed on the installed cRPD build.
+- No forwarding-plane convergence or sub-50-ms LFA result is claimed.
+
+Decision rule: feature support and candidate backup must be proven before claiming an LFA pass. If cRPD rejects the statement or does not expose the expected backup calculations, preserve the outputs and move this feature test to vJunos-router.

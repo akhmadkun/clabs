@@ -1,0 +1,10 @@
+CLEANUP BEFORE LAB-018
+
+1. Ensure LAB-016 BFD liveness-detection config has been removed from all routers, as required by LAB-016 cleanup.
+2. Remove LAB-017 Graceful Restart settings if R1-R4 are being reused from the LAB-017 hybrid profile; do not leave helper/restart settings from a previous experiment unintentionally.
+3. Ensure all four R1-R4 logical links are enabled and no LAB-specific interface deactivation remains.
+4. Confirm the existing br-univ is up; do not create, delete, flush, or recreate it.
+5. Apply one and only one LAB-018 base.conf per router using a saved working copy of the existing configuration.
+6. Verify all four adjacencies Full and R1 route to 10.1.1.4/32 via R2 metric 2 before starting the LFA task.
+
+Do not blindly issue `load override` on a router carrying management or unrelated user configuration. Save and restore the prior configuration through the established lab workflow.

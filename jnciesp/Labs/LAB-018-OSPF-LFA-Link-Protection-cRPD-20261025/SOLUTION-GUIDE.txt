@@ -1,0 +1,76 @@
+LAB-018 — SOLUTION GUIDE
+OSPF LFA LINK PROTECTION & BACKUP COVERAGE (cRPD FIRST)
+
+Read after attempting TASK.txt. Interface names below assume the provided baseline files were applied to the existing cRPD R1-R4 nodes.
+
+1. BASELINE
+On all four routers:
+  run show ospf neighbor
+  run show ospf interface detail
+
+On R1:
+  run show route 10.1.1.4/32 exact detail
+  run show configuration protocols ospf area 0.0.0.0 interface eth1.13 | display set
+  run show ospf database router detail advertising-router 10.1.1.3
+  run show ospf database router detail advertising-router 10.1.1.4
+
+Expected: four P2P adjacencies Full. R1's route to 10.1.1.4/32 has a single primary next hop 10.0.12.2 via eth1.12, metric 2. The direct R1-R3 outgoing cost from R1 is 10; the R3-R4 link cost is 1, making the path through R3 cost 11 from R1. The RFC-style loop-free condition for alternate neighbor N=R3, local repair point S=R1, destination D=R4 is D(N,D) < D(N,S) + D(S,D). Here D(R3,R4)=1, D(R3,R1)=1 (R3's outgoing metric toward R1), and D(R1,R4)=2, so 1 < 1 + 2. Therefore R3 is a valid loop-free alternate candidate for R4.
+
+2. CONFIGURE LINK PROTECTION ON R1
+At the [edit] hierarchy on R1:
+  set protocols ospf area 0.0.0.0 interface eth1.12 link-protection
+  commit check
+  commit
+
+Verify effective config:
+  run show configuration protocols ospf area 0.0.0.0 interface eth1.12 | display set
+
+Inspect backup computation/coverage (if the commands are available on this cRPD build):
+  run show ospf backup coverage
+  run show ospf backup neighbor
+  run show ospf backup spf detail
+
+Some versions or platforms may expose differing detail or lack certain operational support in cRPD. Use `?` completion if needed, and capture exact errors. Do not treat `commit complete` alone as proof. A viable result should identify backup coverage and a candidate through R3 for target route 10.1.1.4/32. The precise displayed format can vary by release.
+
+Juniper's documented interface-level statement is `protocols ospf area <area-id> interface <interface-name> link-protection`. `show ospf backup coverage`, `show ospf backup neighbor`, and `show ospf backup spf detail` are documented checks for coverage, eligible backup neighbors, and backup SPF calculations. See REFERENCE.txt.
+
+cRPD LIMIT: if link-protection is rejected, backup commands are missing, or computation does not expose a candidate for the target route, save the exact evidence and stop the feature-specific pass. Keep the interface/route baseline valid and move the test to vJunos-router. Do not add a load-balancing policy simply to make the CLI show something; Juniper's per-packet load-balancing guidance concerns installing all next hops for forwarding, a separate concern from proving the cRPD control-plane calculation.
+
+3. CONTROLLED FAILURE (GLOBAL OSPF RECALCULATION OBSERVATION)
+Capture all Task 2 evidence first. On R1 only, disable the logical unit 12, not the physical parent:
+  deactivate interfaces eth1 unit 12
+  commit check
+  commit
+
+Observe on R1:
+  run show ospf neighbor
+  run show route 10.1.1.4/32 exact detail
+  run ping 10.1.1.4 count 10
+
+Expected after OSPF reconverges: R1-R2 adjacency is down, R1-R3 remains Full, and route to R4 loopback uses 10.0.13.2 via eth1.13, metric 11. This demonstrates normal routing recovery along the alternate path; on cRPD it does NOT prove hardware/PFE LFA local repair or a sub-50-ms transition.
+
+Restore the logical interface:
+  activate interfaces eth1 unit 12
+  commit check
+  commit
+
+Wait for R1-R2 adjacency Full and confirm:
+  run show ospf neighbor
+  run show route 10.1.1.4/32 exact detail
+  run show ospf backup coverage
+  run show ospf backup neighbor
+  run show ospf backup spf detail
+
+Expected: primary via R2 metric 2 restored. Backup coverage should be re-evaluated after recovery.
+
+4. CLEANUP
+On R1, remove only the link-protection test setting:
+  delete protocols ospf area 0.0.0.0 interface eth1.12 link-protection
+  activate interfaces eth1 unit 12
+  commit check
+  commit
+
+Verify all four adjacencies Full, R1 -> 10.1.1.4/32 via 10.0.12.2 metric 2, and no link-protection statement remains on eth1.12. Keep the lab's preconfigured R1 eth1.13 metric 10 unless you are restoring a previously saved universal baseline. Do not touch eth1 parent, br-univ, unrelated router configs, or unrelated OSPF settings.
+
+WHAT COUNTS AS PASS
+A control-plane LFA calculation pass requires the statement to be accepted and backup SPF/coverage evidence to show a viable backup for the target route. A controlled route switch after interface deactivation only proves post-convergence routing. Actual hardware fast-reroute is outside the evidence available from a cRPD-only exercise and should be tested on a forwarding-capable vJunos-router path if needed.

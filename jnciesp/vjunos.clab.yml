@@ -1,0 +1,63 @@
+name: jncie-sp-vjunos
+prefix: ""
+
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:25.4R1.12
+      exec:
+        - sh -c 'nohup /.venv/bin/python3 -m http.server 81 --bind 0.0.0.0 --directory /labconfigs >/tmp/config-http.log 2>&1 &'
+    
+  nodes:
+    # --- Router Definitions ---
+    r1:
+      kind: juniper_vjunosrouter
+      binds:
+        - ./configs_vjunos/r1:/labconfigs:rw
+    r2:
+      kind: juniper_vjunosrouter
+      binds:
+        - ./configs_vjunos/r2:/labconfigs:rw
+    r3:
+      kind: juniper_vjunosrouter
+      binds:
+        - ./configs_vjunos/r3:/labconfigs:rw
+    r4:
+      kind: juniper_vjunosrouter
+      binds:
+        - ./configs_vjunos/r4:/labconfigs:rw
+    r5:
+      kind: juniper_vjunosrouter
+      binds:
+        - ./configs_vjunos/r5:/labconfigs:rw
+    r6:
+      kind: juniper_vjunosrouter
+      binds:
+        - ./configs_vjunos/r6:/labconfigs:rw
+
+    # note, that the bridge br-univ must be created manually
+    # sudo ip link add br-univ type bridge
+    # sudo ip link set br-univ up
+    br-univ:
+      kind: bridge
+
+  links:
+    # --- Point-to-Point Links (LAG) R1 <-> R2 ---
+    # eth2 = ge-0/0/1   eth3 = ge-0/0/2
+    - endpoints: ["r1:eth2", "r2:eth2"]
+    - endpoints: ["r1:eth3", "r2:eth3"]
+
+    # --- Point-to-Point Links (LAG) R5 <-> R6 ---
+    # eth2 = ge-0/0/1   eth3 = ge-0/0/2
+    - endpoints: ["r5:eth2", "r6:eth2"]
+    - endpoints: ["r5:eth3", "r6:eth3"]
+
+    # --- Mesh Connections (Semua connect ke bridge br-univ) ---
+    # Menggunakan eth1 yang mapping ke ge-0/0/0
+    - endpoints: ["r1:eth1", "br-univ:r1_ge-0/0/0"]
+    - endpoints: ["r2:eth1", "br-univ:r2_ge-0/0/0"]
+    - endpoints: ["r3:eth1", "br-univ:r3_ge-0/0/0"]
+    - endpoints: ["r4:eth1", "br-univ:r4_ge-0/0/0"]
+    - endpoints: ["r5:eth1", "br-univ:r5_ge-0/0/0"]
+    - endpoints: ["r6:eth1", "br-univ:r6_ge-0/0/0"]
+

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1507"
+   height="1044"
+   viewBox="0 0 1507 1044"
+   version="1.1"
+   id="svg56"
+   sodipodi:docname="topology-IOL.ISIS.SingleArea-L2.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview56"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.1752874"
+     inkscape:cx="753.43273"
+     inkscape:cy="521.99998"
+     inkscape:window-width="3440"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg56">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="1507"
+       height="1044"
+       id="page1"
+       margin="60.410755 203.35452 184.6357 188.88997"
+       bleed="0" />
+  </sodipodi:namedview>
+  <title
+     id="title1">IS-IS Single-Area Level-2 Topology</title>
+  <desc
+     id="desc1">Editable vector topology for a single IS-IS area 49.0001. All adjacencies between routers R1-R6 and XR1-XR2 are Level-2 only.</desc>
+  <defs
+     id="defs20">
+    <linearGradient
+       id="blueBody"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#168ac7"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#0874ad"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="orangeBody"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#ffb529"
+         id="stop3" />
+      <stop
+         offset="1"
+         stop-color="#f39b0a"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="areaGray"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#f7f7f7"
+         id="stop5" />
+      <stop
+         offset="1"
+         stop-color="#f0f0f0"
+         id="stop6" />
+    </linearGradient>
+    <linearGradient
+       id="areaGreen"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#e0f1dd"
+         id="stop7" />
+      <stop
+         offset="1"
+         stop-color="#cce5c7"
+         id="stop8" />
+    </linearGradient>
+    <linearGradient
+       id="areaPurple"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#eee7f0"
+         id="stop9" />
+      <stop
+         offset="1"
+         stop-color="#e2d5e6"
+         id="stop10" />
+    </linearGradient>
+    <marker
+       id="arrowWhite"
+       markerWidth="5"
+       markerHeight="5"
+       refX="4.1"
+       refY="2.5"
+       orient="auto"
+       markerUnits="strokeWidth">
+      <path
+         d="M0,0 L5,2.5 L0,5 Z"
+         fill="#ffffff"
+         id="path10" />
+    </marker>
+    <g
+       id="routerBlue">
+      <path
+         d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
+         fill="url(#blueBody)"
+         stroke="#076da2"
+         stroke-width="1.1"
+         id="path11" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="url(#blueBody)"
+         stroke="#ffffff"
+         stroke-width="2"
+         id="ellipse11" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="none"
+         stroke="#7cc3e4"
+         stroke-width="1"
+         id="ellipse12" />
+      <g
+         stroke="#ffffff"
+         stroke-width="4.6"
+         stroke-linecap="round"
+         fill="none"
+         id="g15">
+        <path
+           d="M-5,-7 L-22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path12" />
+        <path
+           d="M5,-7 L22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path13" />
+        <path
+           d="M-5,-2 L-22,8"
+           marker-end="url(#arrowWhite)"
+           id="path14" />
+        <path
+           d="M5,-2 L22,8"
+           marker-end="url(#arrowWhite)"
+           id="path15" />
+      </g>
+    </g>
+    <g
+       id="routerOrange">
+      <path
+         d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
+         fill="url(#orangeBody)"
+         stroke="#d88b00"
+         stroke-width="1.1"
+         id="path16" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="url(#orangeBody)"
+         stroke="#ffffff"
+         stroke-width="2"
+         id="ellipse16" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="none"
+         stroke="#ffd17b"
+         stroke-width="1"
+         id="ellipse17" />
+      <g
+         stroke="#ffffff"
+         stroke-width="4.6"
+         stroke-linecap="round"
+         fill="none"
+         id="g20">
+        <path
+           d="M-5,-7 L-22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path17" />
+        <path
+           d="M5,-7 L22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path18" />
+        <path
+           d="M-5,-2 L-22,8"
+           marker-end="url(#arrowWhite)"
+           id="path19" />
+        <path
+           d="M5,-2 L22,8"
+           marker-end="url(#arrowWhite)"
+           id="path20" />
+      </g>
+    </g>
+    <style
+       id="style20">
+      .area-box { stroke-width: 1.6; }
+      .area-heading { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 37px; text-anchor: middle; fill: #080808; }
+      .area-sub { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 35px; text-anchor: middle; fill: #080808; }
+      .router-label { font-family: Arial, Helvetica, sans-serif; font-size: 21px; font-weight: 700; fill: #050505; text-anchor: middle; }
+      .interface { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; fill: #050505; }
+      .link { stroke: #171717; stroke-width: 1.8; fill: none; stroke-linecap: round; }
+    </style>
+  </defs>
+  <rect
+     id="background"
+     x="0"
+     y="0"
+     width="1507"
+     height="1044"
+     fill="#ffffff" />
+  <!-- Single IS-IS area; all routers form Level-2-only adjacencies -->
+  <rect
+     class="area-box"
+     x="200.61055"
+     y="72.47364"
+     width="1086.3927"
+     height="779.26544"
+     rx="31.686451"
+     fill="#f7fafc"
+     stroke="#78909c"
+     stroke-width="2.2"
+     id="rect20"
+     style="fill:#e3f9fe;fill-opacity:1" />
+  <!-- Single area label and adjacency-level legend -->
+  <g
+     id="single-area-label"
+     transform="translate(-5.1051345,199.10024)">
+    <text
+       x="753"
+       y="78"
+       style="font-weight:700;font-size:30px;font-family:Arial, Helvetica, sans-serif;text-anchor:middle;fill:#172b3a"
+       id="text20">IS-IS AREA 49.0001</text>
+    <rect
+       x="594"
+       y="91"
+       width="318"
+       height="30"
+       rx="15"
+       fill="#e2e8f0"
+       stroke="#64748b"
+       stroke-width="1"
+       id="rect21" />
+    <text
+       x="753"
+       y="112"
+       style="font-weight:700;font-size:17px;font-family:Arial, Helvetica, sans-serif;text-anchor:middle;fill:#243746"
+       id="text21">ALL ADJACENCIES: L2 ONLY</text>
+  </g>
+  <!-- Links (drawn behind the routers) -->
+  <g
+     class="link"
+     id="g31">
+    <path
+       d="M293,190 L293,366"
+       id="path21" />
+    <path
+       d="M324,411 L517,529"
+       id="path22" />
+    <path
+       d="M307,423 L528,746"
+       id="path23" />
+    <path
+       d="M546,575 L546,735"
+       id="path24" />
+    <path
+       d="M575,544 L881,544"
+       id="path25" />
+    <path
+       d="M548,754 L882,557"
+       id="path26" />
+    <path
+       d="M575,766 L882,766"
+       id="path27" />
+    <path
+       d="M912,575 L912,736"
+       id="path28" />
+    <path
+       d="M940,529 L1151,416"
+       id="path29" />
+    <path
+       d="M938,749 L1158,421"
+       id="path30" />
+    <path
+       d="M1184,190 L1184,366"
+       id="path31" />
+  </g>
+  <!-- Interface labels -->
+  <g
+     class="interface"
+     id="g41">
+    <text
+       x="304"
+       y="280"
+       id="text31">Eth0/1.12</text>
+    <text
+       x="549.90698"
+       y="194.29617"
+       transform="rotate(29)"
+       id="text32">Eth0/1.23</text>
+    <text
+       x="393"
+       y="585"
+       transform="rotate(57 393 585)"
+       id="text33">Eth0/1.24</text>
+    <text
+       x="533"
+       y="690"
+       transform="rotate(-90 533 690)"
+       id="text34">Eth0/1.34</text>
+    <text
+       x="684"
+       y="533"
+       id="text35">Eth0/1.36</text>
+    <text
+       x="672"
+       y="665"
+       transform="rotate(-29 672 665)"
+       id="text36">Eth0/1.46</text>
+    <text
+       x="668"
+       y="790"
+       id="text37">Eth0/1.45</text>
+    <text
+       x="893"
+       y="690"
+       transform="rotate(-90 893 690)"
+       id="text38">Eth0/1.56</text>
+    <text
+       x="951"
+       y="520"
+       transform="rotate(-28 951 520)"
+       id="text39">Gi0/0/0.619</text>
+    <text
+       x="1010"
+       y="635"
+       transform="rotate(-56 1010 635)"
+       id="text40">Gi0/0/0.519</text>
+    <text
+       x="1054"
+       y="280"
+       id="text41">Gi0/0/0.1920</text>
+  </g>
+  <!-- Blue IOL routers -->
+  <g
+     transform="translate(293 163)"
+     id="g42">
+    <use
+       xlink:href="#routerBlue"
+       id="use41" />
+  </g>
+  <g
+     transform="translate(293 400)"
+     id="g43">
+    <use
+       xlink:href="#routerBlue"
+       id="use42" />
+  </g>
+  <g
+     transform="translate(546 546)"
+     id="g44">
+    <use
+       xlink:href="#routerBlue"
+       id="use43" />
+  </g>
+  <g
+     transform="translate(546 768)"
+     id="g45">
+    <use
+       xlink:href="#routerBlue"
+       id="use44" />
+  </g>
+  <g
+     transform="translate(912 768)"
+     id="g46">
+    <use
+       xlink:href="#routerBlue"
+       id="use45" />
+  </g>
+  <g
+     transform="translate(912 546)"
+     id="g47">
+    <use
+       xlink:href="#routerBlue"
+       id="use46" />
+  </g>
+  <!-- Orange IOS-XR routers -->
+  <g
+     transform="translate(1184 163)"
+     id="g48">
+    <use
+       xlink:href="#routerOrange"
+       id="use47" />
+  </g>
+  <g
+     transform="translate(1184 400)"
+     id="g49">
+    <use
+       xlink:href="#routerOrange"
+       id="use48" />
+  </g>
+  <!-- Router names -->
+  <g
+     class="router-label"
+     id="g56">
+    <text
+       x="293"
+       y="103"
+       id="text49">R1</text>
+    <text
+       x="226"
+       y="416"
+       id="text50">R2</text>
+    <text
+       x="546"
+       y="498"
+       id="text51">R3</text>
+    <text
+       x="546"
+       y="829"
+       id="text52">R4</text>
+    <text
+       x="912"
+       y="829"
+       id="text53">R5</text>
+    <text
+       x="912"
+       y="498"
+       id="text54">R6</text>
+    <text
+       x="1184"
+       y="103"
+       id="text55">XR2</text>
+    <text
+       x="1260"
+       y="416"
+       id="text56">XR1</text>
+  </g>
+</svg>

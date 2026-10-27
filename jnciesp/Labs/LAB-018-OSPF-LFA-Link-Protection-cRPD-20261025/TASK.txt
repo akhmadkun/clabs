@@ -1,0 +1,52 @@
+LAB-018 — OSPF LFA: LINK PROTECTION & BACKUP COVERAGE
+CHALLENGE SHEET — OUTCOME-BASED; NOT A COMMAND RECIPE
+
+SCENARIO
+A maintenance change requires R1 to protect traffic toward the R4 loopback against a single failure of the primary R1-R2 link. R2 itself is assumed to remain healthy and reachable from the rest of the network. The network has an alternate route through R3, but the change record does not prove that OSPF LFA backup computation is enabled or that the alternate is loop-free.
+
+ENVIRONMENT
+- First platform: cRPD crpd:23.4R2-S5.6.
+- R1-R4 form the same Area 0 P2P diamond: VLAN 12 (R1-R2), VLAN 13 (R1-R3), VLAN 24 (R2-R4), VLAN 34 (R3-R4).
+- One startup configuration per router; no alternative startup profiles.
+- R1 eth1.13 outgoing OSPF metric is intentionally 10; other links default to cost 1. Baseline target route is 10.1.1.4/32 via R2 at metric 2. The candidate alternate path through R3 has cost 11 from R1.
+- cRPD control-plane only: this exercise must not claim actual PFE local repair or a sub-50-ms data-plane result unless separately proved on a forwarding-capable platform.
+
+TASK 1 — BASELINE AND PATH ANALYSIS
+Establish that all four expected P2P adjacencies are Full. Explain why R1's primary route to 10.1.1.4/32 is via R2, and show that the path through R3 is topologically loop-free for this destination.
+
+Evidence required:
+- OSPF neighbor table for R1-R4.
+- R1 route detail for 10.1.1.4/32 showing primary next hop via 10.0.12.2 / eth1.12 and metric 2.
+- Router-LSA / route evidence sufficient to explain the R1-R3-R4 alternate path.
+- Effective metric on R1 eth1.13 and note that the interface cost is directional.
+
+TASK 2 — ENABLE LFA LINK PROTECTION
+Provide link protection for the R1-R2 interface that carries the primary route to R4 loopback. Make the minimum change and determine whether this cRPD build accepts and operationalizes the feature.
+
+Evidence required:
+- Effective OSPF interface configuration for R1 eth1.12.
+- `show ospf backup coverage` result if supported.
+- `show ospf backup neighbor` result if supported.
+- `show ospf backup spf detail` result if supported.
+- State clearly which commands/features are supported, rejected, or unable to show a candidate on the installed build. A successful commit alone is not a pass.
+
+If the configuration is rejected or backup operational commands / calculations are unavailable, record the exact error/output. Do not pretend LFA passed; stop the LFA-specific acceptance part and report that a vJunos-router fallback is needed.
+
+TASK 3 — CONTROLLED LINK-FAILURE OBSERVATION
+After saving Task 2 evidence, simulate failure of R1's logical R1-R2 interface only. Do not shut down the physical parent eth1 and do not touch br-univ. Confirm that R1-R2 adjacency drops, R1-R3 remains usable, and R1 can reach 10.1.1.4/32 through R3 after normal OSPF reconvergence. Record the measured interruption without asserting that it represents LFA/PFE switchover.
+
+Restore the R1-R2 logical interface. Prove adjacency returns Full and R1's primary route to R4 returns to R2. Re-check backup coverage after link restoration.
+
+ACCEPTANCE CRITERIA
+- Baseline: all four P2P adjacencies Full; R1 -> 10.1.1.4/32 via R2 only, metric 2.
+- Link protection: accepted on R1 eth1.12 and backup-SPF/coverage evidence exists for the target route, if the cRPD feature implementation supports it.
+- Controlled link outage: no physical parent / bridge disruption; R1-R3 remains Full; route to R4 resolves through R3 after global OSPF recalculation.
+- Recovery: all adjacencies Full and primary route via R2 metric 2 restored.
+- Reporting: distinguish LFA backup calculation/coverage from actual forwarding-plane local repair. No precise FRR time claim on cRPD.
+- Feature unavailability is a valid finding, not a reason to fabricate a pass. Record evidence and nominate vJunos-router fallback.
+
+CLEAN RESTORE — REQUIRED
+Remove the lab's link-protection stanza from R1 after the test; restore R1 eth1.12 if it is disabled. Do not remove the intentional metric 10 on R1 eth1.13 because it is part of this lab's startup profile. Verify four OSPF adjacencies Full and R1's route to R4 loopback via R2, metric 2. If restoring the user's pre-lab config instead of retaining the lab profile, restore that prior saved config explicitly.
+
+EVIDENCE TO SAVE
+Baseline routes/adjacencies; the exact link-protection config and backup-coverage/neighbor/SPF outputs; outage route and adjacency outputs; recovery outputs; any unsupported-feature errors. Include timestamps for outage observations but do not present manual CLI timing as an LFA data-plane benchmark.

@@ -1,0 +1,101 @@
+name: juniper_ospf
+prefix: ""
+
+# LAB-002 keeps the LAB-001 physical topology.
+# All cRPD eth1 parent interfaces attach to the pre-existing host bridge br-univ.
+# Logical router-to-router connectivity is formed by 802.1Q VLAN subinterfaces:
+# VLAN 12 = Area 0, VLAN 13 = Area 1, VLAN 24 = Area 2.
+# Area assignments follow Day One: Advanced OSPF in the Enterprise, Chapter 3.
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+    juniper_crpd:
+      image: crpd:23.4R2-S5.6
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r1/base.conf
+      binds:
+        - ./configs_crpd/r1:/lab-configs:rw
+    r2:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r2/base.conf
+      binds:
+        - ./configs_crpd/r2:/lab-configs:rw
+    r3:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r3/base.conf
+      binds:
+        - ./configs_crpd/r3:/lab-configs:rw
+    r4:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r4/base.conf
+      binds:
+        - ./configs_crpd/r4:/lab-configs:rw
+    r5:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r5/base.conf
+      binds:
+        - ./configs_crpd/r5:/lab-configs:rw
+    r6:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r6/base.conf
+      binds:
+        - ./configs_crpd/r6:/lab-configs:rw
+    r7:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r7/base.conf
+      binds:
+        - ./configs_crpd/r7:/lab-configs:rw
+    r8:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r8/base.conf
+      binds:
+        - ./configs_crpd/r8:/lab-configs:rw
+    r9:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r9/base.conf
+      binds:
+        - ./configs_crpd/r9:/lab-configs:rw
+    r10:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r10/base.conf
+      binds:
+        - ./configs_crpd/r10:/lab-configs:rw
+    # This is an existing Linux bridge managed outside Containerlab.
+    # Create/enable it on the host beforehand; this topology must not delete it.
+    br-univ:
+      kind: bridge
+
+    epiol1:
+      kind: cisco_iol
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./configs_crpd/epiol1:/iol/labconfigs:rw
+    epiol2:
+      kind: cisco_iol
+      #startup-config: ./lab_configs/csr_startup_config.cfg
+      binds:
+        - ./configs_crpd/epiol2:/iol/labconfigs:rw
+
+  links:
+    # Shared physical Layer-2 bridge; 802.1Q logical adjacencies are configured on cRPD.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r5:eth1", "br-univ:r5_eth1"]
+    - endpoints: ["r6:eth1", "br-univ:r6_eth1"]
+    - endpoints: ["r7:eth1", "br-univ:r7_eth1"]
+    - endpoints: ["r8:eth1", "br-univ:r8_eth1"]
+    - endpoints: ["r9:eth1", "br-univ:r9_eth1"]
+    - endpoints: ["r10:eth1", "br-univ:r10_eth1"]
+
+    # iol as endpoints for testing only
+    - endpoints: ["epiol1:eth1", "br-univ:epiol1_eth1"]
+    - endpoints: ["epiol2:eth1", "br-univ:epiol2_eth1"]

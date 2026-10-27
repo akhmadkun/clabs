@@ -1,0 +1,10 @@
+LAB-018 CONFIG MAP — EXACTLY ONE STARTUP FILE PER ROUTER
+
+R1: configs/r1/base.conf
+R2: configs/r2/base.conf
+R3: configs/r3/base.conf
+R4: configs/r4/base.conf
+
+No additional baseline/target/incident config variants are included. The `link-protection` statement is intentionally NOT preconfigured; configuring and verifying it is the core task. R1 eth1.13 metric 10 is a topology precondition, included in its single startup config so R1 starts with a unique primary path through R2.
+
+Use the existing tested universal topology and config application workflow. These files are native Junos hierarchical configuration text. Save a copy of the prior router config before replacing or loading anything. If using the existing `startup-config: ./configs/rN/base.conf` file locations, apply this package in a dedicated working copy rather than overwrite your canonical universal configs.

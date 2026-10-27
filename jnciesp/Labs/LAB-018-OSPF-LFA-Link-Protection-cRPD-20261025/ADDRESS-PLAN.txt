@@ -1,0 +1,19 @@
+LAB-018 ADDRESS PLAN
+
+Router IDs / loopbacks
+- R1: RID 10.1.1.1, lo0.0 10.1.1.1/32
+- R2: RID 10.1.1.2, lo0.0 10.1.1.2/32
+- R3: RID 10.1.1.3, lo0.0 10.1.1.3/32
+- R4: RID 10.1.1.4, lo0.0 10.1.1.4/32
+
+Area 0, point-to-point
+- R1 eth1.12 10.0.12.1/30 <-> R2 eth1.12 10.0.12.2/30; VLAN 12
+- R1 eth1.13 10.0.13.1/30 <-> R3 eth1.13 10.0.13.2/30; VLAN 13
+- R2 eth1.24 10.0.24.1/30 <-> R4 eth1.24 10.0.24.2/30; VLAN 24
+- R3 eth1.34 10.0.34.1/30 <-> R4 eth1.34 10.0.34.2/30; VLAN 34
+
+Metrics
+- R1 eth1.13 outgoing OSPF metric 10, by design.
+- All remaining P2P links use default OSPF cost 1.
+- R1 -> R4 loopback primary cost 2 via R2.
+- R1 -> R4 via R3 candidate cost 11.
