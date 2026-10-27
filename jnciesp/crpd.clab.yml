@@ -12,7 +12,8 @@ topology:
       network-mode: none
       image: ghcr.io/srl-labs/network-multitool:latest
     juniper_crpd:
-      image: crpd:23.4R2-S5.6
+      #image: crpd:23.4R2-S5.6
+      image: xzjt/crpd:25.2R1-S1.4
     cisco_iol:
       image: arthurk99/cisco-iol:17.15.01
 
@@ -21,52 +22,52 @@ topology:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r1/base.conf
       binds:
-        - ./configs_crpd/r1:/lab-configs:rw
+        - ./configs_crpd/r1:/labconfigs:rw
     r2:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r2/base.conf
       binds:
-        - ./configs_crpd/r2:/lab-configs:rw
+        - ./configs_crpd/r2:/labconfigs:rw
     r3:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r3/base.conf
       binds:
-        - ./configs_crpd/r3:/lab-configs:rw
+        - ./configs_crpd/r3:/labconfigs:rw
     r4:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r4/base.conf
       binds:
-        - ./configs_crpd/r4:/lab-configs:rw
+        - ./configs_crpd/r4:/labconfigs:rw
     r5:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r5/base.conf
       binds:
-        - ./configs_crpd/r5:/lab-configs:rw
+        - ./configs_crpd/r5:/labconfigs:rw
     r6:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r6/base.conf
       binds:
-        - ./configs_crpd/r6:/lab-configs:rw
+        - ./configs_crpd/r6:/labconfigs:rw
     r7:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r7/base.conf
       binds:
-        - ./configs_crpd/r7:/lab-configs:rw
+        - ./configs_crpd/r7:/labconfigs:rw
     r8:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r8/base.conf
       binds:
-        - ./configs_crpd/r8:/lab-configs:rw
+        - ./configs_crpd/r8:/labconfigs:rw
     r9:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r9/base.conf
       binds:
-        - ./configs_crpd/r9:/lab-configs:rw
+        - ./configs_crpd/r9:/labconfigs:rw
     r10:
       kind: juniper_crpd
       startup-config: ./configs_crpd/r10/base.conf
       binds:
-        - ./configs_crpd/r10:/lab-configs:rw
+        - ./configs_crpd/r10:/labconfigs:rw
     # This is an existing Linux bridge managed outside Containerlab.
     # Create/enable it on the host beforehand; this topology must not delete it.
     br-univ:
