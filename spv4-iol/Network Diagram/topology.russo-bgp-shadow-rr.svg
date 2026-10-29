@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1472" height="708" viewBox="0 0 736 354" role="img" aria-labelledby="title desc">
+  <title id="title">BGP Route Reflector Topology</title>
+  <desc id="desc">Topology with R1 through R8, iBGP in AS 65000, customer AS 65001 and AS 65006, and route-reflector paths.</desc>
+  <defs>
+    <linearGradient id="routerSide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdfdfd"/>
+      <stop offset="0.55" stop-color="#e9e9e7"/>
+      <stop offset="1" stop-color="#cfd1d0"/>
+    </linearGradient>
+    <linearGradient id="routerTop" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.68" stop-color="#f0f1ef"/>
+      <stop offset="1" stop-color="#d9dcda"/>
+    </linearGradient>
+    <marker id="redArrow" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c3232c" stroke="#8f141a" stroke-width="0.35"/>
+    </marker>
+    <style>
+      .solid-link { fill:none; stroke:#111111; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; }
+      .route-cyan { fill:none; stroke:#37a9bd; stroke-width:2.1; stroke-dasharray:10 7; stroke-linecap:butt; }
+      .route-red { fill:none; stroke:#b13b3b; stroke-width:2.1; stroke-dasharray:10 7; stroke-linecap:butt; }
+      .role { font-family:Arial,Helvetica,sans-serif; font-size:16px; fill:#3b718e; text-anchor:middle; }
+      .node-label { font-family:Arial,Helvetica,sans-serif; font-size:16px; fill:#111; text-anchor:middle; }
+      .asn-label { font-family:Arial,Helvetica,sans-serif; font-size:22px; text-anchor:middle; }
+      .small-label { font-family:Arial,Helvetica,sans-serif; font-size:22px; fill:#4aaec4; }
+    </style>
+    <!-- A reusable, editable router symbol. Each instance is a group with its own label. -->
+    <g id="router">
+      <!-- Cylindrical lower housing -->
+      <path d="M-34,-7 C-34,-25 -19,-34 0,-34 C19,-34 34,-25 34,-7 L34,17 C34,28 19,35 0,35 C-19,35 -34,28 -34,17 Z"
+            fill="url(#routerSide)" stroke="#171717" stroke-width="2"/>
+      <!-- top surface -->
+      <ellipse cx="0" cy="-9" rx="33.5" ry="25" fill="url(#routerTop)" stroke="#171717" stroke-width="1.8"/>
+      <!-- four crossed directional paths; marker heads remain editable vectors -->
+      <path d="M-20,-19 L18,-1" fill="none" stroke="#8e171e" stroke-width="3.7" stroke-linecap="round" marker-start="url(#redArrow)" marker-end="url(#redArrow)"/>
+      <path d="M19,-19 L-18,-1" fill="none" stroke="#8e171e" stroke-width="3.7" stroke-linecap="round" marker-start="url(#redArrow)" marker-end="url(#redArrow)"/>
+      <!-- Front face separator and faint highlight -->
+      <path d="M-32,-5 C-20,5 20,5 32,-5" fill="none" stroke="#8b8b89" stroke-width="0.8" opacity="0.8"/>
+      <path d="M-31,18 C-30,27 -18,32 -7,33" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.8"/>
+    </g>
+  </defs>
+
+  <!-- White canvas -->
+  <rect id="canvas-background" x="0" y="0" width="736" height="354" fill="#ffffff"/>
+
+  <!-- Background domains -->
+  <g id="domain-backgrounds">
+    <rect x="6" y="12" width="526" height="331" rx="3" fill="#fbeee4"/>
+    <rect x="6" y="148" width="120" height="195" rx="2" fill="#e8f1dc"/>
+    <rect x="606" y="12" width="120" height="196" rx="2" fill="#f0d5d4"/>
+  </g>
+
+  <!-- Dashed BGP/iBGP route-reflector paths -->
+  <g id="bgp-route-paths">
+    <path class="route-cyan" d="M99,105 C137,123 178,153 193,237"/>
+    <path class="route-red" d="M99,106 C153,128 251,168 307,241"/>
+    <path class="route-cyan" d="M260,109 C229,133 207,167 195,237"/>
+    <path class="route-red" d="M299,109 C310,143 313,183 310,239"/>
+    <path class="route-cyan" d="M443,98 C373,133 300,175 200,244"/>
+    <path class="route-red" d="M444,104 C393,138 352,183 317,243"/>
+    <path class="route-cyan" d="M207,258 C264,232 359,234 442,259"/>
+    <path class="route-red" d="M319,259 C358,244 408,245 442,263"/>
+  </g>
+
+  <!-- Physical / IGP underlay links -->
+  <g id="physical-links" class="solid-link">
+    <path d="M100,89 L243,89"/>
+    <path d="M310,89 L439,89"/>
+    <path d="M506,89 L636,89"/>
+    <path d="M67,122 L67,178"/>
+    <path d="M277,122 L277,239"/>
+    <path d="M304,108 L449,247"/>
+    <path d="M496,247 L648,112"/>
+  </g>
+
+  <!-- Horizontal separator shown in the source diagram -->
+  <path id="route-reflector-divider" d="M165,197 L347,197" stroke="#111" stroke-width="3.1" stroke-linecap="round"/>
+
+  <!-- Domain and protocol annotations -->
+  <g id="annotations">
+    <text x="171" y="58" class="small-label">iBGP</text>
+    <text x="456" y="157" class="asn-label" fill="#be7b43">BGP ASN</text>
+    <text x="456" y="185" class="asn-label" fill="#be7b43">65000</text>
+    <text x="67" y="296" class="asn-label" fill="#758d54">BGP ASN</text>
+    <text x="67" y="325" class="asn-label" fill="#758d54">65001</text>
+    <text x="667" y="163" class="asn-label" fill="#865450">BGP ASN</text>
+    <text x="667" y="191" class="asn-label" fill="#865450">65006</text>
+  </g>
+
+  <!-- Router nodes -->
+  <g id="nodes">
+    <g id="node-R2" transform="translate(67 89)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R2</text>
+    </g>
+    <g id="node-R1" transform="translate(67 211)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R1</text>
+    </g>
+    <g id="node-R3" transform="translate(277 89)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R3</text>
+    </g>
+    <g id="node-R4" transform="translate(473 89)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R4</text>
+    </g>
+    <g id="node-R5" transform="translate(472 271)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R5</text>
+    </g>
+    <g id="node-R6" transform="translate(667 89)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R6</text>
+    </g>
+    <g id="node-R7" transform="translate(196 271)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R7</text>
+    </g>
+    <g id="node-R8" transform="translate(311 271)">
+      <use href="#router"/>
+      <text class="node-label" x="0" y="20">R8</text>
+    </g>
+  </g>
+
+  <!-- Router roles -->
+  <g id="router-roles" class="role">
+    <text x="67" y="44">PE</text>
+    <text x="67" y="262">CE</text>
+    <text x="277" y="42">P</text>
+    <text x="473" y="42">PE</text>
+    <text x="667" y="42">CE</text>
+    <text x="472" y="323">PE</text>
+    <text x="196" y="322">RR</text>
+    <text x="311" y="322">RR</text>
+  </g>
+</svg>

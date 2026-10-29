@@ -1,0 +1,91 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "R1",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 280,
+        "y": 420
+      }
+    },
+    {
+      "id": "R2",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 600,
+        "y": 380
+      }
+    },
+    {
+      "id": "R3",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 520,
+        "y": 200
+      }
+    },
+    {
+      "id": "R4",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 460,
+        "y": 520
+      }
+    },
+    {
+      "id": "R5",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 320,
+        "y": 220
+      }
+    },
+    {
+      "id": "R6",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 360,
+        "y": 500
+      }
+    },
+    {
+      "id": "R7",
+      "interfacePattern": "e0/{n}",
+      "position": {
+        "x": 420,
+        "y": 180
+      }
+    },
+    {
+      "id": "XR1",
+      "interfacePattern": "Gi0-0-0-{n}",
+      "position": {
+        "x": 560,
+        "y": 460
+      }
+    },
+    {
+      "id": "XR2",
+      "interfacePattern": "Gi0-0-0-{n}",
+      "position": {
+        "x": 580,
+        "y": 280
+      }
+    },
+    {
+      "id": "br-univ",
+      "position": {
+        "x": 420,
+        "y": 340
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}

@@ -1,57 +1,231 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="1507" height="1044" viewBox="0 0 1507 1044">
-  <title>IS-IS Multi-Area Topology</title>
-  <desc>Editable vector topology with areas 49.0012, 49.0003, 49.0004, 49.0005 and 49.1920; routers R1-R6 and XR1-XR2.</desc>
-  <defs>
-    <linearGradient id="blueBody" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#168ac7"/>
-      <stop offset="1" stop-color="#0874ad"/>
+<svg
+   width="1507"
+   height="1044"
+   viewBox="0 0 1507 1044"
+   version="1.1"
+   id="svg73"
+   sodipodi:docname="topology-IOL.ISIS.MultiArea.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview73"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.6621073"
+     inkscape:cx="1033.9284"
+     inkscape:cy="325.79124"
+     inkscape:window-width="2560"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g58" />
+  <title
+     id="title1">IS-IS Multi-Area Topology</title>
+  <desc
+     id="desc1">Editable vector topology with areas 49.0012, 49.0003, 49.0004, 49.0005 and 49.1920; routers R1-R6 and XR1-XR2.</desc>
+  <defs
+     id="defs20">
+    <linearGradient
+       id="blueBody"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#168ac7"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#0874ad"
+         id="stop2" />
     </linearGradient>
-    <linearGradient id="orangeBody" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffb529"/>
-      <stop offset="1" stop-color="#f39b0a"/>
+    <linearGradient
+       id="orangeBody"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#ffb529"
+         id="stop3" />
+      <stop
+         offset="1"
+         stop-color="#f39b0a"
+         id="stop4" />
     </linearGradient>
-    <linearGradient id="areaGray" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f7f7f7"/>
-      <stop offset="1" stop-color="#f0f0f0"/>
+    <linearGradient
+       id="areaGray"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#f7f7f7"
+         id="stop5" />
+      <stop
+         offset="1"
+         stop-color="#f0f0f0"
+         id="stop6" />
     </linearGradient>
-    <linearGradient id="areaGreen" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e0f1dd"/>
-      <stop offset="1" stop-color="#cce5c7"/>
+    <linearGradient
+       id="areaGreen"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#e0f1dd"
+         id="stop7" />
+      <stop
+         offset="1"
+         stop-color="#cce5c7"
+         id="stop8" />
     </linearGradient>
-    <linearGradient id="areaPurple" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#eee7f0"/>
-      <stop offset="1" stop-color="#e2d5e6"/>
+    <linearGradient
+       id="areaPurple"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#eee7f0"
+         id="stop9" />
+      <stop
+         offset="1"
+         stop-color="#e2d5e6"
+         id="stop10" />
     </linearGradient>
-    <marker id="arrowWhite" markerWidth="5" markerHeight="5" refX="4.1" refY="2.5" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L5,2.5 L0,5 Z" fill="#ffffff"/>
+    <marker
+       id="arrowWhite"
+       markerWidth="5"
+       markerHeight="5"
+       refX="4.1"
+       refY="2.5"
+       orient="auto"
+       markerUnits="strokeWidth">
+      <path
+         d="M0,0 L5,2.5 L0,5 Z"
+         fill="#ffffff"
+         id="path10" />
     </marker>
-    <g id="routerBlue">
-      <path d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
-            fill="url(#blueBody)" stroke="#076da2" stroke-width="1.1"/>
-      <ellipse cx="0" cy="-5" rx="45" ry="22" fill="url(#blueBody)" stroke="#ffffff" stroke-width="2"/>
-      <ellipse cx="0" cy="-5" rx="45" ry="22" fill="none" stroke="#7cc3e4" stroke-width="1"/>
-      <g stroke="#ffffff" stroke-width="4.6" stroke-linecap="round" fill="none">
-        <path d="M-5,-7 L-22,-16" marker-end="url(#arrowWhite)"/>
-        <path d="M5,-7 L22,-16" marker-end="url(#arrowWhite)"/>
-        <path d="M-5,-2 L-22,8" marker-end="url(#arrowWhite)"/>
-        <path d="M5,-2 L22,8" marker-end="url(#arrowWhite)"/>
+    <g
+       id="routerBlue">
+      <path
+         d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
+         fill="url(#blueBody)"
+         stroke="#076da2"
+         stroke-width="1.1"
+         id="path11" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="url(#blueBody)"
+         stroke="#ffffff"
+         stroke-width="2"
+         id="ellipse11" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="none"
+         stroke="#7cc3e4"
+         stroke-width="1"
+         id="ellipse12" />
+      <g
+         stroke="#ffffff"
+         stroke-width="4.6"
+         stroke-linecap="round"
+         fill="none"
+         id="g15">
+        <path
+           d="M-5,-7 L-22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path12" />
+        <path
+           d="M5,-7 L22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path13" />
+        <path
+           d="M-5,-2 L-22,8"
+           marker-end="url(#arrowWhite)"
+           id="path14" />
+        <path
+           d="M5,-2 L22,8"
+           marker-end="url(#arrowWhite)"
+           id="path15" />
       </g>
     </g>
-    <g id="routerOrange">
-      <path d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
-            fill="url(#orangeBody)" stroke="#d88b00" stroke-width="1.1"/>
-      <ellipse cx="0" cy="-5" rx="45" ry="22" fill="url(#orangeBody)" stroke="#ffffff" stroke-width="2"/>
-      <ellipse cx="0" cy="-5" rx="45" ry="22" fill="none" stroke="#ffd17b" stroke-width="1"/>
-      <g stroke="#ffffff" stroke-width="4.6" stroke-linecap="round" fill="none">
-        <path d="M-5,-7 L-22,-16" marker-end="url(#arrowWhite)"/>
-        <path d="M5,-7 L22,-16" marker-end="url(#arrowWhite)"/>
-        <path d="M-5,-2 L-22,8" marker-end="url(#arrowWhite)"/>
-        <path d="M5,-2 L22,8" marker-end="url(#arrowWhite)"/>
+    <g
+       id="routerOrange">
+      <path
+         d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
+         fill="url(#orangeBody)"
+         stroke="#d88b00"
+         stroke-width="1.1"
+         id="path16" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="url(#orangeBody)"
+         stroke="#ffffff"
+         stroke-width="2"
+         id="ellipse16" />
+      <ellipse
+         cx="0"
+         cy="-5"
+         rx="45"
+         ry="22"
+         fill="none"
+         stroke="#ffd17b"
+         stroke-width="1"
+         id="ellipse17" />
+      <g
+         stroke="#ffffff"
+         stroke-width="4.6"
+         stroke-linecap="round"
+         fill="none"
+         id="g20">
+        <path
+           d="M-5,-7 L-22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path17" />
+        <path
+           d="M5,-7 L22,-16"
+           marker-end="url(#arrowWhite)"
+           id="path18" />
+        <path
+           d="M-5,-2 L-22,8"
+           marker-end="url(#arrowWhite)"
+           id="path19" />
+        <path
+           d="M5,-2 L22,8"
+           marker-end="url(#arrowWhite)"
+           id="path20" />
       </g>
     </g>
-    <style>
+    <style
+       id="style20">
       .area-box { stroke-width: 1.6; }
       .area-heading { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 37px; text-anchor: middle; fill: #080808; }
       .area-sub { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 35px; text-anchor: middle; fill: #080808; }
@@ -60,107 +234,331 @@
       .link { stroke: #171717; stroke-width: 1.8; fill: none; stroke-linecap: round; }
     </style>
   </defs>
-
-  <rect id="background" x="0" y="0" width="1507" height="1044" fill="#ffffff"/>
-
+  <rect
+     id="background"
+     x="0"
+     y="0"
+     width="1507"
+     height="1044"
+     fill="#ffffff" />
   <!-- Area panels -->
-  <rect class="area-box" x="17" y="38" width="412" height="432" rx="55" fill="url(#areaGray)" stroke="#858585"/>
-  <rect class="area-box" x="457" y="309" width="543" height="292" rx="43" fill="url(#areaGreen)" stroke="#7bb85d"/>
-  <rect class="area-box" x="254" y="692" width="396" height="294" rx="34" fill="url(#areaGray)" stroke="#858585"/>
-  <rect class="area-box" x="768" y="692" width="400" height="294" rx="34" fill="url(#areaGray)" stroke="#858585"/>
-  <rect class="area-box" x="1044" y="38" width="412" height="432" rx="55" fill="url(#areaPurple)" stroke="#9d7eab"/>
-
+  <rect
+     class="area-box"
+     x="17"
+     y="38"
+     width="412"
+     height="432"
+     rx="55"
+     fill="url(#areaGray)"
+     stroke="#858585"
+     id="rect20" />
+  <rect
+     class="area-box"
+     x="457"
+     y="309"
+     width="543"
+     height="292"
+     rx="43"
+     fill="url(#areaGreen)"
+     stroke="#7bb85d"
+     id="rect21" />
+  <rect
+     class="area-box"
+     x="254"
+     y="692"
+     width="396"
+     height="294"
+     rx="34"
+     fill="url(#areaGray)"
+     stroke="#858585"
+     id="rect22" />
+  <rect
+     class="area-box"
+     x="768"
+     y="692"
+     width="400"
+     height="294"
+     rx="34"
+     fill="url(#areaGray)"
+     stroke="#858585"
+     id="rect23" />
+  <rect
+     class="area-box"
+     x="1044"
+     y="38"
+     width="412"
+     height="432"
+     rx="55"
+     fill="url(#areaPurple)"
+     stroke="#9d7eab"
+     id="rect24" />
   <!-- Area labels -->
-  <g>
-    <text class="area-heading" x="145" y="155">AREA</text>
-    <text class="area-sub" x="145" y="198">49.0012</text>
-    <text class="area-sub" x="145" y="241">(L1 only)</text>
-
-    <text class="area-heading" x="729" y="371">AREA</text>
-    <text class="area-sub" x="729" y="415">49.0003</text>
-    <text class="area-sub" x="729" y="458">(L2 only)</text>
-
-    <text class="area-heading" x="452" y="837">AREA</text>
-    <text class="area-sub" x="452" y="881">49.0004</text>
-    <text class="area-sub" x="452" y="924">(L1 only)</text>
-
-    <text class="area-heading" x="1039" y="837">AREA</text>
-    <text class="area-sub" x="1039" y="881">49.0005</text>
-    <text class="area-sub" x="1039" y="924">(L1 only)</text>
-
-    <text class="area-heading" x="1350" y="81">AREA</text>
-    <text class="area-sub" x="1350" y="124">49.1920</text>
+  <g
+     id="g37">
+    <text
+       class="area-heading"
+       x="145"
+       y="155"
+       id="text24">AREA</text>
+    <text
+       class="area-sub"
+       x="145"
+       y="198"
+       id="text25">49.0012</text>
+    <text
+       class="area-sub"
+       x="145"
+       y="241"
+       id="text26">(L1 only)</text>
+    <text
+       class="area-heading"
+       x="729"
+       y="371"
+       id="text27">AREA</text>
+    <text
+       class="area-sub"
+       x="729"
+       y="415"
+       id="text28">49.0003</text>
+    <text
+       class="area-sub"
+       x="729"
+       y="458"
+       id="text29">(L2 only)</text>
+    <text
+       class="area-heading"
+       x="452"
+       y="837"
+       id="text30">AREA</text>
+    <text
+       class="area-sub"
+       x="452"
+       y="881"
+       id="text31">49.0004</text>
+    <text
+       class="area-sub"
+       x="452"
+       y="924"
+       id="text32">(L1 only)</text>
+    <text
+       class="area-heading"
+       x="1039"
+       y="837"
+       id="text33">AREA</text>
+    <text
+       class="area-sub"
+       x="1039"
+       y="881"
+       id="text34">49.0005</text>
+    <text
+       class="area-sub"
+       x="1039"
+       y="924"
+       id="text35">(L1 only)</text>
+    <text
+       class="area-heading"
+       x="1350"
+       y="81"
+       id="text36">AREA</text>
+    <text
+       class="area-sub"
+       x="1350"
+       y="124"
+       id="text37">49.1920</text>
   </g>
   <!-- XR area label's L1-only annotation placed to match source -->
-  <text class="area-sub" x="1350" y="209">(L1 only)</text>
-
+  <text
+     class="area-sub"
+     x="1350"
+     y="209"
+     id="text38">(L1 only)</text>
   <!-- Links (drawn behind the routers) -->
-  <g class="link">
-    <path d="M293,190 L293,366"/>
-    <path d="M324,411 L517,529"/>
-    <path d="M307,423 L528,746"/>
-    <path d="M546,575 L546,735"/>
-    <path d="M575,544 L881,544"/>
-    <path d="M548,754 L882,557"/>
-    <path d="M575,766 L882,766"/>
-    <path d="M912,575 L912,736"/>
-    <path d="M940,529 L1151,416"/>
-    <path d="M938,749 L1158,421"/>
-    <path d="M1184,190 L1184,366"/>
+  <g
+     class="link"
+     id="g48">
+    <path
+       d="M293,190 L293,366"
+       id="path38" />
+    <path
+       d="M324,411 L517,529"
+       id="path39" />
+    <path
+       d="M307,423 L528,746"
+       id="path40" />
+    <path
+       d="M546,575 L546,735"
+       id="path41" />
+    <path
+       d="M575,544 L881,544"
+       id="path42" />
+    <path
+       d="M548,754 L882,557"
+       id="path43" />
+    <path
+       d="M575,766 L882,766"
+       id="path44" />
+    <path
+       d="M912,575 L912,736"
+       id="path45" />
+    <path
+       d="M940,529 L1151,416"
+       id="path46" />
+    <path
+       d="M938,749 L1158,421"
+       id="path47" />
+    <path
+       d="M1184,190 L1184,366"
+       id="path48" />
   </g>
-
   <!-- Interface labels -->
-  <g class="interface">
-    <text x="304" y="280">Eth0/1.12</text>
-    <text x="374" y="451" transform="rotate(29 374 451)">Eth0/1.23</text>
-    <text x="393" y="585" transform="rotate(57 393 585)">Eth0/1.24</text>
-    <text x="533" y="690" transform="rotate(-90 533 690)">Eth0/1.34</text>
-    <text x="684" y="533">Eth0/1.36</text>
-    <text x="672" y="665" transform="rotate(-29 672 665)">Eth0/1.46</text>
-    <text x="668" y="790">Eth0/1.45</text>
-    <text x="893" y="690" transform="rotate(-90 893 690)">Eth0/1.56</text>
-    <text x="1054" y="474" transform="rotate(-28 1054 474)">Gi0/0/0.619</text>
-    <text x="1082" y="553" transform="rotate(-56 1082 553)">Gi0/0/0.519</text>
-    <text x="1054" y="280">Gi0/0/0.1920</text>
+  <g
+     class="interface"
+     id="g58">
+    <text
+       x="304"
+       y="280"
+       id="text48">Eth0/1.12</text>
+    <text
+       x="549.71436"
+       y="230.20207"
+       transform="rotate(29)"
+       id="text49">Eth0/1.23</text>
+    <text
+       x="393"
+       y="585"
+       transform="rotate(57 393 585)"
+       id="text50">Eth0/1.24</text>
+    <text
+       x="533"
+       y="690"
+       transform="rotate(-90 533 690)"
+       id="text51">Eth0/1.34</text>
+    <text
+       x="684"
+       y="533"
+       id="text52">Eth0/1.36</text>
+    <text
+       x="672"
+       y="665"
+       transform="rotate(-29 672 665)"
+       id="text53">Eth0/1.46</text>
+    <text
+       x="668"
+       y="790"
+       id="text54">Eth0/1.45</text>
+    <text
+       x="893"
+       y="690"
+       transform="rotate(-90 893 690)"
+       id="text55">Eth0/1.56</text>
+    <text
+       x="685.2702"
+       y="927.43701"
+       transform="rotate(-28)"
+       id="text56">Gi0/0/0.619</text>
+    <text
+       x="138.15649"
+       y="1220.6487"
+       transform="rotate(-56)"
+       id="text57">Gi0/0/0.519</text>
+    <text
+       x="1054"
+       y="280"
+       id="text58">Gi0/0/0.1920</text>
   </g>
-
   <!-- Blue IOL routers -->
-  <g transform="translate(293 163)">
-    <use xlink:href="#routerBlue"/>
+  <g
+     transform="translate(293 163)"
+     id="g59">
+    <use
+       xlink:href="#routerBlue"
+       id="use58" />
   </g>
-  <g transform="translate(293 400)">
-    <use xlink:href="#routerBlue"/>
+  <g
+     transform="translate(293 400)"
+     id="g60">
+    <use
+       xlink:href="#routerBlue"
+       id="use59" />
   </g>
-  <g transform="translate(546 546)">
-    <use xlink:href="#routerBlue"/>
+  <g
+     transform="translate(546 546)"
+     id="g61">
+    <use
+       xlink:href="#routerBlue"
+       id="use60" />
   </g>
-  <g transform="translate(546 768)">
-    <use xlink:href="#routerBlue"/>
+  <g
+     transform="translate(546 768)"
+     id="g62">
+    <use
+       xlink:href="#routerBlue"
+       id="use61" />
   </g>
-  <g transform="translate(912 768)">
-    <use xlink:href="#routerBlue"/>
+  <g
+     transform="translate(912 768)"
+     id="g63">
+    <use
+       xlink:href="#routerBlue"
+       id="use62" />
   </g>
-  <g transform="translate(912 546)">
-    <use xlink:href="#routerBlue"/>
+  <g
+     transform="translate(912 546)"
+     id="g64">
+    <use
+       xlink:href="#routerBlue"
+       id="use63" />
   </g>
-
   <!-- Orange IOS-XR routers -->
-  <g transform="translate(1184 163)">
-    <use xlink:href="#routerOrange"/>
+  <g
+     transform="translate(1184 163)"
+     id="g65">
+    <use
+       xlink:href="#routerOrange"
+       id="use64" />
   </g>
-  <g transform="translate(1184 400)">
-    <use xlink:href="#routerOrange"/>
+  <g
+     transform="translate(1184 400)"
+     id="g66">
+    <use
+       xlink:href="#routerOrange"
+       id="use65" />
   </g>
-
   <!-- Router names -->
-  <g class="router-label">
-    <text x="293" y="103">R1</text>
-    <text x="226" y="416">R2</text>
-    <text x="546" y="498">R3</text>
-    <text x="546" y="829">R4</text>
-    <text x="912" y="829">R5</text>
-    <text x="912" y="498">R6</text>
-    <text x="1184" y="103">XR2</text>
-    <text x="1260" y="416">XR1</text>
+  <g
+     class="router-label"
+     id="g73">
+    <text
+       x="293"
+       y="103"
+       id="text66">R1</text>
+    <text
+       x="226"
+       y="416"
+       id="text67">R2</text>
+    <text
+       x="546"
+       y="498"
+       id="text68">R3</text>
+    <text
+       x="546"
+       y="829"
+       id="text69">R4</text>
+    <text
+       x="912"
+       y="829"
+       id="text70">R5</text>
+    <text
+       x="912"
+       y="498"
+       id="text71">R6</text>
+    <text
+       x="1184"
+       y="103"
+       id="text72">XR2</text>
+    <text
+       x="1260"
+       y="416"
+       id="text73">XR1</text>
   </g>
 </svg>
