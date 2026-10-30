@@ -1,0 +1,88 @@
+============================================================
+LAB-006 — RSTP PROTECTION FEATURES
+TASK ONLY — NO SOLUTIONS
+============================================================
+
+OBJECTIVES
+----------
+1. Verify an RSTP topology and identify the root, root ports,
+   designated ports, and alternate/blocking ports.
+2. Demonstrate edge-port behavior and protect an edge port from BPDUs.
+3. Demonstrate Root Guard behavior when a downstream switch advertises
+   a superior BPDU.
+4. Demonstrate Loop Guard behavior when an alternate port stops receiving
+   BPDUs while its physical link remains up.
+5. Restore the topology safely after each test.
+
+STARTING CONDITIONS
+-------------------
+- Deploy the lab using clab.yml and wait for all switches to boot.
+- Host1 = 10.10.10.11/24; Host2 = 10.10.10.12/24.
+- VLAN USERS = VLAN 10.
+- SW1 priority = 4k; SW2 = 8k; SW3 = 12k; SW4 = 16k.
+- The initial configuration does not include BPDU Guard, Root Guard,
+  or Loop Guard on the test interfaces.
+
+TASK 1 — BASELINE
+-----------------
+1. Verify Host1 can ping Host2.
+2. On each switch, inspect:
+     show spanning-tree bridge
+     show spanning-tree interface
+3. Record the expected root bridge and the role/state of:
+   - SW1 ge-0/0/3
+   - SW2 ge-0/0/2
+   - SW3 ge-0/0/1
+   - SW4 ge-0/0/1
+
+TASK 2 — EDGE + BPDU PROTECTION
+-------------------------------
+1. Configure the SW1 interface facing SW4 as an edge interface.
+2. Enable BPDU protection for edge interfaces on SW1.
+3. Commit and inspect the interface state and relevant logs.
+4. Explain why the port is affected even though it is connected to a
+   switch rather than an end host.
+5. Restore the link so the next task can run. Verify that the link is up.
+
+TASK 3 — ROOT GUARD
+-------------------
+1. Configure root protection on SW1's interface toward SW4.
+2. Change SW4's bridge priority so it advertises a superior BPDU.
+3. Inspect the RSTP state on SW1 and verify SW1 remains root for the
+   original triangle while the protected link is prevented from becoming
+   a root path.
+4. Restore SW4's original bridge priority and verify recovery.
+5. Remove the temporary test configuration from SW1's protected port.
+
+TASK 4 — LOOP GUARD
+------------------
+WARNING: This is intentionally a fault-injection exercise in an isolated
+virtual lab. Do not perform it on a production network.
+
+1. Identify SW3 ge-0/0/1 as the alternate/non-designated port on the
+   SW2-SW3 segment.
+2. Configure Loop Guard behavior on that interface.
+3. Stop continuous traffic generation.
+4. Simulate loss of STP BPDUs while preserving physical link state by
+   temporarily disabling RSTP on SW2 ge-0/0/2 (not the physical interface).
+5. Wait for the BPDU timeout and inspect SW3's spanning-tree interface.
+6. Restore RSTP on SW2 ge-0/0/2 immediately and verify SW3 recovers when
+   BPDUs return.
+
+TASK 5 — WRAP-UP
+----------------
+1. Confirm Host1 can ping Host2 again.
+2. Record the exact configuration statements used for each protection.
+3. Explain where each protection should normally be deployed.
+4. Confirm no temporary fault-injection settings remain.
+
+SUCCESS CRITERIA
+----------------
+- Initial and final Host1-to-Host2 connectivity succeeds.
+- BPDU protection prevents an edge interface from forwarding after it
+  receives a BPDU (verify the observed behavior on this platform).
+- Root protection blocks/prevents a superior root BPDU from changing the
+  protected port into a root path.
+- Loop protection prevents a non-designated port from transitioning to
+  forwarding when expected BPDUs stop arriving (verify state/log output).
+- Every temporary test condition is reverted.

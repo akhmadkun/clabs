@@ -1,0 +1,20 @@
+name: asa-lab
+prefix: ""
+
+topology:
+  nodes:
+    asa1:
+      kind: cisco_asav
+      image: csiggydev/cisco_asav:9-18-2
+
+    host1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+    host2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  links:
+    - endpoints: ["host1:eth1", "asa1:Gi0/0"]
+    - endpoints: ["asa1:Gi0/1", "host2:eth1"]

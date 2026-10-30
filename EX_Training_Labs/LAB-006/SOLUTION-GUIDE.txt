@@ -1,0 +1,287 @@
+============================================================
+LAB-006 — RSTP PROTECTION FEATURES
+SOLUTION GUIDE (SELF-CONTAINED)
+============================================================
+
+1. PURPOSE AND CONCEPT MAPPING
+------------------------------
+This lab tests four Cisco concepts using Junos EX configuration.
+The mapping is conceptual; the vendors' state names and recovery behavior
+are not guaranteed to be one-to-one.
+
+Cisco concept       Junos EX concept
+------------------  -----------------------------------------------
+PortFast            protocols rstp interface <port> edge
+BPDU Guard          protocols rstp bpdu-block-on-edge, combined with
+                    edge on the protected interface
+Root Guard          protocols rstp interface <port> no-root-port
+Loop Guard          protocols rstp interface <port>
+                    bpdu-timeout-action block
+
+Key distinction:
+- edge: treat a port as an edge port so it can transition quickly to
+  forwarding; it does not itself provide the same protective action as
+  BPDU Guard.
+- bpdu-block-on-edge: protects edge interfaces; receipt of a BPDU causes
+  the edge interface to be disabled/blocked according to the platform.
+- no-root-port: root protection. A superior BPDU on that interface causes
+  a root-prevented/inconsistent condition rather than accepting that path.
+- bpdu-timeout-action block: loop protection. If expected BPDUs disappear
+  on a root/alternate or other non-designated interface, it prevents an
+  unsafe transition to forwarding and can show Loop-Inconsistent state.
+
+Official references are listed at the end of this guide.
+
+2. TOPOLOGY AND BASELINE
+------------------------
+Image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+Host image: ghcr.io/srl-labs/network-multitool:latest
+
+SW1 (priority 4k) is intended root.
+SW2 (priority 8k); SW3 (priority 12k); SW4 (priority 16k).
+VLAN USERS = VLAN 10.
+Host1 = 10.10.10.11/24; Host2 = 10.10.10.12/24.
+
+Links:
+  SW1 ge-0/0/1 <-> SW2 ge-0/0/1
+  SW2 ge-0/0/2 <-> SW3 ge-0/0/1
+  SW3 ge-0/0/2 <-> SW1 ge-0/0/2
+  SW1 ge-0/0/3 <-> SW4 ge-0/0/1
+  Host1 eth1 <-> SW1 ge-0/0/10
+  Host2 eth1 <-> SW3 ge-0/0/10
+
+Deploy:
+  containerlab deploy -t clab.yml
+
+After all nodes finish booting:
+  ./scripts/verify.sh
+
+On switches, use:
+  show spanning-tree bridge
+  show spanning-tree interface
+  show interfaces terse | match "ge-0/0/(1|2|3|10)[.]0"
+  show configuration protocols rstp
+
+Baseline expected observations:
+- SW1 is the root bridge.
+- SW2's ge-0/0/1 is its root port toward SW1.
+- SW3's ge-0/0/2 is its root port toward SW1.
+- On the SW2-SW3 segment, SW2 has the superior BPDU (lower bridge ID
+  at equal root path cost); SW2 ge-0/0/2 is designated and SW3 ge-0/0/1
+  is alternate/blocking.
+- SW1 ge-0/0/3 is designated on the link to SW4; SW4 ge-0/0/1 is its
+  root port. Exact labels can vary slightly by software output.
+- Host1 should ping Host2 before the fault-injection tasks.
+
+3. TASK 2 — EDGE + BPDU PROTECTION
+----------------------------------
+Purpose:
+Demonstrate why an edge/access interface should not be connected to a
+bridge/switch. A BPDU on a protected edge port is an operational fault.
+
+On SW1:
+  configure
+  set protocols rstp bpdu-block-on-edge
+  set protocols rstp interface ge-0/0/3 edge
+  commit
+
+The global statement protects configured edge ports. The interface
+statement marks ge-0/0/3 (the SW4-facing port) as edge. Since SW4 runs RSTP,
+it sends BPDUs. SW1 should detect the BPDU and disable/block the test port.
+
+Verify on SW1:
+  run show spanning-tree interface
+  run show interfaces ge-0/0/3 terse
+  run show interfaces ge-0/0/3
+  run show log messages | match "BPDU|bpdu|ge-0/0/3"
+
+Expected result:
+- The SW1-to-SW4 test port is no longer forwarding and may report a BPDU
+  error/down state. Check the current output and logs rather than relying
+  on one exact state string.
+- Host1 and Host2 should still communicate through the SW1-SW2-SW3 triangle.
+
+RECOVERY BEFORE TASK 3
+----------------------
+On SW1, remove edge treatment from the test link first; leave edge treatment
+on the actual host-facing ge-0/0/10 in place:
+  configure
+  delete protocols rstp interface ge-0/0/3 edge
+  commit
+
+Then clear the BPDU error from operational mode:
+  run clear error bpdu interface ge-0/0/3
+
+Verify:
+  run show interfaces ge-0/0/3 terse
+  run show spanning-tree interface
+
+Do not clear the error while the port is still configured as an edge port
+with BPDU protection and the switch remains connected; it could trigger again.
+The global bpdu-block-on-edge statement can remain enabled because ge-0/0/3
+is no longer an edge interface. The actual host-facing edge port remains
+protected.
+
+4. TASK 3 — ROOT GUARD
+----------------------
+Purpose:
+Protect SW1's downstream link to SW4 from becoming a root path if SW4
+unexpectedly advertises a superior BPDU.
+
+First configure root protection on SW1's SW4-facing port:
+  configure
+  set protocols rstp interface ge-0/0/3 no-root-port
+  commit
+
+Now make SW4 advertise a superior bridge ID by lowering its bridge priority:
+  configure
+  set protocols rstp bridge-priority 0
+  commit
+
+Inspect both switches:
+SW1:
+  show spanning-tree bridge
+  show spanning-tree interface
+  show log messages | match "RSTP|rstp|root|Root"
+SW4:
+  show spanning-tree bridge
+  show spanning-tree interface
+
+Expected result:
+- SW4 advertises a superior BPDU (priority 0).
+- SW1's protected ge-0/0/3 does not become a root port. It should enter a
+  root-prevented/inconsistent or blocked condition based on the Junos build.
+- SW1 should remain root for its original triangle. Exact output labels may
+  vary; base verification on the state, role, and bridge information shown.
+
+RECOVERY
+--------
+Restore SW4's original priority:
+  configure
+  set protocols rstp bridge-priority 16k
+  commit
+
+When superior BPDUs stop arriving, root protection should release the port.
+Verify recovery with show spanning-tree interface on SW1.
+Then remove the temporary root protection statement:
+  configure
+  delete protocols rstp interface ge-0/0/3 no-root-port
+  commit
+
+5. TASK 4 — LOOP GUARD / BPDU TIMEOUT PROTECTION
+------------------------------------------------
+IMPORTANT: perform only in this isolated virtual lab. The triangle is
+intentionally used to model an STP BPDU-loss failure. Do not generate
+continuous traffic during the test, and restore the peer immediately.
+
+The protected port is SW3 ge-0/0/1, facing SW2. At baseline, this should be
+an alternate/non-designated port because SW3 has a direct path to root SW1.
+Juniper recommends loop protection on ports that can be root or alternate;
+it should not be used on a designated port without understanding the design.
+
+On SW3:
+  configure
+  set protocols rstp interface ge-0/0/1 bpdu-timeout-action block
+  commit
+
+Verify that the statement is present:
+  show configuration protocols rstp interface ge-0/0/1
+  show spanning-tree interface
+
+Now simulate BPDU loss without physically dropping the SW2-SW3 link. On SW2,
+disable RSTP participation on only the SW2-facing interface:
+  configure
+  set protocols rstp interface ge-0/0/2 disable
+  commit
+
+Do not shut down the physical interface. Wait up to about 30 seconds for
+BPDU aging/timeout, then inspect SW3:
+  show interfaces terse | match "ge-0/0/1[.]0"
+  show spanning-tree interface
+  show log messages | match "RSTP|rstp|loop|Loop|BPDU|bpdu"
+
+Expected result:
+- The physical link should remain up.
+- SW3 ge-0/0/1 should not transition unsafely to forwarding when BPDUs stop.
+- Depending on the Junos build, the port may show a loop-inconsistent label,
+  for example "Loop-Incon", or other blocked state/log indicating protection.
+  If this state is not observed, record the actual output; do not claim the
+  behavior is verified solely because the configuration commits.
+
+RESTORE RSTP IMMEDIATELY
+------------------------
+On SW2:
+  configure
+  delete protocols rstp interface ge-0/0/2 disable
+  commit
+
+Wait for BPDUs to return and inspect SW3 again:
+  show spanning-tree interface
+  show log messages | match "RSTP|rstp|loop|Loop|BPDU|bpdu"
+
+SW3's protected port should recover as soon as valid BPDUs return. If it does
+not, verify the SW2 interface configuration and physical link state first.
+
+IMPORTANT DESIGN RULE
+--------------------
+Junos root protection (no-root-port) and loop protection
+(bpdu-timeout-action block) are mutually exclusive on a single interface.
+This lab intentionally uses SW1 ge-0/0/3 for Root Guard and SW3 ge-0/0/1 for
+Loop Guard.
+
+6. FINAL VERIFICATION AND CLEANUP
+---------------------------------
+1. Confirm SW4 priority is 16k.
+2. Confirm SW2 ge-0/0/2 is no longer configured with 'disable'.
+3. Confirm SW1 ge-0/0/3 is no longer configured with temporary 'edge' or
+   'no-root-port' statements from the test.
+4. It is fine to leave the recommended BPDU protection globally configured
+   on SW1 and Loop Guard configured on SW3 ge-0/0/1 for the final review.
+5. Verify traffic end to end:
+     docker exec host1 ping -c 4 -W 1 10.10.10.12
+     docker exec host2 ping -c 4 -W 1 10.10.10.11
+6. Save the observations and explain when each protection is appropriate.
+
+7. TROUBLESHOOTING TIPS
+-----------------------
+- If SW1 ge-0/0/3 does not trigger BPDU protection, confirm SW4 ge-0/0/1 is
+  up, RSTP is enabled on SW4, and the port is configured edge on SW1.
+- If the port remains down after removing edge configuration, issue
+  'clear error bpdu interface ge-0/0/3' after committing the removal.
+- If Root Guard does not trigger, check that SW4 priority really is 0, that
+  SW1 ge-0/0/3 has no-root-port, and that the link is operational.
+- If Loop Guard does not trigger, first confirm SW3 ge-0/0/1 is a non-
+  designated port receiving BPDUs under baseline. Then check SW2 ge-0/0/2
+  has the RSTP disable statement, not an interface disable/shutdown, and
+  allow the BPDU timeout to elapse. Record actual behavior for this vJunos
+  version; CLI acceptance by itself does not prove runtime behavior.
+- If host-to-host ping fails after a task, restore any temporary configuration
+  first, then inspect VLAN membership, interface state, and RSTP roles.
+
+8. REFERENCE CONFIGURATION
+--------------------------
+configs/solution/*.conf contains an example steady-state configuration:
+- BPDU protection on SW1 edge interfaces;
+- Root protection on SW1's SW4-facing port;
+- Loop protection on SW3's alternate port;
+- SW4 restored to priority 16k.
+
+Those solution configs are for reference only. Do not overwrite the clean
+starting config with the solution files before performing the exercises.
+
+9. OFFICIAL JUNIPER REFERENCES
+------------------------------
+Edge interface:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/edge-edit-protocols-stp.html
+
+BPDU protection on edge interfaces:
+https://www.juniper.net/documentation/us/en/software/junos/stp-l2/topics/topic-map/spanning-tree-bpdu-protection.html
+
+Root protection (no-root-port):
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/no-root-port-edit-protocols-stp.html
+
+Loop protection / BPDU timeout action:
+https://www.juniper.net/documentation/us/en/software/junos/stp-l2/topics/topic-map/spanning-tree-loop-protection.html
+
+Clear BPDU error:
+https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/command/clear-error-bpdu-command.html

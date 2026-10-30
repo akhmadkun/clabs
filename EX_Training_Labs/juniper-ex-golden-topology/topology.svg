@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="1010" viewBox="0 0 1540 1010" role="img" aria-labelledby="title desc">
+  <title id="title">Juniper EX Series Golden Training Topology</title>
+  <desc id="desc">Four vJunos switches, a redundant Layer 2 triangle, two SW2-to-SW3 links for LACP, and four Linux hosts representing Students VLAN 10 and Teachers VLAN 20.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#eef3f8"/></linearGradient>
+    <linearGradient id="switchFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#edf4fb"/></linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="145%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e293b" flood-opacity="0.11"/></filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3969b2"/></marker>
+    <style>
+      .title{font:700 29px 'Inter', 'DejaVu Sans', sans-serif; fill:#14253d; letter-spacing:.2px}
+      .subtitle{font:400 14px 'Inter', 'DejaVu Sans', sans-serif; fill:#607087}
+      .sw-name{font:700 21px 'Inter', 'DejaVu Sans', sans-serif; fill:#18324f}
+      .sw-role{font:500 12px 'Inter', 'DejaVu Sans', sans-serif; fill:#5a6e84}
+      .port{font:600 12px 'Inter', 'DejaVu Sans', sans-serif; fill:#344960}
+      .host-name{font:700 17px 'Inter', 'DejaVu Sans', sans-serif; fill:#1e3249}
+      .host-ip{font:500 12px 'Inter', 'DejaVu Sans', sans-serif; fill:#53677e}
+      .pill{font:600 12px 'Inter', 'DejaVu Sans', sans-serif; fill:#344960}
+      .note{font:500 12px 'Inter', 'DejaVu Sans', sans-serif; fill:#607087}
+      .legend{font:600 12px 'Inter', 'DejaVu Sans', sans-serif; fill:#344960}
+    </style>
+  </defs>
+  <rect width="1540" height="1010" fill="url(#bg)" rx="22"/>
+  <text x="64" y="60" class="title">JUNIPER EX SERIES — GOLDEN TRAINING TOPOLOGY</text>
+  <text x="64" y="88" class="subtitle">Containerlab • vJunos-switch 25.4R1.12 • Shared physical topology for LAB-001 through LAB-006</text>
+  <g transform="translate(64 111)"><rect width="248" height="29" rx="14.5" fill="#e3edf9"/><circle cx="15" cy="14.5" r="5" fill="#3969b2"/><text x="29" y="19" class="pill">RSTP redundant triangle</text></g>
+  <g transform="translate(324 111)"><rect width="250" height="29" rx="14.5" fill="#eee8fb"/><circle cx="15" cy="14.5" r="5" fill="#7b55b8"/><text x="29" y="19" class="pill">Dual physical links for LACP</text></g>
+  <g transform="translate(586 111)"><rect width="245" height="29" rx="14.5" fill="#fff0d9"/><circle cx="15" cy="14.5" r="5" fill="#be7b24"/><text x="29" y="19" class="pill">VLAN 20 • Teachers</text></g>
+  <g transform="translate(843 111)"><rect width="235" height="29" rx="14.5" fill="#dff3ff"/><circle cx="15" cy="14.5" r="5" fill="#2683bb"/><text x="29" y="19" class="pill">VLAN 10 • Students</text></g>
+
+  <!-- Switch-to-switch links behind nodes -->
+  <path d="M 620 278 L 473 418" fill="none" stroke="#3969b2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 738 278 L 845 418" fill="none" stroke="#3969b2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 810 214 L 1084 237" fill="none" stroke="#3969b2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 525 461 L 775 461" fill="none" stroke="#7b55b8" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 525 505 L 775 505" fill="none" stroke="#7b55b8" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Topology interface labels -->
+  <g transform="translate(457 318) rotate(-43)"><rect x="-87" y="-14" width="174" height="25" rx="7" fill="#ffffff" stroke="#d7e1ed"/><text y="3" text-anchor="middle" class="port">SW1 ge-0/0/1 ↔ SW2 ge-0/0/1</text></g>
+  <g transform="translate(870 347)"><rect x="-103" y="-13" width="206" height="25" rx="7" fill="#ffffff" stroke="#d7e1ed"/><text y="4" text-anchor="middle" class="port">SW1 ge-0/0/2 ↔ SW3 ge-0/0/1</text></g>
+  <g transform="translate(946 205) rotate(5)"><rect x="-88" y="-14" width="176" height="25" rx="7" fill="#ffffff" stroke="#d7e1ed"/><text y="3" text-anchor="middle" class="port">SW1 ge-0/0/3 ↔ SW4 ge-0/0/1</text></g>
+  <g transform="translate(650 441)"><rect x="-115" y="-13" width="230" height="25" rx="7" fill="#f5f0ff" stroke="#d8c9f0"/><text y="4" text-anchor="middle" class="port">LACP member 1 • ge-0/0/2 ↔ ge-0/0/2</text></g>
+  <g transform="translate(650 526)"><rect x="-115" y="-13" width="230" height="25" rx="7" fill="#f5f0ff" stroke="#d8c9f0"/><text y="4" text-anchor="middle" class="port">LACP member 2 • ge-0/0/3 ↔ ge-0/0/3</text></g>
+
+  <!-- Host access links: VLANs shown in different colors -->
+  <path d="M 345 540 L 214 700" fill="none" stroke="#2683bb" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 450 540 L 438 700" fill="none" stroke="#be7b24" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 850 540 L 844 700" fill="none" stroke="#2683bb" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 955 540 L 1075 700" fill="none" stroke="#be7b24" stroke-width="3.5" stroke-linecap="round"/>
+  <g transform="translate(252 634) rotate(-50)"><rect x="-76" y="-13" width="152" height="24" rx="7" fill="#eef9ff" stroke="#bce4f7"/><text y="3" text-anchor="middle" class="port">SW2 ge-0/0/10</text></g>
+  <g transform="translate(444 625) rotate(-87)"><rect x="-75" y="-13" width="150" height="24" rx="7" fill="#fff8ea" stroke="#f0d8a8"/><text y="3" text-anchor="middle" class="port">SW2 ge-0/0/11</text></g>
+  <g transform="translate(848 625) rotate(-88)"><rect x="-75" y="-13" width="150" height="24" rx="7" fill="#eef9ff" stroke="#bce4f7"/><text y="3" text-anchor="middle" class="port">SW3 ge-0/0/10</text></g>
+  <g transform="translate(1015 633) rotate(53)"><rect x="-75" y="-13" width="150" height="24" rx="7" fill="#fff8ea" stroke="#f0d8a8"/><text y="3" text-anchor="middle" class="port">SW3 ge-0/0/11</text></g>
+
+  <!-- Switch cards -->
+  <g filter="url(#shadow)"><rect x="565" y="150" width="250" height="128" rx="17" fill="url(#switchFill)" stroke="#b8cbe0" stroke-width="1.6"/></g>
+  <g transform="translate(589 174)"><rect width="44" height="44" rx="11" fill="#dceaf9"/><path d="M8 12 H36 M8 21 H36 M8 30 H36" stroke="#3969b2" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="#3969b2"/><circle cx="12" cy="21" r="2" fill="#3969b2"/><circle cx="12" cy="30" r="2" fill="#3969b2"/></g>
+  <text x="648" y="189" class="sw-name">SW1</text><text x="648" y="211" class="sw-role">Root bridge for RSTP labs</text><text x="589" y="249" class="port">Priority: lab-specific</text>
+
+  <g filter="url(#shadow)"><rect x="275" y="420" width="250" height="120" rx="17" fill="url(#switchFill)" stroke="#b8cbe0" stroke-width="1.6"/></g>
+  <g transform="translate(298 442)"><rect width="43" height="43" rx="10" fill="#dceaf9"/><path d="M8 12 H35 M8 21 H35 M8 30 H35" stroke="#3969b2" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="#3969b2"/><circle cx="12" cy="21" r="2" fill="#3969b2"/><circle cx="12" cy="30" r="2" fill="#3969b2"/></g>
+  <text x="355" y="458" class="sw-name">SW2</text><text x="355" y="480" class="sw-role">Student1 + Teacher1</text><text x="298" y="515" class="port">Access: ge-0/0/10, ge-0/0/11</text>
+
+  <g filter="url(#shadow)"><rect x="775" y="420" width="250" height="120" rx="17" fill="url(#switchFill)" stroke="#b8cbe0" stroke-width="1.6"/></g>
+  <g transform="translate(798 442)"><rect width="43" height="43" rx="10" fill="#dceaf9"/><path d="M8 12 H35 M8 21 H35 M8 30 H35" stroke="#3969b2" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="#3969b2"/><circle cx="12" cy="21" r="2" fill="#3969b2"/><circle cx="12" cy="30" r="2" fill="#3969b2"/></g>
+  <text x="855" y="458" class="sw-name">SW3</text><text x="855" y="480" class="sw-role">Student2 + Teacher2</text><text x="798" y="515" class="port">Access: ge-0/0/10, ge-0/0/11</text>
+
+  <g filter="url(#shadow)"><rect x="1084" y="170" width="246" height="120" rx="17" fill="url(#switchFill)" stroke="#b8cbe0" stroke-width="1.6"/></g>
+  <g transform="translate(1106 191)"><rect width="43" height="43" rx="10" fill="#dceaf9"/><path d="M8 12 H35 M8 21 H35 M8 30 H35" stroke="#3969b2" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="#3969b2"/><circle cx="12" cy="21" r="2" fill="#3969b2"/><circle cx="12" cy="30" r="2" fill="#3969b2"/></g>
+  <text x="1163" y="208" class="sw-name">SW4</text><text x="1163" y="230" class="sw-role">Downstream / BPDU source</text><text x="1107" y="265" class="port">Uplink: ge-0/0/1</text>
+
+  <!-- Host cards -->
+  <g filter="url(#shadow)"><rect x="105" y="700" width="215" height="106" rx="15" fill="#f2fbff" stroke="#9bd7ef" stroke-width="1.5"/></g>
+  <g transform="translate(124 719)"><rect width="34" height="27" rx="4" fill="#d7f0fc" stroke="#2683bb"/><path d="M7 31 H27 M17 27 V31" stroke="#2683bb" stroke-width="2" stroke-linecap="round"/></g>
+  <text x="170" y="735" class="host-name">Student1</text><text x="124" y="771" class="host-ip">10.10.10.11/24</text><text x="124" y="790" class="sw-role">VLAN 10 • Students</text>
+
+  <g filter="url(#shadow)"><rect x="330" y="700" width="215" height="106" rx="15" fill="#fffaf0" stroke="#f0d19b" stroke-width="1.5"/></g>
+  <g transform="translate(349 719)"><rect width="34" height="27" rx="4" fill="#ffedcb" stroke="#be7b24"/><path d="M7 31 H27 M17 27 V31" stroke="#be7b24" stroke-width="2" stroke-linecap="round"/></g>
+  <text x="395" y="735" class="host-name">Teacher1</text><text x="349" y="771" class="host-ip">20.20.20.11/24</text><text x="349" y="790" class="sw-role">VLAN 20 • Teachers</text>
+
+  <g filter="url(#shadow)"><rect x="740" y="700" width="215" height="106" rx="15" fill="#f2fbff" stroke="#9bd7ef" stroke-width="1.5"/></g>
+  <g transform="translate(759 719)"><rect width="34" height="27" rx="4" fill="#d7f0fc" stroke="#2683bb"/><path d="M7 31 H27 M17 27 V31" stroke="#2683bb" stroke-width="2" stroke-linecap="round"/></g>
+  <text x="805" y="735" class="host-name">Student2</text><text x="759" y="771" class="host-ip">10.10.10.12/24</text><text x="759" y="790" class="sw-role">VLAN 10 • Students</text>
+
+  <g filter="url(#shadow)"><rect x="975" y="700" width="215" height="106" rx="15" fill="#fffaf0" stroke="#f0d19b" stroke-width="1.5"/></g>
+  <g transform="translate(994 719)"><rect width="34" height="27" rx="4" fill="#ffedcb" stroke="#be7b24"/><path d="M7 31 H27 M17 27 V31" stroke="#be7b24" stroke-width="2" stroke-linecap="round"/></g>
+  <text x="1040" y="735" class="host-name">Teacher2</text><text x="994" y="771" class="host-ip">20.20.20.12/24</text><text x="994" y="790" class="sw-role">VLAN 20 • Teachers</text>
+
+  <!-- Footer practical note -->
+  <rect x="64" y="850" width="1412" height="94" rx="15" fill="#ffffff" stroke="#d7e1ed"/>
+  <text x="88" y="880" class="legend">IMPORTANT</text>
+  <text x="88" y="905" class="note">Physical links are defined here; VLANs, trunk membership, LACP, and RSTP behavior remain lab-specific configuration tasks.</text>
+  <text x="88" y="925" class="note">Before changing labs, destroy the previous deployment because prefix: "" reuses node names (sw1, sw2, sw3, sw4).</text>
+  <text x="1474" y="978" text-anchor="end" class="subtitle">Editable SVG • Generated for Juniper EX training</text>
+</svg>

@@ -19,23 +19,46 @@ topology:
       image: vrnetlab/juniper_vjunos-switch:25.4R1.12
       startup-config: configs/sw3.conf
 
-    host1:
+    Student1:
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest
       exec:
         - ip addr add 10.10.10.11/24 dev eth1
         - ip link set eth1 up
 
-    host2:
+    Student2:
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest
       exec:
         - ip addr add 10.10.10.12/24 dev eth1
         - ip link set eth1 up
 
+    Teacher1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 20.20.20.11/24 dev eth1
+        - ip link set eth1 up
+
+    Teacher2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 20.20.20.12/24 dev eth1
+        - ip link set eth1 up
+
   links:
     - endpoints: ["sw1:ge-0/0/1", "sw2:ge-0/0/1"]
     - endpoints: ["sw1:ge-0/0/2", "sw3:ge-0/0/1"]
+
+    # LACP bundle
     - endpoints: ["sw2:ge-0/0/2", "sw3:ge-0/0/2"]
-    - endpoints: ["host1:eth1", "sw2:ge-0/0/10"]
-    - endpoints: ["host2:eth1", "sw3:ge-0/0/10"]
+    - endpoints: ["sw2:ge-0/0/3", "sw3:ge-0/0/3"]
+
+    # endpoints vlan 10 (Students)
+    - endpoints: ["Student1:eth1", "sw2:ge-0/0/10"]
+    - endpoints: ["Student2:eth1", "sw3:ge-0/0/10"]
+
+    # endpoints vlan 20 (Teachers)
+    - endpoints: ["Teacher1:eth1", "sw2:ge-0/0/10"]
+    - endpoints: ["Teacher2:eth1", "sw3:ge-0/0/10"]

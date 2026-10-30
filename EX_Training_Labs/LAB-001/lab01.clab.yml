@@ -1,0 +1,57 @@
+name: juniper-ex-lab
+
+prefix: ""
+
+topology:
+  kinds:
+    juniper_vjunosswitch:
+        image: vrnetlab/juniper_vjunos-switch:25.4R1.12
+    linux:
+        image: ghcr.io/srl-labs/network-multitool:latest
+  nodes:
+    sw2:
+      kind: juniper_vjunosswitch
+      #startup-config: configs/sw2.conf
+
+    sw3:
+      kind: juniper_vjunosswitch
+      #startup-config: configs/sw3.conf
+
+
+    Student1:
+      kind: linux
+      exec:
+        - ip addr add 10.10.10.11/24 dev eth1
+        - ip link set eth1 up
+
+    Student2:
+      kind: linux
+      exec:
+        - ip addr add 10.10.10.12/24 dev eth1
+        - ip link set eth1 up
+
+    Teacher1:
+      kind: linux
+      exec:
+        - ip addr add 20.20.20.11/24 dev eth1
+        - ip link set eth1 up
+
+    Teacher2:
+      kind: linux
+      exec:
+        - ip addr add 20.20.20.12/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+
+    # Two physical members reserved for the SW2-SW3 LACP exercise
+    - endpoints: ["sw2:ge-0/0/2", "sw3:ge-0/0/2"]
+    - endpoints: ["sw2:ge-0/0/3", "sw3:ge-0/0/3"]
+
+    # VLAN 10 - Students (configure access VLAN on switch ports per lab)
+    - endpoints: ["Student1:eth1", "sw2:ge-0/0/10"]
+    - endpoints: ["Student2:eth1", "sw3:ge-0/0/10"]
+
+    # VLAN 20 - Teachers (configure access VLAN on switch ports per lab)
+    - endpoints: ["Teacher1:eth1", "sw2:ge-0/0/11"]
+    - endpoints: ["Teacher2:eth1", "sw3:ge-0/0/11"]

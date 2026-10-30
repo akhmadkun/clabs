@@ -1,0 +1,20 @@
+Objective
+1.   Become comfortable with Junos operational and configuration modes.
+2.   Verify physical and logical interface state.
+3.   Understand VLAN membership, access ports and a basic trunk.
+4.   Verify MAC learning and endpoint connectivity.
+5.   Practice safe Junos configuration workflow with compare/commit/rollback.
+Tasks
+–   Access both SW2 and SW3 and identify hostname, model and Junos version.
+–   Check interface state.
+–   Confige VLAN Student and Teacher, access and trunk port.
+–   Demonstrate failed commit for non-existent vlans configuration.
+–   Demonstrate show | compare and rollback.
+–   Demonstrate adding more than 1 vlans on access ports.
+–   Verify VLAN configuration
+–   Verify the host-facing port is an access port carrying a single VLAN.
+–   Verify the inter-switch link is a trunk carrying VLAN Student and Teacher.
+–   Verify MAC learning on both switches.
+–   Test end-to-end ping on each VLANs.
+–   Demonstrate removing Teacher VLAN on the trunk port.
+–   Demonstrate rollback to the previous state.

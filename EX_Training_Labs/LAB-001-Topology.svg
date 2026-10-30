@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1289.8062"
+   height="630.08972"
+   viewBox="0 0 1289.8062 630.0897"
+   role="img"
+   aria-labelledby="title desc"
+   version="1.1"
+   id="svg52"
+   sodipodi:docname="LAB-001-Topology.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview52"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.1982422"
+     inkscape:cx="768.20864"
+     inkscape:cy="161.48655"
+     inkscape:window-width="2560"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg52">
+    <inkscape:page
+       x="0"
+       y="1.1751129e-08"
+       width="1289.8062"
+       height="630.08972"
+       id="page58"
+       margin="404.75958 239.51752 0 0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <title
+     id="title">Juniper EX Golden Training Topology</title>
+  <desc
+     id="desc">Four Juniper EX switches. SW1 connects to SW2, SW3, and SW4 using ge-0/0/1, ge-0/0/2, and ge-0/0/4 respectively. SW2 and SW3 are connected with two LACP links on ge-0/0/2 and ge-0/0/3. Student endpoints use VLAN 10 and teacher endpoints use VLAN 20.</desc>
+  <defs
+     id="defs17">
+    <linearGradient
+       id="switchFace"
+       x1="0"
+       y1="0"
+       x2="0.89999998"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#0c3e5b"
+         id="stop1" />
+      <stop
+         offset="0.55"
+         stop-color="#07334e"
+         id="stop2" />
+      <stop
+         offset="1"
+         stop-color="#06283f"
+         id="stop3" />
+    </linearGradient>
+    <linearGradient
+       id="switchTop"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#164965"
+         id="stop4" />
+      <stop
+         offset="1"
+         stop-color="#0b344f"
+         id="stop5" />
+    </linearGradient>
+    <linearGradient
+       id="labelFill"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#e1efff"
+         id="stop6" />
+      <stop
+         offset="1"
+         stop-color="#c8def5"
+         id="stop7" />
+    </linearGradient>
+    <linearGradient
+       id="studentScreen"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#cce9ad"
+         id="stop8" />
+      <stop
+         offset="1"
+         stop-color="#a6d78c"
+         id="stop9" />
+    </linearGradient>
+    <linearGradient
+       id="teacherScreen"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#ffd7a0"
+         id="stop10" />
+      <stop
+         offset="1"
+         stop-color="#ffb96e"
+         id="stop11" />
+    </linearGradient>
+    <linearGradient
+       id="laptopBase"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         id="stop12" />
+      <stop
+         offset="1"
+         stop-color="#c8d0d8"
+         id="stop13" />
+    </linearGradient>
+    <filter
+       id="softShadow"
+       x="-0.2"
+       y="-0.2"
+       width="1.4"
+       height="1.5">
+      <feDropShadow
+         dx="0"
+         dy="3"
+         stdDeviation="4"
+         flood-color="#14344b"
+         flood-opacity="0.13" />
+    </filter>
+    <filter
+       id="smallShadow"
+       x="-0.2"
+       y="-0.2"
+       width="1.4"
+       height="1.5">
+      <feDropShadow
+         dx="0"
+         dy="2"
+         stdDeviation="2"
+         flood-color="#14344b"
+         flood-opacity="0.12" />
+    </filter>
+    <style
+       id="style13">
+      .bg { fill: #ffffff; }
+      .link { fill: none; stroke: #2287ed; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .port-label rect { fill: url(#labelFill); stroke: #d2e6fa; stroke-width: 1; opacity: .98; }
+      .port-label text { font: 600 23px 'DejaVu Sans', Arial, sans-serif; fill: #071e36; text-anchor: middle; dominant-baseline: middle; }
+      .switch-name { font: 800 37px 'DejaVu Sans', Arial, sans-serif; fill: #071a30; text-anchor: middle; }
+      .j-logo { font: 300 35px 'DejaVu Sans', Arial, sans-serif; fill: #ffffff; letter-spacing: -1.7px; text-anchor: middle; }
+      .ex-series { font: 500 14px 'DejaVu Sans', Arial, sans-serif; fill: #ffffff; text-anchor: middle; }
+      .host-name { font: 800 27px 'DejaVu Sans', Arial, sans-serif; fill: #091d34; text-anchor: middle; }
+      .vlan-label { font: 500 25px 'DejaVu Sans', Arial, sans-serif; fill: #10243a; text-anchor: middle; }
+      .bundle-text { font: 800 23px 'DejaVu Sans', Arial, sans-serif; fill: #0646a0; text-anchor: middle; dominant-baseline: middle; }
+    </style>
+    <g
+       id="switch">
+      <path
+         d="m 30,0 h 256 l 28,24 H 0 Z"
+         fill="url(#switchTop)"
+         id="path13" />
+      <rect
+         x="0"
+         y="24"
+         width="314"
+         height="83"
+         rx="9"
+         fill="url(#switchFace)"
+         id="rect13" />
+      <path
+         d="M 1,25 H 313"
+         stroke="#b7d3e4"
+         stroke-width="2.2"
+         opacity="0.85"
+         id="path14" />
+      <text
+         x="157"
+         y="66"
+         class="j-logo"
+         id="text14"
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:35px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">JUNIPER</text>
+      <text
+         x="205"
+         y="86"
+         class="ex-series"
+         id="text15"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:14px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">EX Series</text>
+    </g>
+    <g
+       id="laptop">
+      <rect
+         x="0"
+         y="0"
+         width="124"
+         height="82"
+         rx="11"
+         fill="#0b1b2c"
+         id="rect15" />
+      <rect
+         x="7"
+         y="7"
+         width="110"
+         height="68"
+         rx="5"
+         fill="currentColor"
+         id="rect16" />
+      <path
+         d="m -11,82 h 146 l 8,14 q 0,5 -7,5 H -12 q -7,0 -5,-6 z"
+         fill="url(#laptopBase)"
+         stroke="#102033"
+         stroke-width="5"
+         stroke-linejoin="round"
+         id="path16" />
+      <path
+         d="M 48,91 H 77"
+         stroke="#8997a6"
+         stroke-width="2.5"
+         stroke-linecap="round"
+         id="path17" />
+    </g>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#labelFill"
+       id="linearGradient58"
+       x1="-0.29193711"
+       y1="-0.85634881"
+       x2="-0.29193711"
+       y2="76.21505"
+       gradientTransform="scale(1.7126977,0.58387421)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#labelFill"
+       id="linearGradient59"
+       x1="-0.29193711"
+       y1="-0.85634881"
+       x2="-0.29193711"
+       y2="76.21505"
+       gradientTransform="scale(1.7126977,0.58387421)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#labelFill"
+       id="linearGradient60"
+       x1="-0.28259709"
+       y1="-0.88465172"
+       x2="-0.28259709"
+       y2="80.503311"
+       gradientTransform="scale(1.7693035,0.56519417)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#labelFill"
+       id="linearGradient61"
+       x1="-0.28259709"
+       y1="-0.88465172"
+       x2="-0.28259709"
+       y2="80.503311"
+       gradientTransform="scale(1.7693035,0.56519417)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#labelFill"
+       id="linearGradient62"
+       x1="-0.28259709"
+       y1="-0.88465172"
+       x2="-0.28259709"
+       y2="80.503311"
+       gradientTransform="scale(1.7693035,0.56519417)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#labelFill"
+       id="linearGradient63"
+       x1="-0.28259709"
+       y1="-0.88465172"
+       x2="-0.28259709"
+       y2="80.503311"
+       gradientTransform="scale(1.7693035,0.56519417)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#studentScreen"
+       id="linearGradient64"
+       x1="5.5037179"
+       y1="8.9030724"
+       x2="5.5037179"
+       y2="95.390068"
+       gradientTransform="scale(1.2718675,0.78624539)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#teacherScreen"
+       id="linearGradient65"
+       x1="5.5037179"
+       y1="8.9030724"
+       x2="5.5037179"
+       y2="95.390068"
+       gradientTransform="scale(1.2718675,0.78624539)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#studentScreen"
+       id="linearGradient66"
+       x1="5.5037179"
+       y1="8.9030724"
+       x2="5.5037179"
+       y2="95.390068"
+       gradientTransform="scale(1.2718675,0.78624539)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#teacherScreen"
+       id="linearGradient67"
+       x1="5.5037179"
+       y1="8.9030724"
+       x2="5.5037179"
+       y2="95.390068"
+       gradientTransform="scale(1.2718675,0.78624539)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <rect
+     class="bg"
+     width="1235.5601"
+     height="629.25513"
+     id="rect17"
+     x="54.246128"
+     y="1.6690886"
+     style="display:inline;mix-blend-mode:normal;stroke-width:0.703071"
+     ry="57.438118" />
+  <!-- Physical links: drawn before devices so lines tuck behind switch bodies -->
+  <g
+     id="physical-links"
+     aria-label="Physical links"
+     style="display:inline"
+     transform="translate(0,-350.51346)">
+    <!-- SW1 to SW2 -->
+    <!-- SW1 to SW3 -->
+    <!-- SW1 to SW4 -->
+    <!-- SW2 to SW3 LACP members -->
+    <path
+       class="link"
+       d="M 415,505 H 912"
+       id="path21" />
+    <!-- SW2 downlink endpoints -->
+    <path
+       class="link"
+       d="M 166,578 V 765"
+       id="path23" />
+    <path
+       class="link"
+       d="M 379,578 V 765"
+       id="path24" />
+    <!-- SW3 downlink endpoints -->
+    <path
+       class="link"
+       d="M 948,578 V 765"
+       id="path25" />
+    <path
+       class="link"
+       d="M 1163,578 V 765"
+       id="path26" />
+  </g>
+  <!-- Switches -->
+  <g
+     id="sw2"
+     transform="translate(0,-350.51346)">
+    <text
+       class="switch-name"
+       x="260"
+       y="455"
+       id="text28"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:37px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">SW2</text>
+    <use
+       href="#switch"
+       x="103"
+       y="473"
+       id="use28" />
+  </g>
+  <g
+     id="sw3"
+     transform="translate(0,-350.51346)">
+    <text
+       class="switch-name"
+       x="1069"
+       y="455"
+       id="text29"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:37px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">SW3</text>
+    <use
+       href="#switch"
+       x="912"
+       y="473"
+       id="use29" />
+  </g>
+  <!-- Interface labels: uplinks -->
+  <!-- LACP member labels and aggregate marker -->
+  <g
+     class="port-label"
+     id="lacp-member-labels"
+     transform="translate(0,-350.51346)">
+    <g
+       transform="translate(435,482)"
+       id="g36">
+      <rect
+         width="131"
+         height="44"
+         rx="9"
+         id="rect35"
+         x="0"
+         y="0"
+         style="fill:url(#linearGradient58)" />
+      <text
+         x="65.5"
+         y="23"
+         id="text36"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:23px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">ge-0/0/2</text>
+    </g>
+    <g
+       transform="translate(770,482)"
+       id="g37">
+      <rect
+         width="131"
+         height="44"
+         rx="9"
+         id="rect36"
+         x="0"
+         y="0"
+         style="fill:url(#linearGradient59)" />
+      <text
+         x="65.5"
+         y="23"
+         id="text37"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:23px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">ge-0/0/2</text>
+    </g>
+  </g>
+  <!-- Host port labels -->
+  <g
+     class="port-label"
+     id="endpoint-port-labels"
+     style="display:inline"
+     transform="translate(0,-350.51346)">
+    <g
+       transform="translate(84,645)"
+       id="g41">
+      <rect
+         width="143"
+         height="45"
+         rx="9"
+         id="rect40"
+         x="0"
+         y="0"
+         style="fill:url(#linearGradient60)" />
+      <text
+         x="71.5"
+         y="23"
+         id="text41"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:23px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">ge-0/0/10</text>
+    </g>
+    <g
+       transform="translate(322,645)"
+       id="g42">
+      <rect
+         width="143"
+         height="45"
+         rx="9"
+         id="rect41"
+         x="0"
+         y="0"
+         style="fill:url(#linearGradient61)" />
+      <text
+         x="71.5"
+         y="23"
+         id="text42"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:23px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">ge-0/0/11</text>
+    </g>
+    <g
+       transform="translate(875,645)"
+       id="g43">
+      <rect
+         width="143"
+         height="45"
+         rx="9"
+         id="rect42"
+         x="0"
+         y="0"
+         style="fill:url(#linearGradient62)" />
+      <text
+         x="71.5"
+         y="23"
+         id="text43"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:23px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">ge-0/0/10</text>
+    </g>
+    <g
+       transform="translate(1102,645)"
+       id="g44">
+      <rect
+         width="143"
+         height="45"
+         rx="9"
+         id="rect43"
+         x="0"
+         y="0"
+         style="fill:url(#linearGradient63)" />
+      <text
+         x="71.5"
+         y="23"
+         id="text44"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:23px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">ge-0/0/11</text>
+    </g>
+  </g>
+  <!-- Student1 -->
+  <g
+     id="student1"
+     transform="translate(104,414.48654)">
+    <use
+       href="#laptop"
+       x="0"
+       y="0"
+       id="use44" />
+    <rect
+       x="7"
+       y="7"
+       width="110"
+       height="68"
+       rx="5"
+       fill="url(#studentScreen)"
+       id="rect44"
+       style="fill:url(#linearGradient64)" />
+    <rect
+       x="-36"
+       y="102"
+       width="196"
+       height="91"
+       rx="11"
+       fill="#edf8e8"
+       stroke="#a4d68b"
+       stroke-width="2"
+       id="rect45" />
+    <text
+       class="host-name"
+       x="62"
+       y="138"
+       id="text45"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:27px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">STUDENT1</text>
+    <text
+       class="vlan-label"
+       x="62"
+       y="173"
+       id="text46"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:25px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">(VLAN 10)</text>
+  </g>
+  <!-- Teacher1 -->
+  <g
+     id="teacher1"
+     transform="translate(317,414.48654)">
+    <use
+       href="#laptop"
+       x="0"
+       y="0"
+       id="use46" />
+    <rect
+       x="7"
+       y="7"
+       width="110"
+       height="68"
+       rx="5"
+       fill="url(#teacherScreen)"
+       id="rect46"
+       style="fill:url(#linearGradient65)" />
+    <rect
+       x="-8"
+       y="102"
+       width="183"
+       height="91"
+       rx="11"
+       fill="#fff1e3"
+       stroke="#ffb45b"
+       stroke-width="2"
+       id="rect47" />
+    <text
+       class="host-name"
+       x="83"
+       y="138"
+       id="text47"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:27px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">TEACHER1</text>
+    <text
+       class="vlan-label"
+       x="83"
+       y="173"
+       id="text48"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:25px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">(VLAN 20)</text>
+  </g>
+  <!-- Student2 -->
+  <g
+     id="student2"
+     transform="translate(886,414.48654)">
+    <use
+       href="#laptop"
+       x="0"
+       y="0"
+       id="use48" />
+    <rect
+       x="7"
+       y="7"
+       width="110"
+       height="68"
+       rx="5"
+       fill="url(#studentScreen)"
+       id="rect48"
+       style="fill:url(#linearGradient66)" />
+    <rect
+       x="-43"
+       y="102"
+       width="194"
+       height="91"
+       rx="11"
+       fill="#edf8e8"
+       stroke="#a4d68b"
+       stroke-width="2"
+       id="rect49" />
+    <text
+       class="host-name"
+       x="54"
+       y="138"
+       id="text49"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:27px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">STUDENT2</text>
+    <text
+       class="vlan-label"
+       x="54"
+       y="173"
+       id="text50"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:25px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">(VLAN 10)</text>
+  </g>
+  <!-- Teacher2 -->
+  <g
+     id="teacher2"
+     transform="translate(1101,414.48654)">
+    <use
+       href="#laptop"
+       x="0"
+       y="0"
+       id="use50" />
+    <rect
+       x="7"
+       y="7"
+       width="110"
+       height="68"
+       rx="5"
+       fill="url(#teacherScreen)"
+       id="rect50"
+       style="fill:url(#linearGradient67)" />
+    <rect
+       x="-14"
+       y="102"
+       width="184"
+       height="91"
+       rx="11"
+       fill="#fff1e3"
+       stroke="#ffb45b"
+       stroke-width="2"
+       id="rect51" />
+    <text
+       class="host-name"
+       x="78"
+       y="138"
+       id="text51"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:27px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">TEACHER2</text>
+    <text
+       class="vlan-label"
+       x="78"
+       y="173"
+       id="text52"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:25px;line-height:normal;font-family:'DejaVu Sans', Arial, sans-serif">(VLAN 20)</text>
+  </g>
+  <metadata
+     id="metadata58">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Juniper EX Golden Training Topology</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
