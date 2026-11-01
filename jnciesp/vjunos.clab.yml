@@ -1,6 +1,10 @@
 name: jncie-sp-vjunos
 prefix: ""
 
+mgmt:
+  network: sys101-mgmt
+  ipv4-subnet: 172.31.1.0/24
+
 topology:
   kinds:
     juniper_vjunosrouter:
@@ -40,6 +44,12 @@ topology:
     # sudo ip link set br-univ up
     br-univ:
       kind: bridge
+
+    # service nodes
+    s1:
+      kind: linux
+      image: sys101-services:latest
+      mgmt-ipv4: 172.31.1.100
 
   links:
     # --- Point-to-Point Links (LAG) R1 <-> R2 ---

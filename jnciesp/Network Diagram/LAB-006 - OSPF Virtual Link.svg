@@ -5,7 +5,7 @@
    viewBox="0 0 1680 1000"
    version="1.1"
    id="svg52"
-   sodipodi:docname="LAB-006 - topology.svg"
+   sodipodi:docname="LAB-006 - OSPF Virtual Link.svg"
    inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -20,10 +20,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.7041273"
-     inkscape:cx="512.57908"
-     inkscape:cy="615.27094"
-     inkscape:window-width="2560"
+     inkscape:zoom="4.8199999"
+     inkscape:cx="1022.5104"
+     inkscape:cy="242.21992"
+     inkscape:window-width="3440"
      inkscape:window-height="1408"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -202,12 +202,16 @@
      x="1030"
      y="204"
      class="small"
-     id="text13">R2 RID 10.1.1.2 ↔ R5 RID 10.1.1.5</text>
+     id="text13"><tspan
+       style="font-weight:bold"
+       id="tspan1">R2 RID 2.2.2.2 ↔ R5 RID 5.5.5.5</tspan></text>
   <text
      x="1030"
      y="225"
      class="small"
-     id="text14">Transit Area 2 (0.0.0.2)</text>
+     id="text14"><tspan
+       style="font-weight:bold"
+       id="tspan2">Transit Area 2 (0.0.0.2)</tspan></text>
   <!-- Link labels -->
   <rect
      x="505"

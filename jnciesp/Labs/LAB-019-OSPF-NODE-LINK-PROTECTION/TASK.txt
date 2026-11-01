@@ -1,0 +1,117 @@
+LAB-019 — OSPF NODE-LINK PROTECTION & NODE-FAILURE RESILIENCE
+CHALLENGE SHEET — OUTCOME-BASED, NOT A COMMAND RECIPE
+
+SCENARIO
+  LAB-018 protected the R1-R2 link against a single-link failure. The next
+  maintenance requirement is stronger: traffic from R1 to the R4 loopback must
+  be protected if the entire primary next-hop router R2 becomes unavailable.
+  Determine whether OSPF node-link protection computes a node-avoiding alternate,
+  whether the required next-hop state is prepared for forwarding, and whether
+  traffic survives a controlled R2 node outage.
+
+ENVIRONMENT
+  - R1 is vJunos-router and is the point of local repair (PLR).
+  - R2, R3 and R4 remain the existing peer nodes (cRPD in the current hybrid profile).
+  - Reuse the existing R1-R2-R3-R4 Area 0 P2P diamond:
+      VLAN 12: R1-R2 (primary)
+      VLAN 13: R1-R3 (alternate candidate)
+      VLAN 24: R2-R4
+      VLAN 34: R3-R4
+  - Protected interface on R1: ge-0/0/0.12.
+  - Target destination: R4 loopback 4.4.4.4/32.
+  - Current observed R1-R3 outgoing OSPF cost is 10; preserve it.
+  - Do not renumber, change interface types, alter router IDs, or touch br-univ.
+  - Do not run another lab using the same shared topology concurrently.
+
+TASK 1 — PROVE THE BASELINE
+  Establish the healthy state before changing protection mode.
+
+  Evidence required:
+  - All four expected OSPF adjacencies are Full.
+  - R1 route to 4.4.4.4/32 is primary via 10.0.12.2 / ge-0/0/0.12, metric 2.
+  - R1 has an alternate candidate via 10.0.13.3 / ge-0/0/0.13.
+  - R1's ge-0/0/0.13 outgoing OSPF cost is 10.
+  - R3 can reach 4.4.4.4/32 directly through R4.
+  - R3 can reach R2's router ID without using R1; collect the actual route and
+    metric on R3.
+  - R2 reaches R4's loopback with the expected metric.
+  - Record existing policy-options and routing-options forwarding-table config.
+
+TASK 2 — REPLACE LINK PROTECTION WITH NODE-LINK PROTECTION
+  On R1 only, replace link-protection on ge-0/0/0.12 with node-link-protection.
+  Do not leave both protection statements on the same interface.
+
+  Evidence required:
+  - Effective configuration shows node-link-protection on ge-0/0/0.12.
+  - The former link-protection statement is absent from that interface.
+  - `show ospf backup coverage`, `show ospf backup neighbor`, and
+    `show ospf backup spf detail` are captured.
+  - For destination 4.4.4.4/32, R3 is an eligible backup next-hop.
+  - Explain why the backup path through R3 avoids primary node R2.
+  - Calculate and show the RFC 5286 node-protecting condition using live route
+    metrics: D(R3,R4) < D(R3,R2) + D(R2,R4).
+
+TASK 3 — VERIFY FORWARDING PREPARATION
+  Inspect forwarding-table policy before changing it. Juniper's OSPF LFA
+  guidance recommends a per-packet load-balancing policy so all required
+  next-hops are installed by the routing process. Do not overwrite an existing
+  forwarding-table export policy. If no export policy exists and the current
+  lab profile is isolated, add a lab-scoped per-packet policy as documented in
+  SOLUTION-GUIDE.txt.
+
+  Evidence required:
+  - Existing and effective forwarding-table export policy.
+  - R1 route detail for 4.4.4.4/32 showing primary and backup next-hop/weights.
+  - RE forwarding-table output for 4.4.4.4/32.
+  - PFE route output for 4.4.4.4/32 and PFE next-hop output for ge-0/0/0.13.
+  - Distinguish an existing PFE next-hop object from proof that it is associated
+    with the target prefix as its protection next-hop. Do not overclaim from a
+    single `show pfe route` line.
+
+TASK 4 — CONTROLLED NODE FAILURE
+  Run a sustained rapid ping from R1 to 4.4.4.4/32. From a separate host session,
+  stop only Containerlab node R2 using the topology file/name that owns the
+  running R2 node. Do not stop R1, R3 or R4. Do not destroy the topology.
+
+  Observe and record:
+  - R1-R2 adjacency loss and R1-R3 adjacency remains Full.
+  - Whether R1 continues forwarding to 4.4.4.4/32 during the R2 outage.
+  - Ping loss, sequence gap, RTT spike and total sample count.
+  - Route/next-hop after OSPF has fully reconverged.
+  - Whether the new route avoids R2.
+
+  Important: a route that changes to R3 after global SPF convergence proves
+  reachability recovery, not by itself local repair. A ping result of 0% loss is
+  supportive but is not sufficient alone to prove the PFE local-repair event.
+  Correlate traffic evidence with backup SPF, forwarding-policy and available
+  PFE/log evidence. If the timing cannot distinguish local repair from ordinary
+  reconvergence, classify the result as inconclusive for local repair.
+
+TASK 5 — RECOVER AND RESTORE
+  Start only R2 again. Verify all four OSPF adjacencies return to Full and R1's
+  primary route to R4 returns via R2 at metric 2. Confirm node-link-protection
+  backup coverage is recalculated.
+
+ACCEPTANCE CRITERIA
+  - Baseline is healthy and all addresses/metrics are recorded from live output.
+  - node-link-protection is accepted and effective on R1 ge-0/0/0.12.
+  - Backup SPF shows an eligible R3 path for 4.4.4.4/32.
+  - The RFC 5286 node-protection inequality is satisfied using observed metrics.
+  - Forwarding policy is inspected and any lab-scoped change is documented.
+  - Controlled R2 node outage does not disturb R1-R3 or R3-R4 links.
+  - Traffic behavior is recorded without calling post-convergence reroute an FRR
+    event unless local-repair evidence distinguishes it.
+  - R2 is restarted, all adjacencies recover, and primary route via R2 returns.
+  - No changes are made to br-univ, the physical parent ports, or unrelated labs.
+
+CLEAN RESTORE — REQUIRED
+  Restore the LAB-018 state or the user's pre-lab state deliberately. Remove only
+  LAB-019 node-link-protection and any LAB-019 policy objects/export statements
+  created during the exercise. If returning to LAB-018, restore link-protection
+  on R1 ge-0/0/0.12. Restore R2 to running state and prove the baseline again.
+
+EVIDENCE TO SAVE
+  Baseline adjacencies/routes/metrics; effective node-link-protection config;
+  backup coverage/neighbor/SPF outputs; node-protection metric calculation;
+  forwarding-table policy; RE/PFE observations; ping results with timestamps;
+  R2 stop/start timestamps; post-recovery route and adjacency outputs.

@@ -1,0 +1,10 @@
+lab Cleartext-Password := "lab123"
+    Service-Type = Administrative-User
+
+ops Cleartext-Password := "ops123"
+    Juniper-Local-User-Name := "radius-ops"
+
+noc Cleartext-Password := "noc123"
+    Juniper-Local-User-Name := "radius-noc"
+
+readonly Cleartext-Password := "readonly123"

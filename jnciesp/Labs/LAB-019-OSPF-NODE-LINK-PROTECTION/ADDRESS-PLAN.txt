@@ -1,0 +1,57 @@
+LAB-019 — ADDRESS / TOPOLOGY PLAN
+
+REUSE POLICY
+  Reuse the currently deployed LAB-018 Area 0 core diamond without rebuilding it.
+  The interface names below match the hybrid setup observed in the conversation:
+  R1 is vJunos-router; R2, R3 and R4 are cRPD.
+
+ROUTERS
+  R1  Router ID 1.1.1.1  vJunos-router  PLR
+  R2  Router ID 2.2.2.2  existing peer node  primary next-hop node to protect
+  R3  Router ID 3.3.3.3  existing peer node  node-protecting alternate candidate
+  R4  Router ID 4.4.4.4  existing peer node  destination / loopback 4.4.4.4/32
+
+LINKS
+  Link  VLAN  R1/R2/R3/R4 interfaces               OSPF area  Type
+  R1-R2 12    R1 ge-0/0/0.12 <-> R2 eth1.12        0.0.0.0    P2P
+  R1-R3 13    R1 ge-0/0/0.13 <-> R3 eth1.13        0.0.0.0    P2P
+  R2-R4 24    R2 eth1.24      <-> R4 eth1.24       0.0.0.0    P2P
+  R3-R4 34    R3 eth1.34      <-> R4 eth1.34       0.0.0.0    P2P
+
+OBSERVED R1 VALUES FROM LAB-018
+  R1 primary next-hop to R4: 10.0.12.2 via ge-0/0/0.12
+  R1 alternate neighbor R3: 10.0.13.3 via ge-0/0/0.13
+  R1 ge-0/0/0.13 OSPF outgoing cost: 10
+  R1 route to 4.4.4.4/32: metric 2 via R2
+  R1 backup SPF for 4.4.4.4/32: R3 is Eligible / Contributes backup next-hop
+
+EXPECTED COST PROFILE (VERIFY LIVE BEFORE ACCEPTANCE)
+  R1 -> R2: 1
+  R2 -> R4: 1
+  R3 -> R4: 1
+  R1 -> R3: 10 (observed, directional)
+  Costs are directional OSPF outgoing metrics. Do not infer the reverse
+  direction from the local interface cost; inspect each router's OSPF interface.
+
+NODE-PROTECTION CHECK FOR TARGET 4.4.4.4/32
+  PLR S = R1
+  Primary neighbor E = R2
+  Alternate neighbor N = R3
+  Destination D = R4
+
+  RFC 5286 node-protecting LFA condition:
+    D(N,D) < D(N,E) + D(E,D)
+
+  Expected from the current diamond/cost profile:
+    D(R3,R4) = 1
+    D(R3,R2) = 2 (via R4)
+    D(R2,R4) = 1
+    1 < 2 + 1  => satisfied
+
+  Also verify by routing-table evidence on R3 and R2. The arithmetic above is
+  an expected design check, not a substitute for live route/LSDB evidence.
+
+BRIDGE / HOST
+  The pre-existing host bridge br-univ is external infrastructure. LAB-019 must
+  not create, delete, reconfigure, or bring it down. Do not modify the universal
+  Containerlab YAML or the physical parent interfaces.

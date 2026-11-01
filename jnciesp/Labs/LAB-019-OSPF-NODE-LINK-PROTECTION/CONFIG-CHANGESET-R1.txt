@@ -1,0 +1,48 @@
+LAB-019 — R1 CONFIGURATION CHANGESET
+
+PRECONDITION
+  The current LAB-018 configuration on R1 has:
+    protocols ospf area 0.0.0.0 interface ge-0/0/0.12 link-protection;
+  Confirm this before deleting it. If the live configuration differs, stop and
+  adapt the change rather than deleting an unrelated statement.
+
+REPLACE LINK PROTECTION WITH NODE-LINK PROTECTION
+  configure
+  delete protocols ospf area 0.0.0.0 interface ge-0/0/0.12 link-protection
+  set protocols ospf area 0.0.0.0 interface ge-0/0/0.12 node-link-protection
+  commit check
+  commit
+
+VERIFY
+  run show configuration protocols ospf area 0.0.0.0 interface ge-0/0/0.12 | display set
+  run show ospf backup coverage
+  run show ospf backup neighbor
+  run show ospf backup spf detail
+
+OPTIONAL LAB-SCOPED PER-PACKET LOAD-BALANCING POLICY
+  Only use these commands if `routing-options forwarding-table` has NO existing
+  export policy and there is no existing load-balancing policy to preserve.
+
+  configure
+  set policy-options policy-statement LAB019-PPLB then load-balance per-packet
+  set routing-options forwarding-table export LAB019-PPLB
+  commit check
+  commit
+
+Do not overwrite or remove an existing forwarding-table export policy. If one
+exists, inspect it and determine how to integrate the action safely before
+making any change.
+
+RESTORE LAB-018
+  configure
+  delete protocols ospf area 0.0.0.0 interface ge-0/0/0.12 node-link-protection
+  set protocols ospf area 0.0.0.0 interface ge-0/0/0.12 link-protection
+  commit check
+  commit
+
+REMOVE OPTIONAL LAB019 POLICY (only if LAB-019 created it)
+  configure
+  delete routing-options forwarding-table export LAB019-PPLB
+  delete policy-options policy-statement LAB019-PPLB
+  commit check
+  commit

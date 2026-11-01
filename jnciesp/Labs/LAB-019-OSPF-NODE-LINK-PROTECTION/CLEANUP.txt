@@ -1,0 +1,38 @@
+LAB-019 — CLEANUP AND RECOVERY CHECKLIST
+
+1. If R2 was stopped, start it before any other cleanup:
+     sudo containerlab start -t /absolute/path/to/current-core.clab.yml --node r2
+
+2. Wait until these four adjacencies are Full:
+     R1-R2, R1-R3, R2-R4, R3-R4
+
+3. On R1, verify the route to 4.4.4.4/32 returns via 10.0.12.2 / ge-0/0/0.12
+   with metric 2.
+
+4. Restore the intended state:
+   A. To return to LAB-018:
+        delete protocols ospf area 0.0.0.0 interface ge-0/0/0.12 node-link-protection
+        set protocols ospf area 0.0.0.0 interface ge-0/0/0.12 link-protection
+   B. To return to an unprotected baseline:
+        delete protocols ospf area 0.0.0.0 interface ge-0/0/0.12 node-link-protection
+      Do not choose B if LAB-018 is supposed to remain active.
+
+5. If and only if this lab created LAB019-PPLB and there was no pre-existing
+   forwarding-table export policy, remove:
+        delete routing-options forwarding-table export LAB019-PPLB
+        delete policy-options policy-statement LAB019-PPLB
+
+6. Commit check and commit. Verify the resulting config with display set.
+
+7. Final checks:
+     show ospf neighbor
+     show route 4.4.4.4/32 exact detail
+     show ospf backup coverage
+     show ospf backup spf detail
+
+8. Do not:
+   - destroy or redeploy the shared universal topology;
+   - delete, re-create, or change br-univ;
+   - shut down physical parent interfaces;
+   - remove unrelated policy or forwarding-table export statements;
+   - leave R2 stopped.

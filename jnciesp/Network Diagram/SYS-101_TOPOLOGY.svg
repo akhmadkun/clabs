@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1920"
+   height="1080"
+   viewBox="0 0 1920 1080"
+   role="img"
+   aria-labelledby="svg-title svg-desc"
+   version="1.1"
+   id="svg21"
+   sodipodi:docname="SYS-101_TOPOLOGY.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview21"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.1361111"
+     inkscape:cx="959.8533"
+     inkscape:cy="540"
+     inkscape:window-width="3440"
+     inkscape:window-height="1408"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="routers" />
+  <title
+     id="svg-title">SYS-101 | Initial System Settings</title>
+  <desc
+     id="svg-desc">Management network topology connecting four Juniper routers R1 through R4 and a services host S1.</desc>
+  <defs
+     id="defs1">
+    <style
+       id="style1"><![CDATA[
+      :root {
+        --navy: #102b45;
+        --blue: #2375ba;
+        --blue-pale: #dcecf8;
+        --green: #2b895b;
+        --green-pale: #e5fbf5;
+        --canvas: #f4f8fc;
+        --ink: #112c47;
+        --muted: #566678;
+      }
+      text {
+        font-family: Inter, "Segoe UI", Arial, Helvetica, sans-serif;
+      }
+      .header-title { fill: #ffffff; font-size: 50px; font-weight: 700; letter-spacing: .2px; }
+      .header-subtitle { fill: #e2ebf4; font-size: 26px; font-weight: 400; }
+      .router-box { fill: #ffffff; stroke: #2375ba; stroke-width: 5; }
+      .router-name { fill: #112c47; font-size: 38px; font-weight: 700; text-anchor: middle; }
+      .router-ip { fill: #566678; font-size: 24px; font-weight: 400; text-anchor: middle; }
+      .link-blue { fill: none; stroke: #2375ba; stroke-width: 6; stroke-linecap: square; }
+      .management-box { fill: #dcecf8; stroke: #2375ba; stroke-width: 5; }
+      .management-title { fill: #112c47; font-size: 29px; font-weight: 700; text-anchor: middle; }
+      .management-subtitle { fill: #566678; font-size: 22px; font-weight: 400; text-anchor: middle; }
+      .link-green { fill: none; stroke: #2b895b; stroke-width: 7; stroke-linecap: square; }
+      .service-box { fill: #e5fbf5; stroke: #2b895b; stroke-width: 6; }
+      .service-name { fill: #2b895b; font-size: 40px; font-weight: 700; text-anchor: middle; }
+      .service-ip { fill: #112c47; font-size: 29px; font-weight: 700; text-anchor: middle; }
+      .service-capabilities { fill: #566678; font-size: 25px; font-weight: 400; text-anchor: middle; }
+      .footer { fill: #566678; font-size: 23px; font-weight: 400; }
+    ]]></style>
+  </defs>
+  <!-- Canvas and title band -->
+  <g
+     id="background">
+    <rect
+       x="0"
+       y="0"
+       width="1920"
+       height="1080"
+       fill="#f4f8fc"
+       id="rect1" />
+    <rect
+       x="0"
+       y="0"
+       width="1920"
+       height="151"
+       fill="#102b45"
+       id="rect2" />
+  </g>
+  <g
+     id="title">
+    <text
+       class="header-title"
+       x="72"
+       y="83"
+       id="text2">SYS-101 | Initial System Settings</text>
+    <text
+       class="header-subtitle"
+       x="72"
+       y="123"
+       id="text3">Secure management baseline: DNS, NTP, RADIUS, Syslog, and configuration archival</text>
+  </g>
+  <!-- Router-to-management-network connections (drawn behind nodes) -->
+  <g
+     id="router-links">
+    <path
+       class="link-blue"
+       d="M370 350 V457"
+       id="path3" />
+    <path
+       class="link-blue"
+       d="M741 350 V457"
+       id="path4" />
+    <path
+       class="link-blue"
+       d="M1112 350 V457"
+       id="path5" />
+    <path
+       class="link-blue"
+       d="M1482 350 V457"
+       id="path6" />
+  </g>
+  <!-- Management network to services connection -->
+  <g
+     id="services-link">
+    <path
+       class="link-green"
+       d="M961 566 V703"
+       id="path7" />
+  </g>
+  <!-- Router nodes -->
+  <g
+     id="routers">
+    <g
+       id="router-r1">
+      <rect
+         class="router-box"
+         x="251"
+         y="222"
+         width="239"
+         height="128"
+         rx="20"
+         ry="20"
+         id="rect7" />
+      <text
+         class="router-name"
+         x="370.5"
+         y="278"
+         id="text7">R1</text>
+      <text
+         class="router-ip"
+         x="370.5"
+         y="322"
+         id="text8">172.31.1.X</text>
+    </g>
+    <g
+       id="router-r2">
+      <rect
+         class="router-box"
+         x="621"
+         y="222"
+         width="240"
+         height="128"
+         rx="20"
+         ry="20"
+         id="rect8" />
+      <text
+         class="router-name"
+         x="741"
+         y="278"
+         id="text9">R2</text>
+      <text
+         class="router-ip"
+         x="741"
+         y="322"
+         id="text10">172.31.1.X</text>
+    </g>
+    <g
+       id="router-r3">
+      <rect
+         class="router-box"
+         x="992"
+         y="222"
+         width="239"
+         height="128"
+         rx="20"
+         ry="20"
+         id="rect10" />
+      <text
+         class="router-name"
+         x="1111.5"
+         y="278"
+         id="text11">R3</text>
+      <text
+         class="router-ip"
+         x="1111.5"
+         y="322"
+         id="text12">172.31.1.X</text>
+    </g>
+    <g
+       id="router-r4">
+      <rect
+         class="router-box"
+         x="1362"
+         y="222"
+         width="239"
+         height="128"
+         rx="20"
+         ry="20"
+         id="rect12" />
+      <text
+         class="router-name"
+         x="1481.5"
+         y="278"
+         id="text13">R4</text>
+      <text
+         class="router-ip"
+         x="1481.5"
+         y="322"
+         id="text14">172.31.1.X</text>
+    </g>
+  </g>
+  <!-- Shared management segment -->
+  <g
+     id="management-network">
+    <rect
+       class="management-box"
+       x="181"
+       y="457"
+       width="1561"
+       height="109"
+       rx="25"
+       ry="25"
+       id="rect14" />
+    <text
+       class="management-title"
+       x="961.5"
+       y="516"
+       id="text15">Management Network 172.31.1.0/24</text>
+    <text
+       class="management-subtitle"
+       x="961.5"
+       y="547"
+       id="text16">Addressing injected by Containerlab</text>
+  </g>
+  <!-- Services host -->
+  <g
+     id="services-host">
+    <rect
+       class="service-box"
+       x="722"
+       y="703"
+       width="478"
+       height="217"
+       rx="25"
+       ry="25"
+       id="rect16" />
+    <text
+       class="service-name"
+       x="961"
+       y="758"
+       id="text17">S1</text>
+    <text
+       class="service-ip"
+       x="961"
+       y="798"
+       id="text18">172.31.1.100</text>
+    <text
+       class="service-capabilities"
+       x="961"
+       y="849"
+       id="text19">DNS  |  NTP  |  RADIUS</text>
+    <text
+       class="service-capabilities"
+       x="961"
+       y="889"
+       id="text20">Syslog  |  SCP Archive</text>
+  </g>
+  <!-- Lab environment footer -->
+  <g
+     id="footer">
+    <text
+       class="footer"
+       x="70"
+       y="1016"
+       id="text21">Containerlab prefix: empty  |  vJunos-router 25.4R1.12  |  Services base: network-multitool</text>
+  </g>
+</svg>

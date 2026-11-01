@@ -1,0 +1,40 @@
+LAB-019 — REFERENCES AND TECHNICAL BASIS
+
+1. JUNIPER — CONFIGURING LOOP-FREE ALTERNATE ROUTES FOR OSPF
+   https://www.juniper.net/documentation/us/en/software/junos/ospf/topics/topic-map/configuring-loop-free-alternate-routes-for-ospf.html
+   Relevant sections:
+   - OSPF LFA overview and precomputed backup paths
+   - Configuring Node-Link Protection for OSPF
+   - Backup SPF options
+   - Backup coverage, backup neighbors and backup SPF verification
+   - Per-packet load-balancing best practice
+
+2. JUNIPER — OSPF INTERFACE CLI REFERENCE
+   https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/interface-edit-protocols-ospf.html
+   Confirms the `node-link-protection` interface statement and its behavior:
+   calculate a loop-free alternate through a different router, avoiding the
+   primary next-hop router.
+
+3. IETF RFC 5286 — BASIC SPECIFICATION FOR IP FAST REROUTE: LOOP-FREE ALTERNATES
+   https://www.rfc-editor.org/rfc/rfc5286.html
+   Section 3.2 defines the node-protecting alternate condition:
+     Distance_opt(N,D) < Distance_opt(N,E) + Distance_opt(E,D)
+   where N is the alternate neighbor, D is the destination and E is the primary
+   neighbor being protected.
+
+4. CONTAINERLAB — STOP COMMAND
+   https://containerlab.dev/cmd/stop/
+   Supports stopping selected nodes with `--node` while leaving the deployed lab
+   in place. Use the exact topology path/name that owns the currently running R2.
+
+5. CONTAINERLAB — START COMMAND
+   https://containerlab.dev/cmd/start/
+   Starts selected stopped nodes and restores dataplane interfaces parked by the
+   Containerlab lifecycle operation.
+
+VALIDATION NOTE
+  This package has not been deployed in the user's environment. Release-specific
+  support for `node-link-protection`, the operational output, PFE behavior and
+  actual node-failure traffic continuity must be confirmed on the running
+  vJunos-router image. Record exact CLI errors/output; do not infer a pass from
+  a successful commit alone.

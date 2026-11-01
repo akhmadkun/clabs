@@ -1,0 +1,187 @@
+LAB-019 — SOLUTION GUIDE
+OSPF NODE-LINK PROTECTION & NODE-FAILURE RESILIENCE
+
+READ THIS AFTER ATTEMPTING TASK.txt.
+All commands below assume R1 is the active vJunos-router and R2-R4 are the
+existing cRPD nodes. Confirm the live interface names first. Do not deploy a new
+topology or touch br-univ.
+
+1. BASELINE — R1
+  run show ospf neighbor
+  run show ospf interface ge-0/0/0.12 detail
+  run show ospf interface ge-0/0/0.13 detail
+  run show route 4.4.4.4/32 exact detail
+  run show ospf backup coverage
+  run show ospf backup neighbor
+  run show ospf backup spf detail
+
+Expected from the user's latest LAB-018 evidence:
+  - R1 -> 4.4.4.4/32 primary via 10.0.12.2 / ge-0/0/0.12, metric 2.
+  - Backup candidate via 10.0.13.3 / ge-0/0/0.13.
+  - R1 ge-0/0/0.13 cost 10.
+  - R3 is Eligible / Contributes backup next-hop for 4.4.4.4/32.
+
+2. CHECK NODE-PROTECTION MATH
+  On R3:
+    run show route 4.4.4.4/32 exact detail
+    run show route 2.2.2.2/32 exact detail
+  On R2:
+    run show route 4.4.4.4/32 exact detail
+
+For the expected diamond cost profile:
+  D(R3,R4) = 1
+  D(R3,R2) = 2 (R3 -> R4 -> R2)
+  D(R2,R4) = 1
+
+RFC 5286 node-protecting condition:
+  D(N,D) < D(N,E) + D(E,D)
+  1 < 2 + 1
+  1 < 3  (satisfied)
+
+Use actual route metrics from the live lab. If they differ, recalculate before
+continuing. A node-protecting alternate must reach D without traversing the
+primary neighbor E=R2.
+
+3. REPLACE LINK-PROTECTION WITH NODE-LINK-PROTECTION
+The user's LAB-018 effective configuration showed link-protection on
+ge-0/0/0.12. Replace that statement; do not leave both modes on the interface.
+
+  configure
+  delete protocols ospf area 0.0.0.0 interface ge-0/0/0.12 link-protection
+  set protocols ospf area 0.0.0.0 interface ge-0/0/0.12 node-link-protection
+  commit check
+  commit
+
+Verify:
+  run show configuration protocols ospf area 0.0.0.0 interface ge-0/0/0.12 | display set
+  run show ospf backup coverage
+  run show ospf backup neighbor
+  run show ospf backup spf detail
+
+Expected: node-link-protection is effective on ge-0/0/0.12. For 4.4.4.4/32,
+R1 should identify a backup through R3. The operational SPF output may show
+`Eligible, Reason: Contributes backup next-hop`; do not expect it necessarily to
+print a literal string saying "node-protecting". Prove node protection using the
+configuration plus the live RFC 5286 distance inequality.
+
+If the statement is rejected, save the exact error and stop this feature-specific
+pass. Do not silently fall back to link-protection and call it node protection.
+
+4. CHECK FORWARDING-TABLE EXPORT POLICY BEFORE ADDING ANYTHING
+On R1:
+  run show configuration routing-options forwarding-table | display set
+  run show configuration policy-options | display set | match load-balance
+
+Junos OSPF guidance recommends a per-packet load-balancing policy for link and
+node-link protection so the routing process installs the required next-hops.
+Do not overwrite an existing forwarding-table export policy. If an export policy
+already exists, inspect its terms and integrate only if appropriate; preserve
+its existing policy behavior and order.
+
+If NO forwarding-table export policy exists and this is an isolated lab profile,
+apply this lab-scoped policy:
+  configure
+  set policy-options policy-statement LAB019-PPLB then load-balance per-packet
+  set routing-options forwarding-table export LAB019-PPLB
+  commit check
+  commit
+
+Verify:
+  run show configuration policy-options policy-statement LAB019-PPLB | display set
+  run show configuration routing-options forwarding-table | display set
+  run show route 4.4.4.4/32 exact detail
+  run show route forwarding-table extensive destination 4.4.4.4/32
+  run show pfe route ip prefix 4.4.4.4/32
+  run show pfe next-hop interface ge-0/0/0.13
+
+Interpret carefully:
+  - RIB backup weight is evidence of a calculated/attached backup next-hop.
+  - `show pfe next-hop interface` showing 10.0.13.3 proves a PFE next-hop object
+    exists, not by itself that the object is linked as backup for 4.4.4.4/32.
+  - `show pfe route ip prefix` may show the active primary route only. Absence of
+    a second visible row is not, by itself, proof that local-repair state is absent.
+  - Preserve raw outputs. Do not infer backup association from a next-hop ID alone.
+
+5. CONTROLLED NODE FAILURE — STOP ONLY R2
+Before failure, keep separate sessions open:
+  R1: run ping 4.4.4.4 rapid count 5000
+  R1: run show ospf neighbor
+  R1: run show route 4.4.4.4/32 exact detail
+
+From the Containerlab host, in another terminal, use the topology file or lab
+name that owns the already-running R2 node. Do not use a guessed topology path.
+
+  sudo containerlab stop -t /absolute/path/to/current-core.clab.yml --node r2
+
+Record host time immediately before the stop. The command stops only R2; it does
+not destroy the whole lab. Containerlab node lifecycle operations support
+starting/stopping selected nodes while retaining the deployed lab and its links.
+
+While R2 is stopped, observe on R1:
+  run show ospf neighbor
+  run show route 4.4.4.4/32 exact detail
+  run show ospf backup coverage
+  run show ospf backup spf detail
+
+Also check R3/R4 adjacency. R1-R3 and R3-R4 must remain usable. R1 should
+ultimately reach 4.4.4.4/32 via R3, with expected post-convergence metric 11
+(10 from R1 to R3 + 1 from R3 to R4), provided the live metric profile still
+matches the baseline.
+
+TRAFFIC INTERPRETATION
+  - `ping rapid` is a finite fast probe burst. Start it first and trigger the
+    R2 stop immediately from the separate host terminal; if the burst completes
+    too early, increase count or use an external continuous probe source.
+  - A 0% loss result supports continuity during that sample but does not alone
+    prove PFE local repair.
+  - Route change via R3 after full OSPF SPF convergence proves normal recovery.
+  - Claim local repair only when traffic evidence is correlated with precomputed
+    node-link backup state and forwarding/PFE or platform event evidence that
+    distinguishes it from ordinary reconvergence.
+  - Do not claim a universal sub-50-ms result from ping output.
+
+6. RESTORE R2
+From the host:
+  sudo containerlab start -t /absolute/path/to/current-core.clab.yml --node r2
+
+Wait for OSPF to converge. On all four routers:
+  run show ospf neighbor
+
+On R1:
+  run show route 4.4.4.4/32 exact detail
+  run show ospf backup coverage
+  run show ospf backup spf detail
+
+Expected recovery:
+  - Four expected OSPF adjacencies Full.
+  - R1 primary route to 4.4.4.4/32 returns via 10.0.12.2 / ge-0/0/0.12.
+  - Primary metric returns to 2.
+  - R3 backup is recalculated and remains eligible if topology/metrics unchanged.
+
+7. CLEANUP / CHOOSE RESTORE TARGET
+If restoring the LAB-018 state:
+  configure
+  delete protocols ospf area 0.0.0.0 interface ge-0/0/0.12 node-link-protection
+  set protocols ospf area 0.0.0.0 interface ge-0/0/0.12 link-protection
+  commit check
+  commit
+
+If LAB019 created the policy and there was no prior forwarding-table export:
+  configure
+  delete routing-options forwarding-table export LAB019-PPLB
+  delete policy-options policy-statement LAB019-PPLB
+  commit check
+  commit
+
+If the user wants a clean baseline rather than the LAB-018 state, remove
+node-link-protection without restoring link-protection. Do not delete unrelated
+forwarding-table policies or any pre-existing configuration.
+
+FINAL ACCEPTANCE
+  - Effective node-link-protection config verified on R1.
+  - R3 is a valid node-protecting alternate for R4 based on live metrics.
+  - Forwarding-table policy is documented and was not overwritten.
+  - R2 stop/start affected R2 only; br-univ and other nodes were untouched.
+  - Four adjacencies Full and primary R4 route via R2 metric 2 after recovery.
+  - Report separately: LFA calculation, forwarding preparation, traffic behavior,
+    and proof (or lack of proof) of local repair.
