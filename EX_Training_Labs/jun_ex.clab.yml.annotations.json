@@ -1,0 +1,80 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "sw1",
+      "position": {
+        "x": 520,
+        "y": 200
+      }
+    },
+    {
+      "id": "sw2",
+      "position": {
+        "x": 360,
+        "y": 420
+      }
+    },
+    {
+      "id": "sw3",
+      "position": {
+        "x": 660,
+        "y": 420
+      }
+    },
+    {
+      "id": "sw4",
+      "position": {
+        "x": 700,
+        "y": 200
+      }
+    },
+    {
+      "id": "Student1",
+      "position": {
+        "x": 220,
+        "y": 420
+      }
+    },
+    {
+      "id": "Student2",
+      "position": {
+        "x": 800,
+        "y": 420
+      }
+    },
+    {
+      "id": "Teacher1",
+      "position": {
+        "x": 360,
+        "y": 560
+      }
+    },
+    {
+      "id": "Teacher2",
+      "position": {
+        "x": 660,
+        "y": 560
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {
+    "style": "default",
+    "linkLabelMode": "show-all",
+    "lastNonTelemetryLinkLabelMode": "show-all",
+    "telemetryNodeSizePx": 40,
+    "telemetryInterfaceSizePercent": 115,
+    "showRateLabels": false,
+    "autoCreateTrafficRateAnnotations": false,
+    "gridLineWidth": 0.00001,
+    "gridStyle": "dotted",
+    "gridColor": null,
+    "gridBgColor": null
+  }
+}

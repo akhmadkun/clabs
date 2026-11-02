@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="1507"
-   height="1044"
-   viewBox="0 0 1507 1044"
+   width="1100.2909"
+   height="795.55011"
+   viewBox="0 0 1100.2909 795.55011"
    version="1.1"
    id="svg56"
    sodipodi:docname="topology-IOL.ISIS.SingleArea-L2.svg"
@@ -22,8 +22,8 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.1752874"
-     inkscape:cx="753.43273"
-     inkscape:cy="521.99998"
+     inkscape:cx="367.14424"
+     inkscape:cy="379.05622"
      inkscape:window-width="3440"
      inkscape:window-height="1408"
      inkscape:window-x="0"
@@ -33,10 +33,10 @@
     <inkscape:page
        x="0"
        y="0"
-       width="1507"
-       height="1044"
+       width="1100.2909"
+       height="795.55011"
        id="page1"
-       margin="60.410755 203.35452 184.6357 188.88997"
+       margin="0"
        bleed="0" />
   </sodipodi:namedview>
   <title
@@ -124,19 +124,19 @@
        id="arrowWhite"
        markerWidth="5"
        markerHeight="5"
-       refX="4.1"
+       refX="4.0999999"
        refY="2.5"
        orient="auto"
        markerUnits="strokeWidth">
       <path
-         d="M0,0 L5,2.5 L0,5 Z"
+         d="M 0,0 5,2.5 0,5 Z"
          fill="#ffffff"
          id="path10" />
     </marker>
     <g
        id="routerBlue">
       <path
-         d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
+         d="M -45,-5 C -45,6 -25,20 0,20 25,20 45,6 45,-5 V 7 C 45,19 25,31 0,31 -25,31 -45,19 -45,7 Z"
          fill="url(#blueBody)"
          stroke="#076da2"
          stroke-width="1.1"
@@ -166,19 +166,19 @@
          fill="none"
          id="g15">
         <path
-           d="M-5,-7 L-22,-16"
+           d="m -5,-7 -17,-9"
            marker-end="url(#arrowWhite)"
            id="path12" />
         <path
-           d="M5,-7 L22,-16"
+           d="m 5,-7 17,-9"
            marker-end="url(#arrowWhite)"
            id="path13" />
         <path
-           d="M-5,-2 L-22,8"
+           d="M -5,-2 -22,8"
            marker-end="url(#arrowWhite)"
            id="path14" />
         <path
-           d="M5,-2 L22,8"
+           d="M 5,-2 22,8"
            marker-end="url(#arrowWhite)"
            id="path15" />
       </g>
@@ -186,7 +186,7 @@
     <g
        id="routerOrange">
       <path
-         d="M-45,-5 C-45,6 -25,20 0,20 C25,20 45,6 45,-5 L45,7 C45,19 25,31 0,31 C-25,31 -45,19 -45,7 Z"
+         d="M -45,-5 C -45,6 -25,20 0,20 25,20 45,6 45,-5 V 7 C 45,19 25,31 0,31 -25,31 -45,19 -45,7 Z"
          fill="url(#orangeBody)"
          stroke="#d88b00"
          stroke-width="1.1"
@@ -216,19 +216,19 @@
          fill="none"
          id="g20">
         <path
-           d="M-5,-7 L-22,-16"
+           d="m -5,-7 -17,-9"
            marker-end="url(#arrowWhite)"
            id="path17" />
         <path
-           d="M5,-7 L22,-16"
+           d="m 5,-7 17,-9"
            marker-end="url(#arrowWhite)"
            id="path18" />
         <path
-           d="M-5,-2 L-22,8"
+           d="M -5,-2 -22,8"
            marker-end="url(#arrowWhite)"
            id="path19" />
         <path
-           d="M5,-2 L22,8"
+           d="M 5,-2 22,8"
            marker-end="url(#arrowWhite)"
            id="path20" />
       </g>
@@ -245,16 +245,17 @@
   </defs>
   <rect
      id="background"
-     x="0"
-     y="0"
-     width="1507"
-     height="1044"
-     fill="#ffffff" />
+     x="0.85085171"
+     y="0.85085535"
+     width="1101.142"
+     height="792.14667"
+     fill="#ffffff"
+     style="display:inline;stroke-width:0.74459" />
   <!-- Single IS-IS area; all routers form Level-2-only adjacencies -->
   <rect
      class="area-box"
-     x="200.61055"
-     y="72.47364"
+     x="9.1680145"
+     y="10.361175"
      width="1086.3927"
      height="779.26544"
      rx="31.686451"
@@ -262,11 +263,11 @@
      stroke="#78909c"
      stroke-width="2.2"
      id="rect20"
-     style="fill:#e3f9fe;fill-opacity:1" />
+     style="display:inline;fill:#e3f9fe;fill-opacity:1" />
   <!-- Single area label and adjacency-level legend -->
   <g
      id="single-area-label"
-     transform="translate(-5.1051345,199.10024)">
+     transform="translate(-196.54767,136.98778)">
     <text
        x="753"
        y="78"
@@ -291,45 +292,47 @@
   <!-- Links (drawn behind the routers) -->
   <g
      class="link"
-     id="g31">
+     id="g31"
+     transform="translate(-191.44254,-62.112466)">
     <path
-       d="M293,190 L293,366"
+       d="M 293,190 V 366"
        id="path21" />
     <path
-       d="M324,411 L517,529"
+       d="M 324,411 517,529"
        id="path22" />
     <path
-       d="M307,423 L528,746"
+       d="M 307,423 528,746"
        id="path23" />
     <path
-       d="M546,575 L546,735"
+       d="M 546,575 V 735"
        id="path24" />
     <path
-       d="M575,544 L881,544"
+       d="M 575,544 H 881"
        id="path25" />
     <path
-       d="M548,754 L882,557"
+       d="M 548,754 882,557"
        id="path26" />
     <path
-       d="M575,766 L882,766"
+       d="M 575,766 H 882"
        id="path27" />
     <path
-       d="M912,575 L912,736"
+       d="M 912,575 V 736"
        id="path28" />
     <path
-       d="M940,529 L1151,416"
+       d="M 940,529 1151,416"
        id="path29" />
     <path
-       d="M938,749 L1158,421"
+       d="M 938,749 1158,421"
        id="path30" />
     <path
-       d="M1184,190 L1184,366"
+       d="M 1184,190 V 366"
        id="path31" />
   </g>
   <!-- Interface labels -->
   <g
      class="interface"
-     id="g41">
+     id="g41"
+     transform="translate(-191.44254,-62.112466)">
     <text
        x="304"
        y="280"
@@ -342,12 +345,12 @@
     <text
        x="393"
        y="585"
-       transform="rotate(57 393 585)"
+       transform="rotate(57,393,585)"
        id="text33">Eth0/1.24</text>
     <text
        x="533"
        y="690"
-       transform="rotate(-90 533 690)"
+       transform="rotate(-90,533,690)"
        id="text34">Eth0/1.34</text>
     <text
        x="684"
@@ -356,7 +359,7 @@
     <text
        x="672"
        y="665"
-       transform="rotate(-29 672 665)"
+       transform="rotate(-29,672,665)"
        id="text36">Eth0/1.46</text>
     <text
        x="668"
@@ -365,17 +368,17 @@
     <text
        x="893"
        y="690"
-       transform="rotate(-90 893 690)"
+       transform="rotate(-90,893,690)"
        id="text38">Eth0/1.56</text>
     <text
        x="951"
        y="520"
-       transform="rotate(-28 951 520)"
+       transform="rotate(-28,951,520)"
        id="text39">Gi0/0/0.619</text>
     <text
        x="1010"
        y="635"
-       transform="rotate(-56 1010 635)"
+       transform="rotate(-56,1010,635)"
        id="text40">Gi0/0/0.519</text>
     <text
        x="1054"
@@ -384,42 +387,42 @@
   </g>
   <!-- Blue IOL routers -->
   <g
-     transform="translate(293 163)"
+     transform="translate(101.55746,100.88754)"
      id="g42">
     <use
        xlink:href="#routerBlue"
        id="use41" />
   </g>
   <g
-     transform="translate(293 400)"
+     transform="translate(101.55746,337.88754)"
      id="g43">
     <use
        xlink:href="#routerBlue"
        id="use42" />
   </g>
   <g
-     transform="translate(546 546)"
+     transform="translate(354.55746,483.88754)"
      id="g44">
     <use
        xlink:href="#routerBlue"
        id="use43" />
   </g>
   <g
-     transform="translate(546 768)"
+     transform="translate(354.55746,705.88754)"
      id="g45">
     <use
        xlink:href="#routerBlue"
        id="use44" />
   </g>
   <g
-     transform="translate(912 768)"
+     transform="translate(720.55746,705.88754)"
      id="g46">
     <use
        xlink:href="#routerBlue"
        id="use45" />
   </g>
   <g
-     transform="translate(912 546)"
+     transform="translate(720.55746,483.88754)"
      id="g47">
     <use
        xlink:href="#routerBlue"
@@ -427,14 +430,14 @@
   </g>
   <!-- Orange IOS-XR routers -->
   <g
-     transform="translate(1184 163)"
+     transform="translate(992.55746,100.88754)"
      id="g48">
     <use
        xlink:href="#routerOrange"
        id="use47" />
   </g>
   <g
-     transform="translate(1184 400)"
+     transform="translate(992.55746,337.88754)"
      id="g49">
     <use
        xlink:href="#routerOrange"
@@ -443,7 +446,8 @@
   <!-- Router names -->
   <g
      class="router-label"
-     id="g56">
+     id="g56"
+     transform="translate(-191.44254,-62.112466)">
     <text
        x="293"
        y="103"
