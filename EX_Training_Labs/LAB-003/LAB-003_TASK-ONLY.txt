@@ -1,0 +1,129 @@
+JUNIPER EX SERIES OPERATIONS & TROUBLESHOOTING
+LAB-003 — RSTP Fundamentals (Build from Scratch)
+
+CREDENTIALS
+===========================================================
+user : admin
+pass : admin@123
+===========================================================
+
+OBJECTIVE
+===========================================================
+1. Build the Layer 2 switching configuration without startup-config.
+2. Create VLAN 10 (STUDENTS) and VLAN 20 (TEACHERS).
+3. Configure access ports and inter-switch trunk links.
+4. Build and verify an RSTP topology from an empty configuration.
+5. Understand root bridge election, root/designated/alternate port roles,
+   forwarding/blocking states, and RSTP path cost.
+6. Verify end-to-end connectivity within each VLAN.
+===========================================================
+
+TOPOLOGY & INTERFACE MAPPING
+===========================================================
+SW1 ge-0/0/1  <-> SW2 ge-0/0/1
+SW1 ge-0/0/2  <-> SW3 ge-0/0/1
+SW1 ge-0/0/4  <-> SW4 ge-0/0/4
+SW2 ge-0/0/2  <-> SW3 ge-0/0/2
+
+SW2 ge-0/0/10 <-> Student1 (10.10.10.11/24)  VLAN 10
+SW2 ge-0/0/11 <-> Teacher1 (20.20.20.11/24) VLAN 20
+SW3 ge-0/0/10 <-> Student2 (10.10.10.12/24)  VLAN 10
+SW3 ge-0/0/11 <-> Teacher2 (20.20.20.12/24) VLAN 20
+
+The second SW2-SW3 link (ge-0/0/3 on both switches) is reserved for
+LAB-002 LACP. Keep it disabled / out of Layer 2 for this lab.
+
+VLANs
+-----
+STUDENTS  : VLAN ID 10
+TEACHERS  : VLAN ID 20
+
+RSTP BRIDGE PRIORITY TARGETS
+----------------------------
+SW1 : 4k  (intended Root Bridge)
+SW2 : 8k
+SW3 : 12k
+SW4 : 16k
+===========================================================
+
+TASKS
+===========================================================
+1. Deploy the golden topology WITHOUT applying any startup-config.
+
+2. Access SW1, SW2, SW3, and SW4. Set the hostname on each switch and
+   verify the Junos version and interface status.
+
+3. On all four switches, create:
+   - VLAN STUDENTS with VLAN ID 10.
+   - VLAN TEACHERS with VLAN ID 20.
+
+4. Configure the endpoint-facing access ports:
+   - SW2 ge-0/0/10: access VLAN STUDENTS.
+   - SW2 ge-0/0/11: access VLAN TEACHERS.
+   - SW3 ge-0/0/10: access VLAN STUDENTS.
+   - SW3 ge-0/0/11: access VLAN TEACHERS.
+   Configure these host-facing ports as RSTP edge ports.
+
+5. Configure the inter-switch links as trunks carrying both STUDENTS and
+   TEACHERS:
+   - SW1 ge-0/0/1 and SW2 ge-0/0/1.
+   - SW1 ge-0/0/2 and SW3 ge-0/0/1.
+   - SW1 ge-0/0/4 and SW4 ge-0/0/4.
+   - SW2 ge-0/0/2 and SW3 ge-0/0/2.
+   Keep SW2/SW3 ge-0/0/3 out of this lab.
+
+6. Configure the RSTP bridge priorities using the target values above.
+   Do not configure STP, MSTP, or VSTP; this exercise uses RSTP.
+
+7. Verify the spanning-tree topology. Identify and record:
+   - The elected Root Bridge.
+   - The Root Port on SW2, SW3, and SW4.
+   - The Designated Port on the SW2-SW3 segment.
+   - The Alternate / Blocking port on the SW2-SW3 segment.
+   - The state and role of each host-facing edge port.
+
+8. Verify VLAN membership and MAC learning. Confirm:
+   - Student1 can ping Student2.
+   - Teacher1 can ping Teacher2.
+   - Student and Teacher endpoints remain in separate VLANs.
+
+9. Perform an RSTP path-cost experiment:
+   - On SW3 ge-0/0/1, change the RSTP port cost to 100.
+   - On SW3 ge-0/0/2, change the RSTP port cost to 10.
+   - Re-check the RSTP roles and states on SW2 and SW3.
+   - Record why the Designated / Alternate role on the SW2-SW3 segment changes.
+
+10. Restore the default RSTP path costs on SW3. Re-verify the original
+    Root Bridge, port roles, forwarding/blocking states, VLAN membership,
+    MAC learning, and both same-VLAN ping tests.
+
+===========================================================
+EXPECTED FINAL STATE
+===========================================================
+1. SW1 is elected as the RSTP Root Bridge.
+2. SW2, SW3, and SW4 have a valid Root Port toward SW1.
+3. The SW2-SW3 redundant path is loop-free; one side is Alternate / Blocking.
+4. All configured host-facing ports are Edge / Forwarding.
+5. Student1-to-Student2 and Teacher1-to-Teacher2 connectivity succeeds.
+6. No Layer 3 routing between VLAN 10 and VLAN 20 is configured.
+===========================================================
+
+VERIFICATION COMMAND TOOLKIT
+===========================================================
+show interfaces terse
+show vlans
+show ethernet-switching table
+show spanning-tree bridge
+show spanning-tree interface
+show configuration protocols rstp
+===========================================================
+
+NOTES
+===========================================================
+- RSTP is enabled by default on Ethernet switching interfaces on Juniper
+  EX Series. Configure the required bridge priorities and interface
+  parameters; do not add a different spanning-tree protocol.
+- Use the LAB-003 golden topology and the interface mapping in this file.
+- The unused SW2-SW3 ge-0/0/3 link must not participate in this RSTP exercise.
+- This is a task-only sheet. Do not use a prebuilt solution/startup config.
+===========================================================

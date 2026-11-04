@@ -6,8 +6,11 @@ mgmt:
 topology:
   kinds:
     cisco_iol:
-      image: arthurk99/cisco-iol:17.15.01
+      image: arthurk99/cisco-iol-l2:17.15.01
   nodes:
+    switch:
+      kind: cisco_iol
+      type: L2
     client:
       kind: linux
       image: ghcr.io/srl-labs/network-multitool:latest

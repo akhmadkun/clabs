@@ -38,28 +38,32 @@
       "position": {
         "x": 220,
         "y": 420
-      }
+      },
+      "icon": "client"
     },
     {
       "id": "Student2",
       "position": {
         "x": 800,
         "y": 420
-      }
+      },
+      "icon": "client"
     },
     {
       "id": "Teacher1",
       "position": {
         "x": 360,
         "y": 560
-      }
+      },
+      "icon": "client"
     },
     {
       "id": "Teacher2",
       "position": {
         "x": 660,
         "y": 560
-      }
+      },
+      "icon": "client"
     }
   ],
   "edgeAnnotations": [],
