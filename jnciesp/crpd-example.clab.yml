@@ -1,0 +1,65 @@
+name: juniper_ospf
+prefix: ""
+
+# All labs use the same physical topology.
+# All cRPD eth1 parent interfaces attach to the pre-existing host bridge br-univ.
+# Logical router-to-router connectivity is formed by 802.1Q VLAN subinterfaces:
+# VLAN 12 = Area 0, VLAN 13 = Area 1, VLAN 24 = Area 2.
+# Area assignments follow Day One: Advanced OSPF in the Enterprise, Chapter 3.
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+    juniper_crpd:
+      image: crpd:23.4R2-S5.6
+      #image: xzjt/crpd:25.2R1-S1.4
+    cisco_iol:
+      image: arthurk99/cisco-iol:17.15.01
+
+  nodes:
+    r1:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r1/base.conf
+      binds:
+        - ./configs_crpd/r1:/labconfigs:rw
+    r2:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r2/base.conf
+      binds:
+        - ./configs_crpd/r2:/labconfigs:rw
+    r3:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r3/base.conf
+      binds:
+        - ./configs_crpd/r3:/labconfigs:rw
+    r4:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r4/base.conf
+      binds:
+        - ./configs_crpd/r4:/labconfigs:rw
+    r5:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r5/base.conf
+      binds:
+        - ./configs_crpd/r5:/labconfigs:rw
+    r6:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r6/base.conf
+      binds:
+        - ./configs_crpd/r6:/labconfigs:rw
+    # This is an existing Linux bridge managed outside Containerlab.
+    # Create/enable it on the host beforehand; this topology must not delete it.
+    br-univ:
+      kind: bridge
+
+
+
+  links:
+    # Shared physical Layer-2 bridge; 802.1Q logical adjacencies are configured on cRPD.
+    - endpoints: ["r1:eth1", "br-univ:r1_eth1"]
+    - endpoints: ["r2:eth1", "br-univ:r2_eth1"]
+    - endpoints: ["r3:eth1", "br-univ:r3_eth1"]
+    - endpoints: ["r4:eth1", "br-univ:r4_eth1"]
+    - endpoints: ["r5:eth1", "br-univ:r5_eth1"]
+    - endpoints: ["r6:eth1", "br-univ:r6_eth1"]
