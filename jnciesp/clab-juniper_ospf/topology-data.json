@@ -1,0 +1,1098 @@
+{
+  "name": "juniper_ospf",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "",
+      "mgmt": {
+        "network": "clab",
+        "bridge": "br-5c4c1d383be5",
+        "ipv4-subnet": "172.20.20.0/24",
+        "ipv4-gw": "172.20.20.1",
+        "ipv6-subnet": "3fff:172:20:20::/64",
+        "ipv6-gw": "3fff:172:20:20::1",
+        "external-access": true
+      }
+    }
+  },
+  "ssh-pub-keys": ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNmj55wu0lcSRhMRwPFBAA7sUN/TLqLprf8YTGxRZiP","ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC4H07so2fLhWNfYTioWRqvHNvQmRPPHnmu/4lBRHogoTQ8Wf9jCy2bL0OQ39pWiKC9xDwl6ZfsMJQGmUzxRPcK8yNeR0ojOw7qEpmEZeLVvMvYEYPsmXgbUyoJvDmi4E5M8CWlssN+xfSvhZ6PiC50otXPFNLVxymjlOdPJuIEP2EGFQ/4/2LAN/pe/rb4HvMcsMdXv8sJO8egebl2GZy6ZbdueqmKp5rwpS7tQYUeQBsrhLr3XQHtXs5RQgMVp3DI9P+I9OmMYA6oBdNhoDs7J5rh4er2zuXRUm4axgQJSq/D/oE/jrUvjV0dy9ux5E4V1CLByH66AE57O5Jf6kiDYJeZUGvA4swMf9/TE8kRsQCWFrVNGMasqyZyCohgGhUERNqSbnb0Ke/kzbJBb1ZBzv6FTlqIYZqd6qtOnY7p4Im9l69YiQzL8TAOaWr5FW4plZCivvlVXJErdMdZi+k64pL4NYVx1LOWGtLP6k19tuZikb8zpSsYyH1/YpCq998="],
+  "nodes": {
+    "br-univ": {
+      "index": "0",
+      "shortname": "br-univ",
+      "longname": "br-univ",
+      "fqdn": "br-univ.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/br-univ",
+      "kind": "bridge",
+      "image": "",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "",
+      "mgmt-ipv4-prefix-length": 0,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "bridge",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/br-univ",
+        "clab-node-longname": "br-univ",
+        "clab-node-name": "br-univ",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+      ]
+    },
+    "h1": {
+      "index": "1",
+      "shortname": "h1",
+      "longname": "h1",
+      "fqdn": "h1.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/h1",
+      "kind": "linux",
+      "image": "ghcr.io/srl-labs/network-multitool:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "",
+      "mgmt-ipv4-prefix-length": 0,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/h1",
+        "clab-node-longname": "h1",
+        "clab-node-name": "h1",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+      ]
+    },
+    "h2": {
+      "index": "2",
+      "shortname": "h2",
+      "longname": "h2",
+      "fqdn": "h2.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/h2",
+      "kind": "linux",
+      "image": "ghcr.io/srl-labs/network-multitool:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "",
+      "mgmt-ipv4-prefix-length": 0,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/h2",
+        "clab-node-longname": "h2",
+        "clab-node-name": "h2",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+      ]
+    },
+    "r1": {
+      "index": "3",
+      "shortname": "r1",
+      "longname": "r1",
+      "fqdn": "r1.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r1",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.7",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::7",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r1",
+        "clab-node-longname": "r1",
+        "clab-node-name": "r1",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r10": {
+      "index": "4",
+      "shortname": "r10",
+      "longname": "r10",
+      "fqdn": "r10.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r10",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.10",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::a",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r10",
+        "clab-node-longname": "r10",
+        "clab-node-name": "r10",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r2": {
+      "index": "5",
+      "shortname": "r2",
+      "longname": "r2",
+      "fqdn": "r2.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r2",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.9",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::9",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r2",
+        "clab-node-longname": "r2",
+        "clab-node-name": "r2",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r3": {
+      "index": "6",
+      "shortname": "r3",
+      "longname": "r3",
+      "fqdn": "r3.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r3",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.3",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r3",
+        "clab-node-longname": "r3",
+        "clab-node-name": "r3",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r4": {
+      "index": "7",
+      "shortname": "r4",
+      "longname": "r4",
+      "fqdn": "r4.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r4",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.4",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::4",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r4",
+        "clab-node-longname": "r4",
+        "clab-node-name": "r4",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r5": {
+      "index": "8",
+      "shortname": "r5",
+      "longname": "r5",
+      "fqdn": "r5.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r5",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.6",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::6",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r5",
+        "clab-node-longname": "r5",
+        "clab-node-name": "r5",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r6": {
+      "index": "9",
+      "shortname": "r6",
+      "longname": "r6",
+      "fqdn": "r6.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r6",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.11",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::b",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r6",
+        "clab-node-longname": "r6",
+        "clab-node-name": "r6",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r7": {
+      "index": "10",
+      "shortname": "r7",
+      "longname": "r7",
+      "fqdn": "r7.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r7",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r7",
+        "clab-node-longname": "r7",
+        "clab-node-name": "r7",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r8": {
+      "index": "11",
+      "shortname": "r8",
+      "longname": "r8",
+      "fqdn": "r8.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r8",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.8",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::8",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r8",
+        "clab-node-longname": "r8",
+        "clab-node-name": "r8",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r9": {
+      "index": "12",
+      "shortname": "r9",
+      "longname": "r9",
+      "fqdn": "r9.juniper_ospf.io",
+      "group": "",
+      "labdir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r9",
+      "kind": "juniper_crpd",
+      "image": "crpd:23.4R2-S5.6",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.5",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::5",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-5c4c1d383be5",
+        "clab-node-group": "",
+        "clab-node-kind": "juniper_crpd",
+        "clab-node-lab-dir": "/home/akhmadm/clabs/jnciesp/clab-juniper_ospf/r9",
+        "clab-node-longname": "r9",
+        "clab-node-name": "r9",
+        "clab-node-type": "",
+        "clab-owner": "akhmadm",
+        "clab-topo-file": "/home/akhmadm/clabs/jnciesp/crpd.clab.yml",
+        "containerlab": "juniper_ospf"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 3784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 4784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 50051,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 6784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 7784,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 830,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 179,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 22,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "endpoints": {
+        "a": {
+          "node": "r1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:bc:39:0e",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r1_eth1",
+          "mac": "aa:c1:ab:ed:cd:65",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r2",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:6f:09:cf",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r2_eth1",
+          "mac": "aa:c1:ab:70:11:f9",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r3",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:4b:df:ce",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r3_eth1",
+          "mac": "aa:c1:ab:eb:7f:dd",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r4",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:d4:3f:93",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r4_eth1",
+          "mac": "aa:c1:ab:ff:11:8c",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r5",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:f3:18:75",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r5_eth1",
+          "mac": "aa:c1:ab:e4:27:50",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r6",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:27:1e:fb",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r6_eth1",
+          "mac": "aa:c1:ab:02:92:03",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r7",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:17:a6:91",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r7_eth1",
+          "mac": "aa:c1:ab:6f:85:76",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r8",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:1a:58:9a",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r8_eth1",
+          "mac": "aa:c1:ab:a7:cd:44",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r9",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:86:bf:73",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r9_eth1",
+          "mac": "aa:c1:ab:13:c1:1b",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r10",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:ac:ea:9b",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "r10_eth1",
+          "mac": "aa:c1:ab:3d:43:d1",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "h1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:17:5e:5d",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "h1_eth1",
+          "mac": "aa:c1:ab:7b:09:2b",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "h2",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:72:6c:2c",
+          "peer": "z"
+        },
+        "z": {
+          "node": "br-univ",
+          "interface": "h2_eth1",
+          "mac": "aa:c1:ab:82:eb:57",
+          "peer": "a"
+        }
+      }
+    }
+  ]
+}

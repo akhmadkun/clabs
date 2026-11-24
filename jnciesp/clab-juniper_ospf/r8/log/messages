@@ -1,0 +1,1953 @@
+Nov 23 19:34:05  r8 Kernel: Linux version 7.3.5-zen1-1-zen (linux-zen@archlinux) (gcc (GCC) 16.2.1 20260810, GNU ld (GNU Binutils) 2.47) #1 ZEN SMP PREEMPT_DYNAMIC Tue, 17 Nov 2026 22:28:55 +0000
+Nov 23 19:34:05  r8 Kernel: Command line: BOOT_IMAGE=/@/boot/vmlinuz-linux-zen root=UUID=47c2a8f6-b6a8-4468-b389-6c1e78b0cd9c rw rootflags=subvol=@ vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166 vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173 vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200 quiet resume=UUID=25bbebdd-5301-4dc4-8c4d-867e23fde05a loglevel=3
+Nov 23 19:34:05  r8 Kernel: x86/split lock detection: #DB: warning on user-space bus_locks
+Nov 23 19:34:05  r8 Kernel: BIOS-provided physical RAM map:
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000000000000-0x000000000009efff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000000009f000-0x00000000000fffff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000000100000-0x0000000009afffff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000009b00000-0x0000000009dfffff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000009e00000-0x0000000009efffff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000009f00000-0x0000000009f37fff]  ACPI NVS
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000009f38000-0x000000006c555fff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000006c556000-0x000000006c562fff]  ACPI data
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000006c563000-0x0000000070b4dfff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000070b4e000-0x0000000072d4dfff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000072d4e000-0x0000000072d66fff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000072d67000-0x0000000072d6cfff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000072d6d000-0x0000000072d6efff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000072d6f000-0x0000000072d6ffff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000072d70000-0x0000000076f7efff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000076f7f000-0x000000007977efff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000007977f000-0x0000000079f7efff]  ACPI NVS
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000079f7f000-0x0000000079ffefff]  ACPI data
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000079fff000-0x0000000079ffffff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000007a000000-0x000000007bffffff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [gap 0x000000007c000000-0x000000007d674fff]
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000007d675000-0x00000000ffffffff]  device reserved
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x0000000100000000-0x000000077e17ffff]  System RAM
+Nov 23 19:34:05  r8 Kernel: BIOS-e820: [mem 0x000000077e180000-0x00000008a01fffff]  device reserved
+Nov 23 19:34:05  r8 Kernel: NX (Execute Disable) protection: active
+Nov 23 19:34:05  r8 Kernel: APIC: Static calls initialized
+Nov 23 19:34:05  r8 Kernel: efi: EFI v2.9 by INSYDE Corp.
+Nov 23 19:34:05  r8 Kernel: efi: ACPI=0x79ffe000 ACPI 2.0=0x79ffe014 TPMFinalLog=0x79f3d000 SMBIOS=0x77e75000 SMBIOS 3.0=0x77e72000 MEMATTR=0x6c564018 ESRT=0x6c571d18 INITRD=0x6c566518 RNG=0x79f8b018 TPMEventLog=0x6c556018 
+Nov 23 19:34:05  r8 Kernel: random: crng init done
+Nov 23 19:34:05  r8 Kernel: efi: Remove mem66: MMIO range=[0x80000000-0xffffffff] (2048MB) from e820 map
+Nov 23 19:34:05  r8 Kernel: efi: Remove mem68: MMIO range=[0x880000000-0x8a01fffff] (514MB) from e820 map
+Nov 23 19:34:05  r8 Kernel: DMI: SMBIOS 3.6.0 present.
+Nov 23 19:34:05  r8 Kernel: DMI: LENOVO 83HN/LNVNB161216, BIOS PSCN17WW 09/28/2024
+Nov 23 19:34:05  r8 Kernel: DMI: Memory slots populated: 4/4
+Nov 23 19:34:05  r8 Kernel: tsc: Fast TSC calibration using PIT
+Nov 23 19:34:05  r8 Kernel: tsc: Detected 1996.303 MHz processor
+Nov 23 19:34:05  r8 Kernel: last_pfn = 0x77e180 max_arch_pfn = 0x400000000
+Nov 23 19:34:05  r8 Kernel: MTRR map: 8 entries (3 fixed + 5 variable; max 20), built from 9 variable MTRRs
+Nov 23 19:34:05  r8 Kernel: x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+Nov 23 19:34:05  r8 Kernel: last_pfn = 0x7a000 max_arch_pfn = 0x400000000
+Nov 23 19:34:05  r8 Kernel: esrt: Reserving ESRT space from 0x000000006c571d18 to 0x000000006c571e90.
+Nov 23 19:34:05  r8 Kernel: Using GB pages for direct mapping
+Nov 23 19:34:05  r8 Kernel: Secure boot disabled
+Nov 23 19:34:05  r8 Kernel: RAMDISK: [mem 0x66bfd000-0x68c68fff]
+Nov 23 19:34:05  r8 Kernel: ACPI: Early table checksum verification disabled
+Nov 23 19:34:05  r8 Kernel: ACPI: RSDP 0x0000000079FFE014 000024 (v02 LENOVO)
+Nov 23 19:34:05  r8 Kernel: ACPI: XSDT 0x0000000079FA1228 0001A4 (v01 LENOVO CB-01    00000001      01000013)
+Nov 23 19:34:05  r8 Kernel: ACPI: FACP 0x0000000079FEC000 000114 (v06 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: DSDT 0x0000000079FD5000 011EFE (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: FACS 0x0000000079E91000 000040
+Nov 23 19:34:05  r8 Kernel: ACPI: UEFI 0x0000000079F66000 0001CF (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FFB000 0012C9 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FF2000 0083FE (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FF1000 000047 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FF0000 00033E (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: MSDM 0x0000000079FEF000 000055 (v03 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: ASF! 0x0000000079FEE000 0000A5 (v32 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: BOOT 0x0000000079FED000 000028 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: HPET 0x0000000079FEB000 000038 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: MCFG 0x0000000079FEA000 00003C (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SLIC 0x0000000079FE9000 000176 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: APIC 0x0000000079FD4000 00010A (v05 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: VFCT 0x0000000079FCF000 004484 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FCE000 0000F8 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SDEV 0x0000000079FCD000 000144 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FC6000 006992 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FC5000 000686 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FFD000 000A70 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FC2000 001DB7 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FC0000 00169E (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FBD000 002AA6 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FB3000 009A47 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: FPDT 0x0000000079FB2000 000044 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: WSMT 0x0000000079FB0000 000028 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: TPM2 0x0000000079FE8000 000050 (v05 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FAE000 001B84 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FE7000 00010D (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FAD000 000051 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: IVRS 0x0000000079FAC000 0001F0 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FAB000 000A7F (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FAA000 000A39 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA9000 000DBA (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA8000 0006BD (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA7000 000AB6 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA6000 000057 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA4000 0018CE (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA3000 000CF9 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FA2000 00093B (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F9F000 00101C (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F95000 0096C8 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F90000 004608 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079FC4000 000941 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F8F000 00096A (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F8E000 00008D (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F8D000 000509 (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: SSDT 0x0000000079F8C000 000F5C (v02 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: BGRT 0x0000000079FB1000 000038 (v01 LENOVO CB-01    00000001 ACPI 00040000)
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving FACP table memory at [mem 0x79fec000-0x79fec113]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving DSDT table memory at [mem 0x79fd5000-0x79fe6efd]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving FACS table memory at [mem 0x79e91000-0x79e9103f]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving UEFI table memory at [mem 0x79f66000-0x79f661ce]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79ffb000-0x79ffc2c8]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79ff2000-0x79ffa3fd]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79ff1000-0x79ff1046]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79ff0000-0x79ff033d]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving MSDM table memory at [mem 0x79fef000-0x79fef054]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving ASF! table memory at [mem 0x79fee000-0x79fee0a4]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving BOOT table memory at [mem 0x79fed000-0x79fed027]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving HPET table memory at [mem 0x79feb000-0x79feb037]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving MCFG table memory at [mem 0x79fea000-0x79fea03b]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SLIC table memory at [mem 0x79fe9000-0x79fe9175]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving APIC table memory at [mem 0x79fd4000-0x79fd4109]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving VFCT table memory at [mem 0x79fcf000-0x79fd3483]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fce000-0x79fce0f7]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SDEV table memory at [mem 0x79fcd000-0x79fcd143]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fc6000-0x79fcc991]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fc5000-0x79fc5685]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79ffd000-0x79ffda6f]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fc2000-0x79fc3db6]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fc0000-0x79fc169d]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fbd000-0x79fbfaa5]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fb3000-0x79fbca46]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving FPDT table memory at [mem 0x79fb2000-0x79fb2043]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving WSMT table memory at [mem 0x79fb0000-0x79fb0027]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving TPM2 table memory at [mem 0x79fe8000-0x79fe804f]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fae000-0x79fafb83]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fe7000-0x79fe710c]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fad000-0x79fad050]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving IVRS table memory at [mem 0x79fac000-0x79fac1ef]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fab000-0x79faba7e]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79faa000-0x79faaa38]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa9000-0x79fa9db9]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa8000-0x79fa86bc]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa7000-0x79fa7ab5]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa6000-0x79fa6056]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa4000-0x79fa58cd]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa3000-0x79fa3cf8]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fa2000-0x79fa293a]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f9f000-0x79fa001b]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f95000-0x79f9e6c7]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f90000-0x79f94607]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79fc4000-0x79fc4940]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f8f000-0x79f8f969]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f8e000-0x79f8e08c]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f8d000-0x79f8d508]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving SSDT table memory at [mem 0x79f8c000-0x79f8cf5b]
+Nov 23 19:34:05  r8 Kernel: ACPI: Reserving BGRT table memory at [mem 0x79fb1000-0x79fb1037]
+Nov 23 19:34:05  r8 Kernel: No NUMA configuration found
+Nov 23 19:34:05  r8 Kernel: Faking a node at [mem 0x0000000000000000-0x000000077e17ffff]
+Nov 23 19:34:05  r8 Kernel: NODE_DATA(0) allocated [mem 0x77e154f40-0x77e17ffff]
+Nov 23 19:34:05  r8 Kernel: ACPI: PM-Timer IO Port: 0x408
+Nov 23 19:34:05  r8 Kernel: ACPI: X2APIC_NMI (uid[0xffffffff] high level lint[0x1])
+Nov 23 19:34:05  r8 Kernel: ACPI: LAPIC_NMI (acpi_id[0xff] high level lint[0x1])
+Nov 23 19:34:05  r8 Kernel: IOAPIC[0]: apic_id 33, version 33, address 0xfec00000, GSI 0-23
+Nov 23 19:34:05  r8 Kernel: IOAPIC[1]: apic_id 34, version 33, address 0xfd280000, GSI 24-55
+Nov 23 19:34:05  r8 Kernel: ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Nov 23 19:34:05  r8 Kernel: ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Nov 23 19:34:05  r8 Kernel: ACPI: Using ACPI (MADT) for SMP configuration information
+Nov 23 19:34:05  r8 Kernel: ACPI: HPET id: 0x10228201 base: 0xfed00000
+Nov 23 19:34:05  r8 Kernel: CPU topo: Max. logical packages:   1
+Nov 23 19:34:05  r8 Kernel: CPU topo: Max. logical nodes:      1
+Nov 23 19:34:05  r8 Kernel: CPU topo: Num. nodes per package:  1
+Nov 23 19:34:05  r8 Kernel: CPU topo: Max. logical dies:       1
+Nov 23 19:34:05  r8 Kernel: CPU topo: Max. dies per package:   1
+Nov 23 19:34:05  r8 Kernel: CPU topo: Max. threads per core:   2
+Nov 23 19:34:05  r8 Kernel: CPU topo: Num. cores per package:    10
+Nov 23 19:34:05  r8 Kernel: CPU topo: Num. threads per package:  20
+Nov 23 19:34:05  r8 Kernel: CPU topo: Allowing 20 present CPUs plus 0 hotplug CPUs
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x000fffff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x09b00000-0x09dfffff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x09f00000-0x09f37fff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x6b088000-0x6b2e7fff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x6c556000-0x6c562fff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x6c571000-0x6c571fff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x70b4e000-0x72d4dfff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x72d67000-0x72d6cfff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x72d6f000-0x72d6ffff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x76f7f000-0x79ffefff]
+Nov 23 19:34:05  r8 Kernel: PM: hibernation: Registered nosave memory: [mem 0x7a000000-0xffffffff]
+Nov 23 19:34:05  r8 Kernel: [gap 0x80000000-0xffffffff] available for PCI devices
+Nov 23 19:34:05  r8 Kernel: Booting paravirtualized kernel on bare hardware
+Nov 23 19:34:05  r8 Kernel: clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+Nov 23 19:34:05  r8 Kernel: Zone ranges:
+Nov 23 19:34:05  r8 Kernel:   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+Nov 23 19:34:05  r8 Kernel:   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+Nov 23 19:34:05  r8 Kernel:   Normal   [mem 0x0000000100000000-0x000000077e17ffff]
+Nov 23 19:34:05  r8 Kernel:   Device   empty
+Nov 23 19:34:05  r8 Kernel: Movable zone start for each node
+Nov 23 19:34:05  r8 Kernel: Early memory node ranges
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000000001000-0x000000000009efff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000000100000-0x0000000009afffff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000009e00000-0x0000000009efffff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000009f38000-0x000000006c555fff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x000000006c563000-0x0000000070b4dfff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000072d4e000-0x0000000072d66fff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000072d6d000-0x0000000072d6efff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000072d70000-0x0000000076f7efff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000079fff000-0x0000000079ffffff]
+Nov 23 19:34:05  r8 Kernel:   node   0: [mem 0x0000000100000000-0x000000077e17ffff]
+Nov 23 19:34:05  r8 Kernel: Initmem setup node 0 [mem 0x0000000000001000-0x000000077e17ffff]
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA: 1 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA: 97 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 768 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 56 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 13 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 8704 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 6 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 1 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone DMA32: 12416 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone Normal: 24576 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: On node 0, zone Normal: 7808 pages in unavailable ranges
+Nov 23 19:34:05  r8 Kernel: setup_percpu: NR_CPUS:8192 nr_cpumask_bits:20 nr_cpu_ids:20 nr_node_ids:1
+Nov 23 19:34:05  r8 Kernel: percpu: Embedded 64 pages/cpu s225280 r8192 d28672 u262144
+Nov 23 19:34:05  r8 Kernel: Kernel command line: BOOT_IMAGE=/@/boot/vmlinuz-linux-zen root=UUID=47c2a8f6-b6a8-4468-b389-6c1e78b0cd9c rw rootflags=subvol=@ vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166 vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173 vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200 quiet resume=UUID=25bbebdd-5301-4dc4-8c4d-867e23fde05a loglevel=3
+Nov 23 19:34:05  r8 Kernel: printk: log_buf_len individual max cpu contribution: 4096 bytes
+Nov 23 19:34:05  r8 Kernel: printk: log_buf_len total cpu_extra contributions: 77824 bytes
+Nov 23 19:34:05  r8 Kernel: printk: log_buf_len min size: 131072 bytes
+Nov 23 19:34:05  r8 Kernel: printk: log buffer data + meta data: 262144 + 1114112 = 1376256 bytes
+Nov 23 19:34:05  r8 Kernel: printk: early log buf free: 113072(86%)
+Nov 23 19:34:05  r8 Kernel: Dentry cache hash table entries: 4194304 (order: 13, 33554432 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: Inode-cache hash table entries: 2097152 (order: 12, 16777216 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: software IO TLB: area num 32.
+Nov 23 19:34:05  r8 Kernel: Fallback order for Node 0: 0 
+Nov 23 19:34:05  r8 Kernel: Built 1 zonelists, mobility grouping on.  Total pages: 7285586
+Nov 23 19:34:05  r8 Kernel: Policy zone: Normal
+Nov 23 19:34:05  r8 Kernel: mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+Nov 23 19:34:05  r8 Kernel: SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=20, Nodes=1
+Nov 23 19:34:05  r8 Kernel: ftrace: allocating 56987 entries in 224 pages
+Nov 23 19:34:05  r8 Kernel: ftrace: allocated 224 pages with 3 groups
+Nov 23 19:34:05  r8 Kernel: Dynamic Preempt: full
+Nov 23 19:34:05  r8 Kernel: rcu: Preemptible hierarchical RCU implementation.
+Nov 23 19:34:05  r8 Kernel: rcu: \x09RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=20.
+Nov 23 19:34:05  r8 Kernel: rcu: \x09RCU priority boosting: priority 1 delay 500 ms.
+Nov 23 19:34:05  r8 Kernel: \x09Trampoline variant of Tasks RCU enabled.
+Nov 23 19:34:05  r8 Kernel: \x09Rude variant of Tasks RCU enabled.
+Nov 23 19:34:05  r8 Kernel: \x09Tracing variant of Tasks RCU enabled.
+Nov 23 19:34:05  r8 Kernel: rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+Nov 23 19:34:05  r8 Kernel: rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=20
+Nov 23 19:34:05  r8 Kernel: RCU Tasks: Setting shift to 5 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=20.
+Nov 23 19:34:05  r8 Kernel: RCU Tasks Rude: Setting shift to 5 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=20.
+Nov 23 19:34:05  r8 Kernel: NR_IRQS: 524544, nr_irqs: 1128, preallocated irqs: 16
+Nov 23 19:34:05  r8 Kernel: rcu: srcu_init: Setting srcu_struct sizes based on contention.
+Nov 23 19:34:05  r8 Kernel: clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+Nov 23 19:34:05  r8 Kernel: kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
+Nov 23 19:34:05  r8 Kernel: Console: colour dummy device 160x50
+Nov 23 19:34:05  r8 Kernel: printk: legacy console [tty0] enabled
+Nov 23 19:34:05  r8 Kernel: ACPI: Core revision 20260408
+Nov 23 19:34:05  r8 Kernel: clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 133484873504 ns
+Nov 23 19:34:05  r8 Kernel: APIC: Switch to symmetric I/O mode setup
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: Force device table to maximum size
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: ivrs, add hid:AMDI0020, uid:\x5c_SB.FUR0, rdevid:0xa0
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: ivrs, add hid:AMDI0020, uid:\x5c_SB.FUR1, rdevid:0xa0
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: ivrs, add hid:AMDI0020, uid:\x5c_SB.FUR2, rdevid:0xa0
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: ivrs, add hid:AMDI0020, uid:\x5c_SB.FUR3, rdevid:0xa0
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: ivrs, add hid:MSFT0201, uid:1, rdevid:0x60
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: Using global IVHD EFR:0x246577efa2254afa, EFR2:0x10
+Nov 23 19:34:05  r8 Kernel: ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+Nov 23 19:34:05  r8 Kernel: clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x398d13bc251, max_idle_ns: 881590795011 ns
+Nov 23 19:34:05  r8 Kernel: Calibrating delay loop (skipped), value calculated using timer frequency.. 3992.60 BogoMIPS (lpj=1996303)
+Nov 23 19:34:05  r8 Kernel: RDSEED32 is broken. Disabling the corresponding CPUID bit.
+Nov 23 19:34:05  r8 Kernel: x86/cpu: User Mode Instruction Prevention (UMIP) activated
+Nov 23 19:34:05  r8 Kernel: LVT offset 1 assigned for vector 0xf9
+Nov 23 19:34:05  r8 Kernel: LVT offset 2 assigned for vector 0xf4
+Nov 23 19:34:05  r8 Kernel: Last level iTLB entries: 4KB 64, 2MB 64, 4MB 32
+Nov 23 19:34:05  r8 Kernel: Last level dTLB entries: 4KB 128, 2MB 128, 4MB 64, 1GB 0
+Nov 23 19:34:05  r8 Kernel: process: using mwait in idle threads
+Nov 23 19:34:05  r8 Kernel: mitigations: Enabled attack vectors: user_kernel, user_user, guest_host, guest_guest, SMT mitigations: auto
+Nov 23 19:34:05  r8 Kernel: Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+Nov 23 19:34:05  r8 Kernel: Transient Scheduler Attacks: Vulnerable: No microcode
+Nov 23 19:34:05  r8 Kernel: Spectre V2 : Mitigation: Enhanced / Automatic IBRS
+Nov 23 19:34:05  r8 Kernel: Spectre V2 : User space: Mitigation: STIBP always-on protection
+Nov 23 19:34:05  r8 Kernel: Speculative Return Stack Overflow: Mitigation: IBPB on VMEXIT only
+Nov 23 19:34:05  r8 Kernel: VMSCAPE: Mitigation: IBPB on VMEXIT
+Nov 23 19:34:05  r8 Kernel: Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+Nov 23 19:34:05  r8 Kernel: Spectre V2 : Enabling IBPB for BPF
+Nov 23 19:34:05  r8 Kernel: Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x800: 'Control-flow User registers'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[5]:  832, xstate_sizes[5]:   64
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[6]:  896, xstate_sizes[6]:  512
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[7]: 1408, xstate_sizes[7]: 1024
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[9]: 2432, xstate_sizes[9]:    8
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[11]: 2440, xstate_sizes[11]:   16
+Nov 23 19:34:05  r8 Kernel: x86/fpu: xstate_offset[12]: 2456, xstate_sizes[12]:   24
+Nov 23 19:34:05  r8 Kernel: x86/fpu: Enabled xstate features 0x1ae7, context size is 2480 bytes, using 'compacted' format.
+Nov 23 19:34:05  r8 Kernel: pid_max: default: 32768 minimum: 301
+Nov 23 19:34:05  r8 Kernel: landlock: Up and running.
+Nov 23 19:34:05  r8 Kernel: Yama: becoming mindful.
+Nov 23 19:34:05  r8 Kernel: LSM support for eBPF active
+Nov 23 19:34:05  r8 Kernel: Mount-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: Mountpoint-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: VFS: Finished mounting rootfs on nullfs
+Nov 23 19:34:05  r8 Kernel: smpboot: CPU0: AMD Ryzen AI 9 365 w/ Radeon 880M (family: 0x1a, model: 0x24, stepping: 0x0)
+Nov 23 19:34:05  r8 Kernel: Performance Events: Fam17h+ 16-deep LBR, core perfctr, AMD PMU driver.
+Nov 23 19:34:05  r8 Kernel: ... version:                   2
+Nov 23 19:34:05  r8 Kernel: ... bit width:                 48
+Nov 23 19:34:05  r8 Kernel: ... generic counters:          6
+Nov 23 19:34:05  r8 Kernel: ... generic bitmap:            000000000000003f
+Nov 23 19:34:05  r8 Kernel: ... fixed-purpose counters:    0
+Nov 23 19:34:05  r8 Kernel: ... fixed-purpose bitmap:      0000000000000000
+Nov 23 19:34:05  r8 Kernel: ... value mask:                0000ffffffffffff
+Nov 23 19:34:05  r8 Kernel: ... max period:                00007fffffffffff
+Nov 23 19:34:05  r8 Kernel: ... global_ctrl mask:          000000000000003f
+Nov 23 19:34:05  r8 Kernel: signal: max sigframe size: 3376
+Nov 23 19:34:05  r8 Kernel: rcu: Hierarchical SRCU implementation.
+Nov 23 19:34:05  r8 Kernel: rcu: \x09Max phase no-delay instances is 400.
+Nov 23 19:34:05  r8 Kernel: Timer migration: 2 hierarchy levels; 8 children per group; 2 crossnode level
+Nov 23 19:34:05  r8 Kernel: MCE: In-kernel MCE decoding enabled.
+Nov 23 19:34:05  r8 Kernel: NMI watchdog: Enabled. Permanently consumes one hw-PMU counter.
+Nov 23 19:34:05  r8 Kernel: smp: Bringing up secondary CPUs ...
+Nov 23 19:34:05  r8 Kernel: smpboot: x86: Booting SMP configuration:
+Nov 23 19:34:05  r8 Kernel: .... node  #0, CPUs:        #1  #2  #3  #4  #5  #6  #7  #8  #9 #10 #11 #12 #13 #14 #15 #16 #17 #18 #19
+Nov 23 19:34:05  r8 Kernel: Spectre V2 : Update user space SMT mitigation: STIBP always-on
+Nov 23 19:34:05  r8 Kernel: smp: Brought up 1 node, 20 CPUs
+Nov 23 19:34:05  r8 Kernel: smpboot: Total of 20 processors activated (79852.12 BogoMIPS)
+Nov 23 19:34:05  r8 Kernel: Memory: 28277192K/29142344K available (25626K kernel code, 3077K rwdata, 17708K rodata, 5144K init, 4656K bss, 836648K reserved, 0K cma-reserved)
+Nov 23 19:34:05  r8 Kernel: devtmpfs: initialized
+Nov 23 19:34:05  r8 Kernel: x86/mm: Memory block size: 128MB
+Nov 23 19:34:05  r8 Kernel: ACPI: PM: Registering ACPI NVS region [mem 0x09f00000-0x09f37fff] (229376 bytes)
+Nov 23 19:34:05  r8 Kernel: ACPI: PM: Registering ACPI NVS region [mem 0x7977f000-0x79f7efff] (8388608 bytes)
+Nov 23 19:34:05  r8 Kernel: posixtimers hash table entries: 16384 (order: 6, 262144 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: futex hash table entries: 8192 (524288 bytes on 1 NUMA nodes, total 512 KiB, linear).
+Nov 23 19:34:05  r8 Kernel: xor: automatically using best checksumming function   avx       
+Nov 23 19:34:05  r8 Kernel: PM: RTC time: 19:34:06, date: 2026-11-23
+Nov 23 19:34:05  r8 Kernel: NET: Registered PF_NETLINK/PF_ROUTE protocol family
+Nov 23 19:34:05  r8 Kernel: DMA: preallocated 4096 KiB GFP_KERNEL pool for atomic allocations
+Nov 23 19:34:05  r8 Kernel: DMA: preallocated 4096 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+Nov 23 19:34:05  r8 Kernel: DMA: preallocated 4096 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+Nov 23 19:34:05  r8 Kernel: audit: initializing netlink subsys (disabled)
+Nov 23 19:34:05  r8 Kernel: audit: type=2000 audit(1795462445.142:1): state=initialized audit_enabled=0 res=1
+Nov 23 19:34:05  r8 Kernel: thermal_sys: Registered thermal governor 'fair_share'
+Nov 23 19:34:05  r8 Kernel: thermal_sys: Registered thermal governor 'bang_bang'
+Nov 23 19:34:05  r8 Kernel: thermal_sys: Registered thermal governor 'step_wise'
+Nov 23 19:34:05  r8 Kernel: thermal_sys: Registered thermal governor 'user_space'
+Nov 23 19:34:05  r8 Kernel: thermal_sys: Registered thermal governor 'power_allocator'
+Nov 23 19:34:05  r8 Kernel: cpuidle: using governor ladder
+Nov 23 19:34:05  r8 Kernel: cpuidle: using governor menu
+Nov 23 19:34:05  r8 Kernel: Simple Boot Flag at 0x44 set to 0x1
+Nov 23 19:34:05  r8 Kernel: efi: Freeing EFI boot services memory: 153376K
+Nov 23 19:34:05  r8 Kernel: acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Nov 23 19:34:05  r8 Kernel: PCI: ECAM [mem 0xe0000000-0xefffffff] (base 0xe0000000) for domain 0000 [bus 00-ff]
+Nov 23 19:34:05  r8 Kernel: PCI: Using configuration type 1 for base access
+Nov 23 19:34:05  r8 Kernel: virt/tdx: TDX not supported by the host platform
+Nov 23 19:34:05  r8 Kernel: kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+Nov 23 19:34:05  r8 Kernel: HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+Nov 23 19:34:05  r8 Kernel: HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+Nov 23 19:34:05  r8 Kernel: HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+Nov 23 19:34:05  r8 Kernel: HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+Nov 23 19:34:05  r8 Kernel: raid6: using avx512x2 recovery algorithm
+Nov 23 19:34:05  r8 Kernel: fbcon: Taking over console
+Nov 23 19:34:05  r8 Kernel: ACPI: Added _OSI(Module Device)
+Nov 23 19:34:05  r8 Kernel: ACPI: Added _OSI(Processor Device)
+Nov 23 19:34:05  r8 Kernel: ACPI: Added _OSI(Processor Aggregator Device)
+Nov 23 19:34:05  r8 Kernel: ACPI: 33 ACPI AML tables successfully acquired and loaded
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_: platform _OSC: OS support mask [006e7eff]
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_: platform _OSC: OS control mask [006e7e7f]
+Nov 23 19:34:05  r8 Kernel: ACPI: USB4 _OSC: OS supports USB3+ DisplayPort+ PCIe+ XDomain+
+Nov 23 19:34:05  r8 Kernel: ACPI: USB4 _OSC: OS controls USB3+ DisplayPort+ PCIe+ XDomain+
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: EC started
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: interrupt blocked
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: EC_CMD/EC_SC=0x66, EC_DATA=0x62
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.LPC0.EC0_: Boot DSDT EC used to handle transactions
+Nov 23 19:34:05  r8 Kernel: ACPI: Interpreter enabled
+Nov 23 19:34:05  r8 Kernel: ACPI: PM: (supports S0 S4 S5)
+Nov 23 19:34:05  r8 Kernel: ACPI: Using IOAPIC for interrupt routing
+Nov 23 19:34:05  r8 Kernel: PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Nov 23 19:34:05  r8 Kernel: PCI: Ignoring E820 reservations for host bridge windows
+Nov 23 19:34:05  r8 Kernel: ACPI: Enabled 3 GPEs in block 00 to 1F
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP0.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP0.SWUS.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP1.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP1.SWUS.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP3.P0NV: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP4.PWSR: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP5.PWSR: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP5.WLAN.WRST: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP6.PWSR: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPP7.P0WW: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPA.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPA.VGA_.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPA.ACP_.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPA.AZAL.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPA.HDAU.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPA.XHC1.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPC.NHI0.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPC.NHI1.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPC.XHC0.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPC.XHC0.RHUB.PRT5.BRST: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPC.XHC3.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.GPPC.XHC4.PWRS: New power resource
+Nov 23 19:34:05  r8 Kernel: ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Nov 23 19:34:05  r8 Kernel: acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug AER]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability LTR DPC]
+Nov 23 19:34:05  r8 Kernel: PCI host bridge to bus 0000:00
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [io  0x0d00-0xfeff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0x000c0000-0x000cffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0x000d0000-0x000effff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0x80000000-0xdfffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xf0000000-0xfcffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xfec00000-0xfec01fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xfed45000-0xfed811ff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xfed81900-0xfed81fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xfedc0000-0xfedc0fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xfedc6000-0xfedc6fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0xfee01000-0xffffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [mem 0x8a0200000-0x833fffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: root bus resource [bus 00-ff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:00.0: [1022:1507] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:00.2: [1022:1508] type 00 class 0x080600 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.0: [1022:1509] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1: [1022:150a] type 01 class 0x060400 PCIe Root Port
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1: PCI bridge to [bus 01-5f]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1:   bridge window [io  0x2000-0x5fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1:   bridge window [mem 0x80000000-0x97ffffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1:   bridge window [mem 0x1000000000-0x2fffffffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.0: [1022:1509] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1: [1022:150b] type 01 class 0x060400 PCIe Root Port
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1: PCI bridge to [bus 60]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1:   bridge window [mem 0x98c00000-0x98cfffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3: [1022:150b] type 01 class 0x060400 PCIe Root Port
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3: PCI bridge to [bus 61]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3:   bridge window [mem 0x98b00000-0x98bfffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3:   bridge window [mem 0xf0000000-0xf00fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:03.0: [1022:1509] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.0: [1022:1509] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: [1022:150c] type 01 class 0x060400 PCIe Root Port
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: PCI bridge to [bus 62]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1:   bridge window [io  0x1000-0x1fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1:   bridge window [mem 0x98000000-0x984fffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1:   bridge window [mem 0x3000000000-0x30107fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: [1022:150c] type 01 class 0x060400 PCIe Root Port
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: PCI bridge to [bus 63]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2:   bridge window [mem 0x98900000-0x98afffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2:   bridge window [mem 0x3010800000-0x30108fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: [1022:150c] type 01 class 0x060400 PCIe Root Port
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: PCI bridge to [bus 64]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3:   bridge window [mem 0x98500000-0x988fffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:14.0: [1022:790b] type 00 class 0x0c0500 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:14.3: [1022:790e] type 00 class 0x060100 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.0: [1022:16f8] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.1: [1022:16f9] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.2: [1022:16fa] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.3: [1022:16fb] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.4: [1022:16fc] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.5: [1022:16fd] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.6: [1022:16fe] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.7: [1022:16ff] type 00 class 0x060000 conventional PCI endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1: PCI bridge to [bus 01-5f]
+Nov 23 19:34:05  r8 Kernel: pci 0000:60:00.0: [1344:5416] type 00 class 0x010802 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:60:00.0: BAR 0 [mem 0x98c00000-0x98c03fff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1: PCI bridge to [bus 60]
+Nov 23 19:34:05  r8 Kernel: pci 0000:61:00.0: [14c3:0616] type 00 class 0x028000 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:61:00.0: BAR 0 [mem 0xf0000000-0xf00fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:61:00.0: BAR 2 [mem 0x98b00000-0x98b07fff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:61:00.0: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3: PCI bridge to [bus 61]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: [1002:150e] type 00 class 0x038000 PCIe Legacy Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: BAR 0 [mem 0x3000000000-0x300fffffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: BAR 2 [mem 0x98000000-0x981fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: BAR 4 [io  0x1000-0x10ff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: BAR 5 [mem 0x98400000-0x9847ffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: PME# supported from D1 D2 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.1: [1002:1640] type 00 class 0x040300 PCIe Legacy Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.1: BAR 0 [mem 0x984c8000-0x984cbfff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.1: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.1: PME# supported from D1 D2 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.2: [1022:17e0] type 00 class 0x108000 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.2: BAR 2 [mem 0x98300000-0x983fffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.2: BAR 5 [mem 0x984cc000-0x984cdfff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.2: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.4: [1022:151e] type 00 class 0x0c0330 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.4: BAR 0 [mem 0x98200000-0x982fffff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.4: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.4: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.5: [1022:15e2] type 00 class 0x048000 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.5: BAR 0 [mem 0x98480000-0x984bffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.5: BAR 2 [mem 0x3010000000-0x30107fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.5: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.5: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.6: [1022:15e3] type 00 class 0x040300 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.6: BAR 0 [mem 0x984c0000-0x984c7fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.6: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.6: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: PCI bridge to [bus 62]
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.0: [1022:150d] type 00 class 0x130000 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.0: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: [1022:17f0] type 00 class 0x118000 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: BAR 0 [mem 0x98900000-0x989fffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: BAR 1 [mem 0x98a00000-0x98a01fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: BAR 2 [mem 0x3010800000-0x301087ffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: BAR 4 [mem 0x98a03000-0x98a03fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: BAR 5 [mem 0x98a02000-0x98a02fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: PCI bridge to [bus 63]
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.0: [1022:151f] type 00 class 0x0c0330 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.0: BAR 0 [mem 0x98500000-0x985fffff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.0: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.0: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.3: [1022:151a] type 00 class 0x0c0330 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.3: BAR 0 [mem 0x98600000-0x986fffff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.3: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.3: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.4: [1022:151b] type 00 class 0x0c0330 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.4: BAR 0 [mem 0x98700000-0x987fffff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.4: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.4: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.5: [1022:151c] type 00 class 0x0c0340 PCIe Endpoint
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.5: BAR 0 [mem 0x98800000-0x9887ffff 64bit]
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.5: Max Payload Size set to 128 (was 256, max 256)
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.5: enabling Extended Tags
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.5: PME# supported from D0 D3hot D3cold
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: PCI bridge to [bus 64]
+Nov 23 19:34:05  r8 Kernel: Low-power S0 idle used by default for system suspend
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: interrupt unblocked
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: event unblocked
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: EC_CMD/EC_SC=0x66, EC_DATA=0x62
+Nov 23 19:34:05  r8 Kernel: ACPI: EC: GPE=0xb
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.LPC0.EC0_: Boot DSDT EC initialization complete
+Nov 23 19:34:05  r8 Kernel: ACPI: \x5c_SB_.PCI0.LPC0.EC0_: EC: Used to handle transactions and events
+Nov 23 19:34:05  r8 Kernel: iommu: Default domain type: Translated
+Nov 23 19:34:05  r8 Kernel: iommu: DMA domain TLB invalidation policy: lazy mode
+Nov 23 19:34:05  r8 Kernel: SCSI subsystem initialized
+Nov 23 19:34:05  r8 Kernel: ACPI: bus type USB registered
+Nov 23 19:34:05  r8 Kernel: usbcore: registered new interface driver usbfs
+Nov 23 19:34:05  r8 Kernel: usbcore: registered new interface driver hub
+Nov 23 19:34:05  r8 Kernel: usbcore: registered new device driver usb
+Nov 23 19:34:05  r8 Kernel: EDAC MC: Ver: 3.0.0
+Nov 23 19:34:05  r8 Kernel: efivars: Registered efivars operations
+Nov 23 19:34:05  r8 Kernel: NetLabel: Initializing
+Nov 23 19:34:05  r8 Kernel: NetLabel:  domain hash size = 128
+Nov 23 19:34:05  r8 Kernel: NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+Nov 23 19:34:05  r8 Kernel: NetLabel:  unlabeled traffic allowed by default
+Nov 23 19:34:05  r8 Kernel: mctp: management component transport protocol core
+Nov 23 19:34:05  r8 Kernel: NET: Registered PF_MCTP protocol family
+Nov 23 19:34:05  r8 Kernel: PCI: Using ACPI for IRQ routing
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x0009f000-0x0009ffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x09b00000-0x0bffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x09f00000-0x0bffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x6b088000-0x6bffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x6c556000-0x6fffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x6c571000-0x6fffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x70b4e000-0x73ffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x72d67000-0x73ffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x72d6f000-0x73ffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x76f7f000-0x77ffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x7a000000-0x7bffffff]
+Nov 23 19:34:05  r8 Kernel: e820: register RAM buffer resource [mem 0x77e180000-0x77fffffff]
+Nov 23 19:34:05  r8 Kernel: vgaarb: loaded
+Nov 23 19:34:05  r8 Kernel: hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+Nov 23 19:34:05  r8 Kernel: hpet0: 3 comparators, 32-bit 14.318180 MHz counter
+Nov 23 19:34:05  r8 Kernel: clocksource: Switched to clocksource tsc-early
+Nov 23 19:34:05  r8 Kernel: VFS: Disk quotas dquot_6.6.0
+Nov 23 19:34:05  r8 Kernel: VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:00: Reserved [mem 0xe0000000-0xefffffff]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x0010-0x001f]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x0020-0x0021]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x00a0-0x00a1]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x0072-0x0073]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x0080]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x00b0-0x00b1]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x0092]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Skipped [io  0x00f0]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0400-0x04cf]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x04d0-0x04d1]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x04d6]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0c00-0x0c01]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0c14]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0c50-0x0c52]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0c6c]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0c6f]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C02:01: Reserved [io  0x0cd0-0x0cdb]
+Nov 23 19:34:05  r8 Kernel: acpi PNP0C01:00: Reserved [mem 0xff000000-0xffffffff]
+Nov 23 19:34:05  r8 Kernel: pnp: PnP ACPI init
+Nov 23 19:34:05  r8 Kernel: pnp: PnP ACPI: found 1 devices
+Nov 23 19:34:05  r8 Kernel: clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+Nov 23 19:34:05  r8 Kernel: NET: Registered PF_INET protocol family
+Nov 23 19:34:05  r8 Kernel: IP idents hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: tcp_listen_portaddr_hash hash table entries: 16384 (order: 6, 262144 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: TCP established hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: TCP: Hash tables configured (established 262144 bind 65536)
+Nov 23 19:34:05  r8 Kernel: MPTCP token hash table entries: 32768 (order: 8, 786432 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: UDP hash table entries: 16384 (order: 8, 1048576 bytes, linear)
+Nov 23 19:34:05  r8 Kernel: NET: Registered PF_UNIX/PF_LOCAL protocol family
+Nov 23 19:34:05  r8 Kernel: NET: Registered PF_XDP protocol family
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1: PCI bridge to [bus 01-5f]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1:   bridge window [io  0x2000-0x5fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1:   bridge window [mem 0x80000000-0x97ffffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1:   bridge window [mem 0x1000000000-0x2fffffffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1: PCI bridge to [bus 60]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1:   bridge window [mem 0x98c00000-0x98cfffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3: PCI bridge to [bus 61]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3:   bridge window [mem 0x98b00000-0x98bfffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3:   bridge window [mem 0xf0000000-0xf00fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: PCI bridge to [bus 62]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1:   bridge window [io  0x1000-0x1fff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1:   bridge window [mem 0x98000000-0x984fffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1:   bridge window [mem 0x3000000000-0x30107fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: PCI bridge to [bus 63]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2:   bridge window [mem 0x98900000-0x98afffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2:   bridge window [mem 0x3010800000-0x30108fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: PCI bridge to [bus 64]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3:   bridge window [mem 0x98500000-0x988fffff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 5 [io  0x0d00-0xfeff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 7 [mem 0x000c0000-0x000cffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 8 [mem 0x000d0000-0x000effff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 9 [mem 0x80000000-0xdfffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 10 [mem 0xf0000000-0xfcffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 11 [mem 0xfec00000-0xfec01fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 12 [mem 0xfed45000-0xfed811ff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 13 [mem 0xfed81900-0xfed81fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 14 [mem 0xfedc0000-0xfedc0fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 15 [mem 0xfedc6000-0xfedc6fff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 16 [mem 0xfee01000-0xffffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:00: resource 17 [mem 0x8a0200000-0x833fffffff window]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:01: resource 0 [io  0x2000-0x5fff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:01: resource 1 [mem 0x80000000-0x97ffffff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:01: resource 2 [mem 0x1000000000-0x2fffffffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:60: resource 1 [mem 0x98c00000-0x98cfffff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:61: resource 1 [mem 0x98b00000-0x98bfffff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:61: resource 2 [mem 0xf0000000-0xf00fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:62: resource 0 [io  0x1000-0x1fff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:62: resource 1 [mem 0x98000000-0x984fffff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:62: resource 2 [mem 0x3000000000-0x30107fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:63: resource 1 [mem 0x98900000-0x98afffff]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:63: resource 2 [mem 0x3010800000-0x30108fffff 64bit pref]
+Nov 23 19:34:05  r8 Kernel: pci_bus 0000:64: resource 1 [mem 0x98500000-0x988fffff]
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:00.0: enhanced atomics disabled
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.1: D0 power state depends on 0000:62:00.0
+Nov 23 19:34:05  r8 Kernel: PCI: CLS 64 bytes, default 64
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
+Nov 23 19:34:05  r8 Kernel: Trying to unpack rootfs image as initramfs...
+Nov 23 19:34:05  r8 Kernel: platform MSFT0201:00: Adding to iommu group 0
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.0: Adding to iommu group 1
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:01.1: Adding to iommu group 2
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.0: Adding to iommu group 3
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.1: Adding to iommu group 4
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:02.3: Adding to iommu group 5
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:03.0: Adding to iommu group 6
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.0: Adding to iommu group 7
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.1: Adding to iommu group 8
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.2: Adding to iommu group 9
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:08.3: Adding to iommu group 10
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:14.0: Adding to iommu group 11
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:14.3: Adding to iommu group 11
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.0: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.1: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.2: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.3: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.4: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.5: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.6: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:00:18.7: Adding to iommu group 12
+Nov 23 19:34:05  r8 Kernel: pci 0000:60:00.0: Adding to iommu group 13
+Nov 23 19:34:05  r8 Kernel: pci 0000:61:00.0: Adding to iommu group 14
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.0: Adding to iommu group 15
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.1: Adding to iommu group 16
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.2: Adding to iommu group 17
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.4: Adding to iommu group 18
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.5: Adding to iommu group 19
+Nov 23 19:34:05  r8 Kernel: pci 0000:62:00.6: Adding to iommu group 20
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.0: Adding to iommu group 21
+Nov 23 19:34:05  r8 Kernel: pci 0000:63:00.1: Adding to iommu group 22
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.0: Adding to iommu group 23
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.3: Adding to iommu group 24
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.4: Adding to iommu group 25
+Nov 23 19:34:05  r8 Kernel: pci 0000:64:00.5: Adding to iommu group 26
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: Extended features (0x246577efa2254afa, 0x10): PPR NX GT [5] IA GA PC GA_vAPIC
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: Interrupt remapping enabled
+Nov 23 19:34:05  r8 Kernel: AMD-Vi: Virtual APIC enabled
+Nov 23 19:34:05  r8 Kernel: PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+Nov 23 19:34:05  r8 Kernel: software IO TLB: mapped [mem 0x000000005eb7f000-0x0000000062b7f000] (64MB)
+Nov 23 19:34:05  r8 Kernel: LVT offset 0 assigned for vector 0x400
+Nov 23 19:34:05  r8 Kernel: perf: AMD IBS detected (0x00081bff)
+Nov 23 19:34:05  r8 Kernel: perf/amd_iommu: Detected AMD IOMMU #0 (2 banks, 4 counters/bank).
+Nov 23 19:34:05  r8 Kernel: Initialise system trusted keyrings
+Nov 23 19:34:05  r8 Kernel: Key type blacklist registered
+Nov 23 19:34:05  r8 Kernel: workingset: timestamp_bits=36 (anon: 31) max_order=23 bucket_order=0 (anon: 0)
+Nov 23 19:34:05  r8 Kernel: fuse: init (API version 7.46)
+Nov 23 19:34:05  r8 Kernel: integrity: Platform Keyring initialized
+Nov 23 19:34:05  r8 Kernel: integrity: Machine keyring initialized
+Nov 23 19:34:05  r8 Kernel: Key type asymmetric registered
+Nov 23 19:34:05  r8 Kernel: Asymmetric key parser 'x509' registered
+Nov 23 19:34:05  r8 Kernel: Block layer SCSI generic (bsg) driver version 0.4 loaded (major 245)
+Nov 23 19:34:05  r8 Kernel: io scheduler mq-deadline registered
+Nov 23 19:34:05  r8 Kernel: io scheduler kyber registered
+Nov 23 19:34:05  r8 Kernel: io scheduler bfq registered
+Nov 23 19:34:05  r8 Kernel: raid6: skipped pq benchmark and selected avx512x4
+Nov 23 19:34:05  r8 Kernel: ledtrig-cpu: registered to indicate activity on CPUs
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:01.1: PME: Signaling with IRQ 30
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:01.1: pciehp: Slot #0 AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LLActRep+
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:02.1: PME: Signaling with IRQ 31
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:02.3: PME: Signaling with IRQ 32
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:08.1: PME: Signaling with IRQ 33
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:08.2: PME: Signaling with IRQ 34
+Nov 23 19:34:05  r8 Kernel: pcieport 0000:00:08.3: PME: Signaling with IRQ 35
+Nov 23 19:34:05  r8 Kernel: ACPI: AC: AC Adapter [ACAD] (off-line)
+Nov 23 19:34:05  r8 Kernel: input: Power Button as /devices/platform/PNP0C0C:00/input/input0
+Nov 23 19:34:05  r8 Kernel: ACPI: button: Power Button [PWRB]
+Nov 23 19:34:05  r8 Kernel: input: Lid Switch as /devices/platform/PNP0C0D:00/input/input1
+Nov 23 19:34:05  r8 Kernel: ACPI: button: Lid Switch [LID0]
+Nov 23 19:34:05  r8 Kernel: Estimated ratio of average max frequency by base frequency (times 1024): 1815
+Nov 23 19:34:05  r8 Kernel: acpi LNXTHERM:00: registered as thermal_zone0
+Nov 23 19:34:05  r8 Kernel: ACPI: thermal: Thermal Zone [TZ01] (22 C)
+Nov 23 19:34:05  r8 Kernel: Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
+Nov 23 19:34:05  r8 Kernel: Non-volatile memory driver v1.3
+Nov 23 19:34:05  r8 Kernel: tpm_crb_acpi MSFT0101:00: [Firmware Bug]: Bad ACPI memory layout
+Nov 23 19:34:05  r8 Kernel: ACPI: battery: Slot [BAT0] (battery present)
+Nov 23 19:34:05  r8 Kernel: Freeing initrd memory: 33200K
+Nov 23 19:34:06  r8 Kernel: tsc: Refined TSC clocksource calibration: 1996.231 MHz
+Nov 23 19:34:06  r8 Kernel: clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x398c8be4102, max_idle_ns: 881590629355 ns
+Nov 23 19:34:06  r8 Kernel: clocksource: Switched to clocksource tsc
+Nov 23 19:34:07  r8 Kernel: tpm_crb_acpi MSFT0101:00: Disabling hwrng
+Nov 23 19:34:07  r8 Kernel: ACPI: bus type drm_connector registered
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:62:00.4: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:62:00.4: new USB bus registered, assigned bus number 1
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:62:00.4: hcc params 0x0118ffc5 hci version 0x120 quirks 0x0000000200000010
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:62:00.4: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:62:00.4: new USB bus registered, assigned bus number 2
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:62:00.4: Host supports USB 3.1 Enhanced SuperSpeed
+Nov 23 19:34:07  r8 Kernel: usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb1: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb1: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb1: SerialNumber: 0000:62:00.4
+Nov 23 19:34:07  r8 Kernel: hub 1-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 1-0:1.0: 1 port detected
+Nov 23 19:34:07  r8 Kernel: usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+Nov 23 19:34:07  r8 Kernel: usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb2: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb2: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb2: SerialNumber: 0000:62:00.4
+Nov 23 19:34:07  r8 Kernel: hub 2-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 2-0:1.0: 1 port detected
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.0: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.0: new USB bus registered, assigned bus number 3
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.0: hcc params 0x0128ffc5 hci version 0x120 quirks 0x0000000200000010
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.0: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.0: new USB bus registered, assigned bus number 4
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.0: Host supports USB 3.1 Enhanced SuperSpeed
+Nov 23 19:34:07  r8 Kernel: usb usb3: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb3: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb3: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb3: SerialNumber: 0000:64:00.0
+Nov 23 19:34:07  r8 Kernel: hub 3-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 3-0:1.0: 5 ports detected
+Nov 23 19:34:07  r8 Kernel: usb usb4: We don't know the algorithms for LPM for this host, disabling LPM.
+Nov 23 19:34:07  r8 Kernel: usb usb4: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb4: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb4: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb4: SerialNumber: 0000:64:00.0
+Nov 23 19:34:07  r8 Kernel: hub 4-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 4-0:1.0: 2 ports detected
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.3: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.3: new USB bus registered, assigned bus number 5
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.3: hcc params 0x0118ffc5 hci version 0x120 quirks 0x0000000200000010
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.3: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.3: new USB bus registered, assigned bus number 6
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.3: Host supports USB 3.1 Enhanced SuperSpeed
+Nov 23 19:34:07  r8 Kernel: usb usb5: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb5: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb5: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb5: SerialNumber: 0000:64:00.3
+Nov 23 19:34:07  r8 Kernel: hub 5-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 5-0:1.0: 1 port detected
+Nov 23 19:34:07  r8 Kernel: usb usb6: We don't know the algorithms for LPM for this host, disabling LPM.
+Nov 23 19:34:07  r8 Kernel: usb usb6: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb6: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb6: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb6: SerialNumber: 0000:64:00.3
+Nov 23 19:34:07  r8 Kernel: hub 6-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 6-0:1.0: 1 port detected
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.4: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.4: new USB bus registered, assigned bus number 7
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.4: hcc params 0x0118ffc5 hci version 0x120 quirks 0x0000000200000010
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.4: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.4: new USB bus registered, assigned bus number 8
+Nov 23 19:34:07  r8 Kernel: xhci_hcd 0000:64:00.4: Host supports USB 3.1 Enhanced SuperSpeed
+Nov 23 19:34:07  r8 Kernel: usb usb7: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb7: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb7: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb7: SerialNumber: 0000:64:00.4
+Nov 23 19:34:07  r8 Kernel: hub 7-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 7-0:1.0: 1 port detected
+Nov 23 19:34:07  r8 Kernel: usb usb8: We don't know the algorithms for LPM for this host, disabling LPM.
+Nov 23 19:34:07  r8 Kernel: usb usb8: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+Nov 23 19:34:07  r8 Kernel: usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Nov 23 19:34:07  r8 Kernel: usb usb8: Product: xHCI Host Controller
+Nov 23 19:34:07  r8 Kernel: usb usb8: Manufacturer: Linux 7.3.5-zen1-1-zen xhci-hcd
+Nov 23 19:34:07  r8 Kernel: usb usb8: SerialNumber: 0000:64:00.4
+Nov 23 19:34:07  r8 Kernel: hub 8-0:1.0: USB hub found
+Nov 23 19:34:07  r8 Kernel: hub 8-0:1.0: 1 port detected
+Nov 23 19:34:07  r8 Kernel: usbcore: registered new interface driver usbserial_generic
+Nov 23 19:34:07  r8 Kernel: usbserial: USB Serial support registered for generic
+Nov 23 19:34:07  r8 Kernel: i8042: PNP: PS/2 Controller [PNP0303:KBC0] at 0x60,0x64 irq 1
+Nov 23 19:34:07  r8 Kernel: i8042: PNP: PS/2 appears to have AUX port disabled, if this is incorrect please boot with i8042.nopnp
+Nov 23 19:34:07  r8 Kernel: serio: i8042 KBD port at 0x60,0x64 irq 1
+Nov 23 19:34:07  r8 Kernel: rtc_cmos PNP0B00:00: RTC can wake from S4
+Nov 23 19:34:07  r8 Kernel: rtc_cmos PNP0B00:00: registered as rtc0
+Nov 23 19:34:07  r8 Kernel: rtc_cmos PNP0B00:00: setting system clock to 2026-11-23T19:34:07 UTC (1795462447)
+Nov 23 19:34:07  r8 Kernel: rtc_cmos PNP0B00:00: alarms up to one month, y3k, 114 bytes nvram
+Nov 23 19:34:07  r8 Kernel: simple-framebuffer simple-framebuffer.0: [drm] Registered 1 planes with drm panic
+Nov 23 19:34:07  r8 Kernel: [drm] Initialized simpledrm 1.0.0 for simple-framebuffer.0 on minor 0
+Nov 23 19:34:07  r8 Kernel: input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input2
+Nov 23 19:34:07  r8 Kernel: Console: switching to colour frame buffer device 180x56
+Nov 23 19:34:07  r8 Kernel: simple-framebuffer simple-framebuffer.0: [drm] fb0: simpledrmdrmfb frame buffer device
+Nov 23 19:34:07  r8 Kernel: hid: raw HID events driver (C) Jiri Kosina
+Nov 23 19:34:07  r8 Kernel: usbcore: registered new interface driver usbhid
+Nov 23 19:34:07  r8 Kernel: usbhid: USB HID core driver
+Nov 23 19:34:07  r8 Kernel: drop_monitor: Initializing network drop monitor service
+Nov 23 19:34:07  r8 Kernel: NET: Registered PF_INET6 protocol family
+Nov 23 19:34:07  r8 Kernel: Segment Routing with IPv6
+Nov 23 19:34:07  r8 Kernel: RPL Segment Routing with IPv6
+Nov 23 19:34:07  r8 Kernel: In-situ OAM (IOAM) with IPv6
+Nov 23 19:34:07  r8 Kernel: NET: Registered PF_PACKET protocol family
+Nov 23 19:34:07  r8 Kernel: AGESA: AGESA!V9 StrixPI-FP8 1.0.0.0a
+Nov 23 19:34:07  r8 Kernel: microcode: Current revision: 0x0b204011
+Nov 23 19:34:07  r8 Kernel: resctrl: L3 allocation detected
+Nov 23 19:34:07  r8 Kernel: resctrl: MB allocation detected
+Nov 23 19:34:07  r8 Kernel: resctrl: SMBA allocation detected
+Nov 23 19:34:07  r8 Kernel: resctrl: L3 monitoring detected
+Nov 23 19:34:07  r8 Kernel: IPI shorthand broadcast: enabled
+Nov 23 19:34:07  r8 Kernel: sched_clock: Marking stable (1926000779, 1387096)->(1930059301, -2671426)
+Nov 23 19:34:07  r8 Kernel: registered taskstats version 1
+Nov 23 19:34:07  r8 Kernel: Loading compiled-in X.509 certificates
+Nov 23 19:34:07  r8 Kernel: Loaded X.509 cert 'Build time autogenerated kernel key: 380e4fc99165d777ee58a42f556e9166e08e03fe'
+Nov 23 19:34:07  r8 Kernel: zswap: loaded using pool zstd
+Nov 23 19:34:07  r8 Kernel: Demotion targets for Node 0: null
+Nov 23 19:34:07  r8 Kernel: Key type .fscrypt registered
+Nov 23 19:34:07  r8 Kernel: Key type fscrypt-provisioning registered
+Nov 23 19:34:07  r8 Kernel: Btrfs loaded, zoned=yes, fsverity=yes
+Nov 23 19:34:07  r8 Kernel: Key type big_key registered
+Nov 23 19:34:07  r8 Kernel: integrity: Loading X.509 certificate: UEFI:db
+Nov 23 19:34:07  r8 Kernel: integrity: Loaded X.509 cert 'Microsoft Windows Production PCA 2011: a92902398e16c49778cd90f99e4f9ae17c55af53'
+Nov 23 19:34:07  r8 Kernel: integrity: Loading X.509 certificate: UEFI:db
+Nov 23 19:34:07  r8 Kernel: integrity: Loaded X.509 cert 'Microsoft Corporation: Windows UEFI CA 2023: aefc5fbbbe055d8f8daa585473499417ab5a5272'
+Nov 23 19:34:07  r8 Kernel: integrity: Loading X.509 certificate: UEFI:db
+Nov 23 19:34:07  r8 Kernel: integrity: Loaded X.509 cert 'Microsoft Corporation UEFI CA 2011: 13adbf4309bd82709c8cd54f316ed522988a1bd4'
+Nov 23 19:34:07  r8 Kernel: integrity: Loading X.509 certificate: UEFI:db
+Nov 23 19:34:07  r8 Kernel: integrity: Loaded X.509 cert 'Microsoft UEFI CA 2023: 81aa6b3244c935bce0d6628af39827421e32497d'
+Nov 23 19:34:07  r8 Kernel: integrity: Loading X.509 certificate: UEFI:db
+Nov 23 19:34:07  r8 Kernel: integrity: Loaded X.509 cert 'Certificate_PS: 660fef7da24501f867596ffb35f9e5a56ba1388d'
+Nov 23 19:34:07  r8 Kernel: PM:   Magic number: 2:805:597
+Nov 23 19:34:07  r8 Kernel: RAS: Correctable Errors collector initialized.
+Nov 23 19:34:07  r8 Kernel: clk: Disabling unused clocks
+Nov 23 19:34:07  r8 Kernel: PM: genpd: Disabling unused power domains
+Nov 23 19:34:07  r8 Kernel: Freeing unused decrypted memory: 2028K
+Nov 23 19:34:07  r8 Kernel: Freeing unused kernel image (initmem) memory: 5144K
+Nov 23 19:34:07  r8 Kernel: Write protecting the kernel read-only data: 45056k
+Nov 23 19:34:07  r8 Kernel: Freeing unused kernel image (text/rodata gap) memory: 996K
+Nov 23 19:34:07  r8 Kernel: Freeing unused kernel image (rodata/data gap) memory: 724K
+Nov 23 19:34:07  r8 Kernel: x86/mm: Checked W+X mappings: passed, no W+X pages found.
+Nov 23 19:34:07  r8 Kernel: rodata_test: all tests were successful
+Nov 23 19:34:07  r8 Kernel: Run /init as init process
+Nov 23 19:34:07  r8 Kernel: mpls_gso: MPLS GSO support
+Nov 23 19:34:07  r8 Kernel: i2c_dev: i2c /dev entries driver
+Nov 23 19:34:07  r8 Kernel: usb 3-5: new high-speed USB device number 2 using xhci_hcd
+Nov 23 19:34:07  r8 Kernel: usb 1-1: new high-speed USB device number 2 using xhci_hcd
+Nov 23 19:34:07  r8 Kernel: usb 3-5: New USB device found, idVendor=0489, idProduct=e0d8, bcdDevice= 1.00
+Nov 23 19:34:07  r8 Kernel: usb 1-1: New USB device found, idVendor=174f, idProduct=1820, bcdDevice=11.12
+Nov 23 19:34:07  r8 Kernel: usb 3-5: New USB device strings: Mfr=5, Product=6, SerialNumber=7
+Nov 23 19:34:07  r8 Kernel: usb 3-5: Product: Wireless_Device
+Nov 23 19:34:07  r8 Kernel: usb 3-5: Manufacturer: MediaTek Inc.
+Nov 23 19:34:07  r8 Kernel: usb 3-5: SerialNumber: 000000000
+Nov 23 19:34:07  r8 Kernel: usb 1-1: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+Nov 23 19:34:07  r8 Kernel: usb 1-1: Product: Integrated Camera
+Nov 23 19:34:07  r8 Kernel: usb 1-1: Manufacturer:  
+Nov 23 19:34:07  r8 Kernel: usb 1-1: SerialNumber: 0001
+Nov 23 19:34:07  r8 Kernel: sp5100_tco: SP5100/SB800 TCO WatchDog Timer Driver
+Nov 23 19:34:07  r8 Kernel: sp5100-tco sp5100-tco: Using 0xfeb00000 for watchdog MMIO address
+Nov 23 19:34:07  r8 Kernel: sp5100-tco sp5100-tco: initialized. heartbeat=60 sec (nowayout=0)
+Nov 23 19:34:07  r8 Kernel: ACPI: bus type thunderbolt registered
+Nov 23 19:34:07  r8 Kernel: ccp 0000:62:00.2: enabling device (0000 -> 0002)
+Nov 23 19:34:07  r8 Kernel: ccp 0000:62:00.2: tee enabled
+Nov 23 19:34:07  r8 Kernel: ccp 0000:62:00.2: psp enabled
+Nov 23 19:34:07  r8 Kernel: input: SYNA2BA6:00 06CB:CF00 Mouse as /devices/platform/AMDI0010:00/i2c-0/i2c-SYNA2BA6:00/0018:06CB:CF00.0001/input/input3
+Nov 23 19:34:07  r8 Kernel: input: SYNA2BA6:00 06CB:CF00 Touchpad as /devices/platform/AMDI0010:00/i2c-0/i2c-SYNA2BA6:00/0018:06CB:CF00.0001/input/input4
+Nov 23 19:34:07  r8 Kernel: hid-generic 0018:06CB:CF00.0001: input,hidraw0: I2C HID v1.00 Mouse [SYNA2BA6:00 06CB:CF00] on i2c-SYNA2BA6:00
+Nov 23 19:34:07  r8 Kernel: hid-generic 0018:048D:8353.0002: hidraw1: I2C HID v1.00 Device [ITE8353:00 048D:8353] on i2c-ITE8353:00
+Nov 23 19:34:07  r8 Kernel: Key type psk registered
+Nov 23 19:34:07  r8 Kernel: ACPI: video: Video Device [VGA] (multi-head: yes  rom: no  post: no)
+Nov 23 19:34:07  r8 Kernel: input: Video Bus as /devices/pci0000:00/0000:00:08.1/acpi.video_bus.0/input/input6
+Nov 23 19:34:07  r8 Kernel: hid-sensor-hub 0018:048D:8353.0002: hidraw1: I2C HID v1.00 Device [ITE8353:00 048D:8353] on i2c-ITE8353:00
+Nov 23 19:34:07  r8 Kernel: nvme 0000:60:00.0: platform quirk: setting simple suspend
+Nov 23 19:34:07  r8 Kernel: nvme nvme0: pci function 0000:60:00.0
+Nov 23 19:34:07  r8 Kernel: input: SYNA2BA6:00 06CB:CF00 Mouse as /devices/platform/AMDI0010:00/i2c-0/i2c-SYNA2BA6:00/0018:06CB:CF00.0001/input/input7
+Nov 23 19:34:07  r8 Kernel: input: SYNA2BA6:00 06CB:CF00 Touchpad as /devices/platform/AMDI0010:00/i2c-0/i2c-SYNA2BA6:00/0018:06CB:CF00.0001/input/input8
+Nov 23 19:34:07  r8 Kernel: hid-multitouch 0018:06CB:CF00.0001: input,hidraw0: I2C HID v1.00 Mouse [SYNA2BA6:00 06CB:CF00] on i2c-SYNA2BA6:00
+Nov 23 19:34:07  r8 Kernel: nvme nvme0: passthrough uses implicit buffer lengths
+Nov 23 19:34:07  r8 Kernel: nvme nvme0: allocated 64 MiB host memory buffer (1 segment).
+Nov 23 19:34:08  r8 Kernel: nvme nvme0: 20/0/0 default/read/poll queues
+Nov 23 19:34:08  r8 Kernel:  nvme0n1: p1 p2 p3 p4 p5 p6 p7 p8
+Nov 23 19:34:08  r8 Kernel: BTRFS: device fsid 47c2a8f6-b6a8-4468-b389-6c1e78b0cd9c devid 1 transid 58346 /dev/nvme0n1p6 (259:6) scanned by mount (446)
+Nov 23 19:34:08  r8 Kernel: BTRFS info (device nvme0n1p6): first mount of filesystem 47c2a8f6-b6a8-4468-b389-6c1e78b0cd9c
+Nov 23 19:34:08  r8 Kernel: BTRFS info (device nvme0n1p6): using crc32c checksum algorithm
+Nov 23 19:34:08  r8 Kernel: BTRFS info (device nvme0n1p6): enabling ssd optimizations
+Nov 23 19:34:08  r8 Kernel: BTRFS info (device nvme0n1p6): turning on async discard
+Nov 23 19:34:08  r8 Kernel: BTRFS info (device nvme0n1p6): enabling free space tree
+Nov 23 19:34:08  r8 Kernel: zram: Added device: zram0
+Nov 23 19:34:09  r8 Kernel: device-mapper: uevent: version 1.0.3
+Nov 23 19:34:09  r8 Kernel: device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+Nov 23 19:34:09  r8 Kernel: BTRFS info (device nvme0n1p6 state M): use zstd compression, level 3
+Nov 23 19:34:09  r8 Kernel: zram0: detected capacity change from 0 to 57001984
+Nov 23 19:34:09  r8 Kernel: mousedev: PS/2 mouse device common for all mice
+Nov 23 19:34:09  r8 Kernel: piix4_smbus 0000:00:14.0: SMBus Host Controller at 0xb00, revision 0
+Nov 23 19:34:09  r8 Kernel: piix4_smbus 0000:00:14.0: Using register 0x02 for SMBus port selection
+Nov 23 19:34:09  r8 Kernel: piix4_smbus 0000:00:14.0: Auxiliary SMBus Host Controller at 0xb20
+Nov 23 19:34:09  r8 Kernel: i2c i2c-6: Successfully instantiated SPD at 0x50
+Nov 23 19:34:09  r8 Kernel: i2c i2c-6: Successfully instantiated SPD at 0x51
+Nov 23 19:34:09  r8 Kernel: i2c i2c-6: Successfully instantiated SPD at 0x52
+Nov 23 19:34:09  r8 Kernel: i2c i2c-6: Successfully instantiated SPD at 0x53
+Nov 23 19:34:09  r8 Kernel: ACPI: battery: new hook: Ideapad Battery Extension
+Nov 23 19:34:09  r8 Kernel: input: Ideapad extra buttons as /devices/pci0000:00/0000:00:14.3/PNP0C09:00/VPC2004:00/input/input10
+Nov 23 19:34:09  r8 Kernel: mc: Linux media interface: v0.10
+Nov 23 19:34:09  r8 Kernel: RAPL PMU: API unit is 2^-32 Joules, 2 fixed counters, 163840 ms ovfl timer
+Nov 23 19:34:09  r8 Kernel: RAPL PMU: hw unit of domain package 2^-16 Joules
+Nov 23 19:34:09  r8 Kernel: RAPL PMU: hw unit of domain core 2^-16 Joules
+Nov 23 19:34:09  r8 Kernel: cfg80211: Loading compiled-in X.509 certificates for regulatory database
+Nov 23 19:34:09  r8 Kernel: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+Nov 23 19:34:09  r8 Kernel: Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+Nov 23 19:34:09  r8 Kernel: lenovo_wmi_gamezone 887B54E3-DDDC-4B2C-8B88-68A26A8835D0-3: platform_profile probe failed
+Nov 23 19:34:09  r8 Kernel: videodev: Linux video capture interface: v2.00
+Nov 23 19:34:09  r8 Kernel: Adding 31178748k swap on /dev/nvme0n1p7.  Priority:-1 extents:1 across:31178748k SS
+Nov 23 19:34:09  r8 Kernel: Adding 28500988k swap on /dev/zram0.  Priority:100 extents:1 across:28500988k SSDsc
+Nov 23 19:34:09  r8 Kernel: amd-pmf AMDI0103:00: No Smart PC policy present
+Nov 23 19:34:09  r8 Kernel: amd-pmf AMDI0103:00: registered PMF device successfully
+Nov 23 19:34:09  r8 Kernel: Bluetooth: Core ver 2.22
+Nov 23 19:34:09  r8 Kernel: NET: Registered PF_BLUETOOTH protocol family
+Nov 23 19:34:09  r8 Kernel: Bluetooth: HCI device and connection manager initialized
+Nov 23 19:34:09  r8 Kernel: Bluetooth: HCI socket layer initialized
+Nov 23 19:34:09  r8 Kernel: Bluetooth: L2CAP socket layer initialized
+Nov 23 19:34:09  r8 Kernel: Bluetooth: SCO socket layer initialized
+Nov 23 19:34:09  r8 Kernel: snd_hda_intel 0000:62:00.1: enabling device (0000 -> 0002)
+Nov 23 19:34:09  r8 Kernel: snd_hda_intel 0000:62:00.1: Handle vga_switcheroo audio client
+Nov 23 19:34:09  r8 Kernel: snd_hda_intel 0000:62:00.6: enabling device (0000 -> 0002)
+Nov 23 19:34:09  r8 Kernel: amdxdna 0000:63:00.1: [drm] Load firmware amdnpu/17f0_10/npu_7.sbin
+Nov 23 19:34:09  r8 Kernel: amdxdna 0000:63:00.1: enabling device (0000 -> 0002)
+Nov 23 19:34:09  r8 Kernel: kvm_amd: TSC scaling supported
+Nov 23 19:34:09  r8 Kernel: kvm_amd: Nested Virtualization enabled
+Nov 23 19:34:09  r8 Kernel: kvm_amd: Nested Paging enabled
+Nov 23 19:34:09  r8 Kernel: kvm_amd: LBR virtualization supported
+Nov 23 19:34:09  r8 Kernel: kvm_amd: AVIC enabled
+Nov 23 19:34:09  r8 Kernel: kvm_amd: x2AVIC enabled (max 512 vCPUs)
+Nov 23 19:34:09  r8 Kernel: kvm_amd: Virtual VMLOAD VMSAVE supported
+Nov 23 19:34:09  r8 Kernel: kvm_amd: Virtual GIF supported
+Nov 23 19:34:09  r8 Kernel: kvm_amd: Virtual NMI enabled
+Nov 23 19:34:09  r8 Kernel: input: HD-Audio Generic HDMI/DP,pcm=3 as /devices/pci0000:00/0000:00:08.1/0000:62:00.1/sound/card0/input11
+Nov 23 19:34:09  r8 Kernel: input: HD-Audio Generic HDMI/DP,pcm=7 as /devices/pci0000:00/0000:00:08.1/0000:62:00.1/sound/card0/input12
+Nov 23 19:34:09  r8 Kernel: [drm] Initialized amdxdna_accel_driver 0.10.0 for 0000:63:00.1 on minor 0
+Nov 23 19:34:10  r8 Kernel: BTRFS: device fsid b694e86a-d31c-46f8-acc4-a00cc078288d devid 1 transid 82821 /dev/nvme0n1p8 (259:8) scanned by mount (767)
+Nov 23 19:34:10  r8 Kernel: BTRFS info (device nvme0n1p8): first mount of filesystem b694e86a-d31c-46f8-acc4-a00cc078288d
+Nov 23 19:34:10  r8 Kernel: BTRFS info (device nvme0n1p8): using crc32c checksum algorithm
+Nov 23 19:34:10  r8 Kernel: BTRFS info (device nvme0n1p8): enabling ssd optimizations
+Nov 23 19:34:10  r8 Kernel: BTRFS info (device nvme0n1p8): turning on async discard
+Nov 23 19:34:10  r8 Kernel: BTRFS info (device nvme0n1p8): enabling free space tree
+Nov 23 19:34:10  r8 Kernel: BTRFS info (device nvme0n1p8): use zstd compression, level 3
+Nov 23 19:34:10  r8 Kernel: amdgpu: Virtual CRAT table created for CPU
+Nov 23 19:34:10  r8 Kernel: amdgpu: Topology: Add CPU node
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: enabling device (0006 -> 0007)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: initializing kernel modesetting (IP DISCOVERY 0x1002:0x150E 0x17AA:0x3815 0xC4).
+Nov 23 19:34:10  r8 Kernel: uvcvideo 1-1:1.0: Found UVC 1.50 device Integrated Camera (174f:1820)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: register mmio base: 0x98400000
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: register mmio size: 524288
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 0 <common_v1_0_0> (soc21_common)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 1 <gmc_v11_0_0> (gmc_v11_0)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 2 <ih_v6_1_0> (ih_v6_1)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 3 <psp_v13_0_0> (psp)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 4 <smu_v14_0_0> (smu)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 5 <dce_v1_0_0> (dm)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 6 <gfx_v11_0_0> (gfx_v11_0)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 7 <sdma_v6_0_0> (sdma_v6_0)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 8 <vcn_v4_0_5> (vcn_v4_0_5)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 9 <jpeg_v4_0_5> (jpeg_v4_0_5)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 10 <mes_v11_0_0> (mes_v11_0)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 11 <vpe_v6_1_0> (vpe_v6_1)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: detected ip block number 12 <isp_v4_1_0> (isp_ip)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: Fetched VBIOS from VFCT
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] ATOM BIOS: 113-STRIXEMU-001, build: 00107777, ver: 023.010.001.017.000001, 2024/06/14
+Nov 23 19:34:10  r8 Kernel: uvcvideo 1-1:1.2: Found UVC 1.50 device Integrated Camera (174f:1820)
+Nov 23 19:34:10  r8 Kernel: usbcore: registered new interface driver uvcvideo
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: VPE: collaborate mode false
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] Optional firmware "amdgpu/isp_4_1_0.bin" was not found
+Nov 23 19:34:10  r8 Kernel: mt7921e 0000:61:00.0: enabling device (0000 -> 0002)
+Nov 23 19:34:10  r8 Kernel: usbcore: registered new interface driver btusb
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0: ALC287: picked fixup  for PCI SSID 17aa:38a7
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0: autoconfig for ALC287: line_outs=2 (0x14/0x17/0x0/0x0/0x0) type:speaker
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:    speaker_outs=0 (0x0/0x0/0x0/0x0/0x0)
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:    hp_outs=1 (0x21/0x0/0x0/0x0/0x0)
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:    mono: mono_out=0x0
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:    inputs:
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:      Internal Mic=0x12
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:      Internal Mic=0x13
+Nov 23 19:34:10  r8 Kernel: snd_hda_codec_alc269 hdaudioC1D0:      Mic=0x19
+Nov 23 19:34:10  r8 Kernel: intel_rapl_common: Found RAPL domain package
+Nov 23 19:34:10  r8 Kernel: intel_rapl_common: Found RAPL domain core
+Nov 23 19:34:10  r8 Kernel: Bluetooth: hci0: HW/SW Version: 0x008a008a, Build Time: 20260724143815
+Nov 23 19:34:10  r8 Kernel: mt7921e 0000:61:00.0: ASIC revision: 79220010
+Nov 23 19:34:10  r8 Kernel: Console: switching to colour dummy device 160x50
+Nov 23 19:34:10  r8 Kernel: snd_pci_ps 0000:62:00.5: enabling device (0000 -> 0002)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: Trusted Memory Zone (TMZ) feature disabled as experimental (default)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: vm size is 262144 GB, 4 levels, block size is 9-bit, fragment size is 9-bit
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: VRAM: 4096M 0x0000008000000000 - 0x00000080FFFFFFFF (4096M used)
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: GART: 512M 0x00007FFF00000000 - 0x00007FFF1FFFFFFF
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] Detected VRAM RAM=4096M, BAR=4096M
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] RAM width 128bits LPDDR5
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0:  4096M of VRAM memory ready
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0:  13916M of GTT memory ready.
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] GART: num cpu pages 131072, num gpu pages 131072
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] PCIE GART of 512M enabled (table at 0x00000080FFB00000).
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] USB controller 0000:62:00.4 D0 power state depends on 0000:62:00.0
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [drm] Loading DMUB firmware via PSP: version=0x09005700
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: [VCN instance 0] Found VCN firmware Version ENC: 1.24 DEC: 9 VEP: 0 Revision: 55
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: MES: vmid_mask_mmhub 0x0000ff00, vmid_mask_gfxhub 0x0000ff00
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: MES: gfx_hqd_mask 0x00000002, compute_hqd_mask 0x0000000c, sdma_hqd_mask 0x000000fc
+Nov 23 19:34:10  r8 Kernel: input: HD-Audio Generic Mic as /devices/pci0000:00/0000:00:08.1/0000:62:00.6/sound/card1/input13
+Nov 23 19:34:10  r8 Kernel: input: HD-Audio Generic Headphone as /devices/pci0000:00/0000:00:08.1/0000:62:00.6/sound/card1/input14
+Nov 23 19:34:10  r8 Kernel: amdgpu 0000:62:00.0: reserve 0x8900000 from 0x80e0000000 for PSP TMR
+Nov 23 19:34:10  r8 Kernel: mt7921e 0000:61:00.0: Loading firmware patch: mediatek/WIFI_MT7922_patch_mcu_1_1_hdr.bin
+Nov 23 19:34:10  r8 Kernel: mt7921e 0000:61:00.0: HW/SW Version: 0x8a108a10, Build Time: 20260724143257a
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: RAS: optional ras ta ucode is not available
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: RAP: optional rap ta ucode is not available
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: SECUREDISPLAY: optional securedisplay ta ucode is not available
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: smu driver if version = 0x00000007, smu fw if version = 0x00000007, smu fw program = 9, smu fw version = 0x095d0c00 (93.12.0)
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: SMU is initialized successfully!
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] Display Core v3.2.392 initialized on DCN 3.5
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-HDMI FRL PCON supported
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DMUB hardware initialized: version=0x09005700
+Nov 23 19:34:11  r8 Kernel: snd_hda_intel 0000:62:00.1: bound 0000:62:00.0 (ops amdgpu_dm_audio_component_bind_ops [amdgpu])
+Nov 23 19:34:11  r8 Kernel: Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+Nov 23 19:34:11  r8 Kernel: Bluetooth: BNEP filters: protocol multicast
+Nov 23 19:34:11  r8 Kernel: Bluetooth: BNEP socket layer initialized
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] eDP-1: PSR support 0, DC PSR ver 0, sink PSR ver 1 DPCD caps 0x38 su_y_granularity 4
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] HDMI-A-1: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-1: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-2: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-3: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-4: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-5: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] DP-6: PSR support 0, DC PSR ver -1, sink PSR ver 0 DPCD caps 0x0 su_y_granularity 0
+Nov 23 19:34:11  r8 Kernel: kfd kfd: Allocated 3969056 bytes on gart
+Nov 23 19:34:11  r8 Kernel: kfd kfd: Total number of KFD nodes to be created: 1
+Nov 23 19:34:11  r8 Kernel: amdgpu: Virtual CRAT table created for GPU
+Nov 23 19:34:11  r8 Kernel: amdgpu: Topology: Add GPU node [0x1002:0x150e]
+Nov 23 19:34:11  r8 Kernel: kfd kfd: added device 1002:150e
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: SE 1, SH per SE 2, CU per SH 8, active_cu_number 12
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring gfx_0.0.0 uses VM inv eng 0 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring gfx_0.1.0 uses VM inv eng 1 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.0.0 uses VM inv eng 4 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.1.0 uses VM inv eng 6 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.2.0 uses VM inv eng 7 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.3.0 uses VM inv eng 8 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.0.1 uses VM inv eng 9 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.1.1 uses VM inv eng 10 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.2.1 uses VM inv eng 11 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.3.1 uses VM inv eng 12 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring sdma0 uses VM inv eng 13 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring vcn_unified_0 uses VM inv eng 0 on hub 8
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring jpeg_dec_0 uses VM inv eng 1 on hub 8
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring mes_kiq_3.1.0 uses VM inv eng 14 on hub 0
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: ring vpe uses VM inv eng 4 on hub 8
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: Runtime PM not available
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] Using custom brightness curve
+Nov 23 19:34:11  r8 Kernel: amdgpu 0000:62:00.0: [drm] Registered 4 planes with drm panic
+Nov 23 19:34:11  r8 Kernel: [drm] Initialized amdgpu 3.64.0 for 0000:62:00.0 on minor 1
+Nov 23 19:34:11  r8 Kernel: fbcon: amdgpudrmfb (fb0) is primary device
+Nov 23 19:34:11  r8 Kernel: [drm] pre_validate_dsc:1797 MST_DSC dsc precompute is not needed
+Nov 23 19:34:11  r8 Kernel: NET: Registered PF_QIPCRTR protocol family
+Nov 23 19:34:11  r8 Kernel: mt7921e 0000:61:00.0: WM Firmware Version: ____000000, Build Time: 20260724143402
+Nov 23 19:34:11  r8 Kernel: bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+Nov 23 19:34:11  r8 Kernel: u32 classifier
+Nov 23 19:34:11  r8 Kernel:     Performance counters on
+Nov 23 19:34:11  r8 Kernel:     input device check on
+Nov 23 19:34:11  r8 Kernel:     Actions configured
+Nov 23 19:34:11  r8 Kernel: Initializing XFRM netlink socket
+Nov 23 19:34:12  r8 Kernel: Console: switching to colour frame buffer device 180x56
+Nov 23 19:34:12  r8 Kernel: amdgpu 0000:62:00.0: [drm] fb0: amdgpudrmfb frame buffer device
+Nov 23 19:34:12  r8 Kernel: mt7921e 0000:61:00.0 wlp97s0: renamed from wlan0
+Nov 23 19:34:13  r8 Kernel: Bluetooth: hci0: Device setup in 2215353 usecs
+Nov 23 19:34:13  r8 Kernel: Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection command is advertised, but not supported.
+Nov 23 19:34:13  r8 Kernel: Bluetooth: hci0: AOSP extensions version v1.00
+Nov 23 19:34:13  r8 Kernel: Bluetooth: hci0: AOSP quality report is supported
+Nov 23 19:34:13  r8 Kernel: Bluetooth: MGMT ver 1.23
+Nov 23 19:34:13  r8 Kernel: NET: Registered PF_ALG protocol family
+Nov 23 19:34:14  r8 Kernel: Bluetooth: RFCOMM TTY layer initialized
+Nov 23 19:34:14  r8 Kernel: Bluetooth: RFCOMM socket layer initialized
+Nov 23 19:34:14  r8 Kernel: Bluetooth: RFCOMM ver 1.11
+Nov 23 19:34:19  r8 Kernel: warning: `kdeconnectd' uses wireless extensions which will stop working for Wi-Fi 7 hardware; use nl80211
+Nov 23 19:34:39  r8 Kernel: wlp97s0: authenticate with 0a:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 19:34:40  r8 Kernel: wlp97s0: send auth to 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:34:40  r8 Kernel: wlp97s0: authenticated
+Nov 23 19:34:40  r8 Kernel: wlp97s0: associate with 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:34:40  r8 Kernel: wlp97s0: RX AssocResp from 0a:69:45:1f:c8:94 (capab=0x431 status=0 aid=1)
+Nov 23 19:34:40  r8 Kernel: wlp97s0: associated
+Nov 23 19:34:40  r8 Kernel: wlp97s0: deauthenticating from 0a:69:45:1f:c8:94 by local choice (Reason: 3=DEAUTH_LEAVING)
+Nov 23 19:34:46  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 19:34:46  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:34:46  r8 Kernel: wlp97s0: authenticated
+Nov 23 19:34:46  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:34:46  r8 Kernel: wlp97s0: RX AssocResp from 18:69:45:1f:c8:94 (capab=0x431 status=0 aid=5)
+Nov 23 19:34:46  r8 Kernel: wlp97s0: associated
+Nov 23 19:34:52  r8 Kernel: wlp97s0: deauthenticating from 18:69:45:1f:c8:94 by local choice (Reason: 3=DEAUTH_LEAVING)
+Nov 23 19:34:55  r8 Kernel: wlp97s0: authenticate with 0a:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 19:34:55  r8 Kernel: wlp97s0: send auth to 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:34:55  r8 Kernel: wlp97s0: authenticated
+Nov 23 19:34:55  r8 Kernel: wlp97s0: associate with 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:34:55  r8 Kernel: wlp97s0: RX AssocResp from 0a:69:45:1f:c8:94 (capab=0x431 status=0 aid=1)
+Nov 23 19:34:55  r8 Kernel: wlp97s0: associated
+Nov 23 19:34:58  r8 Kernel: wlp97s0: deauthenticated from 0a:69:45:1f:c8:94 (Reason: 6=CLASS2_FRAME_FROM_NONAUTH_STA)
+Nov 23 19:35:07  r8 Kernel: wlp97s0: authenticate with 0a:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 19:35:07  r8 Kernel: wlp97s0: send auth to 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:35:07  r8 Kernel: wlp97s0: authenticated
+Nov 23 19:35:07  r8 Kernel: wlp97s0: associate with 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:35:07  r8 Kernel: wlp97s0: RX AssocResp from 0a:69:45:1f:c8:94 (capab=0x431 status=0 aid=1)
+Nov 23 19:35:07  r8 Kernel: wlp97s0: associated
+Nov 23 19:35:10  r8 Kernel: wlp97s0: deauthenticating from 0a:69:45:1f:c8:94 by local choice (Reason: 3=DEAUTH_LEAVING)
+Nov 23 19:35:15  r8 Kernel: wlp97s0: authenticate with 0a:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 19:35:15  r8 Kernel: wlp97s0: send auth to 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:35:15  r8 Kernel: wlp97s0: authenticated
+Nov 23 19:35:15  r8 Kernel: wlp97s0: associate with 0a:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:35:15  r8 Kernel: wlp97s0: RX AssocResp from 0a:69:45:1f:c8:94 (capab=0x431 status=0 aid=1)
+Nov 23 19:35:15  r8 Kernel: wlp97s0: associated
+Nov 23 19:35:18  r8 Kernel: wlp97s0: deauthenticated from 0a:69:45:1f:c8:94 (Reason: 6=CLASS2_FRAME_FROM_NONAUTH_STA)
+Nov 23 19:35:30  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 19:35:30  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:35:30  r8 Kernel: wlp97s0: authenticated
+Nov 23 19:35:30  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 19:35:30  r8 Kernel: wlp97s0: RX AssocResp from 18:69:45:1f:c8:94 (capab=0x431 status=0 aid=5)
+Nov 23 19:35:30  r8 Kernel: wlp97s0: associated
+Nov 23 19:49:02  r8 Kernel: br-univ: port 1(clab-a5cfced3) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 1(clab-a5cfced3) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-a5cfced3: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-a5cfced3: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: r1_eth1: renamed from clab-a5cfced3
+Nov 23 19:49:02  r8 Kernel: br-univ: port 2(clab-a07507fa) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 2(clab-a07507fa) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-a07507fa: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-a07507fa: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: r2_eth1: renamed from clab-a07507fa
+Nov 23 19:49:02  r8 Kernel: br-univ: port 3(clab-f6f0fe32) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 3(clab-f6f0fe32) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-f6f0fe32: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-f6f0fe32: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: r3_eth1: renamed from clab-f6f0fe32
+Nov 23 19:49:02  r8 Kernel: br-univ: port 4(clab-35eed76f) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 4(clab-35eed76f) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-35eed76f: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-35eed76f: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: r4_eth1: renamed from clab-35eed76f
+Nov 23 19:49:02  r8 Kernel: br-univ: port 5(clab-a41e0205) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 5(clab-a41e0205) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-a41e0205: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-a41e0205: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: r5_eth1: renamed from clab-a41e0205
+Nov 23 19:49:02  r8 Kernel: br-univ: port 6(clab-fe2f7e15) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 6(clab-fe2f7e15) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-fe2f7e15: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-fe2f7e15: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: r6_eth1: renamed from clab-fe2f7e15
+Nov 23 19:49:02  r8 Kernel: br-univ: port 7(clab-5570cc90) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 7(clab-5570cc90) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-5570cc90: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-5570cc90: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: h1_eth1: renamed from clab-5570cc90
+Nov 23 19:49:02  r8 Kernel: br-univ: port 8(clab-0d9dc7ea) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 8(clab-0d9dc7ea) entered disabled state
+Nov 23 19:49:02  r8 Kernel: clab-0d9dc7ea: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: clab-0d9dc7ea: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: h2_eth1: renamed from clab-0d9dc7ea
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered disabled state
+Nov 23 19:49:02  r8 Kernel: veth350d223: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: veth350d223: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: eth1: renamed from clab-ac6f438e
+Nov 23 19:49:02  r8 Kernel: br-univ: port 7(h1_eth1) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 7(h1_eth1) entered listening state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered disabled state
+Nov 23 19:49:02  r8 Kernel: veth4149382: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: veth4149382: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: eth1: renamed from clab-2b9a76d6
+Nov 23 19:49:02  r8 Kernel: eth0: renamed from veth47f4c2e
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered disabled state
+Nov 23 19:49:02  r8 Kernel: veth9bb746c: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: veth9bb746c: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: br-univ: port 8(h2_eth1) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-univ: port 8(h2_eth1) entered listening state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered forwarding state
+Nov 23 19:49:02  r8 Kernel: eth0: renamed from vethf9f0f70
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered forwarding state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered disabled state
+Nov 23 19:49:02  r8 Kernel: vetha77a21e: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: vetha77a21e: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: 8021q: 802.1Q VLAN Support v1.8
+Nov 23 19:49:02  r8 Kernel: eth0: renamed from veth705c45d
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered forwarding state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered disabled state
+Nov 23 19:49:02  r8 Kernel: vethff632cf: entered allmulticast mode
+Nov 23 19:49:02  r8 Kernel: vethff632cf: entered promiscuous mode
+Nov 23 19:49:02  r8 Kernel: eth0: renamed from veth1ec88fc
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered blocking state
+Nov 23 19:49:02  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered forwarding state
+Nov 23 19:49:03  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered disabled state
+Nov 23 19:49:03  r8 Kernel: veth9f0414f: entered allmulticast mode
+Nov 23 19:49:03  r8 Kernel: veth9f0414f: entered promiscuous mode
+Nov 23 19:49:03  r8 Kernel: eth0: renamed from veth7d1df78
+Nov 23 19:49:03  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered forwarding state
+Nov 23 19:49:03  r8 Kernel: eth1: renamed from clab-1778ec35
+Nov 23 19:49:03  r8 Kernel: eth1: renamed from clab-8eddcbf3
+Nov 23 19:49:03  r8 Kernel: eth1: renamed from clab-b9d3539e
+Nov 23 19:49:03  r8 Kernel: br-univ: port 6(r6_eth1) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 6(r6_eth1) entered listening state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 1(r1_eth1) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 1(r1_eth1) entered listening state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 3(r3_eth1) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 3(r3_eth1) entered listening state
+Nov 23 19:49:03  r8 Kernel: eth1: renamed from clab-b1a5b9af
+Nov 23 19:49:03  r8 Kernel: br-univ: port 4(r4_eth1) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 4(r4_eth1) entered listening state
+Nov 23 19:49:03  r8 Kernel: eth0: renamed from veth1e7b366
+Nov 23 19:49:03  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered forwarding state
+Nov 23 19:49:03  r8 Kernel: eth1: renamed from clab-b6a9a6f6
+Nov 23 19:49:03  r8 Kernel: br-univ: port 2(r2_eth1) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 2(r2_eth1) entered listening state
+Nov 23 19:49:03  r8 Kernel: eth1: renamed from clab-42a79cc0
+Nov 23 19:49:03  r8 Kernel: br-univ: port 5(r5_eth1) entered blocking state
+Nov 23 19:49:03  r8 Kernel: br-univ: port 5(r5_eth1) entered listening state
+Nov 23 19:49:04  r8 Kernel: br-univ: port 7(h1_eth1) entered learning state
+Nov 23 19:49:04  r8 Kernel: br-univ: port 8(h2_eth1) entered learning state
+Nov 23 19:49:04  r8 Kernel: gre: GRE over IPv4 demultiplexer driver
+Nov 23 19:49:04  r8 Kernel: ip_gre: GRE over IPv4 tunneling driver
+Nov 23 19:49:04  r8 Kernel: sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+Nov 23 19:49:04  r8 Kernel: ipip: IPv4 and MPLS over IPv4 tunneling driver
+Nov 23 19:49:05  r8 Kernel: br-univ: port 4(r4_eth1) entered learning state
+Nov 23 19:49:05  r8 Kernel: br-univ: port 3(r3_eth1) entered learning state
+Nov 23 19:49:05  r8 Kernel: br-univ: port 1(r1_eth1) entered learning state
+Nov 23 19:49:05  r8 Kernel: br-univ: port 6(r6_eth1) entered learning state
+Nov 23 19:49:05  r8 Kernel: br-univ: port 2(r2_eth1) entered learning state
+Nov 23 19:49:05  r8 Kernel: br-univ: port 5(r5_eth1) entered learning state
+Nov 23 19:49:06  r8 Kernel: br-univ: port 7(h1_eth1) entered forwarding state
+Nov 23 19:49:06  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:06  r8 Kernel: br-univ: port 8(h2_eth1) entered forwarding state
+Nov 23 19:49:06  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:07  r8 Kernel: br-univ: port 6(r6_eth1) entered forwarding state
+Nov 23 19:49:07  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:07  r8 Kernel: br-univ: port 1(r1_eth1) entered forwarding state
+Nov 23 19:49:07  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:07  r8 Kernel: br-univ: port 4(r4_eth1) entered forwarding state
+Nov 23 19:49:07  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:07  r8 Kernel: br-univ: port 3(r3_eth1) entered forwarding state
+Nov 23 19:49:07  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:07  r8 Kernel: br-univ: port 2(r2_eth1) entered forwarding state
+Nov 23 19:49:07  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 19:49:07  r8 Kernel: br-univ: port 5(r5_eth1) entered forwarding state
+Nov 23 19:49:07  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:20:13  r8 Kernel: br-univ: port 3(r3_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: r3_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: r3_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 3(r3_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 7(h1_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: h1_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: h1_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 7(h1_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 4(r4_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: r4_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: r4_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 4(r4_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 1(r1_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: r1_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: r1_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 1(r1_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 2(r2_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: r2_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: r2_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 2(r2_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 5(r5_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: r5_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: r5_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 5(r5_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 8(h2_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: h2_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: h2_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 8(h2_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-univ: port 6(r6_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: r6_eth1 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: r6_eth1 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-univ: port 6(r6_eth1) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth47f4c2e: renamed from eth0
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth350d223 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: veth350d223 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 1(veth350d223) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth705c45d: renamed from eth0
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth1ec88fc: renamed from eth0
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth9bb746c (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: veth9bb746c (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 3(veth9bb746c) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth1e7b366: renamed from eth0
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered disabled state
+Nov 23 20:20:13  r8 Kernel: vetha77a21e (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: vetha77a21e (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 4(vetha77a21e) entered disabled state
+Nov 23 20:20:13  r8 Kernel: vethf9f0f70: renamed from eth0
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth7d1df78: renamed from eth0
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth9f0414f (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: veth9f0414f (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 6(veth9f0414f) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered disabled state
+Nov 23 20:20:13  r8 Kernel: veth4149382 (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: veth4149382 (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 2(veth4149382) entered disabled state
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered disabled state
+Nov 23 20:20:13  r8 Kernel: vethff632cf (unregistering): left allmulticast mode
+Nov 23 20:20:13  r8 Kernel: vethff632cf (unregistering): left promiscuous mode
+Nov 23 20:20:13  r8 Kernel: br-b5bc44fc26c3: port 5(vethff632cf) entered disabled state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered blocking state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered disabled state
+Nov 23 20:20:31  r8 Kernel: veth0d0bfa5: entered allmulticast mode
+Nov 23 20:20:31  r8 Kernel: veth0d0bfa5: entered promiscuous mode
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered blocking state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered disabled state
+Nov 23 20:20:31  r8 Kernel: veth7ef800b: entered allmulticast mode
+Nov 23 20:20:31  r8 Kernel: veth7ef800b: entered promiscuous mode
+Nov 23 20:20:31  r8 Kernel: eth0: renamed from veth90ae873
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered blocking state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered forwarding state
+Nov 23 20:20:31  r8 Kernel: eth0: renamed from veth0f6aa46
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered blocking state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered forwarding state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered blocking state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered disabled state
+Nov 23 20:20:31  r8 Kernel: veth7bdbcab: entered allmulticast mode
+Nov 23 20:20:31  r8 Kernel: veth7bdbcab: entered promiscuous mode
+Nov 23 20:20:31  r8 Kernel: eth0: renamed from vethae6edac
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered blocking state
+Nov 23 20:20:31  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered forwarding state
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered disabled state
+Nov 23 20:23:10  r8 Kernel: veth0f6aa46: renamed from eth0
+Nov 23 20:23:10  r8 Kernel: veth90ae873: renamed from eth0
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered disabled state
+Nov 23 20:23:10  r8 Kernel: vethae6edac: renamed from eth0
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered disabled state
+Nov 23 20:23:10  r8 Kernel: veth7ef800b (unregistering): left allmulticast mode
+Nov 23 20:23:10  r8 Kernel: veth7ef800b (unregistering): left promiscuous mode
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 2(veth7ef800b) entered disabled state
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered disabled state
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered disabled state
+Nov 23 20:23:10  r8 Kernel: veth0d0bfa5 (unregistering): left allmulticast mode
+Nov 23 20:23:10  r8 Kernel: veth0d0bfa5 (unregistering): left promiscuous mode
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 1(veth0d0bfa5) entered disabled state
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered disabled state
+Nov 23 20:23:10  r8 Kernel: veth7bdbcab (unregistering): left allmulticast mode
+Nov 23 20:23:10  r8 Kernel: veth7bdbcab (unregistering): left promiscuous mode
+Nov 23 20:23:10  r8 Kernel: br-594765e521a9: port 3(veth7bdbcab) entered disabled state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 1(clab-d00d0e41) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 1(clab-d00d0e41) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-d00d0e41: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-d00d0e41: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: r1_eth1: renamed from clab-d00d0e41
+Nov 23 20:23:13  r8 Kernel: br-univ: port 2(clab-dd455a87) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 2(clab-dd455a87) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-dd455a87: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-dd455a87: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: r2_eth1: renamed from clab-dd455a87
+Nov 23 20:23:13  r8 Kernel: br-univ: port 3(clab-187d5ab1) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 3(clab-187d5ab1) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-187d5ab1: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-187d5ab1: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: r3_eth1: renamed from clab-187d5ab1
+Nov 23 20:23:13  r8 Kernel: br-univ: port 4(clab-3aa639bb) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 4(clab-3aa639bb) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-3aa639bb: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-3aa639bb: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: r4_eth1: renamed from clab-3aa639bb
+Nov 23 20:23:13  r8 Kernel: br-univ: port 5(clab-ff6d9d4a) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 5(clab-ff6d9d4a) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-ff6d9d4a: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-ff6d9d4a: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: r5_eth1: renamed from clab-ff6d9d4a
+Nov 23 20:23:13  r8 Kernel: br-univ: port 6(clab-808f4944) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 6(clab-808f4944) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-808f4944: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-808f4944: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: r6_eth1: renamed from clab-808f4944
+Nov 23 20:23:13  r8 Kernel: br-univ: port 7(clab-b77db93a) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 7(clab-b77db93a) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-b77db93a: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-b77db93a: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: h1_eth1: renamed from clab-b77db93a
+Nov 23 20:23:13  r8 Kernel: br-univ: port 8(clab-8d9a570d) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 8(clab-8d9a570d) entered disabled state
+Nov 23 20:23:13  r8 Kernel: clab-8d9a570d: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: clab-8d9a570d: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: h2_eth1: renamed from clab-8d9a570d
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered disabled state
+Nov 23 20:23:13  r8 Kernel: veth0d8d224: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: veth0d8d224: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: eth1: renamed from clab-63318444
+Nov 23 20:23:13  r8 Kernel: br-univ: port 8(h2_eth1) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 8(h2_eth1) entered listening state
+Nov 23 20:23:13  r8 Kernel: eth0: renamed from veth7a23c32
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered forwarding state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered disabled state
+Nov 23 20:23:13  r8 Kernel: veth6ba2ec4: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: veth6ba2ec4: entered promiscuous mode
+Nov 23 20:23:13  r8 Kernel: eth1: renamed from clab-20737b69
+Nov 23 20:23:13  r8 Kernel: br-univ: port 5(r5_eth1) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-univ: port 5(r5_eth1) entered listening state
+Nov 23 20:23:13  r8 Kernel: eth0: renamed from veth757140f
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered forwarding state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered blocking state
+Nov 23 20:23:13  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered disabled state
+Nov 23 20:23:13  r8 Kernel: veth7b38768: entered allmulticast mode
+Nov 23 20:23:13  r8 Kernel: veth7b38768: entered promiscuous mode
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered disabled state
+Nov 23 20:23:14  r8 Kernel: veth7842428: entered allmulticast mode
+Nov 23 20:23:14  r8 Kernel: veth7842428: entered promiscuous mode
+Nov 23 20:23:14  r8 Kernel: eth0: renamed from vetha242df6
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered forwarding state
+Nov 23 20:23:14  r8 Kernel: eth1: renamed from clab-c733ac0f
+Nov 23 20:23:14  r8 Kernel: br-univ: port 7(h1_eth1) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-univ: port 7(h1_eth1) entered listening state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered disabled state
+Nov 23 20:23:14  r8 Kernel: veth0329460: entered allmulticast mode
+Nov 23 20:23:14  r8 Kernel: veth0329460: entered promiscuous mode
+Nov 23 20:23:14  r8 Kernel: eth0: renamed from vethc2a5f4a
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered forwarding state
+Nov 23 20:23:14  r8 Kernel: eth1: renamed from clab-9f68833b
+Nov 23 20:23:14  r8 Kernel: br-univ: port 2(r2_eth1) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-univ: port 2(r2_eth1) entered listening state
+Nov 23 20:23:14  r8 Kernel: eth1: renamed from clab-5ca5bbe3
+Nov 23 20:23:14  r8 Kernel: br-univ: port 4(r4_eth1) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-univ: port 4(r4_eth1) entered listening state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered disabled state
+Nov 23 20:23:14  r8 Kernel: veth2000095: entered allmulticast mode
+Nov 23 20:23:14  r8 Kernel: veth2000095: entered promiscuous mode
+Nov 23 20:23:14  r8 Kernel: eth0: renamed from vetha3efab7
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered forwarding state
+Nov 23 20:23:14  r8 Kernel: eth0: renamed from vethfe89b7f
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered forwarding state
+Nov 23 20:23:14  r8 Kernel: eth1: renamed from clab-8387db32
+Nov 23 20:23:14  r8 Kernel: br-univ: port 1(r1_eth1) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-univ: port 1(r1_eth1) entered listening state
+Nov 23 20:23:14  r8 Kernel: eth1: renamed from clab-cb3ff67f
+Nov 23 20:23:14  r8 Kernel: br-univ: port 3(r3_eth1) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-univ: port 3(r3_eth1) entered listening state
+Nov 23 20:23:14  r8 Kernel: eth1: renamed from clab-0fbcb0b6
+Nov 23 20:23:14  r8 Kernel: br-univ: port 6(r6_eth1) entered blocking state
+Nov 23 20:23:14  r8 Kernel: br-univ: port 6(r6_eth1) entered listening state
+Nov 23 20:23:15  r8 Kernel: br-univ: port 8(h2_eth1) entered learning state
+Nov 23 20:23:15  r8 Kernel: br-univ: port 5(r5_eth1) entered learning state
+Nov 23 20:23:16  r8 Kernel: br-univ: port 7(h1_eth1) entered learning state
+Nov 23 20:23:16  r8 Kernel: br-univ: port 2(r2_eth1) entered learning state
+Nov 23 20:23:16  r8 Kernel: br-univ: port 4(r4_eth1) entered learning state
+Nov 23 20:23:16  r8 Kernel: br-univ: port 1(r1_eth1) entered learning state
+Nov 23 20:23:16  r8 Kernel: br-univ: port 3(r3_eth1) entered learning state
+Nov 23 20:23:16  r8 Kernel: br-univ: port 6(r6_eth1) entered learning state
+Nov 23 20:23:17  r8 Kernel: br-univ: port 8(h2_eth1) entered forwarding state
+Nov 23 20:23:17  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 5(r5_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 7(h1_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 2(r2_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 4(r4_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 1(r1_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 3(r3_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:23:18  r8 Kernel: br-univ: port 6(r6_eth1) entered forwarding state
+Nov 23 20:23:18  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 20:30:20  r8 Kernel: wlp97s0: disconnect from AP 18:69:45:1f:c8:94 for new auth to 18:69:45:1f:c8:f3
+Nov 23 20:30:21  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:f3 (local address=58:cd:c9:10:75:b1)
+Nov 23 20:30:21  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:f3 (try 1/3)
+Nov 23 20:30:21  r8 Kernel: wlp97s0: authenticated
+Nov 23 20:30:21  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:f3 (try 1/3)
+Nov 23 20:30:21  r8 Kernel: wlp97s0: RX ReassocResp from 18:69:45:1f:c8:f3 (capab=0x431 status=0 aid=6)
+Nov 23 20:30:21  r8 Kernel: wlp97s0: associated
+Nov 23 20:44:46  r8 Kernel: wlp97s0: deauthenticating from 18:69:45:1f:c8:f3 by local choice (Reason: 3=DEAUTH_LEAVING)
+Nov 23 20:44:46  r8 Kernel: PM: suspend entry (s2idle)
+Nov 23 20:44:46  r8 Kernel: Filesystems sync: 0.021 seconds
+Nov 23 20:44:46  r8 Kernel: Freezing user space processes
+Nov 23 20:44:46  r8 Kernel: Freezing user space processes completed (elapsed 0.004 seconds)
+Nov 23 20:44:46  r8 Kernel: OOM killer disabled.
+Nov 23 20:44:46  r8 Kernel: Freezing remaining freezable tasks
+Nov 23 20:44:46  r8 Kernel: Freezing remaining freezable tasks completed (elapsed 0.002 seconds)
+Nov 23 20:44:46  r8 Kernel: printk: Suspending console(s) (use no_console_suspend to debug)
+Nov 23 20:44:46  r8 Kernel: ACPI: EC: interrupt blocked
+Nov 23 21:12:33  r8 Kernel: ACPI: EC: interrupt unblocked
+Nov 23 21:12:33  r8 Kernel: pci 0000:00:00.0: enhanced atomics disabled
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: [drm] PCIE GART of 512M enabled (table at 0x00000080FFB00000).
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: SMU is resuming...
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: SMU is resumed successfully!
+Nov 23 21:12:33  r8 Kernel: nvme nvme0: 20/0/0 default/read/poll queues
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring gfx_0.0.0 uses VM inv eng 0 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring gfx_0.1.0 uses VM inv eng 1 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.0.0 uses VM inv eng 4 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.1.0 uses VM inv eng 6 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.2.0 uses VM inv eng 7 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.3.0 uses VM inv eng 8 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.0.1 uses VM inv eng 9 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.1.1 uses VM inv eng 10 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.2.1 uses VM inv eng 11 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.3.1 uses VM inv eng 12 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring sdma0 uses VM inv eng 13 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring vcn_unified_0 uses VM inv eng 0 on hub 8
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring jpeg_dec_0 uses VM inv eng 1 on hub 8
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring mes_kiq_3.1.0 uses VM inv eng 14 on hub 0
+Nov 23 21:12:33  r8 Kernel: amdgpu 0000:62:00.0: ring vpe uses VM inv eng 4 on hub 8
+Nov 23 21:12:33  r8 Kernel: OOM killer enabled.
+Nov 23 21:12:33  r8 Kernel: Restarting tasks: Starting
+Nov 23 21:12:33  r8 Kernel: Restarting tasks: Done
+Nov 23 21:12:33  r8 Kernel: efivarfs: resyncing variable state
+Nov 23 21:12:33  r8 Kernel: efivarfs: finished resyncing variable state
+Nov 23 21:12:33  r8 Kernel: random: crng reseeded on system resumption
+Nov 23 21:12:33  r8 Kernel: PM: suspend exit
+Nov 23 21:12:36  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:f3 (local address=58:cd:c9:10:75:b1)
+Nov 23 21:12:36  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:f3 (try 1/3)
+Nov 23 21:12:36  r8 Kernel: wlp97s0: authenticated
+Nov 23 21:12:36  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:f3 (try 1/3)
+Nov 23 21:12:36  r8 Kernel: wlp97s0: RX AssocResp from 18:69:45:1f:c8:f3 (capab=0x431 status=0 aid=4)
+Nov 23 21:12:36  r8 Kernel: wlp97s0: associated
+Nov 23 21:19:36  r8 Kernel: wlp97s0: disconnect from AP 18:69:45:1f:c8:f3 for new auth to 18:69:45:1f:c8:94
+Nov 23 21:19:37  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 21:19:37  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 21:19:37  r8 Kernel: wlp97s0: authenticated
+Nov 23 21:19:37  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 21:19:37  r8 Kernel: wlp97s0: RX ReassocResp from 18:69:45:1f:c8:94 (capab=0x431 status=0 aid=4)
+Nov 23 21:19:37  r8 Kernel: wlp97s0: associated
+Nov 23 21:55:55  r8 Kernel: br-univ: port 1(r1_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: r1_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: r1_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 1(r1_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 7(h1_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: h1_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: h1_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 7(h1_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 2(r2_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: r2_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: r2_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 2(r2_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 8(h2_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: h2_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: h2_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 8(h2_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 3(r3_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: r3_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: r3_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 3(r3_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 4(r4_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: r4_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: r4_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 4(r4_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 5(r5_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: r5_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: r5_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 5(r5_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-univ: port 6(r6_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: r6_eth1 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: r6_eth1 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-univ: port 6(r6_eth1) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered disabled state
+Nov 23 21:55:55  r8 Kernel: vetha242df6: renamed from eth0
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered disabled state
+Nov 23 21:55:55  r8 Kernel: vethfe89b7f: renamed from eth0
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth757140f: renamed from eth0
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth7b38768 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: veth7b38768 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 3(veth7b38768) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered disabled state
+Nov 23 21:55:55  r8 Kernel: vethc2a5f4a: renamed from eth0
+Nov 23 21:55:55  r8 Kernel: vetha3efab7: renamed from eth0
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth7a23c32: renamed from eth0
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth2000095 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: veth2000095 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 6(veth2000095) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth0329460 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: veth0329460 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 5(veth0329460) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth6ba2ec4 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: veth6ba2ec4 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 2(veth6ba2ec4) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth7842428 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: veth7842428 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 4(veth7842428) entered disabled state
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered disabled state
+Nov 23 21:55:55  r8 Kernel: veth0d8d224 (unregistering): left allmulticast mode
+Nov 23 21:55:55  r8 Kernel: veth0d8d224 (unregistering): left promiscuous mode
+Nov 23 21:55:55  r8 Kernel: br-1125aa6f7b21: port 1(veth0d8d224) entered disabled state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 1(clab-29074b14) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 1(clab-29074b14) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-29074b14: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-29074b14: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r1_eth1: renamed from clab-29074b14
+Nov 23 21:56:04  r8 Kernel: br-univ: port 2(clab-1a6c9c55) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 2(clab-1a6c9c55) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-1a6c9c55: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-1a6c9c55: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r2_eth1: renamed from clab-1a6c9c55
+Nov 23 21:56:04  r8 Kernel: br-univ: port 3(clab-ead72929) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 3(clab-ead72929) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-ead72929: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-ead72929: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r3_eth1: renamed from clab-ead72929
+Nov 23 21:56:04  r8 Kernel: br-univ: port 4(clab-0c5e7bc4) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 4(clab-0c5e7bc4) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-0c5e7bc4: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-0c5e7bc4: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r4_eth1: renamed from clab-0c5e7bc4
+Nov 23 21:56:04  r8 Kernel: br-univ: port 5(clab-2ee7661f) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 5(clab-2ee7661f) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-2ee7661f: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-2ee7661f: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r5_eth1: renamed from clab-2ee7661f
+Nov 23 21:56:04  r8 Kernel: br-univ: port 6(clab-99df3e64) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 6(clab-99df3e64) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-99df3e64: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-99df3e64: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r6_eth1: renamed from clab-99df3e64
+Nov 23 21:56:04  r8 Kernel: br-univ: port 7(clab-8f919a95) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 7(clab-8f919a95) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-8f919a95: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-8f919a95: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r7_eth1: renamed from clab-8f919a95
+Nov 23 21:56:04  r8 Kernel: br-univ: port 8(clab-650ca980) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 8(clab-650ca980) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-650ca980: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-650ca980: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r8_eth1: renamed from clab-650ca980
+Nov 23 21:56:04  r8 Kernel: br-univ: port 9(clab-eab03385) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 9(clab-eab03385) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-eab03385: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-eab03385: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r9_eth1: renamed from clab-eab03385
+Nov 23 21:56:04  r8 Kernel: br-univ: port 10(clab-497f72fa) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 10(clab-497f72fa) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-497f72fa: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-497f72fa: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: r10_eth1: renamed from clab-497f72fa
+Nov 23 21:56:04  r8 Kernel: br-univ: port 11(clab-27eeb503) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 11(clab-27eeb503) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-27eeb503: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-27eeb503: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: h1_eth1: renamed from clab-27eeb503
+Nov 23 21:56:04  r8 Kernel: br-univ: port 12(clab-331e4093) entered blocking state
+Nov 23 21:56:04  r8 Kernel: br-univ: port 12(clab-331e4093) entered disabled state
+Nov 23 21:56:04  r8 Kernel: clab-331e4093: entered allmulticast mode
+Nov 23 21:56:04  r8 Kernel: clab-331e4093: entered promiscuous mode
+Nov 23 21:56:04  r8 Kernel: h2_eth1: renamed from clab-331e4093
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 1(vethc192c57) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 1(vethc192c57) entered disabled state
+Nov 23 21:56:05  r8 Kernel: vethc192c57: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: vethc192c57: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth64cf474
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 1(vethc192c57) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 1(vethc192c57) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 2(vethd4292af) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 2(vethd4292af) entered disabled state
+Nov 23 21:56:05  r8 Kernel: vethd4292af: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: vethd4292af: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-bf290ce6
+Nov 23 21:56:05  r8 Kernel: br-univ: port 7(r7_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 7(r7_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-0392bcec
+Nov 23 21:56:05  r8 Kernel: br-univ: port 12(h2_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 12(h2_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 3(vethfcb40ab) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 3(vethfcb40ab) entered disabled state
+Nov 23 21:56:05  r8 Kernel: vethfcb40ab: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: vethfcb40ab: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth0b4ffc6
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 2(vethd4292af) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 2(vethd4292af) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 4(vetha48bec7) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 4(vetha48bec7) entered disabled state
+Nov 23 21:56:05  r8 Kernel: vetha48bec7: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: vetha48bec7: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth575225e
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 3(vethfcb40ab) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 3(vethfcb40ab) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 5(veth941c279) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 5(veth941c279) entered disabled state
+Nov 23 21:56:05  r8 Kernel: veth941c279: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: veth941c279: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth43df99c
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 4(vetha48bec7) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 4(vetha48bec7) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-eb5fb439
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-2ec9b2fb
+Nov 23 21:56:05  r8 Kernel: br-univ: port 3(r3_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 3(r3_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 11(h1_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 11(h1_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-a3c6b9fe
+Nov 23 21:56:05  r8 Kernel: br-univ: port 4(r4_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 4(r4_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 6(veth09af82d) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 6(veth09af82d) entered disabled state
+Nov 23 21:56:05  r8 Kernel: veth09af82d: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: veth09af82d: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth06bbc58
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 5(veth941c279) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 5(veth941c279) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-d68fb946
+Nov 23 21:56:05  r8 Kernel: br-univ: port 9(r9_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 9(r9_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 7(veth4e8ad9f) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 7(veth4e8ad9f) entered disabled state
+Nov 23 21:56:05  r8 Kernel: veth4e8ad9f: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: veth4e8ad9f: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth95c428e
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 6(veth09af82d) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 6(veth09af82d) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 8(veth7dd0996) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 8(veth7dd0996) entered disabled state
+Nov 23 21:56:05  r8 Kernel: veth7dd0996: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: veth7dd0996: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from vethd28f5a8
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 7(veth4e8ad9f) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 7(veth4e8ad9f) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-99662a00
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 9(veth590889d) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 9(veth590889d) entered disabled state
+Nov 23 21:56:05  r8 Kernel: veth590889d: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: veth590889d: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: br-univ: port 5(r5_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 5(r5_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-2079b9cf
+Nov 23 21:56:05  r8 Kernel: br-univ: port 1(r1_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 1(r1_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from vethebb7c16
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 8(veth7dd0996) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 8(veth7dd0996) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 10(vethc2dabc5) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 10(vethc2dabc5) entered disabled state
+Nov 23 21:56:05  r8 Kernel: vethc2dabc5: entered allmulticast mode
+Nov 23 21:56:05  r8 Kernel: vethc2dabc5: entered promiscuous mode
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-59a75820
+Nov 23 21:56:05  r8 Kernel: br-univ: port 8(r8_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 8(r8_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from vethe67f562
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 9(veth590889d) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 9(veth590889d) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-90269491
+Nov 23 21:56:05  r8 Kernel: br-univ: port 2(r2_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 2(r2_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth0: renamed from veth3c7f0f5
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 10(vethc2dabc5) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-5c4c1d383be5: port 10(vethc2dabc5) entered forwarding state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-815bef21
+Nov 23 21:56:05  r8 Kernel: br-univ: port 10(r10_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 10(r10_eth1) entered listening state
+Nov 23 21:56:05  r8 Kernel: eth1: renamed from clab-0c40581f
+Nov 23 21:56:05  r8 Kernel: br-univ: port 6(r6_eth1) entered blocking state
+Nov 23 21:56:05  r8 Kernel: br-univ: port 6(r6_eth1) entered listening state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 7(r7_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 12(h2_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 3(r3_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 9(r9_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 4(r4_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 11(h1_eth1) entered learning state
+Nov 23 21:56:08  r8 bfdd[228]: sysctl hw.product.pvi_model not supported 
+Nov 23 21:56:07  r8 Kernel: br-univ: port 5(r5_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 1(r1_eth1) entered learning state
+Nov 23 21:56:08  r8 root: vrrpd: ./finish: /etc/sv/vrrpd: rc=0; failures 0/5
+Nov 23 21:56:07  r8 Kernel: br-univ: port 2(r2_eth1) entered learning state
+Nov 23 21:56:07  r8 Kernel: br-univ: port 8(r8_eth1) entered learning state
+Nov 23 21:56:08  r8 rpd: L2CKT acquiring mastership for primary
+Nov 23 21:56:08  r8 rpd: L2VPN acquiring mastership for primary
+Nov 23 21:56:08  r8 Kernel: br-univ: port 10(r10_eth1) entered learning state
+Nov 23 21:56:08  r8 Kernel: br-univ: port 6(r6_eth1) entered learning state
+Nov 23 21:56:08  r8 rpd: task_license_feature_init
+Nov 23 21:56:08  r8 rpd: libjtask-license nextgen licensing infra active
+Nov 23 21:56:08  r8 rpd: licinfra_notify_register_init success
+Nov 23 21:56:08  r8 rpd: RPD_KRT_MULTIFIB_SERVICE_INIT: Initializing KRT Multi FIB Service
+Nov 23 21:56:08  r8 rpd: RPD_COMMIT_SYNC_STATUS: RPD commit sync completed on MASTER
+Nov 23 21:56:08  r8 rpd: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 1 [2026-11-23 21:56:08]
+Nov 23 21:56:08  r8 rpd: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 1 [2026-11-23 21:56:08]
+Nov 23 21:56:08  r8 rpd: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs started on MASTER
+Nov 23 21:56:08  r8 rpd: JTASK_TASK_BEGIN: Commencing routing updates version 23.4R2-S5.6, built 2025-06-16 12:59:32 UTC by builder
+Nov 23 21:56:08  r8 rpd: JTASK_BFD_READ_ERROR: Read error on pipe from bfdd: read system call failed (Connection reset by peer)
+Nov 23 21:56:08  r8 rpd: JTASK_NO_SOCKACCEPT: Process events: no read/accept method for BFD I/O./var/run/bfdd_control socket -1
+Nov 23 21:56:08  r8 rpd: RPD_COMMIT_JOBS_STATUS:  RPD commit jobs completed on MASTER
+Nov 23 21:56:08  r8 last message repeated 2 times
+Nov 23 21:56:08  r8 rpd: L2VPN acquiring mastership for primary
+Nov 23 21:56:08  r8 rpd: L2CKT acquiring mastership for primary
+Nov 23 21:56:08  r8 rpd: RPD_RT_HWM_NOTICE: New FIB highwatermark for routes: 1 [2026-11-23 21:56:08]
+Nov 23 21:56:09  r8 mgd[344]: UI_COMMIT: User 'root' requested 'commit' operation (comment: none)
+Nov 23 21:56:09  r8 mgd[344]: UI_EPHEMERAL_COMMIT: User 'root' has requested commit on 'junos-analytics' ephemeral database
+Nov 23 21:56:09  r8 mgd[344]: UI_EPHEMERAL_COMMIT_COMPLETED: commit complete on 'junos-analytics' ephemeral database
+Nov 23 21:56:10  r8 Kernel: br-univ: port 7(r7_eth1) entered forwarding state
+Nov 23 21:56:10  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 12(h2_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 3(r3_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 11(h1_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 9(r9_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 4(r4_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 5(r5_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:09  r8 Kernel: br-univ: port 1(r1_eth1) entered forwarding state
+Nov 23 21:56:09  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:10  r8 Kernel: br-univ: port 8(r8_eth1) entered forwarding state
+Nov 23 21:56:10  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:10  r8 Kernel: br-univ: port 2(r2_eth1) entered forwarding state
+Nov 23 21:56:10  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:10  r8 Kernel: br-univ: port 10(r10_eth1) entered forwarding state
+Nov 23 21:56:10  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:10  r8 Kernel: br-univ: port 6(r6_eth1) entered forwarding state
+Nov 23 21:56:10  r8 Kernel: br-univ: topology change detected, propagating
+Nov 23 21:56:38  r8 rpd: RPD_RT_HWM_NOTICE: New RIB highwatermark for unique destinations: 22 [2026-11-23 21:56:09]
+Nov 23 21:56:38  r8 rpd: RPD_RT_HWM_NOTICE: New RIB highwatermark for routes: 23 [2026-11-23 21:56:09]
+Nov 23 22:00:01  r8 CRON[376]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory
+Nov 23 22:01:38  r8 Kernel: wlp97s0: disconnect from AP 18:69:45:1f:c8:94 for new auth to 18:69:45:1f:c8:f3
+Nov 23 22:01:38  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:f3 (local address=58:cd:c9:10:75:b1)
+Nov 23 22:01:38  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:f3 (try 1/3)
+Nov 23 22:01:38  r8 Kernel: wlp97s0: authenticated
+Nov 23 22:01:38  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:f3 (try 1/3)
+Nov 23 22:01:38  r8 Kernel: wlp97s0: RX ReassocResp from 18:69:45:1f:c8:f3 (capab=0x431 status=0 aid=4)
+Nov 23 22:01:38  r8 Kernel: wlp97s0: associated
+Nov 23 22:06:07  r8 Kernel: wlp97s0: disconnect from AP 18:69:45:1f:c8:f3 for new auth to 18:69:45:1f:c8:94
+Nov 23 22:06:07  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 22:06:07  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 22:06:07  r8 Kernel: wlp97s0: authenticated
+Nov 23 22:06:07  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 22:06:07  r8 Kernel: wlp97s0: RX ReassocResp from 18:69:45:1f:c8:94 (capab=0x431 status=0 aid=2)
+Nov 23 22:06:07  r8 Kernel: wlp97s0: associated
+Nov 23 22:15:01  r8 CRON[409]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory
+Nov 23 22:30:01  r8 CRON[442]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory
+Nov 23 22:30:16  r8 Kernel: wlp97s0: deauthenticating from 18:69:45:1f:c8:94 by local choice (Reason: 3=DEAUTH_LEAVING)
+Nov 23 22:30:15  r8 Kernel: PM: suspend entry (s2idle)
+Nov 23 22:30:16  r8 Kernel: Filesystems sync: 0.018 seconds
+Nov 23 22:30:16  r8 Kernel: Freezing user space processes
+Nov 23 22:30:16  r8 Kernel: Freezing user space processes completed (elapsed 0.004 seconds)
+Nov 23 22:30:16  r8 Kernel: OOM killer disabled.
+Nov 23 22:30:16  r8 Kernel: Freezing remaining freezable tasks
+Nov 23 22:30:16  r8 Kernel: Freezing remaining freezable tasks completed (elapsed 0.002 seconds)
+Nov 23 22:30:16  r8 Kernel: printk: Suspending console(s) (use no_console_suspend to debug)
+Nov 23 22:30:16  r8 Kernel: ACPI: EC: interrupt blocked
+Nov 23 23:41:47  r8 Kernel: ACPI: EC: interrupt unblocked
+Nov 23 23:41:47  r8 Kernel: pci 0000:00:00.0: enhanced atomics disabled
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: [drm] PCIE GART of 512M enabled (table at 0x00000080FFB00000).
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: SMU is resuming...
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: SMU is resumed successfully!
+Nov 23 23:41:47  r8 Kernel: nvme nvme0: 20/0/0 default/read/poll queues
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring gfx_0.0.0 uses VM inv eng 0 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring gfx_0.1.0 uses VM inv eng 1 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.0.0 uses VM inv eng 4 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.1.0 uses VM inv eng 6 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.2.0 uses VM inv eng 7 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.3.0 uses VM inv eng 8 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.0.1 uses VM inv eng 9 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.1.1 uses VM inv eng 10 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.2.1 uses VM inv eng 11 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring comp_1.3.1 uses VM inv eng 12 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring sdma0 uses VM inv eng 13 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring vcn_unified_0 uses VM inv eng 0 on hub 8
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring jpeg_dec_0 uses VM inv eng 1 on hub 8
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring mes_kiq_3.1.0 uses VM inv eng 14 on hub 0
+Nov 23 23:41:47  r8 Kernel: amdgpu 0000:62:00.0: ring vpe uses VM inv eng 4 on hub 8
+Nov 23 23:41:47  r8 Kernel: OOM killer enabled.
+Nov 23 23:41:47  r8 Kernel: Restarting tasks: Starting
+Nov 23 23:41:48  r8 rpd-sa-agent: JTASK_SCHED_SLIP_KEVENT: 8 sec 413440 usec kevent block
+Nov 23 23:41:48  r8 rpd: JTASK_SCHED_SLIP_KEVENT: 8 sec 188709 usec kevent block
+Nov 23 23:41:47  r8 Kernel: Restarting tasks: Done
+Nov 23 23:41:48  r8 Kernel: efivarfs: resyncing variable state
+Nov 23 23:41:48  r8 Kernel: efivarfs: finished resyncing variable state
+Nov 23 23:41:48  r8 Kernel: random: crng reseeded on system resumption
+Nov 23 23:41:48  r8 Kernel: PM: suspend exit
+Nov 23 23:41:50  r8 Kernel: wlp97s0: authenticate with 18:69:45:1f:c8:94 (local address=58:cd:c9:10:75:b1)
+Nov 23 23:41:51  r8 Kernel: wlp97s0: send auth to 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 23:41:51  r8 Kernel: wlp97s0: authenticated
+Nov 23 23:41:51  r8 Kernel: wlp97s0: associate with 18:69:45:1f:c8:94 (try 1/3)
+Nov 23 23:41:51  r8 Kernel: wlp97s0: RX AssocResp from 18:69:45:1f:c8:94 (capab=0x431 status=0 aid=5)
+Nov 23 23:41:51  r8 Kernel: wlp97s0: associated
+Nov 23 23:45:01  r8 CRON[453]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory
+Nov 24 00:00:01  r8 CRON[486]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory

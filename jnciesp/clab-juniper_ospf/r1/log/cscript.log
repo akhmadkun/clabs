@@ -1,0 +1,93 @@
+Nov 23 21:56:08 cscript script processing begins
+Nov 23 21:56:08 reading commit script configuration
+Nov 23 21:56:08 testing commit script configuration
+Nov 23 21:56:08 cscript script processing ends
+Nov 23 21:56:42 cscript script processing begins
+Nov 23 21:56:42 reading commit script configuration
+Nov 23 21:56:42 testing commit script configuration
+Nov 23 21:56:42 Running all the translation scripts
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-bfd.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-local-routing-template.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-network-instance-l2.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-network-instance.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-bgp.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-igmp.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-isis.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-mpls.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-ospfv2.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-pim.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-ni-policyforwarding.slax'
+Nov 23 21:56:42 opening translation script '/var/db/scripts/translation/openconfig-vlan.slax'
+Nov 23 21:56:42 reading commit script 'openconfig-bfd.slax'
+Nov 23 21:56:42 running commit script 'openconfig-bfd.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-bfd.slax'
+Nov 23 21:56:42 no errors from openconfig-bfd.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-bfd.slax
+Nov 23 21:56:42 summary of script openconfig-bfd.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-local-routing-template.slax'
+Nov 23 21:56:42 running commit script 'openconfig-local-routing-template.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-local-routing-template.slax'
+Nov 23 21:56:42 no errors from openconfig-local-routing-template.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-local-routing-template.slax
+Nov 23 21:56:42 summary of script openconfig-local-routing-template.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-network-instance-l2.slax'
+Nov 23 21:56:42 running commit script 'openconfig-network-instance-l2.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-network-instance-l2.slax'
+Nov 23 21:56:42 no errors from openconfig-network-instance-l2.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-network-instance-l2.slax
+Nov 23 21:56:42 summary of script openconfig-network-instance-l2.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-network-instance.slax'
+Nov 23 21:56:42 running commit script 'openconfig-network-instance.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-network-instance.slax'
+Nov 23 21:56:42 no errors from openconfig-network-instance.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-network-instance.slax
+Nov 23 21:56:42 summary of script openconfig-network-instance.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-bgp.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-bgp.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-bgp.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-bgp.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-bgp.slax
+Nov 23 21:56:42 summary of script openconfig-ni-bgp.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-igmp.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-igmp.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-igmp.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-igmp.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-igmp.slax
+Nov 23 21:56:42 summary of script openconfig-ni-igmp.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-isis.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-isis.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-isis.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-isis.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-isis.slax
+Nov 23 21:56:42 summary of script openconfig-ni-isis.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-mpls.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-mpls.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-mpls.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-mpls.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-mpls.slax
+Nov 23 21:56:42 summary of script openconfig-ni-mpls.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-ospfv2.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-ospfv2.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-ospfv2.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-ospfv2.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-ospfv2.slax
+Nov 23 21:56:42 summary of script openconfig-ni-ospfv2.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-pim.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-pim.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-pim.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-pim.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-pim.slax
+Nov 23 21:56:42 summary of script openconfig-ni-pim.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-ni-policyforwarding.slax'
+Nov 23 21:56:42 running commit script 'openconfig-ni-policyforwarding.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-ni-policyforwarding.slax'
+Nov 23 21:56:42 no errors from openconfig-ni-policyforwarding.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-ni-policyforwarding.slax
+Nov 23 21:56:42 summary of script openconfig-ni-policyforwarding.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 reading commit script 'openconfig-vlan.slax'
+Nov 23 21:56:42 running commit script 'openconfig-vlan.slax'
+Nov 23 21:56:42 processing commit script 'openconfig-vlan.slax'
+Nov 23 21:56:42 no errors from openconfig-vlan.slax
+Nov 23 21:56:42 saving commit script changes for script openconfig-vlan.slax
+Nov 23 21:56:42 summary of script openconfig-vlan.slax: changes 0, transients 0 (allowed), syslog 0
+Nov 23 21:56:42 cscript script processing ends
