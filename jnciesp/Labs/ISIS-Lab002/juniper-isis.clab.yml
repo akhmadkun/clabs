@@ -1,0 +1,85 @@
+name: juniper-isis
+prefix: ''
+topology:
+  kinds:
+    linux:
+      network-mode: none
+      image: ghcr.io/srl-labs/network-multitool:latest
+    juniper_crpd:
+      image: crpd:23.4R2-S5.6
+      sysctls:
+        net.ipv4.ip_forward: '1'
+  nodes:
+    r1:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r1/base.conf
+      binds:
+      - ./configs_crpd/r1:/labconfigs:rw
+    r2:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r2/base.conf
+      binds:
+      - ./configs_crpd/r2:/labconfigs:rw
+    r3:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r3/base.conf
+      binds:
+      - ./configs_crpd/r3:/labconfigs:rw
+    r4:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r4/base.conf
+      binds:
+      - ./configs_crpd/r4:/labconfigs:rw
+    r5:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r5/base.conf
+      binds:
+      - ./configs_crpd/r5:/labconfigs:rw
+    r6:
+      kind: juniper_crpd
+      startup-config: ./configs_crpd/r6/base.conf
+      binds:
+      - ./configs_crpd/r6:/labconfigs:rw
+    br-univ:
+      kind: bridge
+    h1:
+      kind: linux
+      exec:
+      - ip link set eth1 up
+      - ip link add link eth1 name v101 type vlan id 101
+      - ip link set v101 up
+      - ip addr replace 192.168.101.10/24 dev v101
+      - ip route replace default via 192.168.101.1
+    h2:
+      kind: linux
+      exec:
+      - ip link set eth1 up
+      - ip link add link eth1 name v102 type vlan id 102
+      - ip link set v102 up
+      - ip addr replace 192.168.102.10/24 dev v102
+      - ip route replace default via 192.168.102.1
+  links:
+  - endpoints:
+    - r1:eth1
+    - br-univ:r1_eth1
+  - endpoints:
+    - r2:eth1
+    - br-univ:r2_eth1
+  - endpoints:
+    - r3:eth1
+    - br-univ:r3_eth1
+  - endpoints:
+    - r4:eth1
+    - br-univ:r4_eth1
+  - endpoints:
+    - r5:eth1
+    - br-univ:r5_eth1
+  - endpoints:
+    - r6:eth1
+    - br-univ:r6_eth1
+  - endpoints:
+    - h1:eth1
+    - br-univ:h1_eth1
+  - endpoints:
+    - h2:eth1
+    - br-univ:h2_eth1
